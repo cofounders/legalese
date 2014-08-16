@@ -34,16 +34,24 @@ parties:
 whereas:
   dealtype: investment
 securities:
-  instrument: convertible_note
-  principal: 1_000_000
+  instrument: convertible notes
+  instrument_shortname: notes
+  amount: 1_000_000
+  subscriptions:
+    - subscriber: the Investor
+      amount: 1_000_000
   currency: SGD
-  term: 3 years
-  conversion:
-    upon: next round financing
-    to: Conversion Shares
-    at:
-      lower-of:
-        - valuation_cap: 5_000_000
-        - discounted_conversion_price:
-            discount: 20%
+  details:
+    term: 3 years
+    conversion:
+      upon: next round financing
+      minimum_raise: 4_000_000
+      to:
+        name: Conversion Shares
+        explanation: whatever shares are issued in the next round financing
+      at:
+        lower-of:
+          - valuation_cap: 5_000_000
+          - discounted_conversion_price:
+              discount: 20%
 

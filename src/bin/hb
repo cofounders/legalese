@@ -46,6 +46,11 @@ readStream(process.stdin, function(err, tmpl) {
             return options.fn(this).toUpperCase();
         });
 
+        hbs.registerHelper('ucfirst', function (options) {
+			var string = options.fn(this);
+			return string.charAt(0).toUpperCase() + string.slice(1);
+        });
+
         hbs.registerHelper('choose_plural', function (options) {
 			if (this.alias instanceof Object) {
 				if (this.members.length == 1) {
