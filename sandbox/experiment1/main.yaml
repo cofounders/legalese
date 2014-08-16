@@ -1,0 +1,49 @@
+---
+title: Legalese Demonstration Experiment 1
+legalese_target: english
+# english | termsheet | legalese | visual
+parties:
+  members:
+    - partytype: founders
+      members:
+        - name: Alice
+          id: S1234567A
+          idtype: NRIC
+        - name: Bob
+          id: S2222222B
+          idtype: NRIC
+        - name: Charlie
+          id: S3333333C
+          idtype: NRIC
+      alias:
+        plural: the Founders
+        singular: the Founder
+    - partytype: investors
+      members:
+        - name: Danny
+          id: S4444444D
+          idtype: Passport
+      alias: the Investor
+    - partytype: companies
+      members:
+        - name: Abecedarium Inc.
+          id: 2014123456K
+          idtype: UEN
+      alias: the Company
+  alias: the Parties
+whereas:
+  dealtype: investment
+securities:
+  instrument: convertible_note
+  principal: 1_000_000
+  currency: SGD
+  term: 3 years
+  conversion:
+    upon: next round financing
+    to: Conversion Shares
+    at:
+      lower-of:
+        - valuation_cap: 5_000_000
+        - discounted_conversion_price:
+            discount: 20%
+

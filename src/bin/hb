@@ -1,0 +1,88 @@
+#!/usr/bin/env node
+
+// mengwong modified from 
+
+var fs   = require('fs'),
+    args = require('optimist').argv,
+    hbs  = require('handlebars');
+
+if (args._.length) {
+    try {
+        args = JSON.parse(fs.readFileSync(args._[0]).toString());
+    } catch (e) { }
+}
+else for (var key in args) {
+    try {
+        args[key] = JSON.parse(args[key]);
+    } catch (e) {
+    }
+}
+
+function readStream(s, done) {
+    var bufs = [];
+    s.on('data', function(d) {
+        bufs.push(d);
+    });
+    s.on('end', function() {
+        done(null, Buffer.concat(bufs));
+    });
+    s.resume();
+}
+
+readStream(process.stdin, function(err, tmpl) {
+    function handle(tmpl, args) {
+        hbs.registerHelper('include', function (file, context, opt) {
+            var context = null == context ? args : context;
+            var f = fs.readFileSync(file);
+            return handle(f, context); 
+        });
+
+// partials
+
+		hbs.registerPartial("parties_short_en_and", fs.readFileSync("parties_short_en_and.mustache", {encoding:'utf8'}));
+
+// helper additions by meng
+        hbs.registerHelper('uc', function (options) {
+            return options.fn(this).toUpperCase();
+        });
+
+        hbs.registerHelper('choose_plural', function (options) {
+			if (this.alias instanceof Object) {
+				if (this.members.length == 1) {
+					return this.alias.singular;
+				}
+				if (this.members.length > 1) {
+					return this.alias.plural;
+				}
+			}
+			else {
+				return this.alias;
+			}
+		});
+
+        hbs.registerHelper('conjunction_en', function (items, options) {
+			var ret = "";
+			var joinchar = options.hash['joinchar'] || ",";
+			if (items.length == 2) {
+				ret = options.fn(items[0]) + " and " + options.fn(items[1]);
+			} else if (items.length == 1) {
+				ret = options.fn(items[0]);
+			} else if (items.length == 0) {
+				ret = "";
+			} else {
+				for(var i=0, j=items.length-1; i<j; i++) {
+					ret = ret + options.fn(items[i]) + joinchar + " ";
+				}
+				ret = ret + "and " + options.fn(items[items.length-1]);
+			}
+
+            return ret;
+        });
+
+        var template = hbs.compile(tmpl.toString());
+        var result = template(args);
+        return result;
+    }
+    process.stdout.write(handle(tmpl, args));
+});
+
