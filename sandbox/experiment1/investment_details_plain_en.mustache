@@ -1,0 +1,15 @@
+The details of the {{instrument_shortname}} are as follows:
+
+Term: {{term}}
+{{#if conversion_upon}}
+Conversion: Upon {{conversion_upon}} {{#if conversion_upon_minimum_raise}}(when the Company raises at least {{../currency}} {{conversion_upon_minimum_raise}}){{/if}}, {{../instrument_shortname}} will convert to {{converts_to.name}} ({{converts_to.explanation}}).
+{{/if}}
+
+{{#conversion_at}}
+  Conversion Price: 
+  {{#if lower_of}}
+  {{ucfirst ../../alias}} will convert at the lower of:
+{{#if lower_of.valuation_cap}}- {{lower_of.valuation_cap}}{{/if}}
+{{#if lower_of.discounted_conversion}}- {{lower_of.discounted_conversion.discount}} less than the price per share paid in the {{../../../conversion_upon}}{{/if}}
+  {{/if}}
+{{/conversion_at}}

@@ -2,18 +2,11 @@
 
 This agreement is between the parties: {{>parties_short_en_and ~}}.
 
-{{#ucfirst}}{{parties.members.[1].alias}}{{/ucfirst}} will invest in {{parties.members.[2].alias}}.
+{{ucfirst (choose_plural parties.members.companies 'alias' 'members')}} intends to raise up to {{securities.currency}} {{securities.amount_on_offer}} from {{choose_plural parties.members.investors 'alias' 'members'}}.
 
 {{#securities}}
-The Company will issue up to {{currency}} {{amount}} worth of {{instrument}}.
-{{#subscriptions}}
-{{#ucfirst}}{{subscriber}}{{/ucfirst}} is expected to subscribe for {{../currency}} {{amount}} of those {{../instrument_shortname}}.
-{{/subscriptions}}
-The details of the {{instrument_shortname}} are as follows:
-{{#details}}
-Term: {{term}}
-{{#conversion}}
-Conversion: Upon {{upon}} {{#minimum_raise}}(when the Company raises at least {{../../../currency}} {{this}}){{/minimum_raise}}, {{../../instrument_shortname}} will convert to {{to.name}} ({{to.explanation}}).
-{{/conversion}}
-{{/details}}
+  {{>investment_summary_plain_en}}
+  {{>investment_details_plain_en}}
 {{/securities}}
+
+{{>standard_clauses_plain_en}}

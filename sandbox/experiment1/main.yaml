@@ -4,7 +4,7 @@ legalese_target: english
 # english | termsheet | legalese | visual
 parties:
   members:
-    - partytype: founders
+    founders:
       members:
         - name: Alice
           id: S1234567A
@@ -18,40 +18,41 @@ parties:
       alias:
         plural: the Founders
         singular: the Founder
-    - partytype: investors
+    investors:
       members:
         - name: Danny
           id: S4444444D
           idtype: Passport
-      alias: the Investor
-    - partytype: companies
+      alias:
+        plural: the Investors
+        singular: the Investor
+    companies:
       members:
         - name: Abecedarium Inc.
           id: 2014123456K
           idtype: UEN
-      alias: the Company
+      alias:
+        plural: the Group
+        singular: the Company
   alias: the Parties
-whereas:
-  dealtype: investment
 securities:
+  type: investment
   instrument: convertible notes
+  alias: the Notes
   instrument_shortname: notes
-  amount: 1_000_000
+  amount_on_offer: 1_000_000
   subscriptions:
     - subscriber: the Investor
-      amount: 1_000_000
+      commitment: 1_000_000
   currency: SGD
-  details:
-    term: 3 years
-    conversion:
-      upon: next round financing
-      minimum_raise: 4_000_000
-      to:
-        name: Conversion Shares
-        explanation: whatever shares are issued in the next round financing
-      at:
-        lower-of:
-          - valuation_cap: 5_000_000
-          - discounted_conversion_price:
-              discount: 20%
-
+  term: 3 years
+  conversion_upon: next round financing
+  conversion_upon_minimum_raise: 4_000_000
+  converts_to:
+    name: Conversion Shares
+    explanation: whatever shares are issued in the next round financing
+  conversion_at:
+    lower_of:
+      valuation_cap: 5_000_000
+      discounted_conversion:
+        discount: 20%
