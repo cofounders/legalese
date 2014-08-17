@@ -46,13 +46,30 @@ securities:
       commitment: 1_000_000
   currency: SGD
   term: 3 years
-  conversion_upon: next round financing
-  conversion_upon_minimum_raise: 4_000_000
+  conversion_upon: qualified financing
+  qualified_financing:
+    minimum_raise: 4_000_000
   converts_to:
     name: Conversion Shares
     explanation: whatever shares are issued in the next round financing
-  conversion_at:
+  conversion_price:
     lower_of:
       valuation_cap: 5_000_000
       discounted_conversion:
         discount: 20%
+  automatic_conversion:
+    - qualified_financing: 1
+    - at_term: 1
+  interest: 5%
+  closings:
+    alternatives:
+      - one_or_more
+      - one
+    default: one_or_more
+    choice: default
+  definitive_agreement:
+    alternatives:
+      - no_further_agreements
+      - subsequent_paperwork
+    default: subsequent_paperwork
+    choice: default

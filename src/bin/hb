@@ -4,7 +4,9 @@
 
 var fs   = require('fs'),
     args = require('optimist').argv,
-    hbs  = require('handlebars');
+    hbs  = require('handlebars'),
+	path = require('path'),
+    _    = require('underscore');
 
 if (args._.length) {
     try {
@@ -39,46 +41,51 @@ readStream(process.stdin, function(err, tmpl) {
 
 // partials
 
-		hbs.registerPartial("parties_short_en_and", fs.readFileSync("parties_short_en_and.mustache", {encoding:'utf8'}));
+		_.each(fs.readdirSync("partials"),function(partial_name) {
+			var partial_name = path.basename(partial_name, ".mustache");
+			hbs.registerPartial(partial_name, fs.readFileSync("partials/" + partial_name + ".mustache", {encoding:'utf8'}));
+		}
+			  );
 
 // helper additions by meng
         hbs.registerHelper('uc', function (options) {
             return options.fn(this).toUpperCase();
         });
 
-        hbs.registerHelper('ucfirst', function (options) {
-			var string = options.fn(this);
-			return string.charAt(0).toUpperCase() + string.slice(1);
-        });
+		hbs.registerHelper('ucfirst', function(mystring) {
+			console.log("ucfirsting " + mystring);
+			return new hbs.SafeString( mystring.charAt(0).toUpperCase() + mystring.slice(1))
+		});
 
-        hbs.registerHelper('choose_plural', function (options) {
-			if (this.alias instanceof Object) {
-				if (this.members.length == 1) {
-					return this.alias.singular;
+        hbs.registerHelper('choose_plural', function (myobj, plural_singular, mylist, options) {
+			if (_.isObject(myobj[plural_singular])) {
+				if (myobj[mylist].length == 1) {
+					return myobj[plural_singular].singular;
 				}
-				if (this.members.length > 1) {
-					return this.alias.plural;
+				if (this[mylist].length > 1) {
+					return myobj[plural_singular].plural;
 				}
 			}
 			else {
-				return this.alias;
+				return myobj[plural_singular];
 			}
 		});
 
         hbs.registerHelper('conjunction_en', function (items, options) {
 			var ret = "";
 			var joinchar = options.hash['joinchar'] || ",";
-			if (items.length == 2) {
-				ret = options.fn(items[0]) + " and " + options.fn(items[1]);
-			} else if (items.length == 1) {
-				ret = options.fn(items[0]);
-			} else if (items.length == 0) {
+			var asarray = _.isArray(items) ? items : _.isObject(items) ? _.values(items) : items;
+			if (asarray.length == 2) {
+				ret = options.fn(asarray[0]) + " and " + options.fn(asarray[1]);
+			} else if (asarray.length == 1) {
+				ret = options.fn(asarray[0]);
+			} else if (asarray.length == 0) {
 				ret = "";
 			} else {
-				for(var i=0, j=items.length-1; i<j; i++) {
-					ret = ret + options.fn(items[i]) + joinchar + " ";
+				for(var i=0, j=asarray.length-1; i<j; i++) {
+					ret = ret + options.fn(asarray[i]) + joinchar + " ";
 				}
-				ret = ret + "and " + options.fn(items[items.length-1]);
+				ret = ret + "and " + options.fn(asarray[asarray.length-1]);
 			}
 
             return ret;
