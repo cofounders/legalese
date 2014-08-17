@@ -54,7 +54,6 @@ readStream(process.stdin, function(err, tmpl) {
         });
 
 		hbs.registerHelper('ucfirst', function(mystring) {
-			console.log("ucfirsting " + mystring);
 			return new hbs.SafeString( mystring.charAt(0).toUpperCase() + mystring.slice(1))
 		});
 

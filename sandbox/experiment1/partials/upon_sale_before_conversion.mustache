@@ -5,10 +5,10 @@
 
 {{#upon_sale_before_conversion.at_election_of_investor}}
   {{#if redemption_preference}}
-  - taking back a payment equal to{{#if_ne redemption_preference "1"}} {{redemption_preference}} times{{/if_ne}} the original {{>principal_plus_interest}}, or
+  * taking back a payment equal to{{#if_ne redemption_preference "1"}} {{redemption_preference}} times{{/if_ne}} the original {{>principal_plus_interest}}, or
   {{/if}}
   {{#if conversion_at_cap}}
-  - converting to Equity Securities at the Valuation Cap.
+  * converting to Equity Securities at the Valuation Cap.
   {{/if}}
 {{/upon_sale_before_conversion.at_election_of_investor}}
 

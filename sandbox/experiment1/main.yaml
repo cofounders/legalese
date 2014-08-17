@@ -40,21 +40,21 @@ securities:
   instrument: convertible notes
   alias: the Notes
   instrument_shortname: notes
-  amount_on_offer: 1_000_000
+  amount_on_offer: 1,000,000
   subscriptions:
     - subscriber: the Investor
-      commitment: 1_000_000
+      commitment: 1,000,000
   currency: SGD
   term: 3 years
   conversion_upon: qualified financing
   qualified_financing:
-    minimum_raise: 4_000_000
+    minimum_raise: 4,000,000
   converts_to:
     name: Conversion Shares
     explanation: whatever shares are issued in the next round financing
   conversion_price:
     lower_of:
-      valuation_cap: 5_000_000
+      valuation_cap: 5,000,000
       discounted_conversion:
         discount: 20%
   automatic_conversion:
@@ -127,7 +127,7 @@ securities:
       - paid by investor
       - paid by company
       - each party pays
-    cap: 100_000
+    cap: 100,000
     default: each party pays
     choice: default
 
