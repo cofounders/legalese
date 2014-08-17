@@ -1,0 +1,8 @@
+{{#conversion_price}}
+# Conversion Price
+  {{#if lower_of}}
+  {{ucfirst ../../alias}} will convert at the lower of:
+{{#if lower_of.valuation_cap}}  - {{lower_of.valuation_cap}}{{/if}}
+{{#if lower_of.discounted_conversion}}  - {{lower_of.discounted_conversion.discount}} less than the price per share paid in the {{../../../conversion_upon}}{{/if}}
+  {{/if}}
+{{/conversion_price}}

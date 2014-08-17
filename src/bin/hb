@@ -42,6 +42,7 @@ readStream(process.stdin, function(err, tmpl) {
 // partials
 
 		_.each(fs.readdirSync("partials"),function(partial_name) {
+			if (-1 == partial_name.search(/\.mustache$/)) { return }
 			var partial_name = path.basename(partial_name, ".mustache");
 			hbs.registerPartial(partial_name, fs.readFileSync("partials/" + partial_name + ".mustache", {encoding:'utf8'}));
 		}
@@ -57,6 +58,23 @@ readStream(process.stdin, function(err, tmpl) {
 			return new hbs.SafeString( mystring.charAt(0).toUpperCase() + mystring.slice(1))
 		});
 
+        hbs.registerHelper('choice_among_alternatives', function (myobj, mytext, options) {
+			if ((myobj.choice == "default" && myobj.default == mytext)
+				||
+				myobj.choice == mytext) {
+				return options.fn(this);
+			}
+			return "";
+		});
+
+		hbs.registerHelper('if_eq', function(str1, str2, options) {
+			if (str1 == str2) { return options.fn(this); } else { return }
+		});
+		
+		hbs.registerHelper('if_ne', function(str1, str2, options) {
+			if (str1 != str2) { return options.fn(this); } else { return }
+		});
+		
         hbs.registerHelper('choose_plural', function (myobj, plural_singular, mylist, options) {
 			if (_.isObject(myobj[plural_singular])) {
 				if (myobj[mylist].length == 1) {

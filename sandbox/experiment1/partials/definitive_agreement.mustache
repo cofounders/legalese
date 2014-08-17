@@ -1,0 +1,12 @@
+{{#if definitive_agreement}}
+# Definitive Agreement
+
+{{#choice_among_alternatives definitive_agreement "no_further_agreements"}}
+  There are no further agreements to sign. This is the final agreement.
+{{/choice_among_alternatives}}
+
+{{#choice_among_alternatives definitive_agreement "subsequent_paperwork"}}
+  A more detailed version of this agreement will follow.
+{{/choice_among_alternatives}}
+
+{{/if}}

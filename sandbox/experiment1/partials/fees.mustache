@@ -1,0 +1,16 @@
+{{#if fees}}
+# Fees and Expenses
+
+{{#choice_among_alternatives fees "paid by investor"}}
+  Fees and expenses incurred in the transaction shall be paid by the Investor{{#if fees.cap}} up to a limit of {{../currency}} {{fees.cap}}.{{/if}}
+{{/choice_among_alternatives}}
+
+{{#choice_among_alternatives fees "paid by company"}}
+  Fees and expenses incurred in the transaction shall be paid by the Company{{#if fees.cap}} up to a limit of {{../currency}} {{fees.cap}}.{{/if}}
+{{/choice_among_alternatives}}
+
+{{#choice_among_alternatives fees "each party pays"}}
+  Parties shall be individually responsible for fees and expenses incurred in the transaction.
+{{/choice_among_alternatives}}
+
+{{/if}}

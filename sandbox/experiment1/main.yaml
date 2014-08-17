@@ -58,9 +58,16 @@ securities:
       discounted_conversion:
         discount: 20%
   automatic_conversion:
-    - qualified_financing: 1
-    - at_term: 1
-  interest: 5%
+    - qualified_financing: at the conversion price
+    - at_term: at the valuation cap
+  interest: 5
+  optional_conversion:
+    alternatives:
+      - at the option of the investor
+      - at the option of the company
+    conversion_preference: 1
+    default: at the option of the investor
+    choice: default
   closings:
     alternatives:
       - one_or_more
@@ -73,3 +80,58 @@ securities:
       - subsequent_paperwork
     default: subsequent_paperwork
     choice: default
+  upon_sale_before_conversion:
+    at_election_of_investor:
+      - redemption_preference: 1.5
+      - conversion_at_cap: 1
+  prepayment:
+    alternatives:
+      - approved by simple majority of investors
+      - approved by two-thirds majority of investors
+    default: approved by simple majority of investors
+    choice: default
+  amendment_and_waiver:
+    alternatives:
+      - company
+      - company and majority of investors
+    default: company and majority of investors
+    choice: default
+  security_interest:
+    alternatives:
+      - secured
+      - unsecured
+    default: unsecured
+    choice: default
+  investor_information_rights:
+    alternatives:
+      - equivalent to shareholders
+      - no rights
+    default: equivalent to shareholders
+    choice: default
+  investor_voting_rights:
+    alternatives:
+      - equivalent to shareholders
+      - no rights
+    default: no rights
+    choice: default
+  investor_board_rights:
+    alternatives:
+      - appoint
+      - no rights
+    number: 1 member
+    default: no rights
+    choice: default
+  board_size: 3
+  fees:
+    alternatives:
+      - paid by investor
+      - paid by company
+      - each party pays
+    cap: 100_000
+    default: each party pays
+    choice: default
+
+    
+
+      
+      

@@ -1,0 +1,12 @@
+{{#if security_interest}}
+# Security Interest
+
+{{#choice_among_alternatives security_interest "secured"}}
+  The {{../alias}} shall be secured against the assets of the Company.
+{{/choice_among_alternatives}}
+
+{{#choice_among_alternatives security_interest "unsecured"}}
+  The Notes will be a general unsecured obligation of the Company.
+{{/choice_among_alternatives}}
+
+{{/if}}
