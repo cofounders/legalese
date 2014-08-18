@@ -9,7 +9,7 @@ HANDLEBARS=../../src/bin/hb
 .SECONDARY:
 
 %.mdh: %.mustache main.json
-	$(HANDLEBARS) main.json < $< > $@
+	$(HANDLEBARS) --file=$< main.json > $@
 
 %.mdm: %.mustache main.yaml
 	mustache main.yaml $< > $@

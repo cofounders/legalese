@@ -8,6 +8,9 @@ var fs   = require('fs'),
 	path = require('path'),
     _    = require('underscore');
 
+var file = args.file;
+delete args.file;
+
 if (args._.length) {
     try {
         args = JSON.parse(fs.readFileSync(args._[0]).toString());
@@ -20,6 +23,8 @@ else for (var key in args) {
     }
 }
 
+process.stderr.write("file = " + file + "\n");
+
 function readStream(s, done) {
     var bufs = [];
     s.on('data', function(d) {
@@ -31,7 +36,7 @@ function readStream(s, done) {
     s.resume();
 }
 
-readStream(process.stdin, function(err, tmpl) {
+readStream(fs.createReadStream(file), function(err, tmpl) {
     function handle(tmpl, args) {
         hbs.registerHelper('include', function (file, context, opt) {
             var context = null == context ? args : context;
@@ -41,10 +46,12 @@ readStream(process.stdin, function(err, tmpl) {
 
 // partials
 
-		_.each(fs.readdirSync("partials"),function(partial_name) {
+		var partials_dir = path.basename(file,".mustache");
+		process.stderr.write("loading partials from " + partials_dir+"\n");
+		_.each(fs.readdirSync(partials_dir),function(partial_name) {
 			if (-1 == partial_name.search(/\.mustache$/)) { return }
 			var partial_name = path.basename(partial_name, ".mustache");
-			hbs.registerPartial(partial_name, fs.readFileSync("partials/" + partial_name + ".mustache", {encoding:'utf8'}));
+			hbs.registerPartial(partial_name, fs.readFileSync(partials_dir+"/" + partial_name + ".mustache", {encoding:'utf8'}));
 		}
 			  );
 
