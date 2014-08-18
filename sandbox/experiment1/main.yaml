@@ -37,7 +37,7 @@ parties:
   alias: the Parties
 securities:
   type: investment
-  instrument: convertible notes
+  instrument: convertible promissory notes
   alias: the Notes
   instrument_shortname: notes
   amount_on_offer: 1,000,000
@@ -45,7 +45,8 @@ securities:
     - subscriber: the Investor
       commitment: 1,000,000
   currency: SGD
-  term: 3 years
+  prefix: $
+  term: twenty-four (24) months
   conversion_upon: qualified financing
   qualified_financing:
     minimum_raise: 4,000,000
@@ -56,7 +57,7 @@ securities:
     lower_of:
       valuation_cap: 5,000,000
       discounted_conversion:
-        discount: 20%
+        discount: 20
   automatic_conversion:
     - qualified_financing: at the conversion price
     - at_term: at the valuation cap
@@ -82,7 +83,7 @@ securities:
     choice: default
   upon_sale_before_conversion:
     at_election_of_investor:
-      - redemption_preference: 1.5
+      - redemption_preference: one and a half (1.5)
       - conversion_at_cap: 1
   prepayment:
     alternatives:

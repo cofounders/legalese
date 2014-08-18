@@ -12,18 +12,11 @@ var file = args.file;
 delete args.file;
 
 if (args._.length) {
-    try {
-        args = JSON.parse(fs.readFileSync(args._[0]).toString());
-    } catch (e) { }
+    args = JSON.parse(fs.readFileSync(args._[0]).toString());
 }
 else for (var key in args) {
-    try {
-        args[key] = JSON.parse(args[key]);
-    } catch (e) {
-    }
+    args[key] = JSON.parse(args[key]);
 }
-
-process.stderr.write("file = " + file + "\n");
 
 function readStream(s, done) {
     var bufs = [];
@@ -47,7 +40,6 @@ readStream(fs.createReadStream(file), function(err, tmpl) {
 // partials
 
 		var partials_dir = path.basename(file,".mustache");
-		process.stderr.write("loading partials from " + partials_dir+"\n");
 		_.each(fs.readdirSync(partials_dir),function(partial_name) {
 			if (-1 == partial_name.search(/\.mustache$/)) { return }
 			var partial_name = path.basename(partial_name, ".mustache");

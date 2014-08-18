@@ -2,11 +2,11 @@
 # Optional Conversion
 
 {{#choice_among_alternatives optional_conversion "at the option of the investor"}}
-  Prior to the Maturity Date, if a {{../conversion_upon}} has not yet occurred, the Investor may elect to convert the entire Investment Amount into Equity Securities{{#if_eq optional_conversion.conversion_preference "1"}} at the valuation cap{{/if_eq}}{{#if_ne optional_conversion.conversion_preference "1"}} at {{optional_conversion.conversion_preference}} times the valuation cap{{/if_ne}}
+  Prior to the Maturity Date, if a {{../conversion_upon}} has not yet occurred, the Investor may elect to convert the entire Investment Amount into Equity Securities{{#if_eq optional_conversion.conversion_preference "1"}} at the valuation cap{{/if_eq}}{{#if_ne optional_conversion.conversion_preference "1"}} at {{optional_conversion.conversion_preference}} times the valuation cap{{/if_ne}}.
 {{/choice_among_alternatives}}
 
 {{#choice_among_alternatives optional_conversion "at the option of the company"}}
-  Prior to the Maturity Date, if a {{../conversion_upon}} has not yet occurred, the Company may elect to convert the entire Investment Amount into Equity Securities{{#if_eq optional_conversion.conversion_preference "1"}} at the valuation cap{{/if_eq}}{{#if_ne optional_conversion.conversion_preference "1"}} at {{optional_conversion.conversion_preference}} times the valuation cap{{/if_ne}}
+  Prior to the Maturity Date, if a {{../conversion_upon}} has not yet occurred, the Company may elect to convert the entire Investment Amount into Equity Securities{{#if_eq optional_conversion.conversion_preference "1"}} at the valuation cap{{/if_eq}}{{#if_ne optional_conversion.conversion_preference "1"}} at {{optional_conversion.conversion_preference}} times the valuation cap{{/if_ne}}.
 {{/choice_among_alternatives}}
 
 {{/if}}

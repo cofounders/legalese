@@ -1,7 +1,7 @@
 %.json: %.yaml
 	perl -MJSON -MYAML=LoadFile -le 'print JSON->new->pretty->encode(LoadFile shift)' $< > $@
 
-all: english.html
+all: english.html legalese.html
 
 HANDLEBARS=handlebars
 HANDLEBARS=../../src/bin/hb
@@ -15,7 +15,10 @@ HANDLEBARS=../../src/bin/hb
 	mustache main.yaml $< > $@
 
 %.html: %.mdh
-	markdown $< > $@
+	markdown $< | perl -nle 'print if /\S/' > $@
+
+legalese.html: legalese.mdh
+	perl -nle 'print if /\S/' $< > $@
 
 clean: 
 	rm -f *.html *.md? *.txt *.json *~

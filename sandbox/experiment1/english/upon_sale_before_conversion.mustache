@@ -8,7 +8,7 @@
   * taking back a payment equal to{{#if_ne redemption_preference "1"}} {{redemption_preference}} times{{/if_ne}} the original {{>principal_plus_interest}}, or
   {{/if}}
   {{#if conversion_at_cap}}
-  * converting to Equity Securities at the Valuation Cap.
+  * converting to Equity Securities at {{#if_ne conversion_at_cap "1"}}{{conversion_at_cap}} times {{/if_ne}}the Valuation Cap.
   {{/if}}
 {{/upon_sale_before_conversion.at_election_of_investor}}
 
