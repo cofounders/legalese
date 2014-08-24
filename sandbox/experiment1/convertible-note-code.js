@@ -15,8 +15,8 @@ function Company () {
 };
 
 // an instrument issued by the company and owned by someone
-function Security ( ) {
-	this.amount=0;
+function Security ( args ) {
+	this.amount=args.amount;
     this.currency = "SGD";
 	this.instrument = "generic securities";
 	this.alias = "the Security";
@@ -31,8 +31,8 @@ Security.prototype.getInfo = function () {
 };
 
 // a security that is able to convert to another security
-function Convertible_Security ( ) {
-	Security.call(this);
+function Convertible_Security ( args ) {
+	Security.call(this, args);
 	this.instrument="convertible securities";
 	this.converts_to={name:"Conversion Shares"};
 	this.term = null;
