@@ -41,7 +41,7 @@ Convertible_Security.prototype = Object.create(Security.prototype);
 Convertible_Security.prototype.constructor = Convertible_Security;
 Convertible_Security.prototype.getInfo = function() {
 	process.stdout.write("hello, this is inside the inheritor's overriding method\n");
-	var toreturn = Security.prototype.getInfo();
+	var toreturn = Security.prototype.getInfo.call(this);
 	toreturn += "Furthermore, I convert to " + this.converts_to.name + "\n";
 	return toreturn;
 };
