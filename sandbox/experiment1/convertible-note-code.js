@@ -15,32 +15,33 @@ function Company () {
 };
 
 // an instrument issued by the company and owned by someone
-function Security () {
-    this.amount = null;
+function Security ( ) {
+	this.amount=0;
     this.currency = "SGD";
 	this.instrument = "generic securities";
 	this.alias = "the Security";
 	this.prefix = "$";
-	this.getInfo = function() {
-		return ("This is an instance of " + this.instrument + ", of amount " +
-				this.prefix + this.amount + " " + this.currency + "\n");
-	};
 	this.subscriber = null;
 	this.company = null;
 }
 
+Security.prototype.getInfo = function () {
+		return ("This is an instance of " + this.instrument + ", of amount " +
+				this.prefix + this.amount + " " + this.currency + "\n");
+};
+
 // a security that is able to convert to another security
-function Convertible_Security () {
+function Convertible_Security ( ) {
 	Security.call(this);
 	this.instrument="convertible securities";
 	this.converts_to={name:"Conversion Shares"};
 	this.term = null;
 }
-Convertible_Security.prototype = new Security ();
+Convertible_Security.prototype = Object.create(Security.prototype);
 Convertible_Security.prototype.constructor = Convertible_Security;
 Convertible_Security.prototype.getInfo = function() {
 	process.stdout.write("hello, this is inside the inheritor's overriding method\n");
-	var toreturn = this.getInfo();
+	var toreturn = Security.prototype.getInfo();
 	toreturn += "Furthermore, I convert to " + this.converts_to.name + "\n";
 	return toreturn;
 };
