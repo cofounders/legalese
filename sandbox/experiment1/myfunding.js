@@ -6,9 +6,12 @@ var investment = require("./convertible-note-code.js");
 
 // here we test a bunch of this stuff
 
-var mygeneric = new investment.Security( { amount:100 } );
+var mygeneric = new investment.Security( { price:100 } );
 process.stdout.write(mygeneric.getInfo());
 
-var mynotes = new investment.Convertible_Security( { amount:100000 } );
-process.stdout.write(mynotes.getInfo("moo"));
+var myconv = new investment.Convertible_Security( { price:100000, converts_to:{name: "Conversion Shares" } } );
+process.stdout.write(myconv.getInfo());
+
+var mydebt = new investment.Note( { price:250000, interest:6, term:"3y", converts_to:{name: "Conversion Shares" } } );
+process.stdout.write(mydebt.getInfo());
 

@@ -17,34 +17,71 @@ function Company () {
 
 // an instrument issued by the company and owned by someone
 function Security ( args ) {
-	this.amount=args.amount;
-    this.currency = "SGD";
-	this.instrument = "generic securities";
-	this.alias = "the Security";
-	this.prefix = "$";
-	this.subscriber = null;
-	this.company = null;
+	var from_args = ["price",
+					 "instrument",
+					 "currency",
+					 "alias",
+					 "prefix",
+					 "subscriber",
+					 "company",
+					];
+	var defaults = { prefix: "$",
+					 currency: "SGD",
+					 instrument: "generic corporate securities" };
+	for (var i = 0; i < from_args.length; i++) {
+		if (this[from_args[i]] == undefined) {
+			this[from_args[i]] = args[from_args[i]] ? args[from_args[i]] : defaults[from_args[i]];
+		}
+	}
 }
 
 Security.prototype.getInfo = function () {
-		return ("This is an instance of " + this.instrument + ", of amount " +
-				this.prefix + this.amount + " " + this.currency + "\n");
+		return ("This is an instance of " + this.instrument + ", of price " +
+				this.prefix + this.price + " " + this.currency + "\n");
 };
 
 // a security that is able to convert to another security
 function Convertible_Security ( args ) {
+	var defaults = { instrument: "convertible securities" };
+	var from_args = ["instrument",
+					 "conversion_upon",
+					 "qualified_financing",
+					 "converts_to",
+					 "conversion_price",
+					 "automatic_conversion"];
+	for (var i = 0; i < from_args.length; i++) {
+		this[from_args[i]] = args[from_args[i]] ? args[from_args[i]] : defaults[from_args[i]];
+	}
 	Security.call(this, args);
-	this.instrument="convertible securities";
-	this.converts_to={name:"Conversion Shares"};
-	this.term = null;
 }
 Convertible_Security.prototype = Object.create(Security.prototype);
 Convertible_Security.prototype.constructor = Convertible_Security;
 Convertible_Security.prototype.getInfo = function() {
 	var toreturn = Security.prototype.getInfo.call(this);
-	toreturn += "Furthermore, I convert to " + this.converts_to.name + "\n";
+	toreturn += "  Furthermore, I convert to " + this.converts_to.name + "\n";
 	return toreturn;
 };
+
+// debt security
+function Note ( args ) {
+	var defaults = { instrument: "promissory notes" };
+	var from_args = ["term",
+					 "interest",
+					 "instrument",
+					];
+	for (var i = 0; i < from_args.length; i++) {
+		this[from_args[i]] = args[from_args[i]] ? args[from_args[i]] : defaults[from_args[i]];
+	}
+	Security.call(this, args);
+}
+Note.prototype = Object.create(Security.prototype);
+Note.prototype.constructor = Note;
+Note.prototype.getInfo = function() {
+	var toreturn = Security.prototype.getInfo.call(this);
+	toreturn += "  I accrue interest at " + this.interest + " per annum and mature after " + this.term + "\n";
+	return toreturn;
+};
+
 
 function SAFE_cap_nodiscount () { }
 
@@ -59,5 +96,6 @@ function SAFE_nocap_nodiscount_MFN () { }
 exports.Company = Company;
 exports.Security = Security;
 exports.Convertible_Security = Convertible_Security;
+exports.Note = Note;
 
 }());
