@@ -10,5 +10,5 @@ var mygeneric = new investment.Security( { amount:100 } );
 process.stdout.write(mygeneric.getInfo());
 
 var mynotes = new investment.Convertible_Security( { amount:100000 } );
-process.stdout.write(mynotes.getInfo());
+process.stdout.write(mynotes.getInfo("moo"));
 

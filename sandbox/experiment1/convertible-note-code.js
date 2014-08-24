@@ -2,6 +2,7 @@
 // let's model out the sequence of events in a convertible note financing,
 // particularly conversion scenarios.
 
+(function(){
 "use strict";
 
 // a company
@@ -12,7 +13,7 @@ function Company () {
 	this.mailing_address = null; // address for official correspondence; often corp sec.
 	this.operating_address = null; // actual office.
 	this.captable = { ordinary: {} };
-};
+}
 
 // an instrument issued by the company and owned by someone
 function Security ( args ) {
@@ -40,19 +41,18 @@ function Convertible_Security ( args ) {
 Convertible_Security.prototype = Object.create(Security.prototype);
 Convertible_Security.prototype.constructor = Convertible_Security;
 Convertible_Security.prototype.getInfo = function() {
-	process.stdout.write("hello, this is inside the inheritor's overriding method\n");
 	var toreturn = Security.prototype.getInfo.call(this);
 	toreturn += "Furthermore, I convert to " + this.converts_to.name + "\n";
 	return toreturn;
 };
 
-function SAFE () { };
+function SAFE_cap_nodiscount () { }
 
-function SAFE_cap_nodiscount () { };
+function SAFE_cap_discount () { }
 
-function SAFE_nocap_discount () { };
+function SAFE_nocap_discount () { }
 
-function SAFE_MFN () {};
+function SAFE_nocap_nodiscount_MFN () { }
 
 // export all the above
 
@@ -60,3 +60,4 @@ exports.Company = Company;
 exports.Security = Security;
 exports.Convertible_Security = Convertible_Security;
 
+}());
