@@ -15,87 +15,91 @@ function Company () {
 	this.captable = { ordinary: {} };
 }
 
-// an instrument issued by the company and owned by someone
-function Security ( args ) {
-	var from_args = ["price",
-					 "instrument",
-					 "currency",
-					 "alias",
-					 "prefix",
-					 "subscriber",
-					 "company",
-					];
-	var defaults = { prefix: "$",
-					 currency: "SGD",
-					 instrument: "generic corporate securities" };
-	for (var i = 0; i < from_args.length; i++) {
-		if (this[from_args[i]] == undefined) {
-			this[from_args[i]] = args[from_args[i]] ? args[from_args[i]] : defaults[from_args[i]];
+// convertible instruments, debt, and other securities are implemented as mixins on top of a basic Security object.
+//
+// http://javascriptweblog.wordpress.com/2011/05/31/a-fresh-look-at-javascript-mixins/
+//
+// a Security is an instrument issued by the company and owned by someone
+
+var Security = function() { // the function-function is needed so that the prototypes don't merge
+	return function(args) {
+//		process.stderr.write("Security: executing init_LIST("+this.init_LIST.length+")\n");
+		for (var i = 0; i < this.init_LIST.length; i++) { this.init_LIST[i].call(this,args); }
+//		process.stderr.write("Security: executing arglist("+this.arglist.length+")\n");
+		for (var i = 0; i < this.arglist.length; i++) {
+			this[this.arglist[i]] = args[this.arglist[i]] ? args[this.arglist[i]] : this.defaults[this.arglist[i]];
+//			process.stderr.write("Security.init: this."+this.arglist[i]+"="+this[this.arglist[i]]+"\n");
 		}
-	}
-}
-
-Security.prototype.getInfo = function () {
-		return ("This is an instance of " + this.instrument + ", of price " +
-				this.prefix + this.price + " " + this.currency + "\n");
+	};
 };
 
-// a security that is able to convert to another security
-function Convertible_Security ( args ) {
-	var defaults = { instrument: "convertible securities" };
-	var from_args = ["instrument",
-					 "conversion_upon",
-					 "qualified_financing",
-					 "converts_to",
-					 "conversion_price",
-					 "automatic_conversion"];
-	for (var i = 0; i < from_args.length; i++) {
-		this[from_args[i]] = args[from_args[i]] ? args[from_args[i]] : defaults[from_args[i]];
-	}
-	Security.call(this, args);
-}
-Convertible_Security.prototype = Object.create(Security.prototype);
-Convertible_Security.prototype.constructor = Convertible_Security;
-Convertible_Security.prototype.getInfo = function() {
-	var toreturn = Security.prototype.getInfo.call(this);
-	toreturn += "  Furthermore, I convert to " + this.converts_to.name + "\n";
-	return toreturn;
+var isSecurity = function () {
+	this.arglist = [];
+	this.defaults = {};
+	this.getInfo_LIST = [function() { return "This is an instance of " + this.instrument + ", of price " + this.prefix + this.price + " " + this.currency + "\n"; }];
+	this.init_LIST = [function(args) {
+		this.arglist.push("price", "instrument", "currency", "alias", "prefix", "subscriber", "company");
+		this.defaults.prefix = "$";
+		this.defaults.currency = "SGD";
+		this.defaults.instrument = "generic corporate securities";
+	}];
+
+	this.getInfo = function() {
+		var toreturn = "";
+		for (var i = 0; i < this.getInfo_LIST.length; i++) {
+			toreturn += this.getInfo_LIST[i].call(this);
+		}
+		return toreturn;
+	};
+	return this;
 };
 
-// debt security
-function Note ( args ) {
-	var defaults = { instrument: "promissory notes" };
-	var from_args = ["term",
-					 "interest",
-					 "instrument",
-					];
-	for (var i = 0; i < from_args.length; i++) {
-		this[from_args[i]] = args[from_args[i]] ? args[from_args[i]] : defaults[from_args[i]];
-	}
-	Security.call(this, args);
-}
-Note.prototype = Object.create(Security.prototype);
-Note.prototype.constructor = Note;
-Note.prototype.getInfo = function() {
-	var toreturn = Security.prototype.getInfo.call(this);
-	toreturn += "  I accrue interest at " + this.interest + " per annum and mature after " + this.term + "\n";
-	return toreturn;
+var Generic = Security();
+isSecurity.call(Generic.prototype);
+
+// MIXIN isConvertible: a security that is able to convert to another security
+var isConvertible = function() {
+	this.init_LIST.push(function(args) {
+		this.arglist.push("conversion_upon", "qualified_financing", "converts_to", "conversion_price", "automatic_conversion");
+		this.defaults.instrument = "convertible securities";
+		this.defaults.converts_to = { name: "Conversion Shares" };
+		this.defaults.conversion_upon = "qualified financing";
+	});
+	this.getInfo_LIST.push ( function() { return "  Furthermore, being a convertible security, upon " + this.conversion_upon + " I will convert to " + this.converts_to.name + "\n"; });
+	return this;
 };
 
+var Convertible = Security();
+isSecurity.call(Convertible.prototype);
+isConvertible.call(Convertible.prototype);
 
-function SAFE_cap_nodiscount () { }
+// MIXIN isNote: a security that bears interest and is repayable at the maturity date
+var isNote = function() {
+	this.init_LIST.push(function(args) {
+		this.arglist.push("term", "interest");
+		this.defaults.instrument = "debt notes";
+	});
+	this.getInfo_LIST.push( function() { return "  Furthermore, being a debt instrument, I accrue " + this.interest + "% interest, repayable after "+this.term+"\n"; });
+};
 
-function SAFE_cap_discount () { }
+var Note = Security();
+isSecurity.call(Note.prototype);
+isNote.call(Note.prototype);
 
-function SAFE_nocap_discount () { }
 
-function SAFE_nocap_nodiscount_MFN () { }
+// triple mixin: the whole point of this exercise.
+var ConvertibleNote = Security();
+isSecurity.call(ConvertibleNote.prototype);
+isConvertible.call(ConvertibleNote.prototype);
+isNote.call(ConvertibleNote.prototype);
 
-// export all the above
+
+// export
 
 exports.Company = Company;
-exports.Security = Security;
-exports.Convertible_Security = Convertible_Security;
-exports.Note = Note;
+exports.Generic = Generic;
+exports.Note    = Note;
+exports.Convertible = Convertible;
+exports.ConvertibleNote = ConvertibleNote;
 
 }());
