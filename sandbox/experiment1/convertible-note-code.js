@@ -37,7 +37,7 @@ var isSecurity = function () {
 	this.arglist = [];
 	this.defaults = {};
 	this.getInfo_LIST = [function() { return "This is an instance of " + this.instrument + ", of price " + this.prefix + this.price + " " + this.currency + "\n"; }];
-	this.init_LIST = [function(args) {
+	this.init_LIST = [function() {
 		this.arglist.push("price", "instrument", "currency", "alias", "prefix", "subscriber", "company");
 		this.defaults.prefix = "$";
 		this.defaults.currency = "SGD";
@@ -59,7 +59,7 @@ isSecurity.call(Generic.prototype);
 
 // MIXIN isConvertible: a security that is able to convert to another security
 var isConvertible = function() {
-	this.init_LIST.push(function(args) {
+	this.init_LIST.push(function() {
 		this.arglist.push("conversion_upon", "qualified_financing", "converts_to", "conversion_price", "automatic_conversion");
 		this.defaults.instrument = "convertible securities";
 		this.defaults.converts_to = { name: "Conversion Shares" };
@@ -75,7 +75,7 @@ isConvertible.call(Convertible.prototype);
 
 // MIXIN isNote: a security that bears interest and is repayable at the maturity date
 var isNote = function() {
-	this.init_LIST.push(function(args) {
+	this.init_LIST.push(function() {
 		this.arglist.push("term", "interest");
 		this.defaults.instrument = "debt notes";
 	});
