@@ -1,6 +1,8 @@
 %.json: %.yaml
 	perl -MJSON -MYAML=LoadFile -le 'print JSON->new->pretty->encode(LoadFile shift)' $< > $@
 
+NODE_PATH=/usr/local/lib/node_modules
+
 all: english.html legalese.html
 
 HANDLEBARS=handlebars
