@@ -65,6 +65,15 @@ readStream(fs.createReadStream(file), function(err, tmpl) {
 			return "";
 		});
 
+        hbs.registerHelper('choice_value', function (myobj, options) {
+			if (myobj.choice == "default") { return myobj.default }
+			else                           { return myobj.choice }
+		});
+
+		hbs.registerHelper('hundred_minus', function(mynum, options) {
+			return 100 - mynum;
+		});
+		
 		hbs.registerHelper('if_eq', function(str1, str2, options) {
 			if (str1 == str2) { return options.fn(this); } else { return }
 		});

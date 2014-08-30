@@ -41,7 +41,6 @@ closing_date: December 31, 2014
 securities:
   type: investment
   instrument: convertible promissory shares
-  flavor: discount, no cap
   alias: the Shares
   instrument_shortname: shares
   amount_on_offer: 1,000,000
@@ -61,6 +60,14 @@ securities:
     - qualified_financing: at the conversion price
     - at_term: at the valuation cap
   interest: 5
+  flavor:
+    alternatives:
+      - discount, no cap
+      - cap, no discount
+      - cap and discount
+      - MFN
+    default: discount, no cap
+    choice: default
   optional_conversion:
     alternatives:
       - at the option of the investor

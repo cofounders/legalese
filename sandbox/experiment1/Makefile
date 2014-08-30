@@ -3,7 +3,7 @@
 
 NODE_PATH=/usr/local/lib/node_modules
 
-all: english.html legalese.html
+all: english.html legalese.html safe.mdh
 
 HANDLEBARS=handlebars
 HANDLEBARS=../../src/bin/hb

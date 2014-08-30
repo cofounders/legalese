@@ -1,0 +1,4 @@
+{{#if securities.jurisdiction}}
+{{#choice_among_alternatives securities.jurisdiction "US"}}{{>disclaimer_us}}{{/choice_among_alternatives}}
+{{#choice_among_alternatives securities.jurisdiction "SG"}}{{>disclaimer_sg}}{{/choice_among_alternatives}}
+{{/if}}
