@@ -57,10 +57,6 @@ securities:
   premoney_valuation: 5,000,000
   conversion_discount:
     percent: 20
-  conversion_price:
-    lower_of:
-      premoney_valuation: true
-      discounted_conversion: true
   automatic_conversion:
     - qualified_financing: at the conversion price
     - at_term: at the valuation cap

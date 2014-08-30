@@ -1,9 +1,7 @@
-{{#conversion_price}}
 # Conversion Price
-  {{#if lower_of}}
-  {{ucfirst ../../alias}} will convert at the lower of:
+
+{{ucfirst alias}} will convert at
+{{#if premoney_valuation}}{{#if conversion_discount}}the lower of:{{/if}}{{/if}}
   
-{{#if lower_of.premoney_valuation}}  * {{../../../currency}} {{../../../premoney_valuation}}{{/if}}
-{{#if lower_of.discounted_conversion}}  * {{../../../conversion_discount.percent}}% less than the price per share paid in the {{../../../conversion_upon}}{{/if}}
-  {{/if}}
-{{/conversion_price}}
+{{#if premoney_valuation}}{{#if conversion_discount}}  * {{/if}}{{currency}} {{premoney_valuation}}{{/if}}
+{{#if conversion_discount}}{{#if premoney_valuation}}  * {{/if}}{{conversion_discount.percent}}% less than the price per share paid in the {{conversion_upon}}{{/if}}
