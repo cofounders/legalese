@@ -23,6 +23,7 @@ parties:
         - name: Danny
           id: S4444444D
           idtype: Passport
+          commitment: 1,000,000
       alias:
         plural: the Investors
         singular: the Investor
@@ -37,13 +38,11 @@ parties:
   alias: the Parties
 securities:
   type: investment
-  instrument: convertible promissory notes
-  alias: the Notes
-  instrument_shortname: notes
+  instrument: convertible promissory shares
+  flavor: discount, no cap
+  alias: the Shares
+  instrument_shortname: shares
   amount_on_offer: 1,000,000
-  subscriptions:
-    - subscriber: the Investor
-      commitment: 1,000,000
   currency: SGD
   prefix: $
   term: twenty-four (24) months
@@ -85,6 +84,13 @@ securities:
     at_election_of_investor:
       - redemption_preference: one and a half (1.5)
       - conversion_at_cap: 1
+  jurisdiction:
+    alternatives:
+      - US
+      - SG
+    default: SG
+    choice: default
+    exemptions: sections 272b(1), 274, and 275(1) of the Securities and Futures Act
   prepayment:
     alternatives:
       - approved by simple majority of investors

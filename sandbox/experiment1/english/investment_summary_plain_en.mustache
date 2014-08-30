@@ -1,4 +1,4 @@
-The investment will take the form of {{instrument}}.
-{{#subscriptions}}
-{{ucfirst subscriber}} is expected to subscribe for {{../currency}} {{commitment}} of those {{../instrument_shortname}}.
-{{/subscriptions}}
+The investment will take the form of {{securities.instrument}}.
+{{#parties/members/investors/members}}
+{{ucfirst name}} is expected to subscribe for {{../securities/currency}} {{commitment}} of those {{../securities/instrument_shortname}}.
+{{/parties/members/investors/members}}
