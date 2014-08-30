@@ -60,7 +60,8 @@ readStream(fs.createReadStream(file), function(err, tmpl) {
 			if ((myobj.choice == "default" && myobj.default == mytext)
 				||
 				myobj.choice == mytext) {
-				return options.fn(this);
+				if (options.fn != undefined) { return options.fn(this); } // usually we expect to be called as a block helper
+				return true;  // sometimes we are called as an argument to if()
 			}
 			return "";
 		});

@@ -49,7 +49,7 @@ securities:
   term: twenty-four (24) months
   conversion_upon: qualified financing
   qualified_financing:
-    minimum_raise: 4,000,000
+    minimum_raise: 250,000
   converts_to:
     name: Conversion Shares
     explanation: whatever shares are issued in the next round financing
@@ -67,7 +67,7 @@ securities:
       - cap and discount
       - MFN
     default: discount, no cap
-    choice: default
+    choice: MFN
   optional_conversion:
     alternatives:
       - at the option of the investor
