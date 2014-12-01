@@ -43,6 +43,7 @@ readStream(fs.createReadStream(file), function(err, tmpl) {
 		_.each(fs.readdirSync(partials_dir),function(partial_name) {
 			if (-1 == partial_name.search(/\.mustache$/)) { return }
 			var partial_name = path.basename(partial_name, ".mustache");
+//			process.stderr.write("registering partial " + partial_name + ".mustache\n");
 			hbs.registerPartial(partial_name, fs.readFileSync(partials_dir+"/" + partial_name + ".mustache", {encoding:'utf8'}));
 		}
 			  );

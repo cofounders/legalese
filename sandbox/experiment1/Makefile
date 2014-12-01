@@ -1,19 +1,21 @@
 %.json: %.yaml
 	perl -MJSON -MYAML=LoadFile -le 'print JSON->new->pretty->encode(LoadFile shift)' $< > $@
 
-NODE_PATH=/usr/local/lib/node_modules
+export NODE_PATH=/usr/local/lib/node_modules
 
 all: english.html legalese.html safe.mdh
 
 HANDLEBARS=handlebars
 HANDLEBARS=../../src/bin/hb
 
+YAML=orig
+
 .SECONDARY:
 
-%.mdh: %.mustache main.json
-	$(HANDLEBARS) --file=$< main.json > $@
+%.mdh: %.mustache $(YAML).json
+	$(HANDLEBARS) --file=$< $(YAML).json > $@
 
-%.mdm: %.mustache main.yaml
+%.mdm: %.mustache $(YAML).yaml
 	mustache main.yaml $< > $@
 
 %.html: %.mdh

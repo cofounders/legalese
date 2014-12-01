@@ -103,3 +103,70 @@ exports.Convertible = Convertible;
 exports.ConvertibleNote = ConvertibleNote;
 
 }());
+
+
+
+
+
+/*
+ shall mean the next sale (or series of related sales) by the Company
+ of its Preferred Stock following the Date of Issuance from which the
+ Company receives gross proceeds of not less than $1,000,000 (excluding
+ 	the aggregate amount of securities converted into Common or Preferred Stock
+ 	in connection with such sale (or series of related sales)).
+
+*/
+
+function onFinancing(event) {
+	// does this qualify as a NextEquityFinancing?
+
+	if (isNextEquityFinancing()) { this.convert(true) }
+}
+
+
+function isNextEquityFinancing(event) {
+	return (event.date > this.dateOfIssuance
+		&&
+		event.GrossProceeds(excluding_this(TRUE)) > 1000000
+		&&
+		event.PreMoneyValution > 50000000
+		);
+}
+
+
+/*
+with respect to a conversion pursuant to Clause 3.1 (Next Equity Financing),
+shares of the Company’s Preferred Stock issued in the Next Equity Financing;
+provided, however, that, at the Company’s election,
+"Conversion Shares” with respect to a conversion pursuant to Clause 3.1
+shall mean shares of a Shadow Series;
+*/
+
+function convert() {
+	delete_old_shares(this.shares);
+	company.create_new_shares(this.shareholder, newShares()
+}
+
+function newShares() {}
+	var security = Security;
+	if (isNextEquityFinancing(event)) { // 3.1
+		security.type = event.securitytype;
+		if (company.directors.elect("regarding security types")) {
+			security.type = event.mkShadowSeries();
+		}
+		return security;
+	}
+	if (isCorporateTransaction(event)) { // 3.2
+		security.type = company.common;
+		security.amount = ...;
+		return security;
+	}
+
+	die "some conversion event was not handled correctly";
+	return undefined; // die on error so the unit tests will pick this up.
+
+}
+
+unit_test(conversion, PreMoneyValution = 1000000);
+unit_test(conversion, PreMoneyValution = 10000000);
+unit_test(conversion, PreMoneyValution = 100000000);

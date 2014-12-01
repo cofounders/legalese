@@ -1,18 +1,16 @@
 ---
-title: Legalese Demonstration Experiment 1
-legalese_target: english
-# english | termsheet | legalese | visual
+title: Legalese Demo 1, YC SAFE
 parties:
   members:
     founders:
       members:
-        - name: Alice
+        - name: Kai
           id: S1234567A
           idtype: NRIC
-        - name: Bob
+        - name: Meng
           id: S2222222B
           idtype: NRIC
-        - name: Charlie
+        - name: Sidhi
           id: S3333333C
           idtype: NRIC
       alias:
@@ -20,7 +18,7 @@ parties:
         singular: the Founder
     investors:
       members:
-        - name: Danny
+        - name: Moritz
           id: S4444444D
           idtype: Passport
           commitment: 1,000,000
@@ -40,26 +38,17 @@ parties:
 closing_date: December 31, 2014
 securities:
   type: investment
-  instrument: convertible promissory shares
-  alias: the Shares
-  instrument_shortname: shares
+  instrument: Simple Agreement for Future Equity
+  alias: the SAFE
+  instrument_shortname: Safe
   amount_on_offer: 1,000,000
   currency: SGD
   prefix: $
-  term: twenty-four (24) months
-  conversion_upon: qualified financing
   qualified_financing:
     minimum_raise: 250,000
-  converts_to:
-    name: Conversion Shares
-    explanation: whatever shares are issued in the next round financing
   premoney_valuation: 5,000,000
   conversion_discount:
     percent: 20
-  automatic_conversion:
-    - qualified_financing: at the conversion price
-    - at_term: at the valuation cap
-  interest: 5
   flavor:
     alternatives:
       - discount, no cap
@@ -67,85 +56,11 @@ securities:
       - cap and discount
       - MFN
     default: discount, no cap
-    choice: MFN
-  optional_conversion:
-    alternatives:
-      - at the option of the investor
-      - at the option of the company
-    conversion_preference: 1
-    default: at the option of the investor
     choice: default
-  closings:
-    alternatives:
-      - one_or_more
-      - one
-    default: one_or_more
-    choice: default
-  definitive_agreement:
-    alternatives:
-      - no_further_agreements
-      - subsequent_paperwork
-    default: subsequent_paperwork
-    choice: default
-  upon_sale_before_conversion:
-    at_election_of_investor:
-      - redemption_preference: one and a half (1.5)
-      - conversion_at_cap: 1
   jurisdiction:
     alternatives:
       - US
       - SG
     default: SG
-    choice: US
+    choice: default
     exemptions: sections 272b(1), 274, and 275(1) of the Securities and Futures Act
-  prepayment:
-    alternatives:
-      - approved by simple majority of investors
-      - approved by two-thirds majority of investors
-    default: approved by simple majority of investors
-    choice: default
-  amendment_and_waiver:
-    alternatives:
-      - company
-      - company and majority of investors
-    default: company and majority of investors
-    choice: default
-  security_interest:
-    alternatives:
-      - secured
-      - unsecured
-    default: unsecured
-    choice: default
-  investor_information_rights:
-    alternatives:
-      - equivalent to shareholders
-      - no rights
-    default: equivalent to shareholders
-    choice: default
-  investor_voting_rights:
-    alternatives:
-      - equivalent to shareholders
-      - no rights
-    default: no rights
-    choice: default
-  investor_board_rights:
-    alternatives:
-      - appoint
-      - no rights
-    number: 1 member
-    default: no rights
-    choice: default
-  board_size: 3
-  fees:
-    alternatives:
-      - paid by investor
-      - paid by company
-      - each party pays
-    cap: 100,000
-    default: each party pays
-    choice: default
-
-    
-
-      
-      

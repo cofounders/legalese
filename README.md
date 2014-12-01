@@ -96,6 +96,30 @@ Term sheet generator wizards create an intermediate representation that captures
 
 -
 
+# Egregious Example
+
+If the investment for the purpose of the Series B Funding is valued at not more than S$32.5 Million, then the investors in the Note shall be entitled to convert the Note into Shares at a fixed valuation of S$27.5 million.
+
+If the investment for the purpose of the Series B Funding is valued at less than S$ 40 million but not below S$32.5 million, investors in the Convertible Note will be entitled to convert the Note into Shares at a 15% discount over the valuation of the Series B Funding (for instance, if the series B Funding is at a valuation of S$35 million, then the investors in the Note shall be entitled to convert at a valuation of 35M less 15% discount);
+
+If the investment for the purpose of the Series B Funding is valued at not less than S$ 40 million but less than S$47.06 million, investors in the Convertible Note will be entitled to convert the Note into Shares at a 15% discount over the valuation of the Series B Funding (for instance, if the series B Funding is at a valuation of S$47.06 million, then the investors in the Note shall be entitled to convert at a pre-money valuation of 40M i.e. S$47.06 million less 15% discount);
+
+If the investment for the purpose of the Series B Funding is valued at not less than S$ 47.06 million but less than S$80 million, investors in the Convertible Note will be entitled to convert the Note into Shares at a fixed pre-money valuation of S$40 million;
+
+If the investment for the purpose of the Series B Funding is valued at not less than S$80 million but less than S$100 million, investors in the Convertible Note will be entitled to convert the Note into Shares at a fixed pre-money valuation of S$45 million; and
+
+If the investment for the purpose of the Series B Funding is valued at not less than S$100 million, investors in the Convertible Note will be entitled to convert the Note into Shares at a fixed pre-money valuation of S$50 million.
+
+
+if      (seriesB < 32.5)  { conversion = 27.5 }
+else if (seriesB < 40)    { conversion = seriesB * 0.85 }
+else if (seriesB < 47.06) { conversion = seriesB * 0.85 }
+else if (seriesB < 80)    { conversion = 40 }
+else if (seriesB < 100)   { conversion = 45 }
+else                      { conversion = 50 }
+
+
+
 # See Also
 
 If you have just wandered across this, you should know that the project contains a few other resources:
