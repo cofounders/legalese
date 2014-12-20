@@ -2,6 +2,7 @@
  * populate the data.* structure
  * the PARTIES go into data.parties.founder.*, data.parties.shareholder.*, data.parties.company.*, data.parties.investor.* as arrays
  * the TERMS go into data.* directly.
+ * if a suitabletemplate is marked as binary then we iterate through the investors and set data.investor.* each time
  */
 function readRows() {
   var sheet = SpreadsheetApp.getActiveSheet();
@@ -108,7 +109,7 @@ function onOpen() {
   var entries = [
   { name:"Generate", functionName:"fillTemplates"},
   { name:"quicktest", functionName:"quicktest"},
-  
+  { name:"Create Form", functionName:"setupForm_"},
   ];
     spreadsheet.addMenu("Legalese", entries);
 };
@@ -237,9 +238,12 @@ function suitableTemplates() {
     // return a bunch of URLs
   var suitables = [
 //  { url:"test1.html", title:"Test One" },
-  { url:"termsheet.html", title:"Convertible Note Termsheet" },
-  { url:"darius.html", title:"Convertible Note Agreement" },
-  { url:"kissing.html", title:"KISS(Sing) Agreement" },
+// investors: onebyone | all
+// 
+
+  { url:"termsheet.html", title:"Convertible Note Termsheet", investors:"onebyone" },
+  { url:"darius.html",    title:"Convertible Note Agreement", investors:"onebyone" },
+  { url:"kissing.html",   title:"KISS(Sing) Agreement",       investors:"onebyone" },
   ];
 return suitables;
 };
