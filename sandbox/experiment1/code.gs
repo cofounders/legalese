@@ -9,12 +9,13 @@
 function onOpen() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var entries = [
-  { name:"Create Form", functionName:"setupForm_"},
+  { name:"Create Investor Form", functionName:"setupForm_"},
   { name:"Generate Docs", functionName:"fillTemplates_"},
   { name:"quicktest_", functionName:"quicktest_"},
   ];
     spreadsheet.addMenu("Legalese", entries);
 	// when we release this as an add-on the menu-adding will change.
+
 };
 
 
@@ -45,7 +46,7 @@ function setupForm_() {
   }	  
   else {
 	cell.setValue("creating form"); SpreadsheetApp.flush();
-	form = FormApp.create('Investor Form')
+	form = FormApp.create('for Investors - ' + ss.getName())
       .setDescription('Please fill in investor details for the proposed investment in ' + data.parties.company[0].name + ".")
       .setConfirmationMessage('Thanks for responding!')
       .setAllowResponseEdits(true)
@@ -88,6 +89,11 @@ function setupForm_() {
   var short_url = form.shortenFormUrl(form_url);
 
   cell.setValue(short_url); SpreadsheetApp.flush();
+
+  var legalese_root = legaleseRootFolder_();
+  legalese_root.addFile(DriveApp.getFileById(form.getId()));
+  legalese_root.addFile(DriveApp.getFileById(ss.getId()));
+  Logger.log("added to legalese root folder");
 }
 
 // ---------------------------------------------------------------------------------------------------------------- onFormSubmit
@@ -334,7 +340,7 @@ function fillTemplates_() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
   var cell = sheet.getRange("F6");
   var suitables = suitableTemplates_();
-  cell.setValue(folder.getUrl());
+  cell.setValue("=HYPERLINK(\""+folder.getUrl()+"\",\""+folder.getName()+"\")");
 
   templatedata.company = templatedata.parties.company[0];
   templatedata.founders = templatedata.parties.founder;
@@ -398,9 +404,30 @@ function suitableTemplates_() {
 return suitables;
 };
 
+function legaleseRootFolder_() {
+  var legaleses = DriveApp.getFoldersByName("Legalese Root");
+  var legalese_root;
+  Logger.log("legaleses = " + legaleses);
+  if (legaleses.hasNext()) {
+	Logger.log("legaleses is defined");
+	legalese_root = legaleses.next();
+	Logger.log("legalese_root = " + legalese_root);
+  } else {
+	legalese_root = DriveApp.createFolder("Legalese Root");
+  }
+  return legalese_root;
+}
+
 // ---------------------------------------------------------------------------------------------------------------- createFolder_
 function createFolder_() {
-  var folder = DriveApp.getFolderById("0BxOaYa8pqqSwOEVtdlJ1Z3hkZkU");
+  var legalese_root = legaleseRootFolder_();
+  Logger.log("attempting createfolder");
+  var folder = legalese_root.createFolder(SpreadsheetApp.getActiveSpreadsheet().getName() + " "
+										  + Utilities.formatDate(new Date(), SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss"));
+  Logger.log("createfolder returned " + folder);
+
+  legalese_root.addFile(DriveApp.getFileById(SpreadsheetApp.getActiveSpreadsheet().getId()));
+
   return folder;
 };
 
