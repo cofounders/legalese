@@ -103,8 +103,6 @@ function onFormSubmit(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
   var data = readRows_();
   var cell = sheet.getRange("H4");
-  cell.setValue("will insert a row after " + data._last_party_row);
-  Logger.log("onFormSubmit: will insert row");
   // add a row and insert the investor fields
   sheet.insertRowAfter(data._last_party_row+1); // might need to update the commitment sum range
   var newrow = sheet.getRange(data._last_party_row+2,1,1,sheet.getMaxColumns());
@@ -274,7 +272,7 @@ function formatify_(format, string) {
 // ---------------------------------------------------------------------------------------------------------------- newclause_
 var clauseroot = [];
 var clausetext2num = {};
-function newclause_(level, clausetext, uniqtext, tag) {
+function newclause(level, clausetext, uniqtext, tag) {
   var clause = clauseroot; // navigate to the desired clause depending on the level
   var pathindex = [clause.length];
   for (var i = 1; i < level; i++) {
@@ -294,7 +292,7 @@ function newclause_(level, clausetext, uniqtext, tag) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------- clausenum_
-function clausenum_(clausetext) {
+function clausenum(clausetext) {
   return clausetext2num[clausetext] || "<<CLAUSE XREF MISSING>>";
 }
   
@@ -333,7 +331,7 @@ function fillTemplates_() {
 
   var folder = createFolder_(); var readme = createReadme_(folder);
 
-  var sheet = SpreadsheetApp.getSheetByName("Deal Terms");
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
   var cell = sheet.getRange("F6");
   var suitables = suitableTemplates_();
   cell.setValue(folder.getUrl());
@@ -380,7 +378,7 @@ clausetext2num = {};
 // ---------------------------------------------------------------------------------------------------------------- readConfigSheet_
 function readConfigSheet_() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = SpreadsheetApp.getSheetByName("Templates"); // get sheet named Templates
+  var sheet = spreadsheet.getSheetByName("Templates"); // get sheet named Templates
   return sheet;
 };
 
