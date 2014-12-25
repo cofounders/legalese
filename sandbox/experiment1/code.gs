@@ -9,9 +9,10 @@
 function onOpen() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var entries = [
-  { name:"Create Investor Form", functionName:"setupForm_"},
+  { name:"Create Form", functionName:"setupForm_"},
   { name:"Generate Docs", functionName:"fillTemplates_"},
-  { name:"quicktest_", functionName:"quicktest_"},
+  { name:"quicktest", functionName:"quicktest"},
+  { name:"delete extra triggers", functionName:"delete_all_but_one_trigger"},
   ];
     spreadsheet.addMenu("Legalese", entries);
 	// when we release this as an add-on the menu-adding will change.
@@ -21,20 +22,19 @@ function onOpen() {
 
 // ---------------------------------------------------------------------------------------------------------------- setupForm
 /**
- * establish a form for investors to fill in their personal details
+ * establish a form for parties to fill in their personal details
+ *
  */
 function setupForm_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var cell = ss.getSheetByName("Deal Terms").getRange("F4");
+  var cell = ss.getSheetByName("Deal Terms").getRange("E4");
 
   var form = ss.getFormUrl();
-  Logger.log("starting readRows_()");
   var data = readRows_();
-  Logger.log("finished readRows_()");
 
   if (form != undefined) {
     var ui = SpreadsheetApp.getUi();
-    var response = ui.prompt('An investor form was previously created.', 'Reset it?', ui.ButtonSet.YES_NO);
+    var response = ui.prompt('A form was previously created.', 'Reset it?', ui.ButtonSet.YES_NO);
 
 	if (response.getSelectedButton() == ui.Button.NO) { return }
 	cell.setValue("resetting form"); SpreadsheetApp.flush();
@@ -46,13 +46,22 @@ function setupForm_() {
   }	  
   else {
 	cell.setValue("creating form"); SpreadsheetApp.flush();
-	form = FormApp.create('for Investors - ' + ss.getName())
-      .setDescription('Please fill in investor details for the proposed investment in ' + data.parties.company[0].name + ".")
+	form = FormApp.create('Personal Particulars - ' + ss.getName())
+      .setDescription('Please fill in your details regarding ' + data.parties.company[0].name + ".")
       .setConfirmationMessage('Thanks for responding!')
       .setAllowResponseEdits(true)
       .setAcceptingResponses(true)
 	  .setProgressBar(true);
-	ScriptApp.newTrigger('onFormSubmit').forSpreadsheet(ss).onFormSubmit().create();
+
+	// don't create a new trigger if there is already one available
+	var triggers = ScriptApp.getUserTriggers(ss);
+	if (triggers.length > 0 && // is there already a trigger for onFormSubmit?
+		triggers.filter(function(t) { return t.getEventType() == ScriptApp.EventType.ON_FORM_SUBMIT }).length > 0) {
+	  Logger.log("we already have an onFormSubmit trigger, so no need to add a new one.");
+	}
+	else {
+	  ScriptApp.newTrigger('onFormSubmit').forSpreadsheet(ss).onFormSubmit().create();
+	}
   }
 
   // Create the form and add a multiple-choice question for each timeslot.
@@ -76,7 +85,7 @@ function setupForm_() {
 		.setTitle(partyfield.fieldname)
 		.setRequired(partyfield.required)
 		.setHelpText(partyfield.helptext);
-	  // in the future, when Google Apss Scripts adds validation to its FormApp, validate the input as a valid email address or number as appropriate.
+	  // in the future, when Google Apps Scripts adds validation to its FormApp, validate the input as a valid email address or number as appropriate.
 	}
 	else if (partyfield.itemtype.match(/^text/)) {
 	  form.addTextItem()
@@ -85,6 +94,18 @@ function setupForm_() {
 		.setHelpText(partyfield.helptext);
 	}	  
   }
+
+  var config = readConfig();
+
+  for (var i in config.form_extras.values) {
+	var field = asvar_(config.form_extras.values[i]);
+	form.addListItem()
+	  .setTitle(config[field].dict["name"][0])
+	  .setRequired(config[field].dict["required"][0])
+	  .setChoiceValues(config[field].dict["choicevalues"])
+	  .setHelpText(config[field].dict["helptext"][0]);
+  }
+
   var form_url = form.getPublishedUrl();
   var short_url = form.shortenFormUrl(form_url);
 
@@ -95,6 +116,114 @@ function setupForm_() {
   legalese_root.addFile(DriveApp.getFileById(ss.getId()));
   Logger.log("added to legalese root folder");
 }
+
+// ---------------------------------------------------------------------------------------------------------------- readConfig_
+// each config row produces multiple representations:
+// config.columna.values is an array of values -- if columna repeats, then values from last line only
+// config.columna.dict is a dictionary of c: [d,e,f] across multiple lines
+
+function readConfig() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("README");
+
+  var rows = sheet.getDataRange();
+  var numRows = rows.getNumRows();
+  var values = rows.getValues();
+  var section = "prologue";
+
+  var config = {};
+  var previous_columna;
+
+  for (var i = 0; i <= numRows - 1; i++) {
+    var row = values[i];
+
+	// process header rows
+	if (row[0] == "CONFIGURATION") { section = row[0]; continue }
+	if (section == "CONFIGURATION") {
+	  if (row[1] == undefined) { continue }
+	  Logger.log("row " + i + ": processing row "+row[0]);
+
+	  var columna = asvar_(row[0]) || previous_columna;
+	  previous_columna = columna;
+
+	  Logger.log("columna="+columna);
+	  config[columna] = config[columna] || { asRange:null, values:null, dict:{} };
+
+	  Logger.log("config[columna]="+config[columna]);
+
+	  config[columna].asRange = sheet.getRange(i+1,2,1,sheet.getMaxColumns());
+	  Logger.log(columna+".asRange=" + config[columna].asRange.getValues()[0].join(","));
+
+	  config[columna].values = config[columna].asRange.getValues()[0];
+	  while (config[columna].values[config[columna].values.length-1] === "") { config[columna].values.pop() }
+
+	  Logger.log(columna+".values=" + config[columna].values.join(","));
+
+	  var columns_def = config[columna].values.slice(0);
+	  if (columns_def[0] == undefined) { continue }
+	  var columnc = asvar_(columns_def.shift());
+
+	  while (columns_def[columns_def.length-1] === "") { columns_def.pop() }
+
+	  config[columna].dict[columnc] = columns_def;
+	  Logger.log(columna+".dict."+columnc+"=" + config[columna].dict[columnc].join(","));
+	}
+  }
+  Logger.log("returning\n" + JSON.stringify(config,null,"  "));
+  return config;
+}
+// {
+//   "form_extras": {
+//     "asRange": {},
+//     "values": [
+//       "Party Types",
+//       "Second Element"
+//     ],
+//     "dict": {
+//       "party_types": [
+//         "Second Element"
+//       ]
+//     }
+//   },
+//   "party_types": {
+//     "asRange": {},
+//     "values": [
+//       "helptext",
+//       "Your role, please."
+//     ],
+//     "dict": {
+//       "name": [
+//         "Party Role"
+//       ],
+//       "choicevalues": [
+//         "Founder",
+//         "Company",
+//         "Investor",
+//         "Existing Shareholder"
+//       ],
+//       "required": [],
+//       "helptext": [
+//         "Your role, please."
+//       ]
+//     }
+//   },
+//   "second_element": {
+//     "asRange": {},
+//     "values": [
+//       "",
+//       "",
+//       " "
+//     ],
+//     "dict": {
+//       "boo": [],
+//       "": [
+//         "",
+//         " "
+//       ]
+//     }
+//   }
+// }
+
 
 // ---------------------------------------------------------------------------------------------------------------- onFormSubmit
 /**
@@ -108,20 +237,21 @@ function onFormSubmit(e) {
   Logger.log("onFormSubmit: beginning");
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
   var data = readRows_();
-  var cell = sheet.getRange("H4");
   // add a row and insert the investor fields
+  Logger.log("inserting a row after " + (parseInt(data._last_party_row)+1));
   sheet.insertRowAfter(data._last_party_row+1); // might need to update the commitment sum range
   var newrow = sheet.getRange(data._last_party_row+2,1,1,sheet.getMaxColumns());
 //  newrow.getCell(0,0).setValue("bar");
-  newrow.getCell(1,1).setValue("Investor:");
-  newrow.getCell(1,3).setValue("investor");
 
-  var origpartyfields = data._origpartyfields;
-  Logger.log("onFormSubmit: origpartyfields = " + origpartyfields);
   // loop through the origpartyfields inserting the new data in the right place.
   for (names in e.namedValues) {
 	Logger.log("e.namedValues = " + names + ":"+e.namedValues[names][0]);
   }
+
+  var origpartyfields = data._origpartyfields;
+  Logger.log("onFormSubmit: origpartyfields = " + origpartyfields);
+  newrow.getCell(1,1).setValue(e.namedValues["Party Role"][0]);
+
   for (var i in origpartyfields) {
 	var partyfield = origpartyfields[i];
 	Logger.log("partyfield "+i+" (" + partyfield.fieldname+") (column="+partyfield.column+") = " + e.namedValues[partyfield.fieldname][0]);
@@ -135,7 +265,7 @@ function onFormSubmit(e) {
 // ---------------------------------------------------------------------------------------------------------------- readRows
 /**
  * populate the data.* structure
- * the PARTIES go into data.parties.founder.*, data.parties.shareholder.*, data.parties.company.*, data.parties.investor.* as arrays
+ * the PARTIES go into data.parties.founder.*, data.parties.existing_shareholder.*, data.parties.company.*, data.parties.investor.* as arrays
  * the TERMS go into data.* directly.
  * if a suitabletemplate is marked as binary then we iterate through the investors and set data.investor.* each time
  */
@@ -149,7 +279,7 @@ function readRows_() {
   var partyfields = [];
   var origpartyfields = [];
   var partyfieldorder = []; // table that remaps column number to order-in-the-form
-  var parties = { founder:[], shareholder:[], company:[], investor:[] };
+  var parties = { founder:[], existing_shareholder:[], company:[], investor:[] };
   var terms_row_offset;
 
   Logger.log("readRows_(): starting.");
@@ -205,9 +335,8 @@ function readRows_() {
 
 	// process data rows
     if (section == "KEY TERMS") {
-      if (row[2] == undefined || row[2].length == 0) { continue }
-//      Logger.log("expanding term " + row[1] + " with format " + term_formats[i][0]);
-      terms[row[2]] = formatify_(term_formats[i][0], row[1]);
+      if ( row[0].length == 0) { continue }
+      terms[asvar_(row[0])] = formatify_(term_formats[i][0], row[1]);
     }
     else if (section == "PARTIES") { // Name	partygroup	Email	IDtype	ID	Address	State	InvestorType Commitment etc
       var singleparty = {};
@@ -218,10 +347,9 @@ function readRows_() {
         var k = partyfields[ki];
         var v = formatify_(party_formats[0][ki],row[ki]);
 
-//        Logger.log("learned %s.%s=%s", row[2], k, v);
         singleparty[k] = v;
       }
-      var partytype = row[2];
+      var partytype = asvar_(row[0]);
 	  if (partytype == undefined || ! partytype.length) { continue }
 
       Logger.log("learning entire %s, %s", partytype, singleparty);
@@ -234,6 +362,11 @@ function readRows_() {
   return terms;
 };
 
+function asvar_(str) {
+  if (str == undefined) { return undefined }
+  return str.toString().replace(/[ -.]/g, "_").replace(/:/g, "").toLowerCase();
+}
+
 // ---------------------------------------------------------------------------------------------------------------- formatify_
 // Wed Dec 17 05:17:57 PST 2014 INFO: term 150000 has format [$S$]#,##0
 // Wed Dec 17 05:17:57 PST 2014 INFO: term 2500000 has format [$$]#,##0.00
@@ -244,8 +377,6 @@ function readRows_() {
 // Wed Dec 17 05:17:57 PST 2014 INFO: term 0.2 has format 0%
 
 // google's raw format expresses 1% as 0.01.
-//  var percent_terms = ["interest", "conversion_discount_percent", "maturity_conversion_discount_percent"];
-//  for (var i in percent_terms) { templatedata[percent_terms[i]] *= 100; }
 function formatify_(format, string) {
   var toreturn;
   if (format != undefined) {
@@ -275,9 +406,20 @@ function formatify_(format, string) {
   return toreturn;
 }
 
-// ---------------------------------------------------------------------------------------------------------------- newclause_
+// ---------------------------------------------------------------------------------------------------------------- clauseroot / clausetext2num
 var clauseroot = [];
 var clausetext2num = {};
+var hintclause2num = {};
+
+// ---------------------------------------------------------------------------------------------------------------- clausehint
+// xml2html musters a hint database of clause text to pathindex.
+// at the start of the .ghtml file all the hints are passed to the HTMLTemplate engine by calling
+// a whole bunch of clausehint()s at the front of the file
+function clausehint(clausetext, pathindex, uniqtext) {
+  hintclause2num[uniqtext || clausetext] = pathindex.join(".");
+}
+
+// ---------------------------------------------------------------------------------------------------------------- newclause
 function newclause(level, clausetext, uniqtext, tag) {
   var clause = clauseroot; // navigate to the desired clause depending on the level
   var pathindex = [clause.length];
@@ -291,29 +433,49 @@ function newclause(level, clausetext, uniqtext, tag) {
   clausetext2num[uniqtext || clausetext] = pathindex.join(".");
   if (clausetext == undefined) { // bullet
 	var myid = pathindex.join("_");
-	return "<style>#"+myid+":before { display:block; content: \"" + pathindex.join(".") + ". \" } </style>" + "<li id=\"" + myid + "\">";
+//	return "<style>#"+myid+":before { display:block; content: \"" + pathindex.join(".") + ". \" } </style>" + "<li id=\"" + myid + "\">";
+	return "<p class=\"ol_li level" + level+ "\">" + pathindex.join(".") + " ";
   } else {
       return "<h"+(level+0)+">"+pathindex.join(".") + ". " + clausetext + "</h"+(level+0)+">";
   }
 }
 
-// ---------------------------------------------------------------------------------------------------------------- clausenum_
+// ---------------------------------------------------------------------------------------------------------------- clausenum
+// this is going to have to make use of a hinting facility.
+// the HTML template is filled in a single pass, so forward references from showclause() to newclause() will dangle.
+// fortunately the newclauses are populated by xml2html so we can muster a hint database.
+//
 function clausenum(clausetext) {
-  return clausetext2num[clausetext] || "<<CLAUSE XREF MISSING>>";
+  return clausetext2num[clausetext] || hintclause2num[clausetext] || "<<CLAUSE XREF MISSING>>";
 }
   
-// ---------------------------------------------------------------------------------------------------------------- showclause_
-function showclause_(clausetext, clausenumber, data) {
-    data.clauses[clausenumber] = { text: clausetext, children: {} };
-    return clausenumber + ". " + clausetext;
+// ---------------------------------------------------------------------------------------------------------------- showclause
+function showclause_(clausetext) {
+    return clausenum + " (" + clausetext + ")";
 }
 
-// ---------------------------------------------------------------------------------------------------------------- quicktest_
-function quicktest_() {
-  var ui = SpreadsheetApp.getUi(); // Same variations.
-//  var mystring = formatify_($ ", 1000000.01);
-  var mystring = formatify_("[$S$]#,###,##0.00",500000000000);
-  ui.alert(mystring);
+
+function delete_all_but_one_trigger() {
+ var ss = SpreadsheetApp.getActiveSpreadsheet();
+ var triggers = ScriptApp.getUserTriggers(ss);
+
+ // Log the event type for the first trigger in the array.
+ for (var i = 1; i < triggers.length; i++) {
+   ScriptApp.deleteTrigger(triggers[i]);
+ }
+}
+
+// ---------------------------------------------------------------------------------------------------------------- quicktest
+function quicktest() {
+ var ss = SpreadsheetApp.getActiveSpreadsheet();
+ var triggers = ScriptApp.getUserTriggers(ss);
+
+ // Log the event type for the first trigger in the array.
+ Logger.log("my triggers are: " + triggers);
+  for (var i in triggers) {
+	var t = triggers[i];
+	Logger.log("trigger " + i + " is: " + t + " which has event type " + t.getEventType());
+  }
 }
 
 /** Template generation is as follows:
@@ -338,7 +500,7 @@ function fillTemplates_() {
   var folder = createFolder_(); var readme = createReadme_(folder);
 
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
-  var cell = sheet.getRange("F6");
+  var cell = sheet.getRange("E6");
   var suitables = suitableTemplates_();
   cell.setValue("=HYPERLINK(\""+folder.getUrl()+"\",\""+folder.getName()+"\")");
 
@@ -351,7 +513,7 @@ function fillTemplates_() {
     var newTemplate = HtmlService.createTemplateFromFile(url);
 
     var investors = templatedata.parties.investor;
-    templatedata.shareholders = templatedata.parties.shareholder;
+    templatedata.existing_shareholders = templatedata.parties.existing_shareholder;
 
     for (var j in investors) {
       // we step through the multiple data.parties.{founder,investor,company}.* arrays.
@@ -381,25 +543,18 @@ clausetext2num = {};
   }
 };
 
-// ---------------------------------------------------------------------------------------------------------------- readConfigSheet_
-function readConfigSheet_() {
-  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = spreadsheet.getSheetByName("Templates"); // get sheet named Templates
-  return sheet;
-};
-
 // ---------------------------------------------------------------------------------------------------------------- suitableTemplates_
 function suitableTemplates_() {
-  var configSheet = readConfigSheet_();
     // return a bunch of URLs
   var suitables = [
 //  { url:"test1.html", title:"Test One" },
 // investors: onebyone | all
 // 
-
-  { url:"termsheet.html", title:"Convertible Note Termsheet", investors:"onebyone" },
-  { url:"darius.html",    title:"Convertible Note Agreement", investors:"onebyone" },
-  { url:"kissing.html",   title:"KISS(Sing) Agreement",       investors:"onebyone" },
+  { url:"founderagreement.html", title:"Founder Agreement 1", investors:"onebyone", founders:"together" },
+//   { url:"test.html", title:"Test 1", investors:"onebyone" },
+//   { url:"termsheet.html", title:"Convertible Note Termsheet", investors:"onebyone" },
+//   { url:"darius.html",    title:"Convertible Note Agreement", investors:"onebyone" },
+//   { url:"kissing.html",   title:"KISS(Sing) Agreement",       investors:"onebyone" },
   ];
 return suitables;
 };
@@ -478,5 +633,20 @@ function resetStyles_(doc) {
     atts.INDENT_START = 36;
     atts.INDENT_FIRST_LINE = 18;
     para.setAttributes(atts);
+  }
+}
+
+
+function showStyleAttributes() {
+
+  var body = DocumentApp.getActiveDocument.getBody();
+
+  var listitems = body.getListItems();
+  for (var p in listitems) {
+    var para = listitems[p];
+    var atts = para.getAttributes();
+    for (i in atts) {
+      para.appendText("attribute " + i + " = " + atts[i]);
+    }
   }
 }
