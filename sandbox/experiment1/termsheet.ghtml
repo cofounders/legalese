@@ -65,7 +65,7 @@
       <td>
         The "Conversion Price" is the lesser of
         <ol>
-          <li><?= 100 - data.conversion_discount_percent ?>% of the per share price paid by the purchasers of such Equity Securities in the Qualified Financing (the "Discounted Conversion Price"), or</li>
+          <li><?= 100 - data.conversion_discount ?>% of the per share price paid by the purchasers of such Equity Securities in the Qualified Financing (the "Discounted Conversion Price"), or</li>
           <li>the price per share equal to <?= data.premoney_valuation ?> divided by the aggregate number of outstanding shares of the Company's Common Stock as of immediately before the initial closing of the Qualified Financing (the "Valuation Cap").</li>
         </ol>
       </td>
@@ -74,7 +74,7 @@
       <th>Automatic Conversion</th>
       <td>
         <p>Automatic Conversion in a Qualified Financing. If the Company issues Equity Securities in a Qualified Financing, then the Notes<? if (data.interest) { ?>, and any accrued but unpaid interest thereon,<? } ?> will automatically convert into the equity securities issued pursuant to the Qualified Financing at the Conversion Price.</p>
-        <p>Automatic Conversion at the Maturity Date. At the Maturity Date, the Notes<? if (data.interest) { ?>, and any accrued but unpaid interest thereon,<? } ?> will automatically convert into Equity Securities at <?= 100 - data.maturity_conversion_discount_percent ?>% of the Valuation Cap.</p>
+        <p>Automatic Conversion at the Maturity Date. At the Maturity Date, the Notes<? if (data.interest) { ?>, and any accrued but unpaid interest thereon,<? } ?> will automatically convert into Equity Securities at <?= 100 - data.maturity_conversion_discount ?>% of the Valuation Cap.</p>
       </td>
     </tr>
     <tr>
