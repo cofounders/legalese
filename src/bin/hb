@@ -43,7 +43,7 @@ readStream(fs.createReadStream(file), function(err, tmpl) {
 		_.each(fs.readdirSync(partials_dir),function(partial_name) {
 			if (-1 == partial_name.search(/\.mustache$/)) { return }
 			var partial_name = path.basename(partial_name, ".mustache");
-//			process.stderr.write("registering partial " + partial_name + ".mustache\n");
+//			process.stderr.write("registering " + partials_dir + " partial " + partial_name + ".mustache\n");
 			hbs.registerPartial(partial_name, fs.readFileSync(partials_dir+"/" + partial_name + ".mustache", {encoding:'utf8'}));
 		}
 			  );
@@ -77,11 +77,21 @@ readStream(fs.createReadStream(file), function(err, tmpl) {
 		});
 		
 		hbs.registerHelper('if_eq', function(str1, str2, options) {
-			if (str1 == str2) { return options.fn(this); } else { return }
+			console.log("str1 = " + str1);
+			console.log("str2 = " + str2);
+			if (str1 == str2) { return options.fn(this); } else { return options.inverse(this) }
+		});
+		
+		hbs.registerHelper('if_eq_insensitive', function(str1, str2, options) {
+			if (str1.toLowerCase() == str2.toLowerCase()) { return options.fn(this); } else { return options.inverse(this) }
 		});
 		
 		hbs.registerHelper('if_ne', function(str1, str2, options) {
-			if (str1 != str2) { return options.fn(this); } else { return }
+			if (str1 != str2) { return options.fn(this); } else { return options.inverse(this) }
+		});
+		
+		hbs.registerHelper('if_nonzero', function(str1, options) {
+			if (parseFloat(str1) != 0.0) { return options.fn(this); } else { return options.inverse(this) }
 		});
 		
         hbs.registerHelper('choose_plural', function (myobj, plural_singular, mylist, options) {
