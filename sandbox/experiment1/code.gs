@@ -804,14 +804,12 @@ function showUserProperties() {
 function uploadAgreement() {
   var acr = postAgreement_(
 	{
-//	  "documentURL": {
-//		"name": "Potato Form Five",
-//		"url": "http://mengwong.com/tmp/potato%20form%205.pdf",
-//		mimeType: "application/pdf",
-//	  }
-	
-	  transientDocumentId:   PropertiesService.getScriptProperties().getProperty("transientDocumentId")
-,
+	  "documentURL": {
+		"name": "Potato Form Five",
+		"url": "http://mengwong.com/tmp/potato%20form%205.pdf",
+		"mimeType": "application/pdf",
+	  }
+//	  transientDocumentId:   PropertiesService.getScriptProperties().getProperty("transientDocumentId")
 	},
 	[ { role:"SIGNER", email: "mengwong@jfdi.asia", },
 	  { role:"SIGNER", email: "mengwong@gmail.com", },
@@ -825,7 +823,7 @@ function uploadAgreement() {
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var cell = ss.getSheetByName("Deal Terms").getRange("F8");
-  cell.setValue("=HYPERLINK(\""+acr.url+"\",\"EchoSign "+acr.agreementId+"\")")
+  cell.setValue("=HYPERLINK(\""+acr.url+"\",\"view in EchoSign\")")
 }
 
 function postAgreement_(fileInfos, recipients, agreementCreationInfo) {
@@ -849,16 +847,21 @@ function postAgreement_(fileInfos, recipients, agreementCreationInfo) {
 	};
   }
 
-  var o = { };
+  var o = { headers: { "Access-Token": api.getAccessToken() },
+			method: "post",
+		  };
 //  o.oAuthServiceName = "echosign";
 //  o.oAuthUseToken = "always";
 
-  o.headers = { "Access-Token": api.getAccessToken(),
-			  };
-  o.contentType = 'application/json';
+// this works in the postTransientDocument, but doesn't work here. how weird!
+// see https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app
+//  o.contentType = 'application/json';
+//  o.payload = agreementCreationInfo;
 
-  o.method = "post";
+  o.contentType = 'application/json';
   o.payload = JSON.stringify(agreementCreationInfo);
+
+//i don't understand why i have to do this manually while in postTransientDocument I don't have to. what a huge mystery!
 
   Logger.log("about to dump %s", JSON.stringify(o));
 
