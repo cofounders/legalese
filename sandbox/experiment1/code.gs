@@ -16,7 +16,7 @@ function onOpen() {
   ];
     spreadsheet.addMenu("Legalese", entries);
 	// when we release this as an add-on the menu-adding will change.
-
+  showSidebar();
 };
 
 
@@ -528,16 +528,25 @@ function fillTemplates_() {
 clauseroot = [];
 clausetext2num = {};
       var filledHTML = fillTemplate_(newTemplate);
-      var htmlfile = DriveApp.createFile(mytitle+".html", filledHTML, 'text/html');
-      var blob = htmlfile.getBlob();
-      var resource = { title: mytitle, convert: true, mimeType: 'application/vnd.google-apps.document' };
-      var drive_file = Drive.Files.insert(resource,blob);
-      var docs_file = DriveApp.getFileById(drive_file.id);
-// in the future we will probably need several subfolders, one for each template family.
-      folder.addFile(docs_file);
-      folder.addFile(htmlfile);
-      var file = DocumentApp.openById(drive_file.id);
-      resetStyles_(file);
+
+	  var htmlfile;
+
+	  if (sourceTemplate.url.match(/^xml|xml$/)) {
+		htmlfile = DriveApp.createFile(mytitle+".xml", filledHTML, 'text/xml');
+	  }
+	  else {
+		htmlfile = DriveApp.createFile(mytitle+".html", filledHTML, 'text/html');
+		var blob = htmlfile.getBlob();
+		var resource = { title: mytitle, convert: true, mimeType: 'application/vnd.google-apps.document' };
+		var drive_file = Drive.Files.insert(resource,blob);  // advanced Drive API
+		var docs_file = DriveApp.getFileById(drive_file.id); // regular Drive API
+		resetStyles_(DocumentApp.openById(drive_file.id));   // regular DocumentApp API
+		folder.addFile(docs_file);                          
+
+		// in the future we will probably need several subfolders, one for each template family.
+	  }
+
+	  folder.addFile(htmlfile);
       Logger.log("finished " + mytitle);
     }
   }
@@ -550,11 +559,12 @@ function suitableTemplates_() {
 //  { url:"test1.html", title:"Test One" },
 // investors: onebyone | all
 // 
-  { url:"founderagreement.html", title:"Founder Agreement 1", investors:"onebyone", founders:"together" },
-//   { url:"test.html", title:"Test 1", investors:"onebyone" },
-//   { url:"termsheet.html", title:"Convertible Note Termsheet", investors:"onebyone" },
-//   { url:"darius.html",    title:"Convertible Note Agreement", investors:"onebyone" },
-//   { url:"kissing.html",   title:"KISS(Sing) Agreement",       investors:"onebyone" },
+  { url:"xml_founderagreement", title:"Founder Agreement 1 XML", investors:"onebyone", founders:"together" },
+  { url:"founderagreement", title:"Founder Agreement 1", investors:"onebyone", founders:"together" },
+//   { url:"test", title:"Test 1", investors:"onebyone" },
+//   { url:"termsheet", title:"Convertible Note Termsheet", investors:"onebyone" },
+//   { url:"darius",    title:"Convertible Note Agreement", investors:"onebyone" },
+//   { url:"kissing",   title:"KISS(Sing) Agreement",       investors:"onebyone" },
   ];
 return suitables;
 };
@@ -650,3 +660,241 @@ function showStyleAttributes() {
     }
   }
 }
+
+// utility function to reset userproperties
+function resetUserProperties() {
+  var userP = PropertiesService.getUserProperties();
+  userP.deleteAllProperties();
+}
+
+// ---------------------------------------------------------------------------------------------------------------- getEchoSignService()
+// oAuth integration with EchoSign
+// EchoSign uses OAuth 2
+// so we grabbed https://github.com/googlesamples/apps-script-oauth2
+// and we turned on the library.
+
+function getnativeEchoSignService() {
+// this uses a slightly different set of endpoints.
+
+// first use the getEchoSignService to obtain OAuth tokens
+// then use the getnativeEchoSignService to perform application calls.
+}
+
+function getEchoSignService() {
+  // Create a new service with the given name. The name will be used when 
+  // persisting the authorized token, so ensure it is unique within the 
+  // scope of the property store.
+  var toreturn = OAuth2.createService('echosign')
+
+      // Set the endpoint URLs
+      .setAuthorizationBaseUrl('https://secure.echosign.com/public/oauth')
+      .setTokenUrl('https://secure.echosign.com/oauth/token')
+
+      // Set the client ID and secret
+      .setClientId('B9HLGY92L5Z4H5')
+      .setClientSecret('ff4c883e539571273980245c41199b70')
+  // from https://secure.echosign.com/account/application -- do this as a CUSTOMER not a PARTNER application.
+
+      // Set the project key of the script using this library.
+      .setProjectKey('M6VMONjB762l0FdR-z7tWO3YH5ITXFjPS')
+
+      // Set the name of the callback function in the script referenced 
+      // above that should be invoked to complete the OAuth flow.
+      .setCallbackFunction('authCallback')
+
+      // Set the property store where authorized tokens should be persisted.
+      .setPropertyStore(PropertiesService.getUserProperties())
+
+      // Set the scopes to request (space-separated for Google services).
+      .setScope('agreement_read agreement_send agreement_write user_login library_read')
+
+
+// see https://secure.echosign.com/public/static/oauthDoc.jsp#scopes
+  toreturn.APIbaseUrl = 'https://secure.echosign.com/api/rest/v2';
+
+//   var oAuthConfig = UrlFetchApp.addOAuthService("echosign");
+//   oAuthConfig.setAccessTokenUrl(toreturn.tokenUrl_);
+//   oAuthConfig.setRequestTokenUrl(toreturn.tokenUrl_);
+//   oAuthConfig.setAuthorizationUrl(toreturn.tokenUrl_);
+//   oAuthConfig.setConsumerKey(toreturn.clientId_);
+//   oAuthConfig.setConsumerSecret(toreturn.clientSecret_);
+
+  return toreturn;
+}
+ 
+function showSidebar() {
+  var echosignService = getEchoSignService();
+  if (!echosignService.hasAccess()) {
+    var authorizationUrl = echosignService.getAuthorizationUrl();
+    var template = HtmlService.createTemplate(
+        '<a href="<?= authorizationUrl ?>" target="_blank">Authorize EchoSign</a>. ' +
+//		'sending you to ' + authorizationUrl +
+        'Close this sidebar when authorization completes.');
+    template.authorizationUrl = authorizationUrl;
+    var page = template.evaluate();
+	page
+      .setSandboxMode(HtmlService.SandboxMode.IFRAME)
+      .setTitle('OAuth to EchoSign')
+      .setWidth(300);
+	SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
+      .showSidebar(page);
+
+  } else {
+    // we already have echosign access
+//	var ui = SpreadsheetApp.getUi(); // Same variations.
+//	ui.alert("we already have OAuth access to EchoSign.");
+  }
+}
+
+function authCallback(request) {
+  var echosignService = getEchoSignService();
+  var isAuthorized = echosignService.handleCallback(request);
+  if (isAuthorized) {
+    return HtmlService.createHtmlOutput('Success! You can close this tab.\nBTW the token property is ' +  PropertiesService.getUserProperties().getProperty("oauth2.echosign"));
+  } else {
+    return HtmlService.createHtmlOutput('Denied. You can close this tab.');
+  }
+}
+
+function getLibraryDocuments() {
+  var api = getEchoSignService();
+  var response = UrlFetchApp.fetch(api.APIbaseUrl + '/libraryDocuments',
+								   { headers: { "Access-Token": api.getAccessToken() } });
+
+  SpreadsheetApp.getUi().alert(response.getContentText());
+}
+
+function postTransientDocument(fileBlob) {
+  var api = getEchoSignService();
+  var o = { headers: { "Access-Token": api.getAccessToken() } };
+  o.method = "post";
+
+  if (fileBlob == undefined) {
+	fileBlob = UrlFetchApp.fetch("http://mengwong.com/tmp/potato%20form%205.pdf").getBlob();
+  }
+
+  o.payload = {
+	"File-Name": "my Transient Document",
+	"File":      fileBlob,
+	"Mime-Type": "application/pdf",
+};
+
+  var response = UrlFetchApp.fetch(api.APIbaseUrl + '/transientDocuments', o);
+  
+//  SpreadsheetApp.getUi().alert(response.getContentText());
+
+// {"transientDocumentId":"2AAABLblqZhCvz2Sc-yDHlZy9Zv_NweXjpM3_s6Id02cz8mJrFncvASsleSe_bv8Bc0CEnT0Eef6TjLLSD0ZYcT2LMYm0WWFSlYgJ05SVrfg0pQ01QnyiE4tHCpgeK0fp0bolv9-qrGirdkoppt7Q1pF0yas4eOS9IN-AHcXZ4uOy3fELHkSoLjt3GJsoFqKU21LzEpg_0wA*"}
+
+  var r = JSON.parse(response.getContentText());
+
+  PropertiesService.getScriptProperties().setProperty("transientDocumentId",r.transientDocumentId);
+
+  Logger.log("transientDocumentId=%s",r.transientDocumentId);
+
+  return r.transientDocumentId;
+}
+
+function showUserProperties() {
+  Logger.log("userProperties: %s", JSON.stringify(PropertiesService.getUserProperties().getProperties()));
+  
+  Logger.log("scriptProperties: %s", JSON.stringify(PropertiesService.getScriptProperties().getProperties()));
+}  
+
+
+function uploadAgreement() {
+  var acr = postAgreement_(
+	{
+//	  "documentURL": {
+//		"name": "Potato Form Five",
+//		"url": "http://mengwong.com/tmp/potato%20form%205.pdf",
+//		mimeType: "application/pdf",
+//	  }
+	
+	  transientDocumentId:   PropertiesService.getScriptProperties().getProperty("transientDocumentId")
+,
+	},
+	[ { role:"SIGNER", email: "mengwong@jfdi.asia", },
+	  { role:"SIGNER", email: "mengwong@gmail.com", },
+	]
+	);
+
+  // {	"expiration": "date",
+  // 	"agreementId": "string",
+  // 	"embeddedCode": "string",
+  // 	"url": "string" }
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var cell = ss.getSheetByName("Deal Terms").getRange("F8");
+  cell.setValue("=HYPERLINK(\""+acr.url+"\",\"EchoSign "+acr.agreementId+"\")")
+}
+
+function postAgreement_(fileInfos, recipients, agreementCreationInfo) {
+  var api = getEchoSignService();
+
+  if (agreementCreationInfo == undefined) {
+	agreementCreationInfo = {
+	  "documentCreationInfo": {
+		"signatureType": "ESIGN",
+		"recipients": recipients,
+		"daysUntilSigningDeadline": "3",
+		"ccs": [ "mengwong@legalese.io" ],
+		"signatureFlow": "PARALLEL", // only available for paid accounts. we may need to check the user info and switch this to SENDER_SIGNATURE_NOT_REQUIRED if the user is in the free tier.
+		"message": "This is a test document. Please sign and return.",
+		"fileInfos": fileInfos,
+		"name": "Test Agreement " + (new Date()),
+	  },
+	  "options": {
+		"authoringRequested": false,
+	  }
+	};
+  }
+
+  var o = { };
+//  o.oAuthServiceName = "echosign";
+//  o.oAuthUseToken = "always";
+
+  o.headers = { "Access-Token": api.getAccessToken(),
+			  };
+  o.contentType = 'application/json';
+
+  o.method = "post";
+  o.payload = JSON.stringify(agreementCreationInfo);
+
+  Logger.log("about to dump %s", JSON.stringify(o));
+
+  var response = UrlFetchApp.fetch(api.APIbaseUrl + '/agreements', o);
+
+  if (response.getResponseCode() >= 400) {
+	Logger.log("got response %s", response.getContentText());
+	Logger.log("dying");
+	return;
+  }
+
+  return JSON.parse(response.getContentText());
+}
+
+// {
+//     "documentCreationInfo": {
+//         "name": "TODO: name of the agreement",
+//         "message": "TODO: an appropriate message to the recipient",
+//         "recipients": [
+//             {
+//                 "email": "TODO: recipient's email ID",
+//                 "role": "TODO: recipient's role (SIGNER/APPROVER)"
+//             }
+//         ],
+//         "signatureType": "TODO: a valid value for signature type (ESIGN/WRITTEN)",
+//         "signatureFlow": "TODO: a valid value for signature flow (SENDER_SIGNS_LAST/SENDER_SIGNS_FIRST/SENDER_SIGNATURE_NOT_REQUIRED/SEQUENTIAL)",
+//         "securityOptions": {
+//             "passwordProtection": "NONE",
+//             "kbaProtection": "NONE",
+//             "webIdentityProtection": "NONE",
+//             "protectOpen": "false",
+//             "internalPassword": "",
+//             "externalPassword": "",
+//             "openPassword": ""
+//         }
+//     }
+// }
+
+  
