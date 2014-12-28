@@ -115,7 +115,9 @@ my $t = XML::Twig->new(twig_handlers => \%convert,
 					   output_text_filter => "safe",
 	);
 
-$t->parsefile(shift);
+my @input = <>;
+for (@input) { s/<(\?.*?\?)>/<!-- PROTECT $1 -->/g }
+$t->parse(join "", @input);
 
 for my $el ($t->get_xpath("//newclause")) {
 #	warn "### get_xpath found newclause " . $el->tag . " depth " . $el->att("depth") . "\n";
@@ -137,12 +139,13 @@ my $output = $t->sprint;
 $output =~ s/<\/\?!= newclause\(\d\) \?>/<\/p>/g;
 $output =~ s/<\/\?!= newclause\(\d, .*?\?>//g;
 
+$output =~ s/<!-- PROTECT (.*?) -->/<$1>/g;
+
 $output =~ s/MACRO\((.*?)\)/<?!= data.$1 ?>/g;
 
 $output =~ s/<\?xml .*//;
 $output =~ s/<Root .*//;
 $output =~ s/<\/Root.*//;
-
 
 print $output;
 
