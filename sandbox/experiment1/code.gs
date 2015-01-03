@@ -11,8 +11,8 @@ function onOpen() {
   var entries = [
   { name:"Create Form", functionName:"setupForm_"},
   { name:"Generate Docs", functionName:"fillTemplates_"},
+  { name:"Send to EchoSign", functionName:"uploadAgreement"},
   { name:"quicktest", functionName:"quicktest"},
-  { name:"delete extra triggers", functionName:"delete_all_but_one_trigger"},
   ];
     spreadsheet.addMenu("Legalese", entries);
 	// when we release this as an add-on the menu-adding will change.
@@ -120,7 +120,7 @@ function setupForm_() {
 // ---------------------------------------------------------------------------------------------------------------- readConfig_
 // each config row produces multiple representations:
 // config.columna.values is an array of values -- if columna repeats, then values from last line only
-// config.columna.dict is a dictionary of c: [d,e,f] across multiple lines
+// config.columna.dict is a dictionary of b: [c,d,e] across multiple lines
 
 function readConfig() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -159,14 +159,14 @@ function readConfig() {
 
 	  Logger.log(columna+".values=" + config[columna].values.join(","));
 
-	  var columns_def = config[columna].values.slice(0);
-	  if (columns_def[0] == undefined) { continue }
-	  var columnc = asvar_(columns_def.shift());
+	  var columns_cde = config[columna].values.slice(0);
+	  if (columns_cde[0] == undefined) { continue }
+	  var columnb = asvar_(columns_cde.shift());
 
-	  while (columns_def[columns_def.length-1] === "") { columns_def.pop() }
+	  while (columns_cde[columns_cde.length-1] === "") { columns_cde.pop() }
 
-	  config[columna].dict[columnc] = columns_def;
-	  Logger.log(columna+".dict."+columnc+"=" + config[columna].dict[columnc].join(","));
+	  config[columna].dict[columnb] = columns_cde;
+	  Logger.log("%s", columna+".dict."+columnb+"=" + config[columna].dict[columnb].join(","));
 	}
   }
   Logger.log("returning\n" + JSON.stringify(config,null,"  "));
@@ -455,16 +455,6 @@ function showclause_(clausetext) {
 }
 
 
-function delete_all_but_one_trigger() {
- var ss = SpreadsheetApp.getActiveSpreadsheet();
- var triggers = ScriptApp.getUserTriggers(ss);
-
- // Log the event type for the first trigger in the array.
- for (var i = 1; i < triggers.length; i++) {
-   ScriptApp.deleteTrigger(triggers[i]);
- }
-}
-
 // ---------------------------------------------------------------------------------------------------------------- quicktest
 function quicktest() {
  var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -507,64 +497,76 @@ function fillTemplates_() {
   templatedata.company = templatedata.parties.company[0];
   templatedata.founders = templatedata.parties.founder;
 
+  var config = readConfig();
+
   for (var i in suitables) {
     var sourceTemplate = suitables[i];
     var url = sourceTemplate.url;
     var newTemplate = HtmlService.createTemplateFromFile(url);
+    newTemplate.data = templatedata;
 
-    var investors = templatedata.parties.investor;
+	// TODO: respect the "all in one doc" vs "one per doc" for all categories not just investors
     templatedata.existing_shareholders = templatedata.parties.existing_shareholder;
 
-    for (var j in investors) {
-      // we step through the multiple data.parties.{founder,investor,company}.* arrays.
-      // we set the singular as we step through.
-      templatedata.investor = investors[j];
-      newTemplate.data = templatedata;
-      
-      var mytitle = sourceTemplate.title + " for " + templatedata.investor.name;
-      Logger.log("started " + mytitle);
-
-// reset "globals"
-clauseroot = [];
-clausetext2num = {};
-      var filledHTML = fillTemplate_(newTemplate);
-
-	  var htmlfile;
-
-	  if (sourceTemplate.url.match(/^xml|xml$/)) {
-		htmlfile = DriveApp.createFile(mytitle+".xml", filledHTML, 'text/xml');
+    var investors = templatedata.parties.investor;
+	var mytitle = sourceTemplate.title;
+	if (config.explosions == undefined || config.explosions.dict.investor[0] == "all in one doc") {
+	  Logger.log("doing investors all in one doc");
+	  fillTemplate_(newTemplate, sourceTemplate, mytitle, folder);
+	}
+	else {
+	  Logger.log("doing investors one per doc");
+      for (var j in investors) {
+		// we step through the multiple data.parties.{founder,investor,company}.* arrays.
+		// we set the singular as we step through.
+		mytitle = mytitle + " for " + templatedata.investor.name;
+		Logger.log("starting " + mytitle);
+		templatedata.investor = investors[j];
+		fillTemplate_(newTemplate, sourceTemplate, mytitle, folder);
 	  }
-	  else {
-		htmlfile = DriveApp.createFile(mytitle+".html", filledHTML, 'text/html');
-		var blob = htmlfile.getBlob();
-		var resource = { title: mytitle, convert: true, mimeType: 'application/vnd.google-apps.document' };
-		var drive_file = Drive.Files.insert(resource,blob);  // advanced Drive API
-		var docs_file = DriveApp.getFileById(drive_file.id); // regular Drive API
-		resetStyles_(DocumentApp.openById(drive_file.id));   // regular DocumentApp API
-		folder.addFile(docs_file);                          
-
-		// in the future we will probably need several subfolders, one for each template family.
-	  }
-
-	  folder.addFile(htmlfile);
-      Logger.log("finished " + mytitle);
     }
   }
 };
+
+// fill a single template -- inner-loop function for fillTemplates_() above.
+function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
+  // reset "globals"
+  clauseroot = [];
+  clausetext2num = {};
+  var filledHTML = newTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+  var htmlfile;
+
+  if (sourceTemplate.url.match(/^xml|xml$/)) {
+	htmlfile = DriveApp.createFile(mytitle+".xml", filledHTML, 'text/xml');
+  }
+  else {
+	htmlfile = DriveApp.createFile(mytitle+".html", filledHTML, 'text/html');
+	var blob = htmlfile.getBlob();
+	var resource = { title: mytitle, convert: true, mimeType: 'application/vnd.google-apps.document' };
+	var drive_file = Drive.Files.insert(resource,blob);  // advanced Drive API
+	var docs_file = DriveApp.getFileById(drive_file.id); // regular Drive API
+	resetStyles_(DocumentApp.openById(drive_file.id));   // regular DocumentApp API
+	folder.addFile(docs_file);                          
+
+	// in the future we will probably need several subfolders, one for each template family.
+  }
+
+  folder.addFile(htmlfile);
+  Logger.log("finished " + mytitle);
+}
 
 // ---------------------------------------------------------------------------------------------------------------- suitableTemplates_
 function suitableTemplates_() {
     // return a bunch of URLs
   var suitables = [
 //  { url:"test1.html", title:"Test One" },
-// investors: onebyone | all
 // 
-  { url:"xml_founderagreement", title:"Founder Agreement 1 XML", investors:"onebyone", founders:"together" },
-  { url:"founderagreement", title:"Founder Agreement 1", investors:"onebyone", founders:"together" },
+  { url:"xml_founderagreement", title:"Founder Agreement 1" },
+  { url:"founderagreement", title:"Founder Agreement 1" },
 //   { url:"test", title:"Test 1", investors:"onebyone" },
-//   { url:"termsheet", title:"Convertible Note Termsheet", investors:"onebyone" },
-//   { url:"darius",    title:"Convertible Note Agreement", investors:"onebyone" },
-//   { url:"kissing",   title:"KISS(Sing) Agreement",       investors:"onebyone" },
+//   { url:"termsheet", title:"Convertible Note Termsheet" },
+//   { url:"darius",    title:"Convertible Note Agreement" },
+//   { url:"kissing",   title:"KISS(Sing) Agreement" },
   ];
 return suitables;
 };
@@ -605,12 +607,6 @@ function createReadme_(folder) { // under the parent folder
   Logger.log("run started");
   return doc;
 }
-
-// ---------------------------------------------------------------------------------------------------------------- fillTemplate_
-function fillTemplate_(template) {
-    var output = template.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME);
-    return output.getContent();
-};
 
 // ---------------------------------------------------------------------------------------------------------------- searchAndReplace_
 function searchAndReplace_() {
@@ -672,13 +668,6 @@ function resetUserProperties() {
 // EchoSign uses OAuth 2
 // so we grabbed https://github.com/googlesamples/apps-script-oauth2
 // and we turned on the library.
-
-function getnativeEchoSignService() {
-// this uses a slightly different set of endpoints.
-
-// first use the getEchoSignService to obtain OAuth tokens
-// then use the getnativeEchoSignService to perform application calls.
-}
 
 function getEchoSignService() {
   // Create a new service with the given name. The name will be used when 
@@ -800,8 +789,16 @@ function showUserProperties() {
   Logger.log("scriptProperties: %s", JSON.stringify(PropertiesService.getScriptProperties().getProperties()));
 }  
 
-
+// ---------------------------------------------------------------------------------------------------------------- getEchoSignService()
+// send PDFs to echosign.
+// if the PDFs don't exist, send them to InDesign for creation and wait.
+// for extra credit, define a usercallback and associate it with a StateToken so InDesign can proactively trigger a pickup.
 function uploadAgreement() {
+  var parties = readRows_().parties;
+  var emailInfo = [];
+  for (var p in parties.founder) {
+	emailInfo.push({email:parties.founder[p].email, role:"SIGNER"});
+  }
   var acr = postAgreement_(
 	{
 	  "documentURL": {
@@ -811,9 +808,7 @@ function uploadAgreement() {
 	  }
 //	  transientDocumentId:   PropertiesService.getScriptProperties().getProperty("transientDocumentId")
 	},
-	[ { role:"SIGNER", email: "mengwong@jfdi.asia", },
-	  { role:"SIGNER", email: "mengwong@gmail.com", },
-	]
+	emailInfo
 	);
 
   // {	"expiration": "date",
@@ -855,13 +850,13 @@ function postAgreement_(fileInfos, recipients, agreementCreationInfo) {
 
 // this works in the postTransientDocument, but doesn't work here. how weird!
 // see https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app
-//  o.contentType = 'application/json';
 //  o.payload = agreementCreationInfo;
 
   o.contentType = 'application/json';
   o.payload = JSON.stringify(agreementCreationInfo);
-
-//i don't understand why i have to do this manually while in postTransientDocument I don't have to. what a huge mystery!
+// this is fucked up. we shouldn't have to do this manually.
+// in postTransientDocument I don't have to. what a huge mystery!
+// https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app
 
   Logger.log("about to dump %s", JSON.stringify(o));
 
