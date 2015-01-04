@@ -115,8 +115,11 @@ my $t = XML::Twig->new(twig_handlers => \%convert,
 					   output_text_filter => "safe",
 	);
 
-my @input = <>;
-for (@input) { s/<(\?.*?\?)>/<!-- PROTECT $1 -->/g }
+my @input;
+while (<>) {
+	s/<(\?.*?\?)>/<!-- PROTECT $1 -->/g; # and print STDERR "$. $_";
+	push @input, $_;
+}
 $t->parse(join "", @input);
 
 for my $el ($t->get_xpath("//newclause")) {
