@@ -14,8 +14,17 @@ function onOpen() {
   { name:"Send to EchoSign", functionName:"uploadAgreement"},
   { name:"quicktest", functionName:"quicktest"},
   ];
-    spreadsheet.addMenu("Legalese", entries);
-	// when we release this as an add-on the menu-adding will change.
+  spreadsheet.addMenu("Legalese", entries);
+  // when we release this as an add-on the menu-adding will change.
+
+  resetUserProperties("oauth2.echosign");
+
+// resetUserProperties("legalese.folder.id");
+// resetUserProperties("legalese.rootfolder");
+
+//  getEchoSignService().reset();
+  // blow away the previous oauth, because there's a problem with using the refresh token after the access token expires after the first hour.
+
   showSidebar();
 };
 
@@ -93,6 +102,9 @@ function setupForm_() {
 		.setRequired(partyfield.required)
 		.setHelpText(partyfield.helptext);
 	}	  
+	else if (partyfield.itemtype.match(/^hidden/)) {
+	  // we don't want to display the Legalese Status field.
+	}	  
   }
 
   var config = readConfig();
@@ -132,7 +144,7 @@ function readConfig() {
   var section = "prologue";
 
   var config = {};
-  var previous_columna;
+  var previous = [];
 
   for (var i = 0; i <= numRows - 1; i++) {
     var row = values[i];
@@ -140,30 +152,50 @@ function readConfig() {
 	// process header rows
 	if (row[0] == "CONFIGURATION") { section = row[0]; continue }
 	if (section == "CONFIGURATION") {
-	  if (row[1] == undefined) { continue }
 	  Logger.log("row " + i + ": processing row "+row[0]);
-
-	  var columna = asvar_(row[0]) || previous_columna;
-	  previous_columna = columna;
+	  
+	  // populate the previous
+	  var columna = asvar_(row[0]) || previous[0];
+	  previous[0] = columna;
 
 	  Logger.log("columna="+columna);
-	  config[columna] = config[columna] || { asRange:null, values:null, dict:{} };
-
+	  config[columna] = config[columna] || { asRange:null, values:null, dict:{}, tree:{} };
 	  Logger.log("config[columna]="+config[columna]);
 
-	  config[columna].asRange = sheet.getRange(i+1,2,1,sheet.getMaxColumns());
+	  config[columna].asRange = sheet.getRange(i+1,1,1,sheet.getMaxColumns());
 	  Logger.log(columna+".asRange=" + config[columna].asRange.getValues()[0].join(","));
 
-	  config[columna].values = config[columna].asRange.getValues()[0];
-	  while (config[columna].values[config[columna].values.length-1] === "") { config[columna].values.pop() }
+	  var rowvalues = config[columna].asRange.getValues()[0];
+	  while (rowvalues[rowvalues.length-1] === "") { rowvalues.pop() }
+	  Logger.log("rowvalues = %s", rowvalues);
 
-	  Logger.log(columna+".values=" + config[columna].values.join(","));
+	  var descended = [columna];
 
-	  var columns_cde = config[columna].values.slice(0);
+	  var leftmost_nonblank = -1;
+	  for (var j = 0; j < rowvalues.length; j++) {
+		if (leftmost_nonblank == -1
+			&& (! (rowvalues[j] === ""))) { leftmost_nonblank = j }
+	  }
+	  Logger.log("leftmost_nonblank=%s", leftmost_nonblank);
+	  for (var j = 0; j < leftmost_nonblank; j++) {
+		descended[j] = previous[j];
+	  }
+	  for (var j = leftmost_nonblank; j < rowvalues.length; j++) {
+		if (j >= 1 && ! (rowvalues[j] === "")) { previous[j] = rowvalues[j] }
+		descended[j] = rowvalues[j];
+	  }
+	  Logger.log("descended = %s", descended);
+
+	  config[columna].values = descended.slice(1);
+	  Logger.log(columna+".values=%s", config[columna].values.join(","));
+
+	  // build tree -- config.a.tree.b.c.d.e.f=g
+	  treeify_(config[columna].tree, descended.slice(1));
+
+	  // build dict -- config.a.dict.b = [c,d,e]
+	  var columns_cde = config[columna].values.slice(1);
 	  if (columns_cde[0] == undefined) { continue }
-	  var columnb = asvar_(columns_cde.shift());
-
-	  while (columns_cde[columns_cde.length-1] === "") { columns_cde.pop() }
+	  var columnb = asvar_(descended[1]);
 
 	  config[columna].dict[columnb] = columns_cde;
 	  Logger.log("%s", columna+".dict."+columnb+"=" + config[columna].dict[columnb].join(","));
@@ -172,6 +204,14 @@ function readConfig() {
   Logger.log("returning\n" + JSON.stringify(config,null,"  "));
   return config;
 }
+function treeify_(root, arr) {
+  if      (arr.length == 2) { root[arr[0]] = arr[1] }
+  else if (arr.length == 1) { root[arr[0]] = null   }
+  else if (arr.length == 0) { return }
+  else                      { if (root[arr[0]] == undefined) root[arr[0]] = {}; treeify_(root[arr[0]], arr.slice(1)) }
+}
+
+
 // {
 //   "form_extras": {
 //     "asRange": {},
@@ -267,14 +307,16 @@ function onFormSubmit(e) {
  * populate the data.* structure
  * the PARTIES go into data.parties.founder.*, data.parties.existing_shareholder.*, data.parties.company.*, data.parties.investor.* as arrays
  * the TERMS go into data.* directly.
- * if a suitabletemplate is marked as binary then we iterate through the investors and set data.investor.* each time
+ * if a availabletemplate is marked as binary then we iterate through the investors and set data.investor.* each time
  */
 function readRows_() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
   var rows = sheet.getDataRange();
   var numRows = rows.getNumRows();
   var values = rows.getValues();
-  var terms = {};
+  var terms = { _parties_last_filled_column: 0,
+				_first_party_row: 0,
+			  };
   var section = "prologue";
   var partyfields = [];
   var origpartyfields = [];
@@ -282,15 +324,14 @@ function readRows_() {
   var parties = { founder:[], existing_shareholder:[], company:[], investor:[] };
   var terms_row_offset;
 
-  Logger.log("readRows_(): starting.");
+  Logger.log("readRows: starting.");
 
 // get the formats for the B column -- else we won't know what currency the money fields are in.
   var term_formats = sheet.getRange(1,2,numRows).getNumberFormats();
 
   for (var i = 0; i <= numRows - 1; i++) {
     var row = values[i];
-
-	Logger.log("row " + i + ": processing row "+row[0]);
+	Logger.log("readRows: row " + i + ": processing row "+row[0]);
 	// process header rows
     if      (row[0] == "KEY TERMS") { section=row[0]; terms_row_offset = i; continue; }
     else if (row[0] == "IGNORE") { 
@@ -301,7 +342,8 @@ function readRows_() {
 																				  partyfieldorder[ki] = row[ki];
 																				  origpartyfields[partyfieldorder[ki]] = origpartyfields[partyfieldorder[ki]]||{};
 																				  origpartyfields[partyfieldorder[ki]].column = parseInt(ki)+1;
-																				  Logger.log("learned that field with order "+row[ki]+ " is in column " +origpartyfields[partyfieldorder[ki]].column);
+																				  origpartyfields[partyfieldorder[ki]].row    = i+1;
+																				  Logger.log("readRows: learned that field with order "+row[ki]+ " is in row %s column %s ", origpartyfields[partyfieldorder[ki]].row, origpartyfields[partyfieldorder[ki]].column);
 																				}
 											continue;
 										  }
@@ -316,19 +358,24 @@ function readRows_() {
 											continue;
 										  }
     else if (row[0] == "PARTYFORM_REQUIRED") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||partyfieldorder[ki]==undefined){continue}
-																					 Logger.log("line "+i+" col "+ki+": learned that field with order "+partyfieldorder[ki]+ " has required="+row[ki]);
+																					 Logger.log("readRows: line "+i+" col "+ki+": learned that field with order "+partyfieldorder[ki]+ " has required="+row[ki]);
 																					 origpartyfields[partyfieldorder[ki]].required = row[ki];
 																				   }
 											continue;
 										  }
     else if (row[0] == "PARTIES")   {
 	  section = row[0]; partyfields = row;
+	  while (row[row.length-1] === "") { row.pop() }
+	  terms._parties_last_filled_column = row.length-1;
+	  Logger.log("readRows: _parties_last_filled_column = %s", terms._parties_last_filled_column);
+
       for (var ki in partyfields) {
-		if (ki < 1 || row[ki] == undefined || row[ki] == "partygroup") { continue }
+		if (ki < 1 || row[ki] == undefined) { continue }
         origpartyfields[partyfieldorder[ki]] = origpartyfields[partyfieldorder[ki]] || {};
         origpartyfields[partyfieldorder[ki]].fieldname = row[ki];
-		Logger.log("learned origpartyfields["+partyfieldorder[ki]+"].fieldname="+row[ki]);
-        partyfields[ki] = partyfields[ki].toLowerCase().replace(/\s+/g, ''); Logger.log("got partyfield " + partyfields[ki]);
+		// Logger.log("readRows: learned origpartyfields["+partyfieldorder[ki]+"].fieldname="+row[ki]);
+        partyfields[ki] = partyfields[ki].toLowerCase().replace(/\s+/g, '');
+		Logger.log("readRows: recorded partyfield[%s]=%s", ki, partyfields[ki]);
       }
       continue;
 	}
@@ -339,8 +386,9 @@ function readRows_() {
       terms[asvar_(row[0])] = formatify_(term_formats[i][0], row[1]);
     }
     else if (section == "PARTIES") { // Name	partygroup	Email	IDtype	ID	Address	State	InvestorType Commitment etc
-      var singleparty = {};
+      var singleparty = { _spreadsheet_row:i+1 };
       var party_formats = sheet.getRange(i+1,1,1,row.length).getNumberFormats();
+	  if (terms._first_party_row == 0) terms._first_party_row = i;
 
       for (var ki in partyfields) {
         if (ki < 1) { continue }
@@ -352,15 +400,70 @@ function readRows_() {
       var partytype = asvar_(row[0]);
 	  if (partytype == undefined || ! partytype.length) { continue }
 
-      Logger.log("learning entire %s, %s", partytype, singleparty);
+      Logger.log("readRows: learning entire %s, %s", partytype, singleparty);
       parties[partytype].push(singleparty);
 	  terms._last_party_row = i;
     }
   }
   terms._origpartyfields = origpartyfields;
+  terms._partyfields = partyfields;
+  parties.founder_unmailed = [];
+  parties.investor_unmailed = [];
+
+  if (partyfields.indexOf("legalesestatus") == -1) {
+	parties.founder_unmailed = parties.founder.concat([]);
+	parties.investor_unmailed = parties.investor.concat([]);
+  }
+  else {
+	// founder
+	for (var p in parties.founder) {
+	  var party = parties.founder[p];
+	  if (party.legalesestatus == undefined || party.legalesestatus === "") {
+		Logger.log("readRows: founder %s hasn't been mailed yet, so copying from parties.founder to parties.founder_unmailed", party.name);
+		parties.founder_unmailed.push(party);
+	  }
+	  else if (party.legalesestatus.toLowerCase().match(/done|ignore|skip|mailed/i)) {
+		Logger.log("readRows: founder %s has status %s, so leaving out from parties.founder_unmailed", party.name, party.legalesestatus);
+	  }
+	  else {
+		Logger.log("readRows: founder %s has status %s; not sure what that means, but leaving out from parties.founder_unmailed", party.name, party.legalesestatus);
+	  }
+	}
+	// investor
+	for (var p in parties.investor) {
+	  var party = parties.investor[p];
+	  if (party.legalesestatus == undefined || party.legalesestatus === "") {
+		Logger.log("readRows: investor %s hasn't been mailed yet, so copying from parties.investor to parties.investor_unmailed", party.name);
+		parties.investor_unmailed.push(party);
+	  }
+	  else if (party.legalesestatus.toLowerCase().match(/done|ignore|skip|mailed/i)) {
+		Logger.log("readRows: investor %s has status %s, so leaving out from parties.investor_unmailed", party.name, party.legalesestatus);
+	  }
+	  else {
+		Logger.log("readRows: investor %s has status %s; not sure what that means, but leaving out from parties.investor_unmailed", party.name, party.legalesestatus);
+	  }
+	}
+  }
+
   terms.parties = parties;
   return terms;
 };
+
+function getPartyCells_(sheet, readrows, party) {
+  Logger.log("looking to return a dict of partyfieldname to cell, for party %s", party.name);
+  Logger.log("party %s comes from spreadsheet row %s", party.name, party._spreadsheet_row);
+  Logger.log("the fieldname map looks like this: %s", readrows._partyfields);
+  Logger.log("so the cell that matters for legalesestatus should be row %s, col %s", party._spreadsheet_row, readrows._partyfields.indexOf("legalesestatus")+1);
+  Logger.log("calling (getRange %s,%s,%s,%s)", party._spreadsheet_row, 1, 1, readrows._partyfields.length+1);
+  var range = sheet.getRange(party._spreadsheet_row, 1, 1, readrows._partyfields.length+1);
+  Logger.log("pulled range %s", JSON.stringify(range.getValues()));
+  var toreturn = {};
+  for (var f = 0; f < readrows._partyfields.length ; f++) {
+	Logger.log("toreturn[%s] = range.getCell(%s,%s)", readrows._partyfields[f], 0+1,f+1);
+	toreturn[readrows._partyfields[f]] = range.getCell(0+1,f+1);
+  }
+  return toreturn;
+}
 
 function asvar_(str) {
   if (str == undefined) { return undefined }
@@ -482,52 +585,97 @@ function quicktest() {
   * 
   */
 
+// ---------------------------------------------------------------------------------------------------------------- availableTemplates_
+function availableTemplates_() {
+    // return a bunch of URLs
+  var availables = [
+//  { url:"test1.html", title:"Test One" },
+
+// for digify
+  { url:"kiss_amendment_xml", title:"KISS Amendment" },
+  { url:"kiss_amendment", title:"Kiss Amendment" },
+  { url:"test", title:"Test 1", investors:"onebyone" },
+  { url:"termsheet", title:"Convertible Note Termsheet" },
+  { url:"darius",    title:"Convertible Note Agreement" },
+  { url:"kissing",   title:"KISS(Sing) Agreement" },
+  ];
+return availables;
+};
+
+// ---------------------------------------------------------------------------------------------------------------- desiredTemplates_
+function desiredTemplates_(config) {
+  var toreturn = [];
+  for (var i in config.templates.dict) {
+	var field = asvar_(i);
+	toreturn.push(field);
+  }
+  Logger.log("desiredTemplates_: returning %s", toreturn);
+  return toreturn;
+}
+
+// ---------------------------------------------------------------------------------------------------------------- intersect_
+// yes, this is O(nm) but for small n,m it should be OK
+function intersect_(array1, array2) {
+  return array1.filter(function(n) { return array2.indexOf(n.url) != -1 || array2.indexOf(n.url.replace(/_xml/,"")) != -1 });
+}
+
 // ---------------------------------------------------------------------------------------------------------------- fillTemplates_
 function fillTemplates_() {
   var templatedata = readRows_();
   templatedata.clauses = {};
 
   var folder = createFolder_(); var readme = createReadme_(folder);
+  PropertiesService.getUserProperties().setProperty("legalese.folder.id", JSON.stringify(folder.getId()));
+  Logger.log("fillTemplates: property set legalese.folder.id = %s", folder.getId());
 
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
   var cell = sheet.getRange("E6");
-  var suitables = suitableTemplates_();
   cell.setValue("=HYPERLINK(\""+folder.getUrl()+"\",\""+folder.getName()+"\")");
+
+  var config = readConfig();
+
+  var availables = availableTemplates_();
+  var desireds = desiredTemplates_(config);
+  var suitables = intersect_(availables, desireds);
+
+  Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
 
   templatedata.company = templatedata.parties.company[0];
   templatedata.founders = templatedata.parties.founder;
-
-  var config = readConfig();
 
   for (var i in suitables) {
     var sourceTemplate = suitables[i];
     var url = sourceTemplate.url;
     var newTemplate = HtmlService.createTemplateFromFile(url);
     newTemplate.data = templatedata;
+	var sans_xml = url.replace(/_xml|xml_/,"");
 
 	// TODO: respect the "all in one doc" vs "one per doc" for all categories not just investors
-    templatedata.existing_shareholders = templatedata.parties.existing_shareholder;
 
     var investors = templatedata.parties.investor;
-	var mytitle = sourceTemplate.title;
-	if (config.explosions == undefined || config.explosions.dict.investor[0] == "all in one doc") {
-	  Logger.log("doing investors all in one doc");
-	  fillTemplate_(newTemplate, sourceTemplate, mytitle, folder);
+	var explosion;
+	try { explosion = config.templates.tree[sans_xml].Investor } catch (e) { Logger.log("explosion exploded"); }
+	if (explosion == "all in one doc") {
+	  Logger.log("doing investors all in one doc ... " + sourceTemplate.url);
+	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder);
 	}
 	else {
-	  Logger.log("doing investors one per doc");
+	  Logger.log("doing investors one per doc ... " + sourceTemplate.url);
       for (var j in investors) {
 		// we step through the multiple data.parties.{founder,investor,company}.* arrays.
 		// we set the singular as we step through.
-		mytitle = mytitle + " for " + templatedata.investor.name;
+		newTemplate.data.investor = investors[j];
+		var mytitle = sourceTemplate.title + " for " + templatedata.investor.name;
 		Logger.log("starting " + mytitle);
-		templatedata.investor = investors[j];
 		fillTemplate_(newTemplate, sourceTemplate, mytitle, folder);
 	  }
     }
+	Logger.log("finished suitable %s", url);
   }
+  Logger.log("that's all folks!");
 };
 
+// ---------------------------------------------------------------------------------------------------------------- fillTemplate_
 // fill a single template -- inner-loop function for fillTemplates_() above.
 function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   // reset "globals"
@@ -549,28 +697,14 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
 	folder.addFile(docs_file);                          
 
 	// in the future we will probably need several subfolders, one for each template family.
+	// and when that time comes we won't want to just send all the PDFs -- we'll need a more structured way to let the user decide which PDFs to send to echosign.
   }
 
   folder.addFile(htmlfile);
   Logger.log("finished " + mytitle);
 }
 
-// ---------------------------------------------------------------------------------------------------------------- suitableTemplates_
-function suitableTemplates_() {
-    // return a bunch of URLs
-  var suitables = [
-//  { url:"test1.html", title:"Test One" },
-// 
-  { url:"xml_founderagreement", title:"Founder Agreement 1" },
-  { url:"founderagreement", title:"Founder Agreement 1" },
-//   { url:"test", title:"Test 1", investors:"onebyone" },
-//   { url:"termsheet", title:"Convertible Note Termsheet" },
-//   { url:"darius",    title:"Convertible Note Agreement" },
-//   { url:"kissing",   title:"KISS(Sing) Agreement" },
-  ];
-return suitables;
-};
-
+// ---------------------------------------------------------------------------------------------------------------- legaleseRootFolder_
 function legaleseRootFolder_() {
   var legaleses = DriveApp.getFoldersByName("Legalese Root");
   var legalese_root;
@@ -582,6 +716,7 @@ function legaleseRootFolder_() {
   } else {
 	legalese_root = DriveApp.createFolder("Legalese Root");
   }
+  PropertiesService.getUserProperties().setProperty("legalese.rootfolder", JSON.stringify(legalese_root.getId));
   return legalese_root;
 }
 
@@ -608,26 +743,6 @@ function createReadme_(folder) { // under the parent folder
   return doc;
 }
 
-// ---------------------------------------------------------------------------------------------------------------- searchAndReplace_
-function searchAndReplace_() {
-  var body = DocumentApp.getActiveDocument()
-      .getBody();
-  var client = {
-    name: 'Joe Script-Guru',
-    address: '100 Script Rd',
-    city: 'Scriptville',
-    state: 'GA',
-    zip: 94043
-  };
-
-  body.replaceText('{name}', client.name);
-  body.replaceText('{address}', client.address);
-  body.replaceText('{city}', client.city);
-  body.replaceText('{state}', client.state);
-  body.replaceText('{zip}', client.zip);
-};
-
-
 // ---------------------------------------------------------------------------------------------------------------- resetStyles_
 function resetStyles_(doc) {
   var body = doc.getBody();
@@ -642,11 +757,9 @@ function resetStyles_(doc) {
   }
 }
 
-
+// ---------------------------------------------------------------------------------------------------------------- showStyleAttributes
 function showStyleAttributes() {
-
   var body = DocumentApp.getActiveDocument.getBody();
-
   var listitems = body.getListItems();
   for (var p in listitems) {
     var para = listitems[p];
@@ -657,13 +770,15 @@ function showStyleAttributes() {
   }
 }
 
+// ---------------------------------------------------------------------------------------------------------------- resetUserProperties
 // utility function to reset userproperties
-function resetUserProperties() {
+function resetUserProperties(which) {
   var userP = PropertiesService.getUserProperties();
-  userP.deleteAllProperties();
+  if (which == "all") userP.deleteAllProperties();
+  else userP.deleteProperty(which);
 }
 
-// ---------------------------------------------------------------------------------------------------------------- getEchoSignService()
+// ---------------------------------------------------------------------------------------------------------------- getEchoSignService
 // oAuth integration with EchoSign
 // EchoSign uses OAuth 2
 // so we grabbed https://github.com/googlesamples/apps-script-oauth2
@@ -678,15 +793,6 @@ function getEchoSignService() {
       // Set the endpoint URLs
       .setAuthorizationBaseUrl('https://secure.echosign.com/public/oauth')
       .setTokenUrl('https://secure.echosign.com/oauth/token')
-
-      // Set the client ID and secret
-      .setClientId('B9HLGY92L5Z4H5')
-      .setClientSecret('ff4c883e539571273980245c41199b70')
-  // from https://secure.echosign.com/account/application -- do this as a CUSTOMER not a PARTNER application.
-
-      // Set the project key of the script using this library.
-      .setProjectKey('M6VMONjB762l0FdR-z7tWO3YH5ITXFjPS')
-
       // Set the name of the callback function in the script referenced 
       // above that should be invoked to complete the OAuth flow.
       .setCallbackFunction('authCallback')
@@ -695,8 +801,23 @@ function getEchoSignService() {
       .setPropertyStore(PropertiesService.getUserProperties())
 
       // Set the scopes to request (space-separated for Google services).
-      .setScope('agreement_read agreement_send agreement_write user_login library_read')
+      .setScope('agreement_read agreement_send agreement_write user_login library_read');
 
+  var ssname = SpreadsheetApp.getActiveSpreadsheet().getName();
+
+  var esApps = {
+	"Digify KISS Amendment" : { clientId:"B7ANAKXAX94V6P", clientSecret:"417e13ac801250d2146892eb0266d16e", projectKey:"MYzWng6oYKb0nTSoDTQ271cUQWaHMB8in" },
+  "default" : { clientId:"B9HLGY92L5Z4H5", clientSecret:"ff4c883e539571273980245c41199b70", projectKey:"M6VMONjB762l0FdR-z7tWO3YH5ITXFjPS" },
+  };
+
+  if (esApps[ssname] == undefined) { ssname = "default" }
+
+  toreturn
+      // Set the client ID and secret
+      .setClientId(esApps[ssname].clientId)
+      .setClientSecret(esApps[ssname].clientSecret)
+  // from https://secure.echosign.com/account/application -- do this as a CUSTOMER not a PARTNER application.
+      .setProjectKey(esApps[ssname].projectKey);
 
 // see https://secure.echosign.com/public/static/oauthDoc.jsp#scopes
   toreturn.APIbaseUrl = 'https://secure.echosign.com/api/rest/v2';
@@ -711,6 +832,7 @@ function getEchoSignService() {
   return toreturn;
 }
  
+// ---------------------------------------------------------------------------------------------------------------- showSidebar
 function showSidebar() {
   var echosignService = getEchoSignService();
   if (!echosignService.hasAccess()) {
@@ -735,6 +857,7 @@ function showSidebar() {
   }
 }
 
+// ---------------------------------------------------------------------------------------------------------------- authCallback
 function authCallback(request) {
   var echosignService = getEchoSignService();
   var isAuthorized = echosignService.handleCallback(request);
@@ -753,75 +876,152 @@ function getLibraryDocuments() {
   SpreadsheetApp.getUi().alert(response.getContentText());
 }
 
-function postTransientDocument(fileBlob) {
+function allPDFs(folder) {
+  var folders = folder.getFolders();
+  var files = folder.getFilesByType("application/pdf");
+  var pdfs = [];
+  while (  files.hasNext()) { pdfs= pdfs.concat(          files.next());  }
+  while (folders.hasNext()) { pdfs= pdfs.concat(allPDFs(folders.next())); }
+  Logger.log("all PDFs under folder = %s", pdfs);
+  return pdfs;
+}
+
+// ---------------------------------------------------------------------------------------------------------------- uploadPDFsToEchoSign
+// upload all the PDFs in the Folder
+// returns an array of the transientDocumentIds of all the PDFs uploaded to Echosign.
+function uploadPDFsToEchoSign() {
   var api = getEchoSignService();
   var o = { headers: { "Access-Token": api.getAccessToken() } };
   o.method = "post";
 
-  if (fileBlob == undefined) {
-	fileBlob = UrlFetchApp.fetch("http://mengwong.com/tmp/potato%20form%205.pdf").getBlob();
+  var folderId = JSON.parse(PropertiesService.getUserProperties().getProperty("legalese.folder.id"));
+  Logger.log("uploadPDFsToEchoSign: property get legalese.folder.id = %s", folderId);
+  if (folderId == undefined) {
+	SpreadsheetApp.getUi().alert("Not sure which folder contains PDFs.\nPlease regenerate documents by clicking Legalese / Generate Docs");
+	exit();
+  }
+  var folder = DriveApp.getFolderById(folderId);
+  var pdfs = allPDFs(folder);
+  var toreturn = [];
+  for (var i in pdfs) {
+	var pdfdoc = pdfs[i];
+
+	o.payload = {
+	  "File-Name": pdfdoc.getName(),
+	  "File":      pdfdoc.getBlob(),
+	  "Mime-Type": pdfdoc.getMimeType(), // we assume that's application/pdf
+	};
+
+	Logger.log("uploading to EchoSign as a transientDocument: %s %s", pdfdoc.getId(), pdfdoc.getName());
+	if (o.payload['Mime-Type'] != "application/pdf") {
+	  Logger.log("WARNING: mime-type of document %s (%s) is not application/pdf ... weird, eh.", pdfdoc.getId(), pdfdoc.getName());
+	}
+
+	var response = UrlFetchApp.fetch(api.APIbaseUrl + '/transientDocuments', o);
+	var r = JSON.parse(response.getContentText());
+	Logger.log("uploaded %s (%s) as transientDocumentId=%s", pdfdoc.getId(), pdfdoc.getName(), r.transientDocumentId);
+
+	toreturn.push(r.transientDocumentId);
   }
 
-  o.payload = {
-	"File-Name": "my Transient Document",
-	"File":      fileBlob,
-	"Mime-Type": "application/pdf",
-};
-
-  var response = UrlFetchApp.fetch(api.APIbaseUrl + '/transientDocuments', o);
-  
-//  SpreadsheetApp.getUi().alert(response.getContentText());
-
-// {"transientDocumentId":"2AAABLblqZhCvz2Sc-yDHlZy9Zv_NweXjpM3_s6Id02cz8mJrFncvASsleSe_bv8Bc0CEnT0Eef6TjLLSD0ZYcT2LMYm0WWFSlYgJ05SVrfg0pQ01QnyiE4tHCpgeK0fp0bolv9-qrGirdkoppt7Q1pF0yas4eOS9IN-AHcXZ4uOy3fELHkSoLjt3GJsoFqKU21LzEpg_0wA*"}
-
-  var r = JSON.parse(response.getContentText());
-
-  PropertiesService.getScriptProperties().setProperty("transientDocumentId",r.transientDocumentId);
-
-  Logger.log("transientDocumentId=%s",r.transientDocumentId);
-
-  return r.transientDocumentId;
+  return toreturn;
 }
 
+// ---------------------------------------------------------------------------------------------------------------- showUserProperties
 function showUserProperties() {
   Logger.log("userProperties: %s", JSON.stringify(PropertiesService.getUserProperties().getProperties()));
-  
   Logger.log("scriptProperties: %s", JSON.stringify(PropertiesService.getScriptProperties().getProperties()));
 }  
 
-// ---------------------------------------------------------------------------------------------------------------- getEchoSignService()
+// ---------------------------------------------------------------------------------------------------------------- createLegaleseStatusColumn
+function createLegaleseStatusColumn(readrows) {
+  var partyfields = readrows._origpartyfields;
+  var fieldnames  = partyfields.map(function(e){return e.fieldname});
+  var last_filled_column = readrows._parties_last_filled_column;
+  var first_party_row = readrows._first_party_row;
+  var last_party_row = readrows._last_party_row;
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
+
+  Logger.log("fieldnames = %s", fieldnames);
+
+  var range;
+  if (fieldnames.indexOf("Legalese Status") != -1) {
+	Logger.log("we already have a Legalese Status column -- column %s", fieldnames.indexOf("Legalese Status")+1);
+	Logger.log("getRange(%s,%s,%s,%s)", 
+			   first_party_row+1, fieldnames.indexOf("Legalese Status")+1, last_party_row-first_party_row+1, 1);
+	range = sheet.getRange(first_party_row+1, fieldnames.indexOf("Legalese Status")+1, last_party_row-first_party_row+1, 1);
+	Logger.log("got back range %s", range);
+  }
+  else {
+	//TODO -- maybe we just DONTDO and mandate that the original spreadsheet just has to have this column already!
+	Logger.log("we shall have to add a Legalese Status column after %s", last_filled_column);
+	// move the range one column to the right
+	Logger.log("we shall move a range within rows %s to %s starting with column %s", first_party_row, last_party_row, last_filled_column+1);
+	// use range.getLastColumn() to do something intelligent here.
+	var cell = sheet.getRange(first_party_row, last_filled_column+1, 1, 1);
+	cell.setValue("Legalese Status");
+	// and add the corret things to the above also
+	partyfields.push({fieldname:"Legalese Status"});
+	range = sheet.getRange(first_party_row, partyfields.length-1, last_party_row-first_party_row, 1);
+  }
+  Logger.log("returning column range %s", JSON.stringify(range));
+  return range;
+}
+  
+
+// ---------------------------------------------------------------------------------------------------------------- uploadAgreement
 // send PDFs to echosign.
 // if the PDFs don't exist, send them to InDesign for creation and wait.
 // for extra credit, define a usercallback and associate it with a StateToken so InDesign can proactively trigger a pickup.
+// for now, just looking for the PDFs in the folder seems to be good enough.
 function uploadAgreement() {
-  var parties = readRows_().parties;
+  var readrows = readRows_();
+  var parties = readrows.parties;
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
+  var transientDocumentIds = uploadPDFsToEchoSign();
   var emailInfo = [];
-  for (var p in parties.founder) {
-	emailInfo.push({email:parties.founder[p].email, role:"SIGNER"});
-  }
-  var acr = postAgreement_(
-	{
-	  "documentURL": {
-		"name": "Potato Form Five",
-		"url": "http://mengwong.com/tmp/potato%20form%205.pdf",
-		"mimeType": "application/pdf",
-	  }
-//	  transientDocumentId:   PropertiesService.getScriptProperties().getProperty("transientDocumentId")
-	},
-	emailInfo
-	);
 
-  // {	"expiration": "date",
-  // 	"agreementId": "string",
-  // 	"embeddedCode": "string",
-  // 	"url": "string" }
+  // does the spreadsheet have a "Legalese Status" field?
+  // if not, create a column in the spreadsheet, to the right of the rightmost filled column.
+  var statusRange = createLegaleseStatusColumn(readrows);
+
+  var now = Utilities.formatDate(new Date(), SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
+  
+  // update the party's Legalese Status cell to indicate we've sent the mail.
+  for (var p in parties.founder_unmailed) {
+	emailInfo.push({email:parties.founder_unmailed[p].email, role:"SIGNER"});
+	getPartyCells_(sheet, readrows, parties.founder_unmailed[p]).legalesestatus.setValue("mailed echosign " + now);
+  }
+  for (var p in parties.investor_unmailed) {
+	emailInfo.push({email:parties.investor_unmailed[p].email, role:"SIGNER"});
+	getPartyCells_(sheet, readrows, parties.investor_unmailed[p]).legalesestatus.setValue("mailed echosign " + now);
+  }
+  Logger.log("we shall be emailing to %s", emailInfo);
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var cell = ss.getSheetByName("Deal Terms").getRange("F8");
-  cell.setValue("=HYPERLINK(\""+acr.url+"\",\"view in EchoSign\")")
+
+  for (var i in transientDocumentIds) {
+	var transientDocumentId = transientDocumentIds[i];
+	Logger.log("turning transientDocument %s into an agreement", transientDocumentId);
+
+	continue;
+	var acr = postAgreement_(	{ "transientDocumentId": transientDocumentId },
+								emailInfo,
+								"This is a test document. Please sign and return. If in doubt please contact "
+								+ parties.founder[0].name + " at " + parties.founder[0].email,
+								ss.getName()
+	);
+
+	Logger.log("uploadAgreement: well, that seems to have worked!");
+
+	var cell = ss.getSheetByName("Deal Terms").getRange(5+i,8,1,1);
+	cell.setValue("=HYPERLINK(\""+acr.url+"\",\"EchoSign\")")
+  }
+
+	Logger.log("uploadAgreement: that's all, folks!");
 }
 
-function postAgreement_(fileInfos, recipients, agreementCreationInfo) {
+function postAgreement_(fileInfos, recipients, message, name, agreementCreationInfo) {
   var api = getEchoSignService();
 
   if (agreementCreationInfo == undefined) {
@@ -830,11 +1030,11 @@ function postAgreement_(fileInfos, recipients, agreementCreationInfo) {
 		"signatureType": "ESIGN",
 		"recipients": recipients,
 		"daysUntilSigningDeadline": "3",
-		"ccs": [ "mengwong@legalese.io" ],
+		"ccs": [ "mengwong@legalese.io" ], // maybe set this to be all the ones who are not unmailed
 		"signatureFlow": "PARALLEL", // only available for paid accounts. we may need to check the user info and switch this to SENDER_SIGNATURE_NOT_REQUIRED if the user is in the free tier.
-		"message": "This is a test document. Please sign and return.",
+		"message": message,
 		"fileInfos": fileInfos,
-		"name": "Test Agreement " + (new Date()),
+		"name": name,
 	  },
 	  "options": {
 		"authoringRequested": false,
@@ -868,6 +1068,8 @@ function postAgreement_(fileInfos, recipients, agreementCreationInfo) {
 	return;
   }
 
+  Logger.log("got back %s", response.getContentText());
+
   return JSON.parse(response.getContentText());
 }
 
@@ -896,3 +1098,6 @@ function postAgreement_(fileInfos, recipients, agreementCreationInfo) {
 // }
 
   
+function mylogger(input) {
+  Logger.log(input);
+}

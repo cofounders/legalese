@@ -19,6 +19,7 @@
      This is a good idea because as the main branch evolves you don't want your fork to
      fall out of sync!
 --->
+
 <? if (data.interest) { data.plus_interest = " and unpaid accrued interest" } else { data.plus_interest = "" } ?>
 
 <h1>Purchase Agreement for Convertible Note</h1>
@@ -131,6 +132,7 @@
 <p>This Agreement has been signed by or on behalf of each of the Parties hereto the day and year first before written.</p>
 
 <p><?= data.company.name ?></p>
+
 <p>Signed by <?= data.founders[0].name ?> for and on behalf of <?= data.company.name ?></p>
 
 <p>Signed by <?= data.investor.name ?></p>
