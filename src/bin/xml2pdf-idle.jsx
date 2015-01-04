@@ -53,7 +53,7 @@ function mySetup() {
 function onIdleEventHandler(myIdleEvent) {
   var deltaT = new Date() - lastIdle;
   lastIdle = new Date();
-  logToFile("onIdleEventHandler: idle for " + deltaT + "ms");
+  logToFile("onIdleEventHandler: idle for " + Math.floor(deltaT/1000) + "s");
   xml2pdf_main();
 }
 

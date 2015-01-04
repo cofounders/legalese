@@ -15,6 +15,8 @@ function xmls2pdf(xmlFiles, indtFile, showingWindow) {
 	try {
 	  logToFile("xmls2pdf: starting " + xmlFile.fullName);
 	  var doc = importXmlIntoTemplate(xmlFile, indtFile, showingWindow);
+	  addTextVariables(doc);
+	  addCrossReferences(doc);
 	  constructFormFields(doc);
 	  exportToPDF(doc, xmlFile);
 	  saveAsIndd(doc, xmlFile);
@@ -28,6 +30,17 @@ function xmls2pdf(xmlFiles, indtFile, showingWindow) {
   }
   if (showingWindow && errors.length > 0) { alert (errors) }
 }
+
+// -------------------------------------------------- addTextVariables
+function addTextVariables(doc) {
+}
+
+// -------------------------------------------------- addCrossReferences
+// i don't know how to do this. maybe we will need to
+// convert the XML into IDML.
+function addCrossReferences(doc) {
+}
+
 
 // -------------------------------------------------- isXmlOrFolder
 function isXmlOrFolder(file) {
@@ -162,9 +175,11 @@ function constructFormFields(doc) {
 
   var signatureCount = 1;
 //  alert("processRuleSet AddFormFields starting");
-  __processRuleSet(doc.xmlElements.item(0), [new AddFormFields(doc, signatureCount)]);
+  __processRuleSet(doc.xmlElements.item(0), [new AddFormFields(doc, signatureCount)
+											]);
 //  alert("processRuleSet AddFormFields completed successfully");
 }
+
 
 // -------------------------------------------------- addFormFields
 function AddFormFields(doc, signatureCount) {
@@ -192,8 +207,12 @@ function AddFormFields(doc, signatureCount) {
 	}
 	// https://secure.echosign.com/doc/TextFormsTutorial.pdf
 	// http://bgsfin.com/Add-Ons/SmartFormsTutorial.pdf
-	
-	signatureField.name = "sigs_es_signer" + signatureCount++ + "_signature";
+
+	logToFile("el.xmlAttributes.item(unmailed) = " + el.xmlAttributes.item("unmailed").value);
+
+	if (el.xmlAttributes.item("unmailed").value == "true") {
+	  signatureField.name = "legalese_es_signer" + signatureCount++ + "_signature";
+	}
 	return false;
   }
 }
