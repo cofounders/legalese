@@ -186,6 +186,7 @@ function readConfig() {
 	  }
 	  Logger.log("descended = %s", descended);
 
+	  // build values -- config.a.values = [b,c,d]
 	  config[columna].values = descended.slice(1);
 	  Logger.log(columna+".values=%s", config[columna].values.join(","));
 
@@ -321,13 +322,15 @@ function readRows_() {
   var partyfields = [];
   var origpartyfields = [];
   var partyfieldorder = []; // table that remaps column number to order-in-the-form
-  var parties = { founder:[], existing_shareholder:[], company:[], investor:[] };
+  var parties = { _unmailed:[], founder:[], existing_shareholder:[], company:[], investor:[] }; // others ok in the form
   var terms_row_offset;
 
   Logger.log("readRows: starting.");
 
 // get the formats for the B column -- else we won't know what currency the money fields are in.
   var term_formats = sheet.getRange(1,2,numRows).getNumberFormats();
+
+  var es_num = 1; // for email orderng the EchoSign fields
 
   for (var i = 0; i <= numRows - 1; i++) {
     var row = values[i];
@@ -374,7 +377,7 @@ function readRows_() {
         origpartyfields[partyfieldorder[ki]] = origpartyfields[partyfieldorder[ki]] || {};
         origpartyfields[partyfieldorder[ki]].fieldname = row[ki];
 		// Logger.log("readRows: learned origpartyfields["+partyfieldorder[ki]+"].fieldname="+row[ki]);
-        partyfields[ki] = partyfields[ki].toLowerCase().replace(/\s+/g, '');
+        partyfields[ki] = partyfields[ki].toLowerCase().replace(/\s+/g, ''); // TODO; convert this to asvar_()
 		Logger.log("readRows: recorded partyfield[%s]=%s", ki, partyfields[ki]);
       }
       continue;
@@ -386,7 +389,7 @@ function readRows_() {
       terms[asvar_(row[0])] = formatify_(term_formats[i][0], row[1]);
     }
     else if (section == "PARTIES") { // Name	partygroup	Email	IDtype	ID	Address	State	InvestorType Commitment etc
-      var singleparty = { _spreadsheet_row:i+1 };
+      var singleparty = { _spreadsheet_row:i+1, _unmailed:false };
       var party_formats = sheet.getRange(i+1,1,1,row.length).getNumberFormats();
 	  if (terms._first_party_row == 0) terms._first_party_row = i;
 
@@ -401,50 +404,28 @@ function readRows_() {
 	  if (partytype == undefined || ! partytype.length) { continue }
 
       Logger.log("readRows: learning entire %s, %s", partytype, singleparty);
+	  if (parties[partytype] == undefined) { parties[partytype] = [] }
       parties[partytype].push(singleparty);
+
+	  // set up the _unmailed attribute
+	  if (singleparty.legalesestatus == undefined || singleparty.legalesestatus === "") {
+		Logger.log("readRows: party %s hasn't been mailed yet. it will have es_num %s", singleparty.name, es_num);
+		singleparty._unmailed = true;
+		singleparty._es_num = es_num++;
+		parties._unmailed.push(singleparty);
+	  }
+	  else if (singleparty.legalesestatus.toLowerCase().match(/done|ignore|skip|mailed/i)) {
+		Logger.log("readRows: founder %s has status %s, so leaving out from parties._unmailed", singleparty.name, singleparty.legalesestatus);
+	  }
+	  else {
+		Logger.log("readRows: founder %s has status %s; not sure what that means, but leaving out from parties._unmailed", singleparty.name, singleparty.legalesestatus);
+	  }
+
 	  terms._last_party_row = i;
     }
   }
   terms._origpartyfields = origpartyfields;
   terms._partyfields = partyfields;
-  parties.founder_unmailed = [];
-  parties.investor_unmailed = [];
-
-  if (partyfields.indexOf("legalesestatus") == -1) {
-	parties.founder_unmailed = parties.founder.concat([]);
-	parties.investor_unmailed = parties.investor.concat([]);
-  }
-  else {
-	// founder
-	for (var p in parties.founder) {
-	  var party = parties.founder[p];
-	  if (party.legalesestatus == undefined || party.legalesestatus === "") {
-		Logger.log("readRows: founder %s hasn't been mailed yet, so copying from parties.founder to parties.founder_unmailed", party.name);
-		parties.founder_unmailed.push(party);
-	  }
-	  else if (party.legalesestatus.toLowerCase().match(/done|ignore|skip|mailed/i)) {
-		Logger.log("readRows: founder %s has status %s, so leaving out from parties.founder_unmailed", party.name, party.legalesestatus);
-	  }
-	  else {
-		Logger.log("readRows: founder %s has status %s; not sure what that means, but leaving out from parties.founder_unmailed", party.name, party.legalesestatus);
-	  }
-	}
-	// investor
-	for (var p in parties.investor) {
-	  var party = parties.investor[p];
-	  if (party.legalesestatus == undefined || party.legalesestatus === "") {
-		Logger.log("readRows: investor %s hasn't been mailed yet, so copying from parties.investor to parties.investor_unmailed", party.name);
-		parties.investor_unmailed.push(party);
-	  }
-	  else if (party.legalesestatus.toLowerCase().match(/done|ignore|skip|mailed/i)) {
-		Logger.log("readRows: investor %s has status %s, so leaving out from parties.investor_unmailed", party.name, party.legalesestatus);
-	  }
-	  else {
-		Logger.log("readRows: investor %s has status %s; not sure what that means, but leaving out from parties.investor_unmailed", party.name, party.legalesestatus);
-	  }
-	}
-  }
-
   terms.parties = parties;
   return terms;
 };
@@ -592,7 +573,8 @@ function availableTemplates_() {
 //  { url:"test1.html", title:"Test One" },
 
 // for digify
-  { url:"kiss_amendment_xml", title:"KISS Amendment" },
+  { url:"dora_xml", title:"DORA" },
+  { url:"kiss_amendment_xml", title:"DORA" },
   { url:"kiss_amendment", title:"Kiss Amendment" },
   { url:"test", title:"Test 1", investors:"onebyone" },
   { url:"termsheet", title:"Convertible Note Termsheet" },
@@ -807,6 +789,7 @@ function getEchoSignService() {
 
   var esApps = {
 	"Digify KISS Amendment" : { clientId:"B7ANAKXAX94V6P", clientSecret:"417e13ac801250d2146892eb0266d16e", projectKey:"MYzWng6oYKb0nTSoDTQ271cUQWaHMB8in" },
+	"JFDI.2014 Deed of Ratification and Accession" : { clientId:"B7ANAKXAX94V6P", clientSecret:"417e13ac801250d2146892eb0266d16e", projectKey:"MYzWng6oYKb0nTSoDTQ271cUQWaHMB8in" },
   "default" : { clientId:"B9HLGY92L5Z4H5", clientSecret:"ff4c883e539571273980245c41199b70", projectKey:"M6VMONjB762l0FdR-z7tWO3YH5ITXFjPS" },
   };
 
@@ -898,7 +881,7 @@ function uploadPDFsToEchoSign() {
   Logger.log("uploadPDFsToEchoSign: property get legalese.folder.id = %s", folderId);
   if (folderId == undefined) {
 	SpreadsheetApp.getUi().alert("Not sure which folder contains PDFs.\nPlease regenerate documents by clicking Legalese / Generate Docs");
-	exit();
+	return;
   }
   var folder = DriveApp.getFolderById(folderId);
   var pdfs = allPDFs(folder);
@@ -976,6 +959,7 @@ function createLegaleseStatusColumn(readrows) {
 // for now, just looking for the PDFs in the folder seems to be good enough.
 function uploadAgreement() {
   var readrows = readRows_();
+  var config = readConfig();
   var parties = readrows.parties;
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
   var transientDocumentIds = uploadPDFsToEchoSign();
@@ -988,15 +972,19 @@ function uploadAgreement() {
   var now = Utilities.formatDate(new Date(), SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
   
   // update the party's Legalese Status cell to indicate we've sent the mail.
-  for (var p in parties.founder_unmailed) {
-	emailInfo.push({email:parties.founder_unmailed[p].email, role:"SIGNER"});
-	getPartyCells_(sheet, readrows, parties.founder_unmailed[p]).legalesestatus.setValue("mailed echosign " + now);
-  }
-  for (var p in parties.investor_unmailed) {
-	emailInfo.push({email:parties.investor_unmailed[p].email, role:"SIGNER"});
-	getPartyCells_(sheet, readrows, parties.investor_unmailed[p]).legalesestatus.setValue("mailed echosign " + now);
+  
+  for (var p in parties._unmailed) {
+	var party = parties._unmailed[p];
+	  
+	  emailInfo.push({email:party.email, role:"SIGNER"});
+	  getPartyCells_(sheet, readrows, party).legalesestatus.setValue("mailed echosign " + now);
   }
   Logger.log("we shall be emailing to %s", emailInfo);
+
+  if (emailInfo.length == 0) {
+	SpreadsheetApp.getUi().alert("There doesn't seem to be anybody for us to mail this to! Check the Legalese Status column.");
+	return;
+  }
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
@@ -1004,17 +992,17 @@ function uploadAgreement() {
 	var transientDocumentId = transientDocumentIds[i];
 	Logger.log("turning transientDocument %s into an agreement", transientDocumentId);
 
-	continue;
+//	continue;
 	var acr = postAgreement_(	{ "transientDocumentId": transientDocumentId },
 								emailInfo,
-								"This is a test document. Please sign and return. If in doubt please contact "
-								+ parties.founder[0].name + " at " + parties.founder[0].email,
+								"Please sign and return. If in doubt please contact "
+								+ parties.company[0].email,
 								ss.getName()
 	);
 
 	Logger.log("uploadAgreement: well, that seems to have worked!");
 
-	var cell = ss.getSheetByName("Deal Terms").getRange(5+i,8,1,1);
+	var cell = ss.getSheetByName("Deal Terms").getCell("E8");
 	cell.setValue("=HYPERLINK(\""+acr.url+"\",\"EchoSign\")")
   }
 
