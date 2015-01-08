@@ -928,41 +928,6 @@ function showUserProperties() {
   Logger.log("scriptProperties: %s", JSON.stringify(PropertiesService.getScriptProperties().getProperties()));
 }  
 
-// ---------------------------------------------------------------------------------------------------------------- createLegaleseStatusColumn
-function createLegaleseStatusColumn(readrows) {
-  var partyfields = readrows._origpartyfields;
-  var fieldnames  = partyfields.map(function(e){return e.fieldname});
-  var last_filled_column = readrows._parties_last_filled_column;
-  var first_party_row = readrows._first_party_row;
-  var last_party_row = readrows._last_party_row;
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
-
-  Logger.log("fieldnames = %s", fieldnames);
-
-  var range;
-  if (fieldnames.indexOf("Legalese Status") != -1) {
-	Logger.log("we already have a Legalese Status column -- column %s", fieldnames.indexOf("Legalese Status")+1);
-	Logger.log("getRange(%s,%s,%s,%s)", 
-			   first_party_row+1, fieldnames.indexOf("Legalese Status")+1, last_party_row-first_party_row+1, 1);
-	range = sheet.getRange(first_party_row+1, fieldnames.indexOf("Legalese Status")+1, last_party_row-first_party_row+1, 1);
-	Logger.log("got back range %s", range);
-  }
-  else {
-	//TODO -- maybe we just DONTDO and mandate that the original spreadsheet just has to have this column already!
-	Logger.log("we shall have to add a Legalese Status column after %s", last_filled_column);
-	// move the range one column to the right
-	Logger.log("we shall move a range within rows %s to %s starting with column %s", first_party_row, last_party_row, last_filled_column+1);
-	// use range.getLastColumn() to do something intelligent here.
-	var cell = sheet.getRange(first_party_row, last_filled_column+1, 1, 1);
-	cell.setValue("Legalese Status");
-	// and add the corret things to the above also
-	partyfields.push({fieldname:"Legalese Status"});
-	range = sheet.getRange(first_party_row, partyfields.length-1, last_party_row-first_party_row, 1);
-  }
-  Logger.log("returning column range %s", JSON.stringify(range));
-  return range;
-}
-  
 
 // ---------------------------------------------------------------------------------------------------------------- uploadAgreement
 // send PDFs to echosign.
@@ -979,7 +944,6 @@ function uploadAgreement() {
 
   // does the spreadsheet have a "Legalese Status" field?
   // if not, create a column in the spreadsheet, to the right of the rightmost filled column.
-  var statusRange = createLegaleseStatusColumn(readrows);
 
   var now = Utilities.formatDate(new Date(), SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
   
