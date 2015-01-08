@@ -18,9 +18,10 @@ function xmls2pdf(xmlFiles, indtFile, showingWindow) {
 	  addTextVariables(doc);
 	  addCrossReferences(doc);
 	  constructFormFields(doc);
+	  // findAndReplace(doc); change " to ''
 	  exportToPDF(doc, xmlFile);
 	  saveAsIndd(doc, xmlFile);
-	  doc.close();
+	  if (! showingWindow) doc.close();
 	  logToFile("xmls2pdf: finished " + xmlFile.fullName);
 	}
 	catch (error) {
@@ -122,7 +123,9 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
   }
 
   doc.xmlElements.item(0).importXML(xmlFile);
-  __processRuleSet(doc.xmlElements.item(0), [new AddReturns(doc,importMaps)]);
+  __processRuleSet(doc.xmlElements.item(0), [new AddReturns(doc,importMaps),
+											 new InsertTextVariables(doc,importMaps),
+											]);
 //  alert("processRuleSet AddReturns completed successfully");
   doc.mapXMLTagsToStyles();
 
@@ -156,7 +159,19 @@ function AddReturns(doc, importMaps){
 //	  alert("appending newline to element " + myElement.markupTag.name + ":\r" + myElement.contents)
       myElement.insertTextAsContent("\r", XMLElementPosition.ELEMENT_END);
 	}
-    return true;
+    return false;
+  }
+}
+
+
+// -------------------------------------------------- InsertTextVariables
+function InsertTextVariables(doc, importMaps){
+  this.name = "InsertTextVariables";
+  this.xpath = "//textvar";	
+  this.apply = function(myElement, myRuleProcessor){
+	var myInsertionPoint = myElement.insertionPoints.item(0);
+	var textVariableInstance = myInsertionPoint.textVariableInstances.add({associatedTextVariable: doc.textVariables.item( myElement.xmlAttributes.item("name").value ) });
+    return false;
   }
 }
 
@@ -173,18 +188,19 @@ function constructFormFields(doc) {
   doc.viewPreferences.horizontalMeasurementUnits = MeasurementUnits.points;
   doc.viewPreferences.verticalMeasurementUnits = MeasurementUnits.points;
 
-  var signatureCount = 1;
+  doc.recompose(); // force smart text reflow otherwise the signature fields won't add properly.
+
 //  alert("processRuleSet AddFormFields starting");
-  __processRuleSet(doc.xmlElements.item(0), [new AddFormFields(doc, signatureCount)
+  __processRuleSet(doc.xmlElements.item(0), [new AddFormFields(doc)
 											]);
 //  alert("processRuleSet AddFormFields completed successfully");
 }
 
 
 // -------------------------------------------------- addFormFields
-function AddFormFields(doc, signatureCount) {
+function AddFormFields(doc) {
   this.name = "AddFormFields";
-  this.xpath = "//para_1[@class='signatureblock']";
+  this.xpath = "//para_1[@class='signatureblock' and @unmailed='true']";
   this.apply = function(el, myRuleProcessor){
 
 // this won't work when running in background idle mode
@@ -192,17 +208,15 @@ function AddFormFields(doc, signatureCount) {
 //	app.layoutWindows.item(0).zoom(ZoomOptions.FIT_PAGE);
 
 	var myInsertionPoint = el.paragraphs.item(0).insertionPoints.item(2);
-	var signatureField = myInsertionPoint.signatureFields.add();
-	var myArray = [0, 0, 55, 216];
-    signatureField.geometricBounds = myArray;
+	var signatureField = myInsertionPoint.signatureFields.add({geometricBounds:[0,0,55,216]});
 	with(signatureField.anchoredObjectSettings){
 	  anchoredPosition = AnchorPosition.anchored;
 	  anchorPoint = AnchorPoint.topLeftAnchor;
 	  horizontalReferencePoint = AnchoredRelativeTo.anchorLocation;
 	  horizontalAlignment = HorizontalAlignment.leftAlign;
-	  anchorXoffset = -160;
+	  anchorXoffset = -160; // this needs to match the template's columnWidth
 	  verticalReferencePoint = VerticallyRelativeTo.lineBaseline;
-	  anchorYoffset = 3;
+	  anchorYoffset = 0;
 	  anchorSpaceAbove = 0;
 	}
 	// https://secure.echosign.com/doc/TextFormsTutorial.pdf
@@ -211,7 +225,8 @@ function AddFormFields(doc, signatureCount) {
 	logToFile("el.xmlAttributes.item(unmailed) = " + el.xmlAttributes.item("unmailed").value);
 
 	if (el.xmlAttributes.item("unmailed").value == "true") {
-	  signatureField.name = "legalese_es_signer" + signatureCount++ + "_signature";
+	  var signatureCount = el.xmlAttributes.item("esnum").value;
+	  signatureField.name = "legalese_es_signer" + signatureCount + "_signature";
 	}
 	return false;
   }

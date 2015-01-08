@@ -10,7 +10,7 @@ function onOpen() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var entries = [
   { name:"Create Form", functionName:"setupForm_"},
-  { name:"Generate Docs", functionName:"fillTemplates_"},
+  { name:"Generate Docs", functionName:"fillTemplates"},
   { name:"Send to EchoSign", functionName:"uploadAgreement"},
   { name:"quicktest", functionName:"quicktest"},
   ];
@@ -322,7 +322,8 @@ function readRows_() {
   var partyfields = [];
   var origpartyfields = [];
   var partyfieldorder = []; // table that remaps column number to order-in-the-form
-  var parties = { _unmailed:[], founder:[], existing_shareholder:[], company:[], investor:[] }; // others ok in the form
+  var parties = { _allparties:[], _unmailed:[], founder:[], existing_shareholder:[], company:[], investor:[] }; // others ok in the form
+  // maybe we should do it this way and just synthesize the partygroups as needed, along with any other filters.
   var terms_row_offset;
 
   Logger.log("readRows: starting.");
@@ -392,6 +393,7 @@ function readRows_() {
       var singleparty = { _spreadsheet_row:i+1, _unmailed:false };
       var party_formats = sheet.getRange(i+1,1,1,row.length).getNumberFormats();
 	  if (terms._first_party_row == 0) terms._first_party_row = i;
+	  terms._last_party_row = i;
 
       for (var ki in partyfields) {
         if (ki < 1) { continue }
@@ -405,7 +407,11 @@ function readRows_() {
 
       Logger.log("readRows: learning entire %s, %s", partytype, singleparty);
 	  if (parties[partytype] == undefined) { parties[partytype] = [] }
+
+	  if (singleparty.legalesestatus.toLowerCase() == "ignore") { continue }
+
       parties[partytype].push(singleparty);
+	  parties._allparties.push(singleparty);
 
 	  // set up the _unmailed attribute
 	  if (singleparty.legalesestatus == undefined || singleparty.legalesestatus === "") {
@@ -414,14 +420,13 @@ function readRows_() {
 		singleparty._es_num = es_num++;
 		parties._unmailed.push(singleparty);
 	  }
-	  else if (singleparty.legalesestatus.toLowerCase().match(/done|ignore|skip|mailed/i)) {
+	  else if (singleparty.legalesestatus.toLowerCase().match(/^(done|ignore|skip|mailed|cc)/i)) {
 		Logger.log("readRows: founder %s has status %s, so leaving out from parties._unmailed", singleparty.name, singleparty.legalesestatus);
 	  }
 	  else {
 		Logger.log("readRows: founder %s has status %s; not sure what that means, but leaving out from parties._unmailed", singleparty.name, singleparty.legalesestatus);
 	  }
 
-	  terms._last_party_row = i;
     }
   }
   terms._origpartyfields = origpartyfields;
@@ -572,6 +577,8 @@ function availableTemplates_() {
   var availables = [
 //  { url:"test1.html", title:"Test One" },
 
+  { url:"loan_waiver_xml", title:"Waiver of Convertible Loan" },
+
 // for digify
   { url:"dora_xml", title:"DORA" },
   { url:"kiss_amendment_xml", title:"DORA" },
@@ -601,8 +608,8 @@ function intersect_(array1, array2) {
   return array1.filter(function(n) { return array2.indexOf(n.url) != -1 || array2.indexOf(n.url.replace(/_xml/,"")) != -1 });
 }
 
-// ---------------------------------------------------------------------------------------------------------------- fillTemplates_
-function fillTemplates_() {
+// ---------------------------------------------------------------------------------------------------------------- fillTemplates
+function fillTemplates() {
   var templatedata = readRows_();
   templatedata.clauses = {};
 
@@ -658,7 +665,7 @@ function fillTemplates_() {
 };
 
 // ---------------------------------------------------------------------------------------------------------------- fillTemplate_
-// fill a single template -- inner-loop function for fillTemplates_() above.
+// fill a single template -- inner-loop function for fillTemplates() above.
 function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   // reset "globals"
   clauseroot = [];
@@ -765,6 +772,10 @@ function resetUserProperties(which) {
 // EchoSign uses OAuth 2
 // so we grabbed https://github.com/googlesamples/apps-script-oauth2
 // and we turned on the library.
+//
+// the redirect url is https://script.google.com/macros/d/{PROJECT KEY}/usercallback
+
+
 
 function getEchoSignService() {
   // Create a new service with the given name. The name will be used when 
@@ -783,12 +794,13 @@ function getEchoSignService() {
       .setPropertyStore(PropertiesService.getUserProperties())
 
       // Set the scopes to request (space-separated for Google services).
-      .setScope('agreement_read agreement_send agreement_write user_login library_read');
+      .setScope('agreement_read agreement_send agreement_write user_login');
 
   var ssname = SpreadsheetApp.getActiveSpreadsheet().getName();
 
   var esApps = {
 	"Digify KISS Amendment" : { clientId:"B7ANAKXAX94V6P", clientSecret:"417e13ac801250d2146892eb0266d16e", projectKey:"MYzWng6oYKb0nTSoDTQ271cUQWaHMB8in" },
+	"Waiver of Convertible Loan" : { clientId:"B8WRFA45X5727E", clientSecret:"0ef004d92582af21ceda0ee94e8ba5c2", projectKey:"M8Z8igDQBcgVeVy1AdAskyHYH5ITXFjPS" },
 	"JFDI.2014 Deed of Ratification and Accession" : { clientId:"B7ANAKXAX94V6P", clientSecret:"417e13ac801250d2146892eb0266d16e", projectKey:"MYzWng6oYKb0nTSoDTQ271cUQWaHMB8in" },
   "default" : { clientId:"B9HLGY92L5Z4H5", clientSecret:"ff4c883e539571273980245c41199b70", projectKey:"M6VMONjB762l0FdR-z7tWO3YH5ITXFjPS" },
   };
@@ -975,7 +987,6 @@ function uploadAgreement() {
   
   for (var p in parties._unmailed) {
 	var party = parties._unmailed[p];
-	  
 	  emailInfo.push({email:party.email, role:"SIGNER"});
 	  getPartyCells_(sheet, readrows, party).legalesestatus.setValue("mailed echosign " + now);
   }
@@ -986,30 +997,42 @@ function uploadAgreement() {
 	return;
   }
 
+  // TODO: who shall we cc to? everybody whose legalese status == "cc".
+  var cc_list = parties._allparties.filter(function(party){return party.legalesestatus=="cc"});
+  for (var p in cc_list) {
+	var party = cc_list[p];
+	getPartyCells_(sheet, readrows, party).legalesestatus.setValue("CC'ed echosign " + now);
+  }
+  cc_list = cc_list.map(function(party){return party.email});
+
+  Logger.log("To: %s", emailInfo.map(function(party){return party.email}));
+  Logger.log("CC: %s", cc_list);
+
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
   for (var i in transientDocumentIds) {
 	var transientDocumentId = transientDocumentIds[i];
 	Logger.log("turning transientDocument %s into an agreement", transientDocumentId);
 
-//	continue;
+	// continue;
 	var acr = postAgreement_(	{ "transientDocumentId": transientDocumentId },
 								emailInfo,
 								"Please sign and return. If in doubt please contact "
 								+ parties.company[0].email,
-								ss.getName()
+								ss.getName(),
+								cc_list
 	);
 
 	Logger.log("uploadAgreement: well, that seems to have worked!");
 
-	var cell = ss.getSheetByName("Deal Terms").getCell("E8");
+	var cell = ss.getSheetByName("Deal Terms").getRange("E8");
 	cell.setValue("=HYPERLINK(\""+acr.url+"\",\"EchoSign\")")
   }
 
 	Logger.log("uploadAgreement: that's all, folks!");
 }
 
-function postAgreement_(fileInfos, recipients, message, name, agreementCreationInfo) {
+function postAgreement_(fileInfos, recipients, message, name, cc_list, agreementCreationInfo) {
   var api = getEchoSignService();
 
   if (agreementCreationInfo == undefined) {
@@ -1018,7 +1041,7 @@ function postAgreement_(fileInfos, recipients, message, name, agreementCreationI
 		"signatureType": "ESIGN",
 		"recipients": recipients,
 		"daysUntilSigningDeadline": "3",
-		"ccs": [ "mengwong@legalese.io" ], // maybe set this to be all the ones who are not unmailed
+		"ccs": cc_list , // everyone whose legalese status is cc
 		"signatureFlow": "PARALLEL", // only available for paid accounts. we may need to check the user info and switch this to SENDER_SIGNATURE_NOT_REQUIRED if the user is in the free tier.
 		"message": message,
 		"fileInfos": fileInfos,
@@ -1089,3 +1112,9 @@ function postAgreement_(fileInfos, recipients, message, name, agreementCreationI
 function mylogger(input) {
   Logger.log(input);
 }
+// TODO:
+// data.parties._investor_plural
+// how many parties are there in all of the investors? if there's only one investor and it's a natural person then the answer is 1.
+// otherwise the answer is probably plural.
+// used by the convertible_loan_waiver.
+
