@@ -139,8 +139,8 @@ The Investor shall have no information rights over the financials of the company
 <?   var party = data.parties.investor[i]; ?>
 <para_1 class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
 <Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
-<?!= columnWidth ?><cell><?= party.signatoryname  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.signatoryrole  ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.signatory_name  ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.signatory_role  ?></cell><?!= endCell ?>
 <?!= columnWidth ?><cell><?= party.name ?></cell><?!= endCell ?>
 <?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
 </Table></para_1>
@@ -155,8 +155,8 @@ The Investor shall have no information rights over the financials of the company
 <?   var party = data.parties.company[i]; ?>
 <para_1 class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
 <Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
-<?!= columnWidth ?><cell><?= party.signatoryname  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.signatoryrole  ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.signatory_name  ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.signatory_role  ?></cell><?!= endCell ?>
 <?!= columnWidth ?><cell><?= party.name ?></cell><?!= endCell ?>
 <?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
 </Table></para_1>

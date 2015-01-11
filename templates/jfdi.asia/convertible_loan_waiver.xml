@@ -40,12 +40,7 @@
    for (var i in data.parties.investor) { ?>
 <?   if (data.parties.investor.length > 1 && i == 0) { ?></para_1><? } ?>
 <?   if (data.parties.investor.length > 1)           { ?><parties><? } ?>
-<?=    data.parties.investor[i].name ?> (<?= data.parties.investor[i].idtype ?> <span_ucnum><?= data.parties.investor[i].id ?></span_ucnum>), <?
-     if (data.parties.investor[i].investortype == "company") { ?>
-a company incorporated in <?= data.parties.investor[i].state ?> with its registered office at <?= data.parties.investor[i].address ?>
-<?     } else { ?>
-a citizen of <?= data.parties.investor[i].state ?> resident at (or receiving official notices at) <?= data.parties.investor[i].address ?>
-<?     } ?>
+<?!= include("lib_party", data, data.parties.investor[i]) ?>
 <?   if (data.parties.investor.length > 1)           { ?></parties>
 <?   } else                                          { ?> <? } ?>
 <? } ?>
@@ -87,7 +82,7 @@ a citizen of <?= data.parties.investor[i].state ?> resident at (or receiving off
 <para_1 class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
 <Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
 <?!= columnWidth ?><cell><?= party.name  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.signatoryrole ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.signatory_role ?></cell><?!= endCell ?>
 <?!= columnWidth ?><cell><?= data.parties.investor[0].name ?></cell><?!= endCell ?>
 <?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
 </Table></para_1>
@@ -101,8 +96,8 @@ a citizen of <?= data.parties.investor[i].state ?> resident at (or receiving off
 <?   var party = data.parties.investor[i]; ?>
 <para_1 class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
 <Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
-<?!= columnWidth ?><cell><?= party.signatoryname  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.signatoryrole  ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.signatory_name  ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.signatory_role  ?></cell><?!= endCell ?>
 <?!= columnWidth ?><cell><?= party.name ?></cell><?!= endCell ?>
 <?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
 </Table></para_1>

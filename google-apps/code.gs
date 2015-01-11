@@ -378,7 +378,7 @@ function readRows_() {
         origpartyfields[partyfieldorder[ki]] = origpartyfields[partyfieldorder[ki]] || {};
         origpartyfields[partyfieldorder[ki]].fieldname = row[ki];
 		// Logger.log("readRows: learned origpartyfields["+partyfieldorder[ki]+"].fieldname="+row[ki]);
-        partyfields[ki] = partyfields[ki].toLowerCase().replace(/\s+/g, ''); // TODO; convert this to asvar_()
+        partyfields[ki] = asvar_(partyfields[ki]);
 		Logger.log("readRows: recorded partyfield[%s]=%s", ki, partyfields[ki]);
       }
       continue;
@@ -408,23 +408,23 @@ function readRows_() {
       Logger.log("readRows: learning entire %s, %s", partytype, singleparty);
 	  if (parties[partytype] == undefined) { parties[partytype] = [] }
 
-	  if (singleparty.legalesestatus.toLowerCase() == "ignore") { continue }
+	  if (singleparty.legalese_status.toLowerCase() == "ignore") { continue }
 
       parties[partytype].push(singleparty);
 	  parties._allparties.push(singleparty);
 
 	  // set up the _unmailed attribute
-	  if (singleparty.legalesestatus == undefined || singleparty.legalesestatus === "") {
+	  if (singleparty.legalese_status == undefined || singleparty.legalese_status === "") {
 		Logger.log("readRows: party %s hasn't been mailed yet. it will have es_num %s", singleparty.name, es_num);
 		singleparty._unmailed = true;
 		singleparty._es_num = es_num++;
 		parties._unmailed.push(singleparty);
 	  }
-	  else if (singleparty.legalesestatus.toLowerCase().match(/^(done|ignore|skip|mailed|cc)/i)) {
-		Logger.log("readRows: founder %s has status %s, so leaving out from parties._unmailed", singleparty.name, singleparty.legalesestatus);
+	  else if (singleparty.legalese_status.toLowerCase().match(/^(done|ignore|skip|mailed|cc)/i)) {
+		Logger.log("readRows: founder %s has status %s, so leaving out from parties._unmailed", singleparty.name, singleparty.legalese_status);
 	  }
 	  else {
-		Logger.log("readRows: founder %s has status %s; not sure what that means, but leaving out from parties._unmailed", singleparty.name, singleparty.legalesestatus);
+		Logger.log("readRows: founder %s has status %s; not sure what that means, but leaving out from parties._unmailed", singleparty.name, singleparty.legalese_status);
 	  }
 
     }
@@ -439,7 +439,7 @@ function getPartyCells_(sheet, readrows, party) {
   Logger.log("looking to return a dict of partyfieldname to cell, for party %s", party.name);
   Logger.log("party %s comes from spreadsheet row %s", party.name, party._spreadsheet_row);
   Logger.log("the fieldname map looks like this: %s", readrows._partyfields);
-  Logger.log("so the cell that matters for legalesestatus should be row %s, col %s", party._spreadsheet_row, readrows._partyfields.indexOf("legalesestatus")+1);
+  Logger.log("so the cell that matters for legalese_status should be row %s, col %s", party._spreadsheet_row, readrows._partyfields.indexOf("legalese_status")+1);
   Logger.log("calling (getRange %s,%s,%s,%s)", party._spreadsheet_row, 1, 1, readrows._partyfields.length+1);
   var range = sheet.getRange(party._spreadsheet_row, 1, 1, readrows._partyfields.length+1);
   Logger.log("pulled range %s", JSON.stringify(range.getValues()));
@@ -569,18 +569,18 @@ function availableTemplates_() {
   var availables = [
 //  { url:"test1.html", title:"Test One" },
 
-  { url:"parent_xml",          title:"Include Parent" },
-  { url:"loan_waiver_xml",     title:"Waiver of Convertible Loan" },
-  { url:"simplified_note_xml", title:"Simplified Convertible Loan Agreement" },
+  { name:"parent_xml",			url:"parent_xml",          title:"Include Parent" },
+  { name:"loan_waiver_xml",		url:"loan_waiver_xml",     title:"Waiver of Convertible Loan" },
+  { name:"simplified_note_xml",		url:"simplified_note_xml", title:"Simplified Convertible Loan Agreement" },
 
 // for digify
-  { url:"dora_xml", title:"DORA" },
-  { url:"kiss_amendment_xml", title:"DORA" },
-  { url:"kiss_amendment", title:"Kiss Amendment" },
-  { url:"test", title:"Test 1", investors:"onebyone" },
-  { url:"termsheet", title:"Convertible Note Termsheet" },
-  { url:"darius",    title:"Convertible Note Agreement" },
-  { url:"kissing",   title:"KISS(Sing) Agreement" },
+  { name:"dora_xml",			url:"dora_xml", title:"DORA" },
+  { name:"kiss_amendment_xml",	url:"kiss_amendment_xml", title:"DORA" },
+  { name:"kiss_amendment",		url:"kiss_amendment", title:"Kiss Amendment" },
+  { name:"test",				url:"test", title:"Test 1", investors:"onebyone" },
+  { name:"termsheet",			url:"termsheet", title:"Convertible Note Termsheet" },
+  { name:"darius",				url:"darius",    title:"Convertible Note Agreement" },
+  { name:"kissing",				url:"kissing",   title:"KISS(Sing) Agreement" },
   ];
 return availables;
 };
@@ -599,7 +599,7 @@ function desiredTemplates_(config) {
 // ---------------------------------------------------------------------------------------------------------------- intersect_
 // yes, this is O(nm) but for small n,m it should be OK
 function intersect_(array1, array2) {
-  return array1.filter(function(n) { return array2.indexOf(n.url) != -1 || array2.indexOf(n.url.replace(/_xml/,"")) != -1 });
+  return array1.filter(function(n) { return array2.indexOf(n.name) != -1 || array2.indexOf(n.name.replace(/_xml/,"")) != -1 });
 }
 
 // obtainTemplate
@@ -607,9 +607,25 @@ function intersect_(array1, array2) {
 // in future we may pull a generic HTML template from somewhere else.
 function obtainTemplate_(url) {
   Logger.log("obtainTemplate_(%s) called", url);
+
+  // we're actually running within a single script invocation so maybe we should find a more intelligent way to cache within a single session.
+  // otherwise this risks not picking up changes
+
   if (url.match(/^http/)) {
-
-
+	var cache = CacheService.getDocumentCache();
+	var cached = cache.get(url);
+	if (cached != null) {
+	  return HtmlService.createTemplate(cached);
+	}
+	else {
+	  var result = UrlFetchApp.fetch(url);
+	  var contents = result.getContentText();
+	  if (contents.length < 100000 && url.length < 250) {
+		// bounds-check. key (url) maxlength = 250 so maybe we need to hash. content maxlength = 100KB so we may need to chain the content across multiple cache items
+		cache.put(url, contents, 60);
+	  }
+	  return HtmlService.createTemplate(contents);
+	}
   }
   else return HtmlService.createTemplateFromFile(url);
 }
@@ -682,10 +698,11 @@ function fillTemplates() {
 //
 // so, we define an include() function.
 
-function include(url, data) {
+function include(url, data, _include) {
   Logger.log("running include.");
   var childTemplate = obtainTemplate_(url)
   childTemplate.data = data;
+  childTemplate.data._include = _include;
   var filledHTML = childTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
   return filledHTML;
 }
@@ -976,7 +993,7 @@ function uploadAgreement() {
   for (var p in parties._unmailed) {
 	var party = parties._unmailed[p];
 	  emailInfo.push({email:party.email, role:"SIGNER"});
-	  getPartyCells_(sheet, readrows, party).legalesestatus.setValue("mailed echosign " + now);
+	  getPartyCells_(sheet, readrows, party).legalese_status.setValue("mailed echosign " + now);
   }
   Logger.log("we shall be emailing to %s", emailInfo);
 
@@ -986,10 +1003,10 @@ function uploadAgreement() {
   }
 
   // TODO: who shall we cc to? everybody whose legalese status == "cc".
-  var cc_list = parties._allparties.filter(function(party){return party.legalesestatus=="cc"});
+  var cc_list = parties._allparties.filter(function(party){return party.legalese_status=="cc"});
   for (var p in cc_list) {
 	var party = cc_list[p];
-	getPartyCells_(sheet, readrows, party).legalesestatus.setValue("CC'ed echosign " + now);
+	getPartyCells_(sheet, readrows, party).legalese_status.setValue("CC'ed echosign " + now);
   }
   cc_list = cc_list.map(function(party){return party.email});
 
