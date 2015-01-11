@@ -15,10 +15,12 @@ function xmls2pdf(xmlFiles, indtFile, showingWindow) {
 	try {
 	  logToFile("xmls2pdf: starting " + xmlFile.fullName);
 	  var doc = importXmlIntoTemplate(xmlFile, indtFile, showingWindow);
-	  addTextVariables(doc);
+	  doc.recompose(); // force smart text reflow otherwise the signature fields won't add properly.
 	  addCrossReferences(doc);
 	  constructFormFields(doc);
 	  // findAndReplace(doc); change " to ''
+	  // trim trailing newlines from the document. not quite sure how to do this.
+	  doc.recompose();
 	  exportToPDF(doc, xmlFile);
 	  saveAsIndd(doc, xmlFile);
 	  if (! showingWindow) doc.close();
@@ -30,10 +32,6 @@ function xmls2pdf(xmlFiles, indtFile, showingWindow) {
 	}
   }
   if (showingWindow && errors.length > 0) { alert (errors) }
-}
-
-// -------------------------------------------------- addTextVariables
-function addTextVariables(doc) {
 }
 
 // -------------------------------------------------- addCrossReferences
@@ -151,10 +149,11 @@ function AddReturns(doc, importMaps){
 	if (importMaps[myElement.markupTag.name] != undefined
 		&& importMaps[myElement.markupTag.name].constructor.name == "ParagraphStyle"
 		&& importMaps[myElement.markupTag.name].name != "[Basic Paragraph]"
+//		&& myElement.markupTag.name != "table_enclosing_para"
 		&& myElement.markupTag.name != "Table"
 		&& myElement.markupTag.name != "Cell"
 		&& myElement.markupTag.name != "cell"
-		// and there is no XMLAttribute where addnewline=false ... though maybe that could be in xpath
+		// TODO: and there is no XMLAttribute where addnewline=false ... though maybe that could be in xpath
 		&& ! myElement.contents.match(/\r$/)) {
 //	  alert("appending newline to element " + myElement.markupTag.name + ":\r" + myElement.contents)
       myElement.insertTextAsContent("\r", XMLElementPosition.ELEMENT_END);
@@ -188,8 +187,6 @@ function constructFormFields(doc) {
   doc.viewPreferences.horizontalMeasurementUnits = MeasurementUnits.points;
   doc.viewPreferences.verticalMeasurementUnits = MeasurementUnits.points;
 
-  doc.recompose(); // force smart text reflow otherwise the signature fields won't add properly.
-
 //  alert("processRuleSet AddFormFields starting");
   __processRuleSet(doc.xmlElements.item(0), [new AddFormFields(doc)
 											]);
@@ -200,7 +197,7 @@ function constructFormFields(doc) {
 // -------------------------------------------------- addFormFields
 function AddFormFields(doc) {
   this.name = "AddFormFields";
-  this.xpath = "//para_1[@class='signatureblock' and @unmailed='true']";
+  this.xpath = "//table_enclosing_para[@class='signatureblock' and @unmailed='true']";
   this.apply = function(el, myRuleProcessor){
 
 // this won't work when running in background idle mode
@@ -208,7 +205,11 @@ function AddFormFields(doc) {
 //	app.layoutWindows.item(0).zoom(ZoomOptions.FIT_PAGE);
 
 	var myInsertionPoint = el.paragraphs.item(0).insertionPoints.item(2);
-	var signatureField = myInsertionPoint.signatureFields.add({geometricBounds:[0,0,55,216]});
+	
+	var signatureField = myInsertionPoint.signatureFields.add({geometricBounds:[0,0,55,216], pinPosition:false});
+	doc.recompose(); // recompose because adding that newline may have caused text to overset.
+
+	signatureField.geometricBounds = [0,0,55,216];
 	with(signatureField.anchoredObjectSettings){
 	  anchoredPosition = AnchorPosition.anchored;
 	  anchorPoint = AnchorPoint.topLeftAnchor;
@@ -228,6 +229,9 @@ function AddFormFields(doc) {
 	  var signatureCount = el.xmlAttributes.item("esnum").value;
 	  signatureField.name = "legalese_es_signer" + signatureCount + "_signature";
 	}
+
+	doc.recompose();
+
 	return false;
   }
 }
