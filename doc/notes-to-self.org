@@ -1,0 +1,132 @@
+* Technical Workflows
+** Exporting from InDesign
+
+Over 2012--2014, JFDI developed boilerplate in InDesign.
+
+As part of the Legalese project we migrate the authoritative master from InDesign into Legalese's Github repository as XML.
+
+We document here the process for migrating the authoritative boilerplate from InDesign into Legalese.
+
+*** Important Files and Folders
+
+**** Master Indesign Template
+/00 founder agreement.indd/ is the most up-to-date format template.
+
+We assume you are now working with SomeOtherBoilerplate.indd.
+
+From /00 founder agreemend.indd/, load:
+- all text styles
+- tags
+- styles to tags
+
+Note that this file has grep styles stripped from the file.
+
+([[*Importing%20Into%20InDesign][Subsequently when you import filled XML into InDesign]] you'll want to use a Text Styles document which has the GREP styles.)
+
+**** Folder Structure
+
+***** build/10-indesign2xml
+
+XML files exported from InDesign boilerplate
+
+***** build/20-xmlmasters
+
+XML files xml_pp'ed from the indesign2xml export
+
+***** build/30-xmltemplates
+
+containing <? ?>
+
+***** build/40-htmltemplates
+
+after piping through xml2html, contains <? ?>
+
+these files are mastered out to the Google Apps Script Add-On Script Gallery Folder.
+
+The Legalese Google Apps Add-On is responsible for creating a form, filling the spreadsheet, and generating XML and HTML filled documents which contain particulars. Those filled documents are placed into a set of folders under the Legalese Root folder.
+
+Google Drive syncs any folders thus created onto the local filesystem.
+
+***** Legalese Root
+
+A Node script keeps an eye on the Legalese Root tree and notices when new folders are created.
+
+It renames files according to their Google Document ID.
+
+It updates the 00-tracker folder.
+
+***** build/00-tracker
+
+Keeps track of what state the system is in, and of what state each file is in.
+
+Multiple scripts refer to and update this tracker folder.
+
+If you are familiar with procmail you will have an idea of how the multiple scripts are supposed to cooperate.
+
+***** build/50-xml2indesign
+
+*.xml are XML files filled by Google Apps Script's HTMLTemplate.
+
+Those XML files contain a set of nonprinting processing instructions in a special XML tag tree which indicates which email addresses need to sign the documents.
+
+Any filled XML files have a unique filename. They are tracked in the 00-tracker folder, so that we don't process the same document twice.
+
+an InDesign idleTask script monitors that folder and creates the following:
+
+*.indd are filled by those XML files
+
+*.pdf are exported by INDD.
+
+***** build/60-indesign2pdf
+
+The last thing the InDesign script does is mv the exported PDFs into build/60-indesign2pdf
+
+***** build/70-pdf2echosign
+
+The Legalese spreadsheet has another script function -- sendToEchosign.
+
+EchoSign offers Oauth-based API integration.
+https://developers.google.com/apps-script/guides/services/external
+
+Legalese monitors the appropriate folder under /Legalese Root/ for new PDFs that have been produced by InDesign.
+
+The script processes them by:
+1. recording a column in the spreadsheet indicating that the upload-to-echosign workflow has begun
+2. uploading them to EchoSign
+3. recording a column in the spreadsheet indicating that the upload completed
+
+If the upload fails for some reason then at least the record in the first step prevents the script from doing it twice.
+
+
+*** Procedure
+**** Map Styles to Tags
+In the tags pane, map styles to tags
+**** Export as XML
+to the folder build/indesign2xml
+
+**** run xml_pp -s format_c < indesign2xml/SomeOtherBoilerplate.xml > 
+
+*** Migrated Documents
+**** TODO 00 founder agreement.indd
+
+the first doc signed between JFDI and the founders
+**** TODO KISS(Sing) Agreement
+**** TODO Darius Convertible Note Agreement
+**** TODO Darius Convertible Note Termsheet
+**** TODO Volunteer Agreement
+**** 
+
+** Importing Into InDesign
+
+The template document should have GREP styles restored. Compare with 00 founder agreement.xml.
+
+* Business Workflows
+
+Legalese supports two major workflows:
+
+** Founder Agreement Onboarding
+When teams join JFDI they sign a number of papers which help JFDI get its investment into the startup ASAP.
+
+** Seed Round Investment
+Where third-party angels join a round led by the teams.
+
