@@ -678,10 +678,9 @@ function fillTemplates() {
 // 
 // it's possible that a template references another template.
 // the Google Docs HTMLTemplate engine is pretty basic and has no concept
-// of modular components. so we just make repeated passes over the template,
-// filling it again and again, until it stops changing.
+// of modular components.
 //
-// so, we define an include() function. I wonder if Caja supports it.
+// so, we define an include() function.
 
 function include(url, data) {
   Logger.log("running include.");
