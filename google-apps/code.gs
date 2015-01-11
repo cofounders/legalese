@@ -546,15 +546,7 @@ function showclause_(clausetext) {
 
 // ---------------------------------------------------------------------------------------------------------------- quicktest
 function quicktest() {
- var ss = SpreadsheetApp.getActiveSpreadsheet();
- var triggers = ScriptApp.getUserTriggers(ss);
 
- // Log the event type for the first trigger in the array.
- Logger.log("my triggers are: " + triggers);
-  for (var i in triggers) {
-	var t = triggers[i];
-	Logger.log("trigger " + i + " is: " + t + " which has event type " + t.getEventType());
-  }
 }
 
 /** Template generation is as follows:
@@ -577,7 +569,9 @@ function availableTemplates_() {
   var availables = [
 //  { url:"test1.html", title:"Test One" },
 
-  { url:"loan_waiver_xml", title:"Waiver of Convertible Loan" },
+  { url:"parent_xml",          title:"Include Parent" },
+  { url:"loan_waiver_xml",     title:"Waiver of Convertible Loan" },
+  { url:"simplified_note_xml", title:"Simplified Convertible Loan Agreement" },
 
 // for digify
   { url:"dora_xml", title:"DORA" },
@@ -608,6 +602,18 @@ function intersect_(array1, array2) {
   return array1.filter(function(n) { return array2.indexOf(n.url) != -1 || array2.indexOf(n.url.replace(/_xml/,"")) != -1 });
 }
 
+// obtainTemplate
+// initially we just assume the template is available as one of the project's HTML files.
+// in future we may pull a generic HTML template from somewhere else.
+function obtainTemplate_(url) {
+  Logger.log("obtainTemplate_(%s) called", url);
+  if (url.match(/^http/)) {
+
+
+  }
+  else return HtmlService.createTemplateFromFile(url);
+}
+
 // ---------------------------------------------------------------------------------------------------------------- fillTemplates
 function fillTemplates() {
   var templatedata = readRows_();
@@ -635,8 +641,9 @@ function fillTemplates() {
   for (var i in suitables) {
     var sourceTemplate = suitables[i];
     var url = sourceTemplate.url;
-    var newTemplate = HtmlService.createTemplateFromFile(url);
+    var newTemplate = obtainTemplate_(url);
     newTemplate.data = templatedata;
+    newTemplate.data._explosion = newTemplate.data._explosion || {};
 	var sans_xml = url.replace(/_xml|xml_/,"");
 
 	// TODO: respect the "all in one doc" vs "one per doc" for all categories not just investors
@@ -646,10 +653,12 @@ function fillTemplates() {
 	try { explosion = config.templates.tree[sans_xml].Investor } catch (e) { Logger.log("explosion exploded"); }
 	if (explosion == "all in one doc") {
 	  Logger.log("doing investors all in one doc ... " + sourceTemplate.url);
+	  newTemplate.data._explosion.investor = false;
 	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder);
 	}
 	else {
 	  Logger.log("doing investors one per doc ... " + sourceTemplate.url);
+	  newTemplate.data._explosion.investor = true;
       for (var j in investors) {
 		// we step through the multiple data.parties.{founder,investor,company}.* arrays.
 		// we set the singular as we step through.
@@ -666,6 +675,22 @@ function fillTemplates() {
 
 // ---------------------------------------------------------------------------------------------------------------- fillTemplate_
 // fill a single template -- inner-loop function for fillTemplates() above.
+// 
+// it's possible that a template references another template.
+// the Google Docs HTMLTemplate engine is pretty basic and has no concept
+// of modular components. so we just make repeated passes over the template,
+// filling it again and again, until it stops changing.
+//
+// so, we define an include() function. I wonder if Caja supports it.
+
+function include(url, data) {
+  Logger.log("running include.");
+  var childTemplate = obtainTemplate_(url)
+  childTemplate.data = data;
+  var filledHTML = childTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+  return filledHTML;
+}
+
 function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   // reset "globals"
   clauseroot = [];
@@ -1004,7 +1029,7 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, agreement
 	  "documentCreationInfo": {
 		"signatureType": "ESIGN",
 		"recipients": recipients,
-		"daysUntilSigningDeadline": "3",
+//		"daysUntilSigningDeadline": "7",
 		"ccs": cc_list , // everyone whose legalese status is cc
 		"signatureFlow": "PARALLEL", // only available for paid accounts. we may need to check the user info and switch this to SENDER_SIGNATURE_NOT_REQUIRED if the user is in the free tier.
 		"message": message,
