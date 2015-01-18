@@ -76,10 +76,10 @@ function LegalEvent(name, pre_conditions, neg_conditions, act) { this.name=name;
 var bob = new LegalParty({fullname:"Bob The Dog", address: "1 Nassim Drive, Singapore", IDval:"S1111111A", IDtype:"NRIC", entitytype:"person", shortname:"the Borrower"});
 var cal = new LegalParty({fullname:"Cal the Cat", address: "2 Oxley Rise, Singapore",   IDval:"S2222222B", IDtype:"NRIC", entitytype:"person", shortname:"the Lender"});
 
-var agreement  =  new LegalVar("20141114", { en:"Date of Agreement" }, "date");
+var agreement  =  new LegalVar("20141114", { en:"Date of Agreement", de:"Datum der Einigung" }, "date");
 var completion =  new LegalVar("20141201", { en:"Completion Date" },   "date");
 var expiration =  new LegalVar("20150101", { en:"Expiration Date" },   "date");
-var interest   =  new LegalVar(6,          { en:"Interest", show:function(val){return val+"%"} },          "percentage");
+var interest   =  new LegalVar(6,          { en:"Interest",            show:function(val){return val+"%"} },          "percentage");
 var principal  =  new LegalVar(25000,      { en:"Principal Amount" },  "currencyamount");
 var currency   =  new LegalVar("SGD",      { en:"Singapore Dollars"},  "currencytype");
 
