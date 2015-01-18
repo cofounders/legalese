@@ -43,9 +43,9 @@ ulwrapper						ul
 p								p
 para_1							p
 para_2							p
-parties							li	ol
-recitals						li	ol
-recitals_restart				li	ol
+parties							li
+recitals						li
+recitals_restart				li
 sidebar							p
 smallcaps						span style="font-variant: small-caps"
 span							
