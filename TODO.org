@@ -51,5 +51,8 @@ import JFDI's
 
 different users should be able to log in to collaboratively edit the same deal.
 
+figure out building this as a proper google add-on.
+
+
 
 
