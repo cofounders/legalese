@@ -12,6 +12,7 @@ function onOpen() {
   { name:"Create Form", functionName:"setupForm_"},
   { name:"Generate Docs", functionName:"fillTemplates"},
   { name:"Send to EchoSign", functionName:"uploadAgreement"},
+  { name:"faux MegaSign", functionName:"fauxMegaSign"},
   { name:"quicktest", functionName:"quicktest"},
   ];
   spreadsheet.addMenu("Legalese", entries);
@@ -36,7 +37,8 @@ function onOpen() {
  */
 function setupForm_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var cell = ss.getSheetByName("Deal Terms").getRange("E4");
+  var config = readConfig();
+  var cell = ss.getSheetByName(config.sheet.values[0]).getRange("E4");
 
   var form = ss.getFormUrl();
   var data = readRows_();
@@ -106,8 +108,6 @@ function setupForm_() {
 	  // we don't want to display the Legalese Status field.
 	}	  
   }
-
-  var config = readConfig();
 
   for (var i in config.form_extras.values) {
 	var field = asvar_(config.form_extras.values[i]);
@@ -209,7 +209,8 @@ function treeify_(root, arr) {
   if      (arr.length == 2) { root[arr[0]] = arr[1] }
   else if (arr.length == 1) { root[arr[0]] = null   }
   else if (arr.length == 0) { return }
-  else                      { if (root[arr[0]] == undefined) root[arr[0]] = {}; treeify_(root[arr[0]], arr.slice(1)) }
+  else                      { if (root[arr[0]] == undefined) root[arr[0]] = {};
+							  treeify_(root[arr[0]], arr.slice(1)) }
 }
 
 
@@ -276,7 +277,8 @@ function treeify_(root, arr) {
  */
 function onFormSubmit(e) {
   Logger.log("onFormSubmit: beginning");
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
+  var config = readConfig();
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(config.sheet.values[0]);
   var data = readRows_();
   // add a row and insert the investor fields
   Logger.log("inserting a row after " + (parseInt(data._last_party_row)+1));
@@ -311,7 +313,9 @@ function onFormSubmit(e) {
  * if a availabletemplate is marked as binary then we iterate through the investors and set data.investor.* each time
  */
 function readRows_() {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
+  var config = readConfig();
+  Logger.log("readRows_: will use sheet " + config.sheet.values[0]);
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(config.sheet.values[0]);
   var rows = sheet.getDataRange();
   var numRows = rows.getNumRows();
   var values = rows.getValues();
@@ -408,7 +412,8 @@ function readRows_() {
       Logger.log("readRows: learning entire %s, %s", partytype, singleparty);
 	  if (parties[partytype] == undefined) { parties[partytype] = [] }
 
-	  if (singleparty.legalese_status.toLowerCase() == "ignore") { continue }
+	  if (singleparty.legalese_status.toLowerCase() == "ignore") { Logger.log("ignoring %s line", partytype);
+																   continue }
 
       parties[partytype].push(singleparty);
 	  parties._allparties.push(singleparty);
@@ -416,6 +421,7 @@ function readRows_() {
 	  // set up the _unmailed attribute
 	  if (singleparty.legalese_status == undefined || singleparty.legalese_status === "") {
 		Logger.log("readRows: party %s hasn't been mailed yet. it will have es_num %s", singleparty.name, es_num);
+		singleparty._to_email = email_to_cc_(singleparty.email)[0]; // and the subsequent addresses are in an array [1]
 		singleparty._unmailed = true;
 		singleparty._es_num = es_num++;
 		parties._unmailed.push(singleparty);
@@ -432,6 +438,7 @@ function readRows_() {
   terms._origpartyfields = origpartyfields;
   terms._partyfields = partyfields;
   terms.parties = parties;
+  Logger.log("readRows: terms.parties = %s", terms.parties);
   return terms;
 };
 
@@ -482,7 +489,7 @@ function formatify_(format, string) {
       toreturn = currency + parts.join(".");
     }
     else if (format.match(/%$/)) {
-      toreturn = string * 100;
+      toreturn = (string * 100).toFixed(2);
     }
     else if (format.match(/yyyy/)) {
     // Thu Dec 18 09:03:28 PST 2014 INFO: expanding term Fri Dec 19 2014 00:00:00 GMT+0800 (HKT) with format yyyy"-"mm"-"dd
@@ -569,6 +576,7 @@ function availableTemplates_() {
   var availables = [
 //  { url:"test1.html", title:"Test One" },
 
+  { name:"preemptive_notice_xml",			url:"preemptive_notice_xml",          title:"Pre-Emptive Notice to Shareholders" },
   { name:"parent_xml",			url:"parent_xml",          title:"Include Parent" },
   { name:"loan_waiver_xml",		url:"loan_waiver_xml",     title:"Waiver of Convertible Loan" },
   { name:"simplified_note_xml",		url:"simplified_note_xml", title:"Simplified Convertible Loan Agreement" },
@@ -639,11 +647,10 @@ function fillTemplates() {
   PropertiesService.getUserProperties().setProperty("legalese.folder.id", JSON.stringify(folder.getId()));
   Logger.log("fillTemplates: property set legalese.folder.id = %s", folder.getId());
 
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
+  var config = readConfig();
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(config.sheet.values[0]);
   var cell = sheet.getRange("E6");
   cell.setValue("=HYPERLINK(\""+folder.getUrl()+"\",\""+folder.getName()+"\")");
-
-  var config = readConfig();
 
   var availables = availableTemplates_();
   var desireds = desiredTemplates_(config);
@@ -651,7 +658,10 @@ function fillTemplates() {
 
   Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
 
+  Logger.log("templatedata.parties = %s", JSON.stringify(templatedata.parties));
+
   templatedata.company = templatedata.parties.company[0];
+  Logger.log("templatedata.company = %s", templatedata.company);
   templatedata.founders = templatedata.parties.founder;
 
   for (var i in suitables) {
@@ -671,6 +681,7 @@ function fillTemplates() {
 	  Logger.log("doing investors all in one doc ... " + sourceTemplate.url);
 	  newTemplate.data._explosion.investor = false;
 	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder);
+	  readme.getBody().appendParagraph("created " + sourceTemplate.title);
 	}
 	else {
 	  Logger.log("doing investors one per doc ... " + sourceTemplate.url);
@@ -682,6 +693,7 @@ function fillTemplates() {
 		var mytitle = sourceTemplate.title + " for " + templatedata.investor.name;
 		Logger.log("starting " + mytitle);
 		fillTemplate_(newTemplate, sourceTemplate, mytitle, folder);
+		readme.getBody().appendParagraph("created " + mytitle);
 	  }
     }
 	Logger.log("finished suitable %s", url);
@@ -770,7 +782,16 @@ function createReadme_(folder) { // under the parent folder
   folder.addFile(DriveApp.getFileById(doc.getId()));
   doc.getBody().appendParagraph("this was created by Legalese.");
   Logger.log("run started");
+  PropertiesService.getUserProperties().setProperty("legalese.readme.id", JSON.stringify(doc.getId()));
   return doc;
+}
+
+function getReadme_() {
+  var id = PropertiesService.getUserProperties().getProperty("legalese.readme.id");
+  if (id != undefined) {
+	return DocumentApp.openById(JSON.parse(id));
+  }
+  return;
 }
 
 // ---------------------------------------------------------------------------------------------------------------- resetStyles_
@@ -835,18 +856,22 @@ function getEchoSignService() {
       .setPropertyStore(PropertiesService.getUserProperties())
 
       // Set the scopes to request (space-separated for Google services).
-      .setScope('agreement_read agreement_send agreement_write user_login');
+      .setScope('agreement_read agreement_send agreement_write user_login library_read library_write');
 
+  var ssid = SpreadsheetApp.getActiveSpreadsheet().getId();
   var ssname = SpreadsheetApp.getActiveSpreadsheet().getName();
 
   var esApps = {
-	"Digify KISS Amendment" : { clientId:"B7ANAKXAX94V6P", clientSecret:"417e13ac801250d2146892eb0266d16e", projectKey:"MYzWng6oYKb0nTSoDTQ271cUQWaHMB8in" },
+	"2014B DD3 Disclaimer" : { clientId:"BGT7YYB6QWXA7F", clientSecret:"bfe3d07fa87540f1adfd67eaea6e2a7f", projectKey:"MPAgnivL4fa0Qi0viwHQwrMUQWaHMB8in" },
 	"Waiver of Convertible Loan" : { clientId:"B8WRFA45X5727E", clientSecret:"0ef004d92582af21ceda0ee94e8ba5c2", projectKey:"M8Z8igDQBcgVeVy1AdAskyHYH5ITXFjPS" },
-	"JFDI.2014 Deed of Ratification and Accession" : { clientId:"B7ANAKXAX94V6P", clientSecret:"417e13ac801250d2146892eb0266d16e", projectKey:"MYzWng6oYKb0nTSoDTQ271cUQWaHMB8in" },
+	"1DIqLn8LTRO7ZilONtyX3576SXy0ULRRTz1pXitWP0Po" : { clientId:"B7ANAKXAX94V6P", clientSecret:"417e13ac801250d2146892eb0266d16e", projectKey:"MYzWng6oYKb0nTSoDTQ271cUQWaHMB8in" },
   "default" : { clientId:"B9HLGY92L5Z4H5", clientSecret:"ff4c883e539571273980245c41199b70", projectKey:"M6VMONjB762l0FdR-z7tWO3YH5ITXFjPS" },
   };
 
+  if (esApps[ssid] != undefined) { ssname = ssid }
   if (esApps[ssname] == undefined) { ssname = "default" }
+
+  Logger.log("ssname has become %s", ssname);
 
   toreturn
       // Set the client ID and secret
@@ -939,6 +964,12 @@ function uploadPDFsToEchoSign() {
   var folder = DriveApp.getFolderById(folderId);
   var pdfs = allPDFs(folder);
   var toreturn = [];
+
+  if (pdfs.length == 0) {
+	SpreadsheetApp.getUi().alert("Couldn't find a PDF to upload. You may need to poke InDesign.");
+	return toreturn;
+  }	
+
   for (var i in pdfs) {
 	var pdfdoc = pdfs[i];
 
@@ -969,6 +1000,99 @@ function showUserProperties() {
   Logger.log("scriptProperties: %s", JSON.stringify(PropertiesService.getScriptProperties().getProperties()));
 }  
 
+function email_to_cc_(email) {
+  var to = null;
+  var emails = email.split(/\s*[\n\r,]\s*/).filter(function(e){return e.length > 0});
+  if (emails.length > 0) {
+	to = [emails.shift()];
+  }
+  return [to, emails];
+}
+
+// ---------------------------------------------------------------------------------------------------------------- fauxMegaUpload
+// upload a document to the template library
+function fauxMegaUpload() {
+  // we do this using the web UI
+}
+
+// ---------------------------------------------------------------------------------------------------------------- fauxMegaSign
+// send a particular document from the template library for faux megasign
+function fauxMegaSign() {
+  var readrows = readRows_();
+  var config = readConfig();
+  var parties = readrows.parties;
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(config.sheet.values[0]);
+  var to_list = [];
+  var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"});
+  var cc2_list = [];
+  var commit_updates_to = [];
+  var commit_updates_cc = [];
+
+  // is the desired document in the library?
+  var libTemplateName = config.echosign.tree.libTemplateName != undefined ? config.echosign.tree.libTemplateName : undefined;
+
+  if (libTemplateName == undefined) {
+	Logger.log("libTemplateName not defined in README. not uploading agreement.");
+	return;
+  }
+
+  var now = Utilities.formatDate(new Date(), SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
+  
+  for (var p in parties._unmailed) {
+	var party = parties._unmailed[p];
+	// if multi-address, then first address is To: and subsequent addresses are CC
+	var to_cc = email_to_cc_(party.email);
+	if (to_cc[0] != undefined && to_cc[0].length > 0) {
+	  party._email_to = to_cc[0];
+	  to_list.push(party);
+	  party._commit_update_to = getPartyCells_(sheet, readrows, party);
+	}
+	if (to_cc[1].length > 0) {
+	  cc2_list = cc2_list.concat(to_cc[1]);
+	}
+  }
+  Logger.log("we shall be emailing to %s", to_list.join(", "));
+
+  if (to_list.length == 0) {
+	SpreadsheetApp.getUi().alert("There doesn't seem to be anybody for us to mail this to! Check the Legalese Status column.");
+	return;
+  }
+
+  // TODO: who shall we cc to? everybody whose legalese status == "cc".
+  for (var p in cc_list) {
+	var party = cc_list[p];
+	party._commit_update_cc = getPartyCells_(sheet, readrows, party);
+  }
+  cc_list = cc_list.map(function(party){return party.email});
+  cc_list = cc_list.concat(cc2_list);
+
+  Logger.log("To: %s", to_list.join(", "));
+  Logger.log("CC: %s", cc_list.join(", "));
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  for (var p in to_list) {
+	var party = to_list[p];
+	var emailInfo = [{email:party._email_to, role:"SIGNER"}];
+	
+	var acr = postAgreement_(	{ "libraryDocumentName": libTemplateName },
+								emailInfo,
+								config.echosign.tree.message,
+								config.echosign.tree.title,
+								cc_list,
+								config,
+								null
+							);
+	
+	party._commit_update_to.legalese_status.setValue("mailed echosign " + now);
+
+	Logger.log("uploadAgreement: well, that seems to have worked!");
+
+	var cell = ss.getSheetByName(config.sheet.values[0]).getRange("E8");
+	cell.setValue("=HYPERLINK(\""+acr.url+"\",\"EchoSign\")")
+  }
+  Logger.log("uploadAgreement: that's all, folks!");
+}
 
 // ---------------------------------------------------------------------------------------------------------------- uploadAgreement
 // send PDFs to echosign.
@@ -979,9 +1103,20 @@ function uploadAgreement() {
   var readrows = readRows_();
   var config = readConfig();
   var parties = readrows.parties;
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Deal Terms");
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(config.sheet.values[0]);
   var transientDocumentIds = uploadPDFsToEchoSign();
   var emailInfo = [];
+  var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"});
+  var cc2_list = [];
+  var commit_updates_to = [];
+  var commit_updates_cc = [];
+  var readmeDoc = getReadme_();
+
+  if (transientDocumentIds.length == 0) {
+	Logger.log("nothing uploaded to EchoSign. not uploading agreement.");
+	if (readmeDoc != undefined) readmeDoc.getBody().appendParagraph("nothing uploaded to EchoSign. not uploading agreement.");
+	return;
+  }
 
   // does the spreadsheet have a "Legalese Status" field?
   // if not, create a column in the spreadsheet, to the right of the rightmost filled column.
@@ -992,8 +1127,15 @@ function uploadAgreement() {
   
   for (var p in parties._unmailed) {
 	var party = parties._unmailed[p];
-	  emailInfo.push({email:party.email, role:"SIGNER"});
-	  getPartyCells_(sheet, readrows, party).legalese_status.setValue("mailed echosign " + now);
+	// if multi-address, then first address is To: and subsequent addresses are CC
+	var to_cc = email_to_cc_(party.email);
+	if (to_cc[0] != undefined) {
+	  emailInfo.push({email:to_cc[0], role:"SIGNER"});
+	  commit_updates_to.push(getPartyCells_(sheet, readrows, party));
+	}
+	if (to_cc[1].length > 0) {
+	  cc2_list = cc2_list.concat(to_cc[1]);
+	}
   }
   Logger.log("we shall be emailing to %s", emailInfo);
 
@@ -1003,15 +1145,19 @@ function uploadAgreement() {
   }
 
   // TODO: who shall we cc to? everybody whose legalese status == "cc".
-  var cc_list = parties._allparties.filter(function(party){return party.legalese_status=="cc"});
   for (var p in cc_list) {
 	var party = cc_list[p];
-	getPartyCells_(sheet, readrows, party).legalese_status.setValue("CC'ed echosign " + now);
+	commit_updates_cc.push(getPartyCells_(sheet, readrows, party));
   }
   cc_list = cc_list.map(function(party){return party.email});
+  cc_list = cc_list.concat(cc2_list);
 
   Logger.log("To: %s", emailInfo.map(function(party){return party.email}));
   Logger.log("CC: %s", cc_list);
+
+  readmeDoc.appendHorizontalRule();
+  readmeDoc.appendParagraph("To: " + emailInfo.map(function(party){return party.email}).join(", "));
+  readmeDoc.appendParagraph("CC: " + cc_list.join(", "));
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
@@ -1019,25 +1165,28 @@ function uploadAgreement() {
 	var transientDocumentId = transientDocumentIds[i];
 	Logger.log("turning transientDocument %s into an agreement", transientDocumentId);
 
-	// continue;
+	for (var cu in commit_updates_to) { commit_updates_to[cu].legalese_status.setValue("mailed echosign " + now) }
+	for (var cu in commit_updates_cc) { commit_updates_cc[cu].legalese_status.setValue("CC'ed echosign " + now) }
+
 	var acr = postAgreement_(	{ "transientDocumentId": transientDocumentId },
 								emailInfo,
-								"Please sign and return. If in doubt please contact "
-								+ parties.company[0].email,
-								ss.getName(),
-								cc_list
+								config.echosign.tree.message,
+								config.echosign.tree.title,
+								cc_list,
+								config,
+								readmeDoc
 	);
 
 	Logger.log("uploadAgreement: well, that seems to have worked!");
 
-	var cell = ss.getSheetByName("Deal Terms").getRange("E8");
+	var cell = ss.getSheetByName(config.sheet.values[0]).getRange("E8");
 	cell.setValue("=HYPERLINK(\""+acr.url+"\",\"EchoSign\")")
   }
 
-	Logger.log("uploadAgreement: that's all, folks!");
+  Logger.log("uploadAgreement: that's all, folks!");
 }
 
-function postAgreement_(fileInfos, recipients, message, name, cc_list, agreementCreationInfo) {
+function postAgreement_(fileInfos, recipients, message, name, cc_list, config, readmeDoc, agreementCreationInfo) {
   var api = getEchoSignService();
 
   if (agreementCreationInfo == undefined) {
@@ -1045,7 +1194,6 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, agreement
 	  "documentCreationInfo": {
 		"signatureType": "ESIGN",
 		"recipients": recipients,
-//		"daysUntilSigningDeadline": "7",
 		"ccs": cc_list , // everyone whose legalese status is cc
 		"signatureFlow": "PARALLEL", // only available for paid accounts. we may need to check the user info and switch this to SENDER_SIGNATURE_NOT_REQUIRED if the user is in the free tier.
 		"message": message,
@@ -1056,7 +1204,13 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, agreement
 		"authoringRequested": false,
 	  }
 	};
+
+	if (config.expire_after != undefined && config.expire_after.values[0] > 0) {
+	  agreementCreationInfo.daysUntilSigningDeadline = config.expire_after.values[0];
+	}
   }
+
+  if (readmeDoc != undefined) readmeDoc.appendParagraph("agreementCreationInfo = " + JSON.stringify(agreementCreationInfo));
 
   var o = { headers: { "Access-Token": api.getAccessToken() },
 			method: "post",
@@ -1088,30 +1242,6 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, agreement
 
   return JSON.parse(response.getContentText());
 }
-
-// {
-//     "documentCreationInfo": {
-//         "name": "TODO: name of the agreement",
-//         "message": "TODO: an appropriate message to the recipient",
-//         "recipients": [
-//             {
-//                 "email": "TODO: recipient's email ID",
-//                 "role": "TODO: recipient's role (SIGNER/APPROVER)"
-//             }
-//         ],
-//         "signatureType": "TODO: a valid value for signature type (ESIGN/WRITTEN)",
-//         "signatureFlow": "TODO: a valid value for signature flow (SENDER_SIGNS_LAST/SENDER_SIGNS_FIRST/SENDER_SIGNATURE_NOT_REQUIRED/SEQUENTIAL)",
-//         "securityOptions": {
-//             "passwordProtection": "NONE",
-//             "kbaProtection": "NONE",
-//             "webIdentityProtection": "NONE",
-//             "protectOpen": "false",
-//             "internalPassword": "",
-//             "externalPassword": "",
-//             "openPassword": ""
-//         }
-//     }
-// }
 
   
 function mylogger(input) {
