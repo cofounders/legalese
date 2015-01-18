@@ -1,5 +1,9 @@
 #!/usr/local/bin/node
 
+# mengwong 20141201
+# inspired by http://szabo.best.vwh.net/contractlanguage.html
+# and by http://commonaccord.org/PDFs/Cmacc-LegallyenabledCrypto-Transacting.pdf
+
 var argv = require('optimist').argv;
 var fs = require("fs");
 var contents = fs.readFileSync(argv._[0], "utf8");
