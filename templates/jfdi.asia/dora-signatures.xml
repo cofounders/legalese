@@ -6,8 +6,6 @@
 
 
 
-
-
 <?= data.parties.company[0].name ?>
 
 </cover_company_name>
@@ -44,7 +42,8 @@
     <para_1><span_smallcaps>This deed</span_smallcaps> is made on <?= data.agreement_date ?> between</para_1>
 
     <parties><?!= include("inc_party", data, data.parties.new_investor[0]) ?> (the "New Shareholder");</parties>
-    <parties>The persons whose names are set out in Schedule 1 of this Deed (collectively the "Current Shareholders" and individually a "Current Shareholder"); and</parties>
+    <parties><?!= include("inc_party", data, data.parties.existing_shareholder[0]) ?>;</parties>
+<para_1>(collectively the "Current Shareholders" and individually a "Current Shareholder"); and</para_1>
     <parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
     <para_1>Whereas:</para_1>
     <recitals>A shareholders&#8217; agreement was entered into on <?= data.previous_shareholder_agreement_date ?> by and among the Current Shareholders and the Company (as may have been modified, amended or supplemented from time to time) (the "Shareholders&#8217; Agreement"), a copy of which the New Shareholder hereby confirms that it has been supplied with and acknowledges the terms therein. </recitals>
@@ -73,42 +72,21 @@
 
 <b_left_sidehead>The New Shareholder</b_left_sidehead>
 
-<? var columnWidth = "<Cell aid:ccols=\"1\" aid:ccolwidth=\"150\" aid:crows=\"1\" aid:table=\"cell\">"; ?>
-<? var endCell = "</Cell>"; ?>
 <? for (var i = 0; i < data.parties.new_investor.length; i++) { ?>
-<?   var party = data.parties.new_investor[i]; ?>
-<table_enclosing_para class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
-<Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/"><?!= columnWidth ?><cell>Signed as a <span_smallcaps>deed</span_smallcaps> and delivered by</cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.signatory_name  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.name            ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
-</Table>
-</table_enclosing_para>
+<?!= include("inc_signature", data, data.parties.new_investor[i]) ?>
 <? } ?>
 
 <b_left_sidehead>The Company</b_left_sidehead>
 
 <? for (var i = 0; i < data.parties.company.length; i++) { ?>
-<?   var party = data.parties.company[i]; ?>
-<table_enclosing_para class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
-<Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/"><?!= columnWidth ?><cell>Signed as a <span_smallcaps>deed</span_smallcaps> and delivered by</cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.signatory_name  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.name            ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
-</Table>
-</table_enclosing_para>
+<?!= include("inc_signature", data, data.parties.company[i]) ?>
 <? } ?>
 
 <b_left_sidehead>The Current Shareholders</b_left_sidehead>
 
-<? for (var i = 0; i < data.parties.investor.length; i++) { ?>
-<?   var party = data.parties.investor[i]; ?>
-<table_enclosing_para class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
-<Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/"><?!= columnWidth ?><cell>Signed as a <span_smallcaps>deed</span_smallcaps> and delivered by</cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.signatory_name  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.name            ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
-</Table>
-</table_enclosing_para><? } ?>
+<? for (var i = 0; i < data.parties.existing_shareholder.length; i++) { ?>
+<?!= include("inc_signature", data, data.existing_shareholder.company[i]) ?>
+<? } ?>
+
 </Story_Main>
 </Root>

@@ -130,38 +130,17 @@ The Investor shall have no information rights over the financials of the company
 <chapter_header>Signatures</chapter_header>
     <para_1><span_smallcaps>In witness whereof</span_smallcaps> we have hereunto set our hands.</para_1>
 
-
 <b_left_sidehead>For the Investor <?= data.parties.investor[0].name ?></b_left_sidehead>
 
-<? var columnWidth = "<Cell aid:ccols=\"1\" aid:ccolwidth=\"150\" aid:crows=\"1\" aid:table=\"cell\">"; ?>
-<? var endCell = "</Cell>"; ?>
 <? for (var i = 0; i < data.parties.investor.length; i++) { ?>
-<?   var party = data.parties.investor[i]; ?>
-<para_1 class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
-<Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
-<?!= columnWidth ?><cell><?= party.signatory_name  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.signatory_role  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.name ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
-</Table></para_1>
+<?!= include("inc_signature", data, data.parties.investor[i]) ?>
 <? } ?>
-
 
 <b_left_sidehead>For the Company <?= data.parties.company[0].name ?></b_left_sidehead>
 
-<? var columnWidth = "<Cell aid:ccols=\"1\" aid:ccolwidth=\"150\" aid:crows=\"1\" aid:table=\"cell\">"; ?>
-<? var endCell = "</Cell>"; ?>
 <? for (var i = 0; i < data.parties.company.length; i++) { ?>
-<?   var party = data.parties.company[i]; ?>
-<para_1 class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
-<Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
-<?!= columnWidth ?><cell><?= party.signatory_name  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.signatory_role  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.name ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
-</Table></para_1>
+<?!= include("inc_signature", data, data.parties.company[i]) ?>
 <? } ?>
-
 
 </Story_Main>
 </Root>
