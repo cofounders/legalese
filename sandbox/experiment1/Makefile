@@ -3,14 +3,17 @@
 
 export NODE_PATH=/usr/local/lib/node_modules
 
-all: english.html legalese.html safe.mdh
+all: darius.html legalese.html safe.mdh
 
 HANDLEBARS=handlebars
 HANDLEBARS=../../src/bin/hb
 
-YAML=orig
+YAML=main
 
 .SECONDARY:
+
+darius.html: darius.mustache $(YAML).json
+	$(HANDLEBARS) --file=$< $(YAML).json > $@
 
 %.mdh: %.mustache $(YAML).json
 	$(HANDLEBARS) --file=$< $(YAML).json > $@
