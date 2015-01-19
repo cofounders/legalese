@@ -28,30 +28,114 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-		  <h2>Introduction</h2>
+		  <h2>Guides</h2>
 
-          <h3>User Guide</h3>
-		  <p>for people who just need a fistful of paperwork ASAP to slap some signatures on.</p>
+          <h3>Workflows</h3>
 
-          <h3>Brogrammer Guide</h3>
-		  <p>Just show me the demo!</p>
+		  <p>Each workflow may be customized for a different legal jurisdiciction &ndash; US, EU, UK, SG, IN. Not all papers support all jurisdictions yet.</p>
 
-          <h3>Quickstart Guide</h3>
-		  <p>I don't read documentation. Just tell me where to click!</p>
+		  <p><b>Incorporation:</b> <a href="#">Articles of Incorporation</a>. <a href="#">Constitutional Documents</a>. <a href="#">Memorandum of Association</a>. <a href="#">Articles of Association.</a></p>
 
-          <h3>Developer Guide</h3>
-		  <p>for power users and legal professionals who want to tweak the templates and create new ones.</p>
+		  <p><b>Raising Early-Stage Investment:</b> <a href="#">Term Sheet</a>. <a href="#">Convertible Note Agreement</a>. <a href="#">Common Stock / Ordinary Shares Subscription Agreement</a>. <a href="#">Y Combinator's Series AA</a>. <a href="#">Y Combinator's SAFE</a>. <a href="#">Techstars Model Docs</a>. <a href="#">Series Seed</a>. <a href="#">500 Startups' KISS</a>. <a href="#">Shareholder Agreement</a>. <a href="#">Investor Rights Agreement</a>. <a href="#">Directors' Resolutions Proposing Issue of New Securities</a>. <a href="#">Members' Resolutions Authorising Issue of New Securities</a>. <a href="#">Pre-Emptive Rights Notice to Shareholders</a>.</p>
+
+		  <p><b>Employment:</b> <a href="#">Volunteer Agreement</a>. <a href="#">Employment Agreement</a>. <a href="#">Vesting Agreement</a>. <a href="#">ESOP Agreement</a>. <a href="#">Termination</a>. </p>
+
+		  <p><b>Doing Business:</b> <a href="#">Nondisclosure Agreement (NDA)</a>. <a href="#">Product Contract</a>. <a href="#">Service Contract</a>. </p>
+		  
+		  <p><b>Termination:</b> <a href="#">Striking Off</a>. <a href="#">Winding Up</a>. </p>
+
+		  <p><b>Other Guides:</b> In future we may add support for other workflows. If you can't wait, <a href="#devguide">add your own</a>!</p>
+
+		  <h2>Guides</h2>
+
+          <h3><a href="#userguide">User Guide</a></h3>
+		  <p>Quickstart guide. Important concepts. FAQ.</p>
+
+          <h3><a href="#priorart">Prior Art and Alternative Resources</a></h3>
+		  <p>There are many other resources similar to this one. We list all the ones we know about. Where does Legalese fit in?</p>
+
+          <h3><a href="#devguide">Developer Guide</a></h3>
+		  <p>For power users and legal professionals who want to tweak templates and make new ones.</p>
+
+          <h3><a href="#theory">The Theory of Turing-Complete Contracts</a></h3>
+		  <p>Template automation is just the beginning. Why not compile contracts from JavaScript to English? Up next.</p>
+
+		  <h2><a name="userguide">User Guide</a></h2>
+		  
+		  <p>Legalese 2.0 helps non-lawyers discover and execute the appropriate legal paperwork, by filling in
+		  spreadsheets, generating PDFs, and sending them out via Adobe EchoSign.</p>
+
+		  <p>First, identify your <b>workflow</b>. Are you raising (or leading) an early stage investment? Do you need
+		  to get an NDA signed with a potential business partner? Or do you need an employment agreement? A stock option
+		  agreement? Or something else?</p>
+
+		  <p>You will need a Google Apps account. If you use Google Docs or Google Drive, you already have one.</p>
+
+		  <p>If you want to send papers out for e-signature, you will need
+		  an <a href="https://www.echosign.adobe.com">Adobe EchoSign</a> account. You can start with a trial. If you
+		  don't want to use EchoSign, you can just circulate the PDFs by email, and remind your recipients
+		  that <a href="http://9to5mac.com/2014/02/15/how-to-use-preview-to-put-signatures-on-pdfs-pages-documents-and-mail-messages/">Preview
+		  can create e-signatures</a>. In future we may add support for <a href="http://fitsmallbusiness.com/best-electronic-signature-software/">other signing services</a>.</p>
+
+		  <h3>Concepts</h3>
+
+		  <p>A <b>workflow</b> involves one or more <b>steps</b>.</p>
+
+		  <p>Each step involves one or more <b>papers</b>. (A paper is a document, an agreement, a deed, or some other
+			boilerplate.)</p>
+		  
+		  <p>Each paper involves zero or more <b>parties</b>.</p>
+
+		  <p>Each party is asked for <b>signature</b>.</p>
+
+		  <p>Each paper is based on a <b>template</b>. Often, more than one template may be available and appropriate to
+		  your situation. Our template matrix compares alternative templates so you can hazard an educated guess.
+		  Following the somewhat passive-aggressive philosophy of "mechanism, not policy", we helpfully fill every
+		  template that might possibly suit your needs, leaving you to decide which one is actually most
+		  appropriate. Lawyers can breathe a sigh of relief here &ndash; your opinions are still valued!</p>
+
+		  <h3>The Spreadsheet</h3>
+
+		  <p>At the heart of each step is a Google Docs spreadsheet. To get it working for you, install
+		  the <i>Legalese</i> Google Add-On from the Add-On Store. (This step is still in development.)</p>
+
+		  <p>The spreadsheet contains information about the parties.</p>
+
+		  <p>The spreadsheet also contains information about the terms of the agreement.</p>
+
+		  <p>The templates are filled based on the information in the spreadsheet.</p>
+
+		  <p>You should be able to fill in the <i>Terms</i> section of the spreadsheet on your own.</p>
+
+		  <p>If you don't have all the particulars of each party, you can interrogate them directly, or Legalese can create a form from the spreadsheet, and you can just ask the parties to fill in the form with their details.</p>
+
+		  <p>The spreadsheet is configured at the bottom of the README sheet.</p>
+
+		  <h3>Generating Papers</h3>
+
+		  <p>Once all the parties are fleshed out, and the terms are correct, click <i>Legalese / Generate Papers</i>.
+		  It'll grind away for a few minutes, then the templates will fill in, and you'll see a Google Docs draft of
+		  each resulting paper. That draft is editable, but not beautiful. You should see a beautiful version -- a PDF
+		  generated by Adobe InDesign. This is done over the cloud, because most end-users don't have Indesign
+		  installed.</p>
+
+		  <p>What about a Word version? That's a premium feature. If there's enough crowdfunding demand for that
+		  feature, we'll add it.</p>
+
+		  <h3>Sending out for Signature</h3>
+
+		  <p>When you're happy with the document, hit <i>Legalese / Send to EchoSign</i>. You'll need an EchoSign
+		  account, of course. The system will prompt you to sign in to EchoSign using OAuth.</p>
+
+
+
 
         </section>
 
         <aside id="sidebar">
           <a href="https://github.com/cofounders/legalese/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/cofounders/legalese/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
+            <small>Install</small>
+            the Google App
           </a>
 
           <p class="repo-owner"><a href="https://github.com/cofounders/legalese"></a> is maintained by <a href="https://github.com/cofounders">cofounders</a>.</p>
