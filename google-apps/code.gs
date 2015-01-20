@@ -830,13 +830,13 @@ function fillTemplates() {
     var newTemplate = obtainTemplate_(url);
     newTemplate.data = templatedata;
     newTemplate.data._explosion = newTemplate.data._explosion || {};
-	var sans_xml = url.replace(/_xml|xml_/,"");
+	var sans_xml = sourceTemplate.name.replace(/_xml|xml_/,"");
 
 	// TODO: respect the "all in one doc" vs "one per doc" for all categories not just investors
 
     var investors = templatedata.parties.investor;
 	var explosion;
-	try { explosion = config.templates.tree[sans_xml].Investor } catch (e) { Logger.log("ERROR: explosion exploded"); }
+	try { explosion = config.templates.tree[sans_xml]["Investor"] } catch (e) { Logger.log("ERROR: explosion exploded: %s", e); }
 	if (explosion == "all in one doc") {
 	  Logger.log("doing investors all in one doc ... " + sourceTemplate.url);
 	  newTemplate.data._explosion.investor = false;
