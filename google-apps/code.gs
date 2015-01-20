@@ -1,3 +1,61 @@
+/* TODO
+ *
+**  move the "templates:" configurator from the README to the ActiveSheet. refactor the config processing logic so readrows and readconfig both
+ *  use a standard set of functions. this is particularly important to allow the user to select the desired template without having to go over
+ *  to the README sheet.
+ *  
+ *  how do we intuitively allow the end-user to select from among multiple deal terms spreadsheets?
+ *  i think we choose the leftmost one, if SpreadsheetApp allows us to disambiguate indexes.
+ * 
+ *  how do we make it convenient for multiple deal terms to operate against the same set of parties?
+ * 
+**  reduce the security threat surface -- find a way to make this work with OnlyCurrentDoc.
+ *  https://developers.google.com/apps-script/guides/services/authorization
+ * 
+ *  the risk is that a malicious commit on the legalese codebase will embed undesirable content in an xml template file
+ *  which then runs with user permissions with access to all the user's docs. this is clearly undesirable.
+ *  
+ *  a functionally equivalent man-in-the-middle attack would intercept the UrlFetch() operation and return a malicious XML template file.
+ * 
+ *  lodging the XML templates inside the app itself is a seemingly attractive alternative, but it reduces to the same threat scenario because that data
+ *  has to populate from somewhere in the first place.
+ * 
+ *  an alternative design sees the user sharing the spreadsheet with the Legalese Robot, which only has access to that one spreadsheet and no other files.
+ *  the legalese robot would run, then share back a folder that contains the output. that limits exposure to user data.
+ *  this sharing situation is clumsy -- why not just bring up a REST API that submits the active sheet's data as a sort of RPC to the robot?
+ *  the robot would then issue a drive share in response.
+ * 
+ *  while we work on implementing that approach, we require that all committers with access to GitHub must have 2FA.
+ * 
+ *  ideally we would reduce the authorization scope of this script to only the current doc.
+ *  but we need a way to share the resulting PDF with the user without access to everything in Drive!
+*/
+
+
+// ---------------------------------------------------------------------------------------------------- state
+//
+// a brief discussion regarding state.
+// 
+// A spreadsheet may contain one or more sheets with deal-terms and party particulars.
+// 
+// When the user launches a routine from the Legalese menu, the routine usually takes its configuration from the ActiveSheet.
+// 
+// But some routines are not launched from the Legalese menu. The form's submission callback writes to a sheet. How will it know which sheet to write to?
+//
+// Whenever we create a form, we shall record the ID of the then activeSheet into a DocumentProperty, "formActiveSheetId".
+// Until the form is re-created, all submissions will feed that sheet.
+//
+// What happens if the user starts working on a different sheet? The user may expect that form submissions will magically follow their activity.
+// 
+// To correct this impression, we give the user some feedback whenever the activeSheet is not the formActiveSheet.
+//
+// The showSidebar shall check and complain.
+//
+// That same test is also triggered when a function is called: if the activesheet is different to the form submission sheet, we alert() a warning.
+//
+// 
+
+
 // ---------------------------------------------------------------------------------------------------------------- onOpen
 /**
  * Adds a custom menu to the active spreadsheet.
@@ -8,9 +66,11 @@
  */
 function onOpen() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = spreadsheet.getActiveSheet();
+
   var entries = [
   { name:"Create Form", functionName:"setupForm_"},
-  { name:"Generate Docs", functionName:"fillTemplates"},
+  { name:"Generate Papers", functionName:"fillTemplates"},
   { name:"Send to EchoSign", functionName:"uploadAgreement"},
   { name:"faux MegaSign", functionName:"fauxMegaSign"},
   { name:"quicktest", functionName:"quicktest"},
@@ -26,9 +86,57 @@ function onOpen() {
 //  getEchoSignService().reset();
   // blow away the previous oauth, because there's a problem with using the refresh token after the access token expires after the first hour.
 
-  showSidebar();
+  showSidebar(sheet);
 };
 
+function activeSheetChanged(sheet) {
+  var formActiveSheetId = PropertiesService.getDocumentProperties().getProperty("legalese.formActiveSheetId");
+  if (formActiveSheetId == undefined)              { return false }
+  if (            sheet == undefined)              { return false }
+  if (sheet.getParent().getFormUrl() == undefined) { return false }
+  return (formActiveSheetId == sheet.getSheetId());
+}
+
+function getSheetById(ss, id) {
+  var sheets = ss.getSheets();
+  for (var i=0; i<sheets.length; i++) {
+    if (sheets[i].getSheetId() == id) {
+      return sheets[i];
+    }
+  }
+  return;
+}
+
+function muteFormActiveSheetWarnings(setter) {
+  if (setter == undefined) { // getter
+	var myprop = PropertiesService.getUserProperties().getProperty("legalese.muteFormActiveSheetWarnings");
+	if (myprop != undefined) {
+	  return JSON.parse(myprop);
+	}
+	else {
+	  return false;
+	}
+  }
+}
+
+function alertIfActiveSheetChanged(sheet) {
+  if (activeSheetChanged(sheet) &&
+	 ! muteFormActiveSheetWarnings()) {
+
+	var ui = SpreadsheetApp.getUi();
+	var formActiveSheet = getSheetById(sheet.getParent(), PropertiesService.getDocumentProperties().getProperty("legalese.formActiveSheetId"));
+	
+	var response = ui.alert("Potential Form Mismatch",
+							"Your form submits to " + formActiveSheet.getSheetName() + " but you are working on " + sheet.getSheetName() +".\nMute this warning?",
+							ui.ButtonSet.YES_NO);
+	
+	if (response == ui.Button.YES) {
+	  PropertiesService.getUserProperties().setProperty("legalese.muteFormActiveSheetWarnings", JSON.stringify(true));
+	} else {
+	  PropertiesService.getUserProperties().setProperty("legalese.muteFormActiveSheetWarnings", JSON.stringify(false));
+	}
+  }
+}
 
 // ---------------------------------------------------------------------------------------------------------------- setupForm
 /**
@@ -37,6 +145,7 @@ function onOpen() {
  */
 function setupForm_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getActiveSheet();
   var config = readConfig();
   var cell = ss.getSheetByName(config.sheet.values[0]).getRange("E4");
 
@@ -58,7 +167,7 @@ function setupForm_() {
   else {
 	cell.setValue("creating form"); SpreadsheetApp.flush();
 	form = FormApp.create('Personal Particulars - ' + ss.getName())
-      .setDescription('Please fill in your details regarding ' + data.parties.company[0].name + ".")
+      .setDescription('Please fill in your details.')
       .setConfirmationMessage('Thanks for responding!')
       .setAllowResponseEdits(true)
       .setAcceptingResponses(true)
@@ -72,11 +181,16 @@ function setupForm_() {
 	}
 	else {
 	  ScriptApp.newTrigger('onFormSubmit').forSpreadsheet(ss).onFormSubmit().create();
+	  Logger.log("setting onFormSubmit trigger");
 	}
   }
 
   // Create the form and add a multiple-choice question for each timeslot.
   form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
+  Logger.log("setting form destination to %s", ss.getId());
+  PropertiesService.getDocumentProperties().setProperty("legalese.formActiveSheetId", sheet.getSheetId());
+  Logger.log("setting formActiveSheetId to %s", sheet.getSheetId());
+
   var origpartyfields = data._origpartyfields;
   Logger.log("origpartyfields = " + origpartyfields);
   for (var i in origpartyfields) {
@@ -85,6 +199,9 @@ function setupForm_() {
 	if (partyfield.itemtype.match(/^list/)) {
 	  var enums = partyfield.itemtype.split(' ');
 	  enums.shift();
+
+	  // TODO: get this out of the Data Validation https://developers.google.com/apps-script/reference/spreadsheet/data-validation
+	  // instead of the Config section.
 	  form.addListItem()
 		.setTitle(partyfield.fieldname)
 		.setRequired(partyfield.required)
@@ -278,7 +395,14 @@ function treeify_(root, arr) {
 function onFormSubmit(e) {
   Logger.log("onFormSubmit: beginning");
   var config = readConfig();
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(config.sheet.values[0]);
+  var sheetId = PropertiesService.getDocumentProperties().getProperty("legalese.formActiveSheetId");
+
+  if (sheetId == undefined) { // uh-oh
+	Logger.log("no formActiveSheetId property, so I don't know which sheet to record party data into. bailing.");
+	return;
+  }
+
+  var sheet = getSheetById(SpreadsheetApp.getActiveSpreadsheet(), sheetId);
   var data = readRows_();
   // add a row and insert the investor fields
   Logger.log("inserting a row after " + (parseInt(data._last_party_row)+1));
@@ -553,7 +677,10 @@ function showclause_(clausetext) {
 
 // ---------------------------------------------------------------------------------------------------------------- quicktest
 function quicktest() {
-
+ var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
+ for (var i = 0; i < sheets.length; i++) {
+   Logger.log("sheet %s is named %s", i, sheets[i].getName());
+ }
 }
 
 /** Template generation is as follows:
@@ -574,21 +701,13 @@ function quicktest() {
 function availableTemplates_() {
     // return a bunch of URLs
   var availables = [
-//  { url:"test1.html", title:"Test One" },
 
-  { name:"preemptive_notice_xml",			url:"preemptive_notice_xml",          title:"Pre-Emptive Notice to Shareholders" },
-  { name:"parent_xml",			url:"parent_xml",          title:"Include Parent" },
-  { name:"loan_waiver_xml",		url:"loan_waiver_xml",     title:"Waiver of Convertible Loan" },
-  { name:"simplified_note_xml",		url:"simplified_note_xml", title:"Simplified Convertible Loan Agreement" },
+  { name:"preemptive_notice_xml", url:"https://www.legalese.io/templates/jfdi.asia/preemptive_notice.xml",       title:"Pre-Emptive Notice to Shareholders" },
+  { name:"loan_waiver_xml",		  url:"https://www.legalese.io/templates/jfdi.asia/convertible_loan_waiver.xml", title:"Waiver of Convertible Loan" },
+  { name:"simplified_note_xml",   url:"https://www.legalese.io/templates/jfdi.asia/simplified_note.xml",         title:"Simplified Convertible Loan Agreement" },
+  { name:"founder_agreement_xml", url:"https://www.legalese.io/templates/jfdi.asia/founderagreement.xml",        title:"JFDI Accelerate Founder Agreement" },
+  { name:"dora_xml",			  url:"https://www.legalese.io/templates/jfdi.asia/dora-signatures.xml",         title:"DORA" },
 
-// for digify
-  { name:"dora_xml",			url:"dora_xml", title:"DORA" },
-  { name:"kiss_amendment_xml",	url:"kiss_amendment_xml", title:"DORA" },
-  { name:"kiss_amendment",		url:"kiss_amendment", title:"Kiss Amendment" },
-  { name:"test",				url:"test", title:"Test 1", investors:"onebyone" },
-  { name:"termsheet",			url:"termsheet", title:"Convertible Note Termsheet" },
-  { name:"darius",				url:"darius",    title:"Convertible Note Agreement" },
-  { name:"kissing",				url:"kissing",   title:"KISS(Sing) Agreement" },
   ];
 return availables;
 };
@@ -628,8 +747,8 @@ function obtainTemplate_(url) {
 	else {
 	  var result = UrlFetchApp.fetch(url);
 	  var contents = result.getContentText();
+	  // the cache service can only store keys of up to 250 characters and content of up to 100k, so over that, we don't cache.
 	  if (contents.length < 100000 && url.length < 250) {
-		// bounds-check. key (url) maxlength = 250 so maybe we need to hash. content maxlength = 100KB so we may need to chain the content across multiple cache items
 		cache.put(url, contents, 60);
 	  }
 	  return HtmlService.createTemplate(contents);
@@ -643,11 +762,12 @@ function fillTemplates() {
   var templatedata = readRows_();
   templatedata.clauses = {};
 
-  var folder = createFolder_(); var readme = createReadme_(folder);
+  var config = readConfig();
+
+  var folder = createFolder_(); var readme = createReadme_(folder, config);
   PropertiesService.getUserProperties().setProperty("legalese.folder.id", JSON.stringify(folder.getId()));
   Logger.log("fillTemplates: property set legalese.folder.id = %s", folder.getId());
 
-  var config = readConfig();
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(config.sheet.values[0]);
   var cell = sheet.getRange("E6");
   cell.setValue("=HYPERLINK(\""+folder.getUrl()+"\",\""+folder.getName()+"\")");
@@ -776,11 +896,17 @@ function createFolder_() {
 };
 
 // ---------------------------------------------------------------------------------------------------------------- createReadme_
-function createReadme_(folder) { // under the parent folder
+function createReadme_(folder, config) { // under the parent folder
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var doc = DocumentApp.create("README for " + spreadsheet.getName());
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(config.sheet.values[0]);
+
   folder.addFile(DriveApp.getFileById(doc.getId()));
   doc.getBody().appendParagraph("this was created by Legalese.");
+
+  var para = doc.getBody().appendParagraph("The origin spreadsheet is ");
+  var text = para.appendText(spreadsheet.getName() + ", " + config.sheet.values[0]);
+  text.setLinkUrl(spreadsheet.getUrl() + "#gid=" + sheet.getSheetId());
   Logger.log("run started");
   PropertiesService.getUserProperties().setProperty("legalese.readme.id", JSON.stringify(doc.getId()));
   return doc;
@@ -862,10 +988,22 @@ function getEchoSignService() {
   var ssname = SpreadsheetApp.getActiveSpreadsheet().getName();
 
   var esApps = {
-	"2014B DD3 Disclaimer" : { clientId:"BGT7YYB6QWXA7F", clientSecret:"bfe3d07fa87540f1adfd67eaea6e2a7f", projectKey:"MPAgnivL4fa0Qi0viwHQwrMUQWaHMB8in" },
-	"Waiver of Convertible Loan" : { clientId:"B8WRFA45X5727E", clientSecret:"0ef004d92582af21ceda0ee94e8ba5c2", projectKey:"M8Z8igDQBcgVeVy1AdAskyHYH5ITXFjPS" },
-	"1DIqLn8LTRO7ZilONtyX3576SXy0ULRRTz1pXitWP0Po" : { clientId:"B7ANAKXAX94V6P", clientSecret:"417e13ac801250d2146892eb0266d16e", projectKey:"MYzWng6oYKb0nTSoDTQ271cUQWaHMB8in" },
-  "default" : { clientId:"B9HLGY92L5Z4H5", clientSecret:"ff4c883e539571273980245c41199b70", projectKey:"M6VMONjB762l0FdR-z7tWO3YH5ITXFjPS" },
+	"2014B DD3 Disclaimer" : { 
+	  clientId:"BGT7YYB6QWXA7F", 
+	  clientSecret:"bfe3d07fa87540f1adfd67eaea6e2a7f", 
+	  projectKey:"MPAgnivL4fa0Qi0viwHQwrMUQWaHMB8in" },
+	"Waiver of Convertible Loan" : { 
+	  clientId:"B8WRFA45X5727E", 
+	  clientSecret:"0ef004d92582af21ceda0ee94e8ba5c2", 
+	  projectKey:"M8Z8igDQBcgVeVy1AdAskyHYH5ITXFjPS" },
+	"1DIqLn8LTRO7ZilONtyX3576SXy0ULRRTz1pXitWP0Po" : { 
+	  clientId:"B7ANAKXAX94V6P", 
+	  clientSecret:"417e13ac801250d2146892eb0266d16e", 
+	  projectKey:"MYzWng6oYKb0nTSoDTQ271cUQWaHMB8in" },
+  "default" : { 
+	clientId:"B9HLGY92L5Z4H5", 
+	clientSecret:"ff4c883e539571273980245c41199b70", 
+	projectKey:"M6VMONjB762l0FdR-z7tWO3YH5ITXFjPS" },
   };
 
   if (esApps[ssid] != undefined) { ssname = ssid }
@@ -894,14 +1032,19 @@ function getEchoSignService() {
 }
  
 // ---------------------------------------------------------------------------------------------------------------- showSidebar
-function showSidebar() {
+function showSidebar(sheet) {
   var echosignService = getEchoSignService();
   if (!echosignService.hasAccess()) {
     var authorizationUrl = echosignService.getAuthorizationUrl();
-    var template = HtmlService.createTemplate(
-        '<a href="<?= authorizationUrl ?>" target="_blank">Authorize EchoSign</a>. ' +
-//		'sending you to ' + authorizationUrl +
-        'Close this sidebar when authorization completes.');
+
+	var myTemplate = '<p><a href="<?= authorizationUrl ?>" target="_blank">Authorize EchoSign</a>. ' +
+      'Close this sidebar when authorization completes.</p>';
+
+	if (activeSheetChanged(sheet)) {
+	  myTemplate = myTemplate + '<h2>Potential Form Mismatch</h2><p>BTW, Your form submits to ' + formActiveSheet.getSheetName() + " but you are working on " + sheet.getSheetName() +".</p><p>If you\'re working with this sheet, you might want to recreate the form so that form submissions go here instead of to " + formActiveSheet.getSheetName() + ".</p>"
+	}
+
+    var template = HtmlService.createTemplate(myTemplate);
     template.authorizationUrl = authorizationUrl;
     var page = template.evaluate();
 	page
