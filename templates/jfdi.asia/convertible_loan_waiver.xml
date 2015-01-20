@@ -1,0 +1,110 @@
+<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
+<CoverTop>
+<cover_title>Waiver of Convertible Loan</cover_title>
+<cover_company_name>
+
+
+
+
+<?= data.parties.company[0].name ?></cover_company_name>
+<cover_company_id><?= data.parties.company[0].idtype ?> <?= data.parties.company[0].id ?></cover_company_id>
+<? for (var i in data.parties.investor) { ?>
+<cover_company_name>
+<?= data.parties.investor[i].name ?></cover_company_name>
+<cover_company_id><?= data.parties.investor[i].idtype ?> <?= data.parties.investor[i].id ?></cover_company_id>
+<? } ?>
+</CoverTop>
+<CoverMid>
+</CoverMid>
+
+<CoverBottom_Logotype>
+<cover_corporate_logotype>Joyful Frog Digital Incubator</cover_corporate_logotype>
+</CoverBottom_Logotype>
+
+<CoverBottom_Address>
+<cover_address_block>Blk 71 Ayer Rajah Crescent</cover_address_block>
+<cover_address_block>#05-16   Singapore 139951</cover_address_block>
+</CoverBottom_Address>
+
+<CoverBottom_series>
+<centered><textvar name="Output Date" />&#8195;<textvar name="output time" /></centered>
+<centered>version 1.0.0</centered>
+</CoverBottom_series>
+
+<Firstpage_Sidebar>
+</Firstpage_Sidebar>
+
+<Story_Main>
+    <chapter_header>Waiver of Convertible Loan</chapter_header>
+    <para_1><span_smallcaps>This deed</span_smallcaps> is made on <textvar name="Output Date" /> by <?
+   for (var i in data.parties.investor) { ?>
+<?   if (data.parties.investor.length > 1 && i == 0) { ?></para_1><? } ?>
+<?   if (data.parties.investor.length > 1)           { ?><parties><? } ?>
+<?!= include("lib_party", data, data.parties.investor[i]) ?>
+<?   if (data.parties.investor.length > 1)           { ?></parties>
+<?   } else                                          { ?> <? } ?>
+<? } ?>
+<?   if (data.parties.investor.length > 1)           { ?><para_1>(the "Investors")
+<?   } else                                          {         ?>(the "Investor")<?  } ?>
+</para_1>
+    <para_1><span_smallcaps>in favour of</span_smallcaps> <?= data.company.name ?> (<?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum>), a company incorporated in <?= data.company.state ?> with its registered office at <?= data.company.address ?> (the "Company").</para_1>
+    <para_1><span_smallcaps>Whereas</span_smallcaps> the <?
+   if (data.parties.investor.length == 1) { ?>Investor is a creditor to the Company<? } else { ?>Investors are creditors to the Company<? } ?>
+ by virtue of a Convertible Loan Agreement executed on or about <?= data.original_agreement_date ?>, in the total amount of <?= data.principal_amount ?><?
+   if (data.interest != 0) { ?> (plus any accrued and unpaid interest)<? } ?>
+ (the "Loan Amount");</para_1>
+<para_1>We<?
+   if (data.parties.investor.filter(function(inv){return inv.investortype == "company"})) { ?>, being appointed corporate representatives of<? } ?>
+<?  if (data.parties.investor.length > 1)           { ?> the Investors<?   }
+    else                                            { ?> the Investor<?  } ?>
+ do hereby agree and declare that we irrevocably and unconditionally waive with immediate effect the Loan Amount due and owing by the Company in its entirety, and that we release and discharge the Company absolutely from the said loan.
+
+
+
+
+
+
+</para_1>
+
+
+
+
+<!-- rephrase the below so that xml2html doesn't barf on the protect problem -->
+
+<? if (data.parties.investor.length == 1) { ?>
+
+<b_left_sidehead>For the Investor <?= data.parties.investor[0].name ?></b_left_sidehead>
+
+<? var columnWidth = "<Cell aid:ccols=\"1\" aid:ccolwidth=\"150\" aid:crows=\"1\" aid:table=\"cell\">"; ?>
+<? var endCell = "</Cell>"; ?>
+<? for (var i = 0; i < data.parties.corporate_representative.length; i++) { ?>
+<?   var party = data.parties.corporate_representative[i]; ?>
+<para_1 class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
+<Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+<?!= columnWidth ?><cell><?= party.name  ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.signatory_role ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= data.parties.investor[0].name ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
+</Table></para_1>
+<? } ?>
+
+<? } else { /* mulitple investors */ ?>
+
+<? var columnWidth = "<Cell aid:ccols=\"1\" aid:ccolwidth=\"150\" aid:crows=\"1\" aid:table=\"cell\">"; ?>
+<? var endCell = "</Cell>"; ?>
+<? for (var i = 0; i < data.parties.investor.length; i++) { ?>
+<?   var party = data.parties.investor[i]; ?>
+<para_1 class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
+<Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+<?!= columnWidth ?><cell><?= party.signatory_name  ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.signatory_role  ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.name ?></cell><?!= endCell ?>
+<?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
+</Table></para_1>
+<? } ?>
+
+<? } ?>
+
+
+</Story_Main>
+</Root>

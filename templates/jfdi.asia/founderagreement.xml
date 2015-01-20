@@ -1,0 +1,143 @@
+<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
+<CoverTop>
+<cover_title>JFDI Founder Agreement
+</cover_title>
+<cover_company_name>
+
+
+
+<?= data.parties.investor[0].name ?>
+
+</cover_company_name>
+<cover_company_id><?= data.parties.investor[0].idtype ?> <?= data.parties.investor[0].id ?>
+
+</cover_company_id>
+<cover_company_name>
+<?= data.parties.company[0].name ?>
+
+</cover_company_name>
+<cover_company_id><?= data.parties.company[0].idtype ?> <?= data.parties.company[0].id ?>
+</cover_company_id>
+</CoverTop>
+<CoverMid>
+<? for (var f in data.parties.founder) { ?>
+<cover_company_name><?= data.parties.founder[f].name ?>
+
+</cover_company_name>
+<cover_company_id><?= data.parties.founder[f].email ?>
+
+
+</cover_company_id>
+<? } ?>
+
+</CoverMid>
+<CoverBottom_Logotype>
+<cover_corporate_logotype>Joyful Frog Digital Incubator</cover_corporate_logotype>
+
+</CoverBottom_Logotype>
+<CoverBottom_Address>
+<cover_address_block>Blk 71 Ayer Rajah Crescent
+</cover_address_block>
+<cover_address_block>#05-16   Singapore 139951</cover_address_block>
+
+</CoverBottom_Address>
+<CoverBottom_series>
+<centered>document 00 in a series &#8211; JFDI Founder Agreement
+</centered>
+<centered><? new Date() ?>
+</centered>
+<centered>version 1.2.0</centered>
+
+</CoverBottom_series>
+<Firstpage_Sidebar>
+<sidebar>This foundational document confirms the Founders&#8217; acceptance of the offer made by JFDI to participate in the next Accelerate Bootcamp.</sidebar>
+</Firstpage_Sidebar>
+<Story_Main>
+<chapter_header>JFDI.2014B Founder Agreement
+</chapter_header>
+<para_1>This Agreement legally binds the following Parties with respect to the JFDI.Asia Accelerate Bootcamp &lt;&lt;bootcamp_number&gt;&gt; (the &#8220;Bootcamp&#8221;):
+</para_1>
+<parties>the Founders: the persons identified as such on the Signature Page.
+</parties>
+<parties>the Startup: a Singapore Private Limited Company promoted by the Founders.
+</parties>
+<parties>JFDI.Asia Pte. Ltd.: the operator of the Bootcamp.
+</parties><parties>JFDI.2014 Pte. Ltd.: an investor into the Startup.
+</parties><para_1>By this Agreement the Parties express a mutual understanding as follows:
+</para_1><numbered_1_para>The JFDI.2015A Bootcamp shall run in two phases. The &#8220;offshore&#8221; phase begins on 15 January 2015. The &#8220;onshore&#8221; phase begins on 1 March 2015. The Bootcamp ends in June 2015. The Founders should be prepared to remain in Singapore through September 2015 to negotiate funding.
+</numbered_1_para><numbered_1_para>The Founders are hereby admitted to the &#8220;offshore&#8221; phase of the Bootcamp. During this phase, the Founders are not required to be present in Singapore.
+</numbered_1_para><numbered_1_para>The Founders undertake to procure that the Startup shall grant a Warrant to JFDI.2014 to purchase a security in the Startup as described in clause 4.
+</numbered_1_para><numbered_1_para>Admission to the &#8220;onshore&#8221; phase shall be subject to JFDI.Asia&#8217;s sole discretion. JFDI.2014 shall, upon the achievement of conditions required for admission to the &#8220;onshore&#8221; phase by the Startup, exercise the warrant by investing a total of S$25,000 (twenty-five thousand Singapore dollars) into the Startup;
+</numbered_1_para><para_2>and in consideration of this investment and for other good and valuable consideration (described in clause 15) which the Parties agree to value at s$150,000,
+</para_2><para_2>the Startup shall authorise and issue convertible debt, equity, or other such security in the corporation such that, immediately prior to the Next External Financing, JFDI.2014 will own a certain percentage (the &#8220;Conversion Percentage&#8221;) of the total capital in the Startup, on a fully-diluted, as-if-converted basis.
+</para_2><numbered_1_para>The Next External Financing refers to the first financing event subsequent to JFDI.2014&#8217;s investment in which the Startup raises more than s$250,000 within one round or series.
+</numbered_1_para><numbered_1_para>The Conversion Percentage shall be fixed at the start of the &#8220;onshore&#8221; phase, and determined according to the following valuation table, or as agreed between the Startup and JFDI.2014.
+</numbered_1_para><p><Table aid:table="table" aid:tcols="2" aid:trows="6" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid:theader=""><cell>Valuation</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid:theader=""><cell_fl>Basis</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell"><cell>S$475,000</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell"><cell_fl>Startup has at least 100 paying customers (if B2C) or 20 paying customers (if B2B) and annualized recurring revenues of at least S$50,000 based on a 3-month trailing average.</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell"><cell>S$390,000</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell"><cell_fl>Startup has at least 100 paying customers (if B2C) or 20 paying customers (if B2B) and cumulative revenues of at least S$50,000.</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell"><cell>S$250,000</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell"><cell_fl>Startup has no revenues, but about 300 Daily Active Users for a consumer app or 10 recurring paying customers for a B2B app.</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell"><cell>S$200,000</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell"><cell_fl>Startup has a prototype developed and launched, and at least 30 daily active users (B2C) or three positive customer testimonials (B2B).</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell"><cell>S$170,000</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell"><cell_fl>Startup has no users, but a prototype developed based on at least 12 customer development interviews.</cell_fl></Cell>
+</Table></p><numbered_1_para>The Founders shall travel to and from Singapore at their own expense. JFDI.Asia and JFDI.2014 are not obligated to reimburse any expenses incurred, or transfer any funds to the Founders or to their Startup, prior to formal acceptance to the onshore phase.
+</numbered_1_para><numbered_1_para>Formal acceptance to the onshore phase is conditional upon the Founders demonstrating, to the satisfaction of JFDI.Asia, that they can:
+</numbered_1_para><bullets>articulate their innovation insight
+</bullets><bullets>articulate their industry dynamics
+</bullets><bullets>show that they have done market research and refined their early adopter customer archetype
+</bullets><bullets>articulate channels to reach those customers
+</bullets><bullets>describe their competitive analysis and positioning
+</bullets><bullets>articulate their sustainable competitive advantage
+</bullets><bullets>show an MVP already launched
+</bullets><bullets>started acquiring users or customers
+</bullets><numbered_1_para>Within two weeks of formal acceptance into the Bootcamp, the Founders shall have incorporated the Startup as a Singapore Private Limited legal entity and have opened a Singapore corporate bank account.
+</numbered_1_para><numbered_1_para>Subsequent to formal acceptance, within one week of incorporation and creation of the Startup&#8217;s Singapore bank account, JFDI.2014 will invest s$10,000 (ten thousand Singapore dollars), that being the first tranche of its total cash investment.
+</numbered_1_para><numbered_1_para>The second tranche payment of s$15,000 (fifteen thousand Singapore dollars) shall be conditional upon the Startup remaining in Singapore, demonstrating product/market fit in the form of a revenue commitment from at least two external, arms-length customers, or otherwise as determined by JFDI.Asia in its sole discretion.
+</numbered_1_para><numbered_1_para>Conditional upon demonstrating further traction, the Startup will also be offered a chance to pitch to potential investors on Demo Day. If the Startup is struggling to show traction, JFDI.Asia may cancel the pitch, or defer it to a future Demo Day. For the avoidance of doubt, a Startup which does not qualify to pitch will not be invited to Demo Day, even to be in the audience.
+</numbered_1_para><numbered_1_para>The Founders shall attend substantially all of the Bootcamp. During the course of the Bootcamp the Founders shall treat the Startup as their exclusive work priority.
+</numbered_1_para><numbered_1_para>The Founders are responsible for finding housing and for ensuring that their presence in Singapore complies with employment and immigration regulations.
+</numbered_1_para><numbered_1_para>During the Bootcamp, JFDI.Asia shall invest time and energy working with the Startup, providing mentoring, office space, and administrative guidance.
+</numbered_1_para><numbered_1_para>JFDI.Asia shall provide standardised legal paperwork such as a Shareholder Agreement, Vesting Schedule, IP Assignment Agreement, Memorandum and Articles of Association, etc.
+</numbered_1_para><numbered_1_para>If the Founders already own an existing Singapore Private Limited company (an &#8220;Existing Company&#8221;), then the Founders may, in lieu of incorporating a new Startup, disclose to JFDI.Asia in writing prior to the beginning of the Bootcamp:
+</numbered_1_para><numbered_2_para>the Existing Company&#8217;s corporate documentation including its memorandum and articles of association, shareholders agreements, directors agreements, etc.;
+</numbered_2_para><numbered_2_para>the capitalisation table of the Existing Company; and
+</numbered_2_para><numbered_2_para>all material liabilities and contractual agreements of the Existing Company;
+</numbered_2_para><para_1>and &#8220;Startup&#8221; in this Agreement shall refer to the Existing Company.
+</para_1><numbered_1_para>In the event that proprietary assets to be used in the Startup (including but not limited to intellectual property assets) reside with individuals or in another legal entity whether such individuals or entities are in Singapore or abroad, the Founders shall, within four weeks of formal acceptance, cause said assets to be transferred into the Singapore Startup legal entity, free and clear of any pledge, reservation of right, or other encumbrance.
+</numbered_1_para><numbered_1_para>As an investor, JFDI.2014 shall hold the following rights which the Founders and/or other shareholders may or may not also hold:
+</numbered_1_para><numbered_2_para_noupspace>transferable preemptive right of first refusal in future investment routnds whether equity, preferred stock, or convertible debt;
+</numbered_2_para_noupspace><numbered_2_para_noupspace>tag-along rights in the case of sale of stock by a Founder;
+</numbered_2_para_noupspace><numbered_2_para_noupspace>information rights regarding traction and financial metrics.
+</numbered_2_para_noupspace><numbered_1_para>The JFDI investment will <i>not</i> carry the following provisions:
+</numbered_1_para><numbered_2_para_noupspace>board rights as a member of the Board of Directors;
+</numbered_2_para_noupspace><numbered_2_para_noupspace>drag-along rights;
+</numbered_2_para_noupspace><numbered_2_para_noupspace>redemption rights, unless the Founders hold such rights; and
+</numbered_2_para_noupspace><numbered_2_para_noupspace>extraordinary protective provisions regarding future financings.
+</numbered_2_para_noupspace><numbered_1_para>Subsequent to the Bootcamp, JFDI.2014 shall cooperate with future financings and other corporate activities by responding to paperwork requests in a timely fashion.
+</numbered_1_para><numbered_1_para>The Founders shall have the responsibility to maintain the Startup as a legal entity in good standing with the Singapore authorities.
+</numbered_1_para><numbered_1_para>Unless otherwise agreed in writing, if the Founders are not all Singapore citizens or permanent residents, then the Founders shall execute a limited power of attorney and/or a proxy to empower JFDI.2014 and its representatives, in the event the Startup fails, to wind up or strike off the company in the absence of the Founders.
+</numbered_1_para><numbered_1_para>The Founders shall cause the Startup to ratify this agreement by corporate resolution, and otherwise agree to promptly undertake such actions as JFDI.Asia may request from time to time in writing to give effect to this agreement, including but not limited to a novation of this agreement, if requested.
+</numbered_1_para><numbered_1_para>The division of equity in the Startup amongst the Founders and/or other employees, advisors and consultants is a matter for the Founders to agree on, so long as JFDI.2014&#8217;s interests under clause 4 are not diluted.
+</numbered_1_para><numbered_1_para>The Founders warrant that they have no reason to believe that any other party may lay exclusive claim to any intellectual property, asset, or other proprietary interest of the Startup.
+</numbered_1_para><numbered_1_para>This offer may be rescinded should the Founders be unable to comply with item 17 or fail to deliver other supporting documents requested by JFDI.Asia.
+</numbered_1_para><b_left_sidehead>Expiry
+</b_left_sidehead><para_1>This agreement must be executed by all parties listed on the Signature Page by <? data.expiry_date ?>. If it is not signed by all parties at that time, this agreement shall be null and void and of no effect.
+</para_1><chapter_header>Signatures
+</chapter_header><para_1>Intending to be bound by this agreement, the Parties on this Signature Page now set their hands:
+</para_1>
+<? for (var f in data.parties.founder) { ?>
+<para_1 class="signatureblock"><Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+<Cell aid:ccols="1" aid:ccolwidth="200" aid:crows="1" aid:table="cell"><cell></cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="200" aid:crows="1" aid:table="cell"><cell><?= data.parties.founder[f].name  ?></cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="200" aid:crows="1" aid:table="cell"><cell><?= data.parties.founder[f].email ?></cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="200" aid:crows="1" aid:table="cell"><cell></cell></Cell>
+</Table>
+</para_1>
+<? } ?>
+</Story_Main>
+</Root>
