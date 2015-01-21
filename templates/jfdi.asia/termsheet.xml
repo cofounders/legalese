@@ -10,7 +10,6 @@
 <cover_company_id><?= data.parties.company[0].idtype ?> <?= data.parties.company[0].id ?></cover_company_id>
 <? if (data._config.show_investors_on_cover.value != false) { for (var i in data.parties.investor) { ?>
 <cover_company_name>
-show_investors_on_cover=<?= JSON.stringify(data._config.show_investors_on_cover.value) ?>
 <?= data.parties.investor[i].name ?></cover_company_name>
 <cover_company_id><?= data.parties.investor[i].idtype ?> <?= data.parties.investor[i].id ?></cover_company_id>
 <? } } ?>
@@ -45,23 +44,24 @@ show_investors_on_cover=<?= JSON.stringify(data._config.show_investors_on_cover.
 
 <table_enclosing_para><? var rowcount = 18; ?>
 <Table aid:table="table" aid:tcols="2" aid:trows="<?= rowcount ?>" xmlns:aid="http://ns.adobe.com/adobeindesign/4.0/">
+<row>
 <?!= cell_l ?>Issuer</cell></Cell>
 <?!= cell_r ?><?= data.company.name ?> (the "Company")</cell_fl></Cell>
-
+</row><row>
 <?!= cell_l ?>Financing Amount</cell></Cell>
 <?!= cell_r ?>Up to <?= data.amount_raising ?> worth of <?= data.security_type_plural ?> (the "<?= data.security_type_short_plural ?>") issued on terms </cell_fl></Cell>
-
+</row><row>
 <?!= cell_l ?>Closings</cell></Cell>
 <?!= cell_r ?>The Company may close the sale of the <?= data.security_type_short_plural ?> in one or more closings with one or more purchasers of the <?= data.security_type_short_plural ?> acceptable to the Company (the "Investors") with identical terms and on the same form as set forth herein<?
   if (data.high_resolution == true) { ?> (except that the Investor, Investment Amount<?= data.variable_terms ?> and Closing Date may differ in each case.)<?
  } else { ?>.<? } ?></cell_fl></Cell>
-
+</row><row>
 <?!= cell_l ?>Investment Amount</cell></Cell>
 <?!= cell_r ?>The amount invested by an Investor for the purchase of such Investor's <?= data.security_type_plural ?> (the "Investment Amount")</cell_fl></Cell>
-
+</row><row>
 <?!= cell_l ?>Definitive Agreement</cell></Cell>
 <?!= cell_r ?>The <?= data.security_type_short_plural ?> will be issued and sold pursuant to a purchase agreement prepared by the Company's legal counsel (the <?= data.security_type_short_singular ?> Purchase Agreement").</cell_fl></Cell>
-
+</row><row>
 <? var and_interest_on = "of" ?>
 <?!= cell_l ?>Interest</cell></Cell>
 <?!= cell_r ?><? if (data.interest > 0) { ?>
@@ -69,14 +69,14 @@ Interest will accrue on an annual basis at the rate of <?= data.interest ?>% per
 and_interest_on = "and unpaid accrued interest on"; } else { ?>
 The <?= data.security_type_short_plural ?> shall be interest-free.<? } ?></cell_fl></Cell>
 
-<? if (data.has_term) { ?>
+<? if (data.has_term) { ?></row><row>
 <?!= cell_l ?>Maturity Date</cell></Cell>
 <?!= cell_r ?>Principal <?= and_interest_on ?> the Notes will be due and payable <?= data.term ?> from the date of the <?= data.security_type_short_singular ?> Purchase Agreement (the "Maturity Date").</cell_fl></Cell>
 <? } ?>
-
+</row><row>
 <?!= cell_l ?>Qualified Financing</cell></Cell>
 <?!= cell_r ?>The issuing of equity securities, or securities convertible to equity, in a transaction or series of related transactions resulting in aggregate gross proceeds to the Company of at least <?= data.qualified_financing ?>, excluding conversion of the Notes and any other indebtedness.</cell_fl></Cell>
-
+</row><row>
 <?!= cell_l ?>Conversion Price</cell></Cell>
 <?!= cell_r ?>The "Conversion Price" is the lesser of
         <ol>
@@ -84,14 +84,14 @@ The <?= data.security_type_short_plural ?> shall be interest-free.<? } ?></cell_
           <li>the price per share equal to <?= data.pre_money_valuation ?> divided by the aggregate number of outstanding shares of the Company's Common Stock as of immediately before the initial closing of the Qualified Financing (assuming full conversion or exercise of all convertible and exercisable securities then outstanding other than the Notes) (the "Valuation Cap").</li>
         </ol>
 </cell_fl></Cell>
-
+</row><row>
 <?!= cell_l ?>Automatic Conversion</cell></Cell>
-<?!= cell_r ?><b>&hellip; in a Qualified Financing.</b> If the Company issues Equity Securities in a Qualified Financing, then the Notes, and any accrued but unpaid interest thereon, will automatically convert into the equity securities issued pursuant to the Qualified Financing at the Conversion Price.
-<b>&hellip; at the Maturity Date.</b> If the Notes have not been previously converted pursuant to a Qualified Financing, then, effective upon the Maturity Date, the Notes, and any accrued but unpaid interest thereon, will automatically convert into Equity Securities at the Valuation Cap less <?= data.maturity_conversion_discount ?>%.</cell_fl></Cell>
-
+<?!= cell_r ?><b>&#8230; in a Qualified Financing.</b> If the Company issues Equity Securities in a Qualified Financing, then the Notes, and any accrued but unpaid interest thereon, will automatically convert into the equity securities issued pursuant to the Qualified Financing at the Conversion Price.
+<b>&#8230; at the Maturity Date.</b> If the Notes have not been previously converted pursuant to a Qualified Financing, then, effective upon the Maturity Date, the Notes, and any accrued but unpaid interest thereon, will automatically convert into Equity Securities at the Valuation Cap less <?= data.maturity_conversion_discount ?>%.</cell_fl></Cell>
+</row><row>
 <?!= cell_l ?>Optional Conversion</cell></Cell>
 <?!= cell_r ?>If the Maturity Date or a Qualified Financing has not occurred, the Investor may elect to convert the entire Investment Amount into Equity Securities at the Valuation Cap.</cell_fl></Cell>
-
+</row><row>
 <?!= cell_l ?>Sale of the Company</cell></Cell>
 <?!= cell_r ?>If a Qualified Financing has not occurred and the Company elects to consummate a sale of the Company prior to the Maturity Date, then at the election of the Investor, either</cell_fl>
         <ol>
@@ -99,23 +99,23 @@ The <?= data.security_type_short_plural ?> shall be interest-free.<? } ?></cell_
           <li>the entire Investment Amount shall convert into Equity Securities at the Valuation Cap.</li>
         </ol>
 </Cell>
-
+</row><row>
 <?!= cell_l ?>Pre-Payment</cell></Cell>
 <?!= cell_r ?>The principal <?= and_interest_on ?> the <? data.security_type_short_plural ?> may not be prepaid unless approved in writing by Investors holding Notes whose aggregate principal amount represents a majority of the outstanding principal amount of all then-outstanding Notes (the "Requisite Holders").</cell_fl></Cell>
-
+</row><row>
 <?!= cell_l ?>Amendment and Waiver</cell></Cell>
 <?!= cell_r ?>The Note Purchase Agreement and the Notes may be amended, or any term thereof waived, upon the written consent of the Company and the Requisite Holders.</cell_fl></Cell>
-
+</row><row>
 <?!= cell_l ?>No Security Interest</cell></Cell>
 <?!= cell_r ?>The Notes will be a general unsecured obligation of the Company.</cell_fl></Cell>
-
+</row><row>
 <?!= cell_l ?>Investor Rights</cell></Cell>
 <?!= cell_r ?>The Investor will have customary information and inspection rights, including receiving an annual budget, annual unaudited financial statements, quarterly unaudited financial statements, and any other information reports prepared for shareholders while the Notes remains outstanding.</cell_fl></Cell>
-
+</row><row>
 <?!= cell_l ?>Fees and Expenses</cell></Cell>
 <?!= cell_r ?>Each Investor will bear its own fees and expenses incurred in the transaction.</cell_fl></Cell>
-
-</table></table_enclosing_para>
+</row>
+</Table></table_enclosing_para>
 
 </Story_Main>
 </Root>
