@@ -803,7 +803,7 @@ function fillTemplates() {
 
   alertIfActiveSheetChanged(sheet);
 
-  var folder = createFolder_(); var readme = createReadme_(folder, config);
+  var folder = createFolder_(sheet); var readme = createReadme_(folder, config);
   PropertiesService.getUserProperties().setProperty("legalese.folder.id", JSON.stringify(folder.getId()));
   PropertiesService.getDocumentProperties().setProperty("legalese.templateActiveSheetId", sheet.getSheetId());
   Logger.log("fillTemplates: property set legalese.folder.id = %s", folder.getId());
@@ -835,7 +835,7 @@ function fillTemplates() {
 	// TODO: respect the "all in one doc" vs "one per doc" for all categories not just investors
 
     var investors = templatedata.parties.investor;
-	var explosion;
+	var explosion = "all in one doc";
 	try { explosion = config.templates.tree[sans_xml]["Investor"] } catch (e) { Logger.log("ERROR: explosion exploded: %s", e); }
 	if (explosion == "all in one doc") {
 	  Logger.log("doing investors all in one doc ... " + sourceTemplate.url);
@@ -929,10 +929,11 @@ function legaleseRootFolder_() {
 }
 
 // ---------------------------------------------------------------------------------------------------------------- createFolder_
-function createFolder_() {
+function createFolder_(sheet) {
   var legalese_root = legaleseRootFolder_();
   Logger.log("attempting createfolder");
   var folder = legalese_root.createFolder(SpreadsheetApp.getActiveSpreadsheet().getName() + " "
+										  + sheet.getSheetName() + " "
 										  + Utilities.formatDate(new Date(), SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss"));
   Logger.log("createfolder returned " + folder);
 
