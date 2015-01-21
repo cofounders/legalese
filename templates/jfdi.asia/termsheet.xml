@@ -10,7 +10,7 @@
 <cover_company_id><?= data.parties.company[0].idtype ?> <?= data.parties.company[0].id ?></cover_company_id>
 <? if (data._config.show_investors_on_cover.value != false) { for (var i in data.parties.investor) { ?>
 <cover_company_name>
-show_investors_on_cover=<?= data._config.show_investors_on_cover.value ?>
+show_investors_on_cover=<?= JSON.stringify(data._config.show_investors_on_cover.value) ?>
 <?= data.parties.investor[i].name ?></cover_company_name>
 <cover_company_id><?= data.parties.investor[i].idtype ?> <?= data.parties.investor[i].id ?></cover_company_id>
 <? } } ?>
