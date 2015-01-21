@@ -82,9 +82,7 @@ The <?= data.security_type_short_plural ?> shall be interest-free.<? } ?></cell_
 <?!= cell_l ?>Sale of the Company</cell></Cell>
 <?!= cell_r ?>If a Qualified Financing has not occurred and the Company elects to consummate a sale of the Company prior to the Maturity Date, then at the election of the Investor, either</cell_fl>
 <cell_numbered_1>the Investor shall receive a payment equal to <?= data.acquisition_preference ?> times the Notes, or</cell_numbered_1>
-<cell_numbered_1>the entire Investment Amount shall convert into Equity Securities at the Valuation Cap.</cell_numbered_1>
-        </ol>
-</Cell>
+<cell_numbered_1>the entire Investment Amount shall convert into Equity Securities at the Valuation Cap.</cell_numbered_1></Cell>
 <?!= cell_l ?>Pre-Payment</cell></Cell>
 <?!= cell_r ?>The principal <?= and_interest_on ?> the <? data.security_type_short_plural ?> may not be prepaid unless approved in writing by Investors holding Notes whose aggregate principal amount represents a majority of the outstanding principal amount of all then-outstanding Notes (the "Requisite Holders").</cell_fl></Cell>
 <?!= cell_l ?>Amendment and Waiver</cell></Cell>
