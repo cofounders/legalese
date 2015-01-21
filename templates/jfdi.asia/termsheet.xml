@@ -38,7 +38,7 @@
 
 <para_1>The following is a summary of the basic terms and conditions of a proposed <?= data.security_type ?> <?= data.investment_stage ?> financing of <?!= include("inc_party", data, data.parties.company[0]) ?> (the "Company"). This term sheet is for discussion purposes only and is not binding on the Company or any prospective Investors.</para_1>
 
-<? var cell_l = '<Cell aid:ccols="1" aid:ccolwidth="144" aid:crows="1" aid:table="cell aid5:cellstyle="border_none"><cell>';
+<? var cell_l = '<Cell aid:ccols="1" aid:ccolwidth="144" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell>';
    var cell_r = '<Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_fl>';
 ?>
 
