@@ -42,8 +42,7 @@
    var cell_r = '<Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell"><cell_fl>';
 ?>
 
-<table_enclosing_para><? var rowcount = 18; ?>
-<Table aid:table="table" aid:tcols="2" aid:trows="<?= rowcount ?>" xmlns:aid="http://ns.adobe.com/adobeindesign/4.0/">
+<table_enclosing_para><Table aid:table="table" aid:tcols="2" aid:trows="19" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
 <row>
 <?!= cell_l ?>Issuer</cell></Cell>
 <?!= cell_r ?><?= data.company.name ?> (the "Company")</cell_fl></Cell>
