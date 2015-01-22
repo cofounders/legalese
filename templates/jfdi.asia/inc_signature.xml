@@ -11,6 +11,6 @@
 rows[i] != undefined ? rows[i].map(function(r){return data._include[r]}).join(" ") : ""
 ?></cell></Cell>
 <? } if (data.signature_comment != undefined) { ?>
-<Cell aid:ccols="1" aid:ccolwidth="150" aid:crows="1" aid:table="cell"><cell><?= data.signature_comment ?></cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="150" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell><?= data.signature_comment ?></cell></Cell>
 <? } ?>
 </Table></table_enclosing_para>
