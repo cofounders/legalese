@@ -1,5 +1,7 @@
 /* TODO
  *
+** import the termsheets from "How to invest in a JFDI Startup"
+ *
 **  move the "templates:" configurator from the README to the ActiveSheet. refactor the config processing logic so readrows and readconfig both
  *  use a standard set of functions. this is particularly important to allow the user to select the desired template without having to go over
  *  to the README sheet.
@@ -567,6 +569,9 @@ function readRows_() {
 	  }
 	  Logger.log("descended = %s", descended);
 
+	  // build value -- config.a.value = b
+	  config[columna].value = descended[1];
+
 	  // build values -- config.a.values = [b,c,d]
 	  config[columna].values = descended.slice(1);
 	  Logger.log(columna+".values=%s", config[columna].values.join(","));
@@ -733,6 +738,7 @@ function availableTemplates_() {
     // return a bunch of URLs
   var availables = [
 
+  { name:"termsheet_xml",         url:"http://www.legalese.io/templates/jfdi.asia/termsheet.xml",       title:"Seed Term Sheet" },
   { name:"preemptive_notice_xml", url:"http://www.legalese.io/templates/jfdi.asia/preemptive_notice.xml",       title:"Pre-Emptive Notice to Shareholders" },
   { name:"loan_waiver_xml",		  url:"http://www.legalese.io/templates/jfdi.asia/convertible_loan_waiver.xml", title:"Waiver of Convertible Loan" },
   { name:"simplified_note_xml",   url:"http://www.legalese.io/templates/jfdi.asia/simplified_note.xml",         title:"Simplified Convertible Loan Agreement" },
@@ -800,6 +806,7 @@ function fillTemplates() {
   var templatedata   = data_config[0];
   var config         = data_config[1];
   templatedata.clauses = {};
+  templatedata._config = config;
 
   alertIfActiveSheetChanged(sheet);
 
@@ -1043,10 +1050,10 @@ function getEchoSignService() {
 	  clientId:"B8WRFA45X5727E", 
 	  clientSecret:"0ef004d92582af21ceda0ee94e8ba5c2", 
 	  projectKey:"M8Z8igDQBcgVeVy1AdAskyHYH5ITXFjPS" },
-	"1DIqLn8LTRO7ZilONtyX3576SXy0ULRRTz1pXitWP0Po" : { 
+	"1CUPlbK0yVw_7EstVEhKu7wbD_ul_nY2LanSF2JYprx8" : { 
 	  clientId:"B7ANAKXAX94V6P", 
 	  clientSecret:"417e13ac801250d2146892eb0266d16e", 
-	  projectKey:"MYzWng6oYKb0nTSoDTQ271cUQWaHMB8in" },
+	  projectKey:"MaupJZ_cPWIZT_FzZJu5q9XYH5ITXFjPS" },
   "default" : { 
 	clientId:"B9HLGY92L5Z4H5", 
 	clientSecret:"ff4c883e539571273980245c41199b70", 
@@ -1087,7 +1094,7 @@ function showSidebar(sheet) {
 	var myTemplate = '<p><a href="<?= authorizationUrl ?>" target="_blank">Authorize EchoSign</a>. ' +
       'Close this sidebar when authorization completes.</p>';
 
-	if (activeSheetChanged(sheet)) {
+	if (templateActiveSheetChanged(sheet)) {
 	  myTemplate = myTemplate + '<h2>Potential Form Mismatch</h2><p>BTW, Your form submits to ' + formActiveSheet.getSheetName() + " but you are working on " + sheet.getSheetName() +".</p><p>If you\'re working with this sheet, you might want to recreate the form so that form submissions go here instead of to " + formActiveSheet.getSheetName() + ".</p>"
 	}
 
