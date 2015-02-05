@@ -144,6 +144,19 @@ The Cliff Period shall include the Probation Period.</numbered_2_para><? } ?>
 <numbered_2_para>This Agreement sets forth the entire agreement and understanding between the parties relating to the subject matter herein and supersedes all prior discussions between them.</numbered_2_para>
 <numbered_2_para>This Agreement is signed in the English language.</numbered_2_para>
 <numbered_2_para>The provisions of this Agreement shall survive the termination of Employment with the Company and the assignment of this Agreement by the Company to any successor in interest or other assignee.</numbered_2_para>
+
+
+<chapter_header>Signatures</chapter_header>
+<para_1>Intending to be bound by this agreement the Parties hereby set their hands:</para_1>
+<b_left_sidehead>The Employee<?= data.parties.employee.length == 1 ? "" : "s" ?></b_left_sidehead>
+<? for (var i = 0; i < data.parties.employee.length; i++) { ?>
+<?!= include("inc_signature", data, data.parties.employee[i]) ?>
+<? } ?>
+<b_left_sidehead>For the Company <?= data.parties.company[0].name ?></b_left_sidehead>
+<? for (var i = 0; i < data.parties.company.length; i++) { ?>
+<?!= include("inc_signature", data, data.parties.company[i]) ?>
+<? } ?>
+
 <chapter_header>Exhibit A: Disclosure of Prior Inventions</chapter_header>
 <centered><i>A list of Works which the Employee previously created and owns, and are related to some aspect of the Company Business, but which are not assigned to the Company</i></centered>
 <? for (var text_i = 1; data["exhibit_a_text_" + text_i.toString()] != undefined; text_i++) { ?>
