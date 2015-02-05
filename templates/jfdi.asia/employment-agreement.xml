@@ -146,16 +146,16 @@ The Cliff Period shall include the Probation Period.<? } ?>
 <chapter_header>Exhibit A: Disclosure of Prior Inventions</chapter_header>
 <centered><i>A list of Works which the Employee previously created and owns, and are related to some aspect of the Company Business, but which are not assigned to the Company</i></centered>
 <? for (var text_i = 1; data["exhibit_a_text_" + text_i.toString()] != undefined; i++) { ?>
-<para_1><?= data.["exhibit_a_text_" + text_i.toString()] ?></para_1>
+<para_1><?= data["exhibit_a_text_" + text_i.toString()] ?></para_1>
 <? } ?>
 <chapter_header>Exhibit B: Disclosure of Opensource Projects</chapter_header>
 <centered><i>A list of Opensource Projects to which the Employee contributes Work which the Company does not own</i></centered>
 <? for (var text_i = 1; data["exhibit_b_text_" + text_i.toString()] != undefined; i++) { ?>
-<para_1><?= data.["exhibit_b_text_" + text_i.toString()] ?></para_1>
+<para_1><?= data["exhibit_b_text_" + text_i.toString()] ?></para_1>
 <? } ?>
 <chapter_header>Annex: Description of Role</chapter_header>
 <centered><i>Details of the work</i></centered>
 <? for (var text_i = 1; data["annex_text_" + text_i.toString()] != undefined; i++) { ?>
-<para_1><?= data.["annex_text_" + text_i.toString()] ?></para_1>
+<para_1><?= data["annex_text_" + text_i.toString()] ?></para_1>
 <? } ?>
 </Root>
