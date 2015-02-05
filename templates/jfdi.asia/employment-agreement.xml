@@ -61,7 +61,6 @@ to regulate other matters concerning intellectual property rights, non-competiti
 <para_1>References in this Agreement to a time of day are to Singapore time.</para_1>
 <para_1>Any document expressed to be in the &#8220;approved form&#8221; means a document in the form or substantially in the form approved by (and signed for identification by or on behalf of) the Parties.</para_1>
 <para_1>Except where the context otherwise requires, Articles which refer to the &#8220;Company&#8221; shall apply mutatis mutandis to subsidiaries or successors of the Company which may from time to time be established.</para_1>
-<para_1>Any reference in this Agreement to a Shareholder procuring and derivative terms thereof (including &#8220;<b>shall procure</b>&#8221;), shall only oblige the Shareholder to exercise its voting rights in the Company to vote in favour of the Company performing its obligation as required.</para_1>
 <para_1>This Agreement shall be governed by and interpreted in accordance with the laws of the Republic of Singapore.</para_1>
 <a_left_sidehead>Employee&#8217;s term of service</a_left_sidehead>
 <numbered_2_para>This Agreement shall be effective upon execution and shall remain in full force and effect until the execution of any subsequent Employment Agreement. This Agreement may be extended by the Parties through a contract extension agreement.</numbered_2_para>
@@ -78,7 +77,7 @@ to regulate other matters concerning intellectual property rights, non-competiti
 <a_left_sidehead>Notice Period</a_left_sidehead>
 <numbered_2_para>This Agreement may be terminated by either the Employee and the Company with a notice period of <?= data.notice_period ?>.</numbered_2_para>
 <a_left_sidehead>Probation</a_left_sidehead>
-<numbered_2_para>The term of regular employment shall be preceded by a period of <?= data.probation_term ?> (the "Probation Period").</numbered_2_para>
+<numbered_2_para>The term of regular employment shall be preceded by a period of <?= data.probation_period ?> (the "Probation Period").</numbered_2_para>
 <numbered_2_para>During the Probation Period, the Notice Period shall be <?= data.probation_notice_period ?>, or as otherwise agreed by the Parties.</numbered_2_para>
 <a_left_sidehead>Annual Leave</a_left_sidehead>
 <numbered_2_para>The Employee shall be entitled to <?= data.leave_entitlement ?> days of leave per year.
