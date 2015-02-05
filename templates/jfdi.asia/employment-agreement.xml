@@ -132,7 +132,7 @@ This entitlement may be increased from time to time by the Company.</numbered_2_
 <numbered_2_para>The Company has established an <?= data.esop_name ?> ("ESOP").
 Under this plan, the Employee shall be entitled to <?= data.esop_shares ?> shares (or share equivalents) from the ESOP pool (the "ESOP Entitlement"). These are equivalent, at the date of this Agreement, to approximately <?= data.esop_percentage ?> of the fully-diluted capitalization of the Company.
 The ESOP Entitlement shall be subject to a vesting period of <?= data.esop_vesting_period ?> with a cliff of <?= data.esop_cliff ?> (the "Cliff Period").
-The Cliff Period shall include the Probation Period.<? } ?>
+The Cliff Period shall include the Probation Period.</numbered_2_para><? } ?>
 <a_left_sidehead>Miscellaneous</a_left_sidehead>
 <numbered_2_para>This Agreement shall be governed by the laws of Singapore without regard to the principles of conflict of laws. All disputes, controversies or differences arising out of or in connection with this agreement shall be submitted to the Singapore Mediation Centre and the Singapore International Arbitration Centre for resolution by med-arb in accordance with the SMC-SIAC Med-Arb Procedure for the time being in force, which procedure is deemed to be incorporated by reference into this clause.</numbered_2_para>
 <numbered_2_para>The Employee acknowledges that, in executing this Agreement, he/she has had the opportunity to seek the advice of independent legal counsel, and he/she has read and understood all of the terms and provisions of this Agreement. This Agreement shall not be construed against any party by reason of the drafting or preparation hereof.</numbered_2_para>
