@@ -36,8 +36,10 @@
 <parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
 <para_1>(each a <b>"Party"</b> and collectively, the <b>"Parties"</b>)</para_1>
 <para_1><span_smallcaps>Whereas:</span_smallcaps></para_1>
-<recitals>The Company shall employ the Employee and the Employee agrees to be employed in the capacity of <?= data.role ?> and subject to the terms and conditions specified in this Agreement;</recitals>
-<recitals>The Company and the Employee now enter into this Agreement to confirm ownership of certain Achievements (as defined below) that may be created during the Employee&#8217;s term of service with the Company and to regulate other matters concerning intellectual property rights, non-competition, and confidentiality.</recitals>
+<recitals>The Company shall employ the Employee and the Employee agrees to be employed in the capacity of <?= data.role ?>, subject to the terms and conditions specified in this Agreement;</recitals>
+<recitals>The Company and the Employee now enter into this Agreement to regulate the terms of employment;
+to confirm ownership of certain Achievements (as defined below) that may be created during the Employee&#8217;s term of service with the Company; and
+to regulate other matters concerning intellectual property rights, non-competition, and confidentiality.</recitals>
 <para_1><span_smallcaps>Now it is hereby agreed</span_smallcaps> as follows:</para_1>
 <a_left_sidehead>Definitions</a_left_sidehead>
 <para_1>In this Agreement and in the Recitals abovementioned, unless the context otherwise requires:</para_1>
