@@ -80,10 +80,10 @@ function onOpen() {
   spreadsheet.addMenu("Legalese", entries);
   // when we release this as an add-on the menu-adding will change.
 
-  resetUserProperties("oauth2.echosign");
+//  resetDocumentProperties("oauth2.echosign");
 
-// resetUserProperties("legalese.folder.id");
-// resetUserProperties("legalese.rootfolder");
+// resetDocumentProperties("legalese.folder.id");
+// resetDocumentProperties("legalese.rootfolder");
 
 //  getEchoSignService().reset();
   // blow away the previous oauth, because there's a problem with using the refresh token after the access token expires after the first hour.
@@ -111,7 +111,7 @@ function formActiveSheetChanged(sheet) {
 
 function muteFormActiveSheetWarnings(setter) {
   if (setter == undefined) { // getter
-	var myprop = PropertiesService.getUserProperties().getProperty("legalese.muteFormActiveSheetWarnings");
+	var myprop = PropertiesService.getDocumentProperties().getProperty("legalese.muteFormActiveSheetWarnings");
 	if (myprop != undefined) {
 	  return JSON.parse(myprop);
 	}
@@ -120,7 +120,7 @@ function muteFormActiveSheetWarnings(setter) {
 	}
   }
   else {
-	PropertiesService.getUserProperties().setProperty("legalese.muteFormActiveSheetWarnings", JSON.stringify(setter));
+	PropertiesService.getDocumentProperties().setProperty("legalese.muteFormActiveSheetWarnings", JSON.stringify(setter));
   }
 }
 
@@ -137,7 +137,7 @@ function templateActiveSheetChanged(sheet) {
 
 function muteTemplateActiveSheetWarnings(setter) {
   if (setter == undefined) { // getter
-	var myprop = PropertiesService.getUserProperties().getProperty("legalese.muteTemplateActiveSheetWarnings");
+	var myprop = PropertiesService.getDocumentProperties().getProperty("legalese.muteTemplateActiveSheetWarnings");
 	if (myprop != undefined) {
 	  return JSON.parse(myprop);
 	}
@@ -146,7 +146,7 @@ function muteTemplateActiveSheetWarnings(setter) {
 	}
   }
   else {
-	PropertiesService.getUserProperties().setProperty("legalese.muteTemplateActiveSheetWarnings", JSON.stringify(setter));
+	PropertiesService.getDocumentProperties().setProperty("legalese.muteTemplateActiveSheetWarnings", JSON.stringify(setter));
   }
 }
 
@@ -520,6 +520,7 @@ function readRows_() {
 		singleparty._to_email = email_to_cc_(singleparty.email)[0]; // and the subsequent addresses are in an array [1]
 		singleparty._unmailed = true;
 		singleparty._es_num = es_num++;
+		// TODO: figure out how to do the es_num in a situation where the xml template may omit a character class.
 		parties._unmailed.push(singleparty);
 	  }
 	  else if (singleparty.legalese_status.toLowerCase().match(/^(done|ignore|skip|mailed|cc)/i)) {
@@ -738,6 +739,11 @@ function availableTemplates_() {
     // return a bunch of URLs
   var availables = [
 
+// templates don't always have to live at an HTTP url.
+// you can also create an HTML file in the code editor and just give the filename directly.
+// the url will be something like termsheet_xml.html instead of termsheet.xml.
+
+  { name:"employment_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/employment-agreement.xml",       title:"Employment Agreement" },
   { name:"termsheet_xml",         url:"http://www.legalese.io/templates/jfdi.asia/termsheet.xml",       title:"Seed Term Sheet" },
   { name:"preemptive_notice_xml", url:"http://www.legalese.io/templates/jfdi.asia/preemptive_notice.xml",       title:"Pre-Emptive Notice to Shareholders" },
   { name:"loan_waiver_xml",		  url:"http://www.legalese.io/templates/jfdi.asia/convertible_loan_waiver.xml", title:"Waiver of Convertible Loan" },
@@ -811,7 +817,7 @@ function fillTemplates() {
   alertIfActiveSheetChanged(sheet);
 
   var folder = createFolder_(sheet); var readme = createReadme_(folder, config);
-  PropertiesService.getUserProperties().setProperty("legalese.folder.id", JSON.stringify(folder.getId()));
+  PropertiesService.getDocumentProperties().setProperty("legalese.folder.id", JSON.stringify(folder.getId()));
   PropertiesService.getDocumentProperties().setProperty("legalese.templateActiveSheetId", sheet.getSheetId());
   Logger.log("fillTemplates: property set legalese.folder.id = %s", folder.getId());
   Logger.log("fillTemplates: property set legalese.templateActiveSheetId = %s", sheet.getSheetId());
@@ -921,17 +927,24 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
 
 // ---------------------------------------------------------------------------------------------------------------- legaleseRootFolder_
 function legaleseRootFolder_() {
-  var legaleses = DriveApp.getFoldersByName("Legalese Root");
   var legalese_root;
-  Logger.log("legaleses = " + legaleses);
-  if (legaleses.hasNext()) {
-	Logger.log("legaleses is defined");
-	legalese_root = legaleses.next();
-	Logger.log("legalese_root = " + legalese_root);
-  } else {
-	legalese_root = DriveApp.createFolder("Legalese Root");
+
+  var legalese_rootfolder_id = PropertiesService.getDocumentProperties().getProperty("legalese.rootfolder");
+  if (! legalese_rootfolder_id == undefined) {
+	legalese_root = DriveApp.getFolderById(JSON.parse(legalese_rootfolder_id));
   }
-  PropertiesService.getUserProperties().setProperty("legalese.rootfolder", JSON.stringify(legalese_root.getId));
+  else {
+	var legaleses = DriveApp.getFoldersByName("Legalese Root");
+	Logger.log("legaleses = " + legaleses);
+	if (legaleses.hasNext()) {
+	  Logger.log("legaleses is defined");
+	  legalese_root = legaleses.next();
+	  Logger.log("legalese_root = " + legalese_root);
+	} else {
+	  legalese_root = DriveApp.createFolder("Legalese Root");
+	}
+	PropertiesService.getDocumentProperties().setProperty("legalese.rootfolder", JSON.stringify(legalese_root.getId));
+  }
   return legalese_root;
 }
 
@@ -962,12 +975,12 @@ function createReadme_(folder, config) { // under the parent folder
   var text = para.appendText(spreadsheet.getName() + ", " + sheet.getName());
   text.setLinkUrl(spreadsheet.getUrl() + "#gid=" + sheet.getSheetId());
   Logger.log("run started");
-  PropertiesService.getUserProperties().setProperty("legalese.readme.id", JSON.stringify(doc.getId()));
+  PropertiesService.getDocumentProperties().setProperty("legalese.readme.id", JSON.stringify(doc.getId()));
   return doc;
 }
 
 function getReadme_() {
-  var id = PropertiesService.getUserProperties().getProperty("legalese.readme.id");
+  var id = PropertiesService.getDocumentProperties().getProperty("legalese.readme.id");
   if (id != undefined) {
 	return DocumentApp.openById(JSON.parse(id));
   }
@@ -1001,12 +1014,12 @@ function showStyleAttributes() {
   }
 }
 
-// ---------------------------------------------------------------------------------------------------------------- resetUserProperties
+// ---------------------------------------------------------------------------------------------------------------- resetDocumentProperties
 // utility function to reset userproperties
-function resetUserProperties(which) {
-  var userP = PropertiesService.getUserProperties();
-  if (which == "all") userP.deleteAllProperties();
-  else userP.deleteProperty(which);
+function resetDocumentProperties(which) {
+  var props = PropertiesService.getDocumentProperties();
+  if (which == "all") props.deleteAllProperties();
+  else props.deleteProperty(which);
 }
 
 // ---------------------------------------------------------------------------------------------------------------- getEchoSignService
@@ -1033,7 +1046,7 @@ function getEchoSignService() {
       .setCallbackFunction('authCallback')
 
       // Set the property store where authorized tokens should be persisted.
-      .setPropertyStore(PropertiesService.getUserProperties())
+      .setPropertyStore(PropertiesService.getDocumentProperties())
 
       // Set the scopes to request (space-separated for Google services).
       .setScope('agreement_read agreement_send agreement_write user_login library_read library_write');
@@ -1120,7 +1133,7 @@ function authCallback(request) {
   var echosignService = getEchoSignService();
   var isAuthorized = echosignService.handleCallback(request);
   if (isAuthorized) {
-    return HtmlService.createHtmlOutput('Success! You can close this tab.\nBTW the token property is ' +  PropertiesService.getUserProperties().getProperty("oauth2.echosign"));
+    return HtmlService.createHtmlOutput('Success! You can close this tab.\nBTW the token property is ' +  PropertiesService.getDocumentProperties().getProperty("oauth2.echosign"));
   } else {
     return HtmlService.createHtmlOutput('Denied. You can close this tab.');
   }
@@ -1152,7 +1165,7 @@ function uploadPDFsToEchoSign() {
   var o = { headers: { "Access-Token": api.getAccessToken() } };
   o.method = "post";
 
-  var folderId = JSON.parse(PropertiesService.getUserProperties().getProperty("legalese.folder.id"));
+  var folderId = JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese.folder.id"));
   Logger.log("uploadPDFsToEchoSign: property get legalese.folder.id = %s", folderId);
   if (folderId == undefined) {
 	SpreadsheetApp.getUi().alert("Not sure which folder contains PDFs.\nPlease regenerate documents by clicking Legalese / Generate Docs");
@@ -1191,9 +1204,9 @@ function uploadPDFsToEchoSign() {
   return toreturn;
 }
 
-// ---------------------------------------------------------------------------------------------------------------- showUserProperties
-function showUserProperties() {
-  Logger.log("userProperties: %s", JSON.stringify(PropertiesService.getUserProperties().getProperties()));
+// ---------------------------------------------------------------------------------------------------------------- showDocumentProperties
+function showDocumentProperties() {
+  Logger.log("userProperties: %s", JSON.stringify(PropertiesService.getDocumentProperties().getProperties()));
   Logger.log("scriptProperties: %s", JSON.stringify(PropertiesService.getScriptProperties().getProperties()));
 }  
 
