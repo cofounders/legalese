@@ -121,41 +121,42 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
   }
 
   doc.xmlElements.item(0).importXML(xmlFile);
+
   __processRuleSet(doc.xmlElements.item(0), [new AddReturns(doc,importMaps),
-											 new InsertTextVariables(doc,importMaps),
+											 new InsertTextVariables(doc,importMaps)
 											]);
 //  alert("processRuleSet AddReturns completed successfully");
+
   doc.mapXMLTagsToStyles();
+
+  __processRuleSet(doc.xmlElements.item(0), [new RestartParagraphNumbering(doc,importMaps)
+											]);
 
   return doc;
 }
 
+
+
 // -------------------------------------------------- AddReturns
 function AddReturns(doc, importMaps){
   this.name = "AddReturns";
-  this.xpath = "//*";	
+  this.xpath = "//*";
   this.apply = function(myElement, myRuleProcessor){
 
-//	alert("considering " + myElement.markupTag.name
-//		  + " myElement " + myElement.contents
-//		  + " whose last char = \"" + myElement.characters.item(-1).contents
-//		  + "\" and is mapped to style " + importMaps[myElement.markupTag.name]);
-
-//	alert("considering " + myElement.markupTag.name
-//		  + " myElement " + myElement.contents
-//		  + " paragraphstyle=" + importMaps[myElement.markupTag.name].name
-//		 );
-
-	if (importMaps[myElement.markupTag.name] != undefined
-		&& importMaps[myElement.markupTag.name].constructor.name == "ParagraphStyle"
-		&& importMaps[myElement.markupTag.name].name != "[Basic Paragraph]"
-//		&& myElement.markupTag.name != "table_enclosing_para"
-		&& myElement.markupTag.name != "Table"
-		&& myElement.markupTag.name != "Cell"
-		&& myElement.markupTag.name != "cell"
-		// TODO: and there is no XMLAttribute where addnewline=false ... though maybe that could be in xpath
-		&& ! myElement.contents.match(/\r$/)) {
-//	  alert("appending newline to element " + myElement.markupTag.name + ":\r" + myElement.contents)
+	if ((myElement.xmlAttributes.item("addnewline").isValid &&
+		 myElement.xmlAttributes.item("addnewline").value == "true")
+		|| (importMaps[myElement.markupTag.name] != undefined
+			&& importMaps[myElement.markupTag.name].constructor.name == "ParagraphStyle"
+			&& importMaps[myElement.markupTag.name].name != "[Basic Paragraph]"
+			&& myElement.markupTag.name != "Table"
+			&& myElement.markupTag.name != "Cell"
+			&& ! myElement.markupTag.name.match(/^cell/i)
+			&& (! myElement.xmlAttributes.item("addnewline").isValid ||
+				myElement.xmlAttributes.item("addnewline").value != "false")
+			&& ! myElement.contents.match(/\r$/)
+		   )
+	   ) {
+	  logToFile("appending newline to element " + myElement.markupTag.name);
       myElement.insertTextAsContent("\r", XMLElementPosition.ELEMENT_END);
 	}
     return false;
@@ -173,6 +174,21 @@ function InsertTextVariables(doc, importMaps){
     return false;
   }
 }
+
+// TODO: look for a restart=true attribute and tell the paragraph bullet & numbering to restart.
+// -------------------------------------------------- AddReturns
+function RestartParagraphNumbering(doc, importMaps){
+  this.name = "RestartParagraphNumbering";
+  this.xpath = "//*[@restart='true']";
+  this.apply = function(myElement, myRuleProcessor){
+
+	myElement.paragraphs.item(0).numberingContinue = false;
+
+    return false;
+  }
+}
+
+
 
 
 // -------------------------------------------------- constructFormFields

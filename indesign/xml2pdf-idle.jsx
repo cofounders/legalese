@@ -1,6 +1,8 @@
 // xml2pdf-idle.jsx
 // An InDesign CS6 JavaScript
 //
+// make sure app nap is disabled for the application first!
+//
 // if the idle task already exists, delete it first.
 // create an idletask that monitors a directory tree for new arrivals
 // any new .xml files that arrive in that tree,
