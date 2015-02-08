@@ -45,7 +45,7 @@
 <sidebar>This foundational document confirms the Founders&#8217; acceptance of the offer made by JFDI to participate in the next Accelerate Bootcamp.</sidebar>
 </Firstpage_Sidebar>
 <Story_Main>
-<chapter_header>JFDI.2014B Founder Agreement
+<chapter_header>Founder Agreement
 </chapter_header>
 <para_1>This Agreement legally binds the following Parties with respect to the JFDI.Asia Accelerate Bootcamp <span_ucnum><?= data.jfdi_accelerate_batch ?></span_ucnum> (the &#8220;Bootcamp&#8221;):
 </para_1>
