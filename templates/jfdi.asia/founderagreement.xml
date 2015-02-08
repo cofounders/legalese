@@ -73,18 +73,18 @@ The Conversion Percentage shall be fixed at the start of the &#8220;Accelerate&#
 if (data.valuation_basis == "table") { ?>, and determined according to the following valuation table, or as agreed between the Startup and JFDI.2014.
 </numbered_1_para>
 <p><Table aid:table="table" aid:tcols="2" aid:trows="6" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
-<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid:theader=""><cell>Valuation</cell></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid:theader=""><cell_fl>Basis</cell_fl></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell"><cell>S$475,000</cell></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell"><cell_fl>Startup has at least 100 paying customers (if B2C) or 20 paying customers (if B2B) and annualized recurring revenues of at least S$50,000 based on a 3-month trailing average.</cell_fl></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell"><cell>S$390,000</cell></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell"><cell_fl>Startup has at least 100 paying customers (if B2C) or 20 paying customers (if B2B) and cumulative revenues of at least S$50,000.</cell_fl></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell"><cell>S$250,000</cell></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell"><cell_fl>Startup has no revenues, but about 300 Daily Active Users for a consumer app or 10 recurring paying customers for a B2B app.</cell_fl></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell"><cell>S$200,000</cell></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell"><cell_fl>Startup has a prototype developed and launched, and at least 30 daily active users (B2C) or three positive customer testimonials (B2B).</cell_fl></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell"><cell>S$170,000</cell></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell"><cell_fl>Startup has no users, but a prototype developed based on at least 12 customer development interviews.</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid:theader="" aid5:cellstyle="border_r"><cell>Valuation</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid:theader="" aid5:cellstyle="border_l"><cell_fl>Basis</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>S$475,000</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl>Startup has at least 100 paying customers (if B2C) or 20 paying customers (if B2B) and annualized recurring revenues of at least S$50,000 based on a 3-month trailing average.</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>S$390,000</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl>Startup has at least 100 paying customers (if B2C) or 20 paying customers (if B2B) and cumulative revenues of at least S$50,000.</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>S$250,000</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl>Startup has no revenues, but about 300 Daily Active Users for a consumer app or 10 recurring paying customers for a B2B app.</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>S$200,000</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl>Startup has a prototype developed and launched, and at least 30 daily active users (B2C) or three positive customer testimonials (B2B).</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>S$170,000</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl>Startup has no users, but a prototype developed based on at least 12 customer development interviews.</cell_fl></Cell>
 </Table></p><? }
 else if (data.valuation_basis == "existing") { ?>, and determined on the basis of the valuation set in the previous round of financing by professional investors.<? }
 else if (data.valuation_basis == "discussion") { ?>, and determined as agreed by the Parties.<? }
