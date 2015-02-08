@@ -62,8 +62,8 @@ JFDI.Asia Pte. Ltd, the operator of the Bootcamp
 Upon acceptance of this Agreement, the Founders will be admitted to the &#8220;Validate&#8221; phase of the Bootcamp. During this phase, the Founders are not required to be present in Singapore. The Founders should work on customer development, product development, and early traction through a Minimum Viable Product (concierge or scalable or both.) JFDI will work with the Founders online to prepare them for Accelerate. The Founders should also recruit as needed to ensure that the team contains a complete mix of capabilities: product, customer, and business development.
 Upon demonstrating early traction and a complete team, the Founders will be invited to the "Accelerate" phase in Singapore. During this phase, the Startup should aim to demonstrate:
 </numbered_1_para>
-<numbered_2_para_noupspace>scalable traction: sales and user growth that does not require direct involvement by the Founders.
-proof of revenue: that some percentage of leads or users are willing to pay.</numbered_2_para_noupspace>
+<bullets>scalable traction: sales and user growth that does not require direct involvement by the Founders.
+proof of revenue: that some percentage of leads or users are willing to pay.</bullets>
 <numbered_1_para>JFDI.2014 shall, at time of admission to the &#8220;Accelerate&#8221; phase, invest a total of <?= data.parties.investor[0].commitment ?> into the Startup;</numbered_1_para>
 <para_2>and <? if (! data.previously_incorporated) { ?>the Founders shall procure that <? } ?>in consideration of this investment <? if (data.intangibles_clause) { ?>and for other good and valuable consideration which the Parties agree to value at s$150,000,
 <? } ?>
@@ -72,7 +72,7 @@ the Startup shall authorise and issue convertible debt, equity, or other such se
 The Conversion Percentage shall be fixed at the start of the &#8220;Accelerate&#8221; phase<?
 if (data.valuation_basis == "table") { ?>, and determined according to the following valuation table, or as agreed between the Startup and JFDI.2014.
 </numbered_1_para>
-<p><Table aid:table="table" aid:tcols="2" aid:trows="6" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+<table_enclosing_para><Table aid:table="table" aid:tcols="2" aid:trows="6" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
 <Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid:theader="" aid5:cellstyle="border_r"><cell>Valuation</cell></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid:theader="" aid5:cellstyle="border_l"><cell_fl>Basis</cell_fl></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>S$475,000</cell></Cell>
@@ -85,7 +85,7 @@ if (data.valuation_basis == "table") { ?>, and determined according to the follo
 <Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl>Startup has a prototype developed and launched, and at least 30 daily active users (B2C) or three positive customer testimonials (B2B).</cell_fl></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>S$170,000</cell></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl>Startup has no users, but a prototype developed based on at least 12 customer development interviews.</cell_fl></Cell>
-</Table></p><? }
+</Table></table_enclosing_para><? }
 else if (data.valuation_basis == "existing") { ?>, and determined on the basis of the valuation set in the previous round of financing by professional investors.<? }
 else if (data.valuation_basis == "discussion") { ?>, and determined as agreed by the Parties.<? }
 else if (data.valuation_basis == "fixed") { ?> at <?= data.agreed_percentage ?>.<? } ?>
