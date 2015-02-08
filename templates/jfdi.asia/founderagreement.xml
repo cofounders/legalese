@@ -21,13 +21,7 @@
 </CoverTop>
 <CoverMid>
 <? for (var f in data.parties.founder) { ?>
-<cover_company_name><?= data.parties.founder[f].name ?>
-
-</cover_company_name>
-<cover_company_id><?= data.parties.founder[f].email ?>
-
-
-</cover_company_id>
+<cover_parties_centered><?= data.parties.founder[f].name ?></cover_parties_centered>
 <? } ?>
 
 </CoverMid>
