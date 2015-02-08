@@ -54,7 +54,7 @@
 <? } ?>
 <para_1><? if (data.parties.founder.length > 1) { ?>(the "Founders") <? } else { ?>(the "Founder")<? } ?></para_1>
 <parties><?= data.company.name ?>, a Singapore Private Limited Company promoted by the Founders (the "Startup")
-<?= data.company.investor[0].name ?>, an investor into the Startup
+<?= data.parties.investor[0].name ?>, an investor into the Startup
 JFDI.Asia Pte. Ltd, the operator of the Bootcamp
 </parties>
 <para_1>By this Agreement the Parties express a mutual understanding as follows:</para_1>
