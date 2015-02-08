@@ -62,8 +62,8 @@ JFDI.Asia Pte. Ltd, the operator of the Bootcamp
 Upon acceptance of this Agreement, the Founders will be admitted to the &#8220;Validate&#8221; phase of the Bootcamp. During this phase, the Founders are not required to be present in Singapore. The Founders should work on customer development, product development, and early traction through a Minimum Viable Product (concierge or scalable or both.) JFDI will work with the Founders online to prepare them for Accelerate. The Founders should also recruit as needed to ensure that the team contains a complete mix of capabilities: product, customer, and business development.
 Upon demonstrating early traction and a complete team, the Founders will be invited to the "Accelerate" phase in Singapore. During this phase, the Startup should aim to demonstrate:
 </numbered_1_para>
-<numbered_2_para>scalable traction: sales and user growth that does not require direct involvement by the Founders.
-proof of revenue: that some percentage of leads or users are willing to pay.</numbered_2_para>
+<numbered_2_para_noupspace>scalable traction: sales and user growth that does not require direct involvement by the Founders.
+proof of revenue: that some percentage of leads or users are willing to pay.</numbered_2_para_noupspace>
 <numbered_1_para>JFDI.2014 shall, at time of admission to the &#8220;Accelerate&#8221; phase, invest a total of <?= data.parties.investor[0].commitment ?> into the Startup;</numbered_1_para>
 <para_2>and <? if (! data.previously_incorporated) { ?>the Founders shall procure that <? } ?>in consideration of this investment <? if (data.intangibles_clause) { ?>and for other good and valuable consideration which the Parties agree to value at s$150,000,
 <? } ?>
