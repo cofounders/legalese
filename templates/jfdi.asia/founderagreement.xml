@@ -131,7 +131,7 @@ The division of equity in the Startup amongst the Founders and/or other employee
 The Founders warrant that they have no reason to believe that any other party may lay exclusive claim to any intellectual property, asset, or other proprietary interest of the Startup.
 This offer may be rescinded should the Founders be unable to comply with the requirements herein, or fail to deliver other supporting documents requested by JFDI.Asia.
 </numbered_1_para><b_left_sidehead>Expiry</b_left_sidehead>
-<para_1>This agreement must be executed by all parties listed on the Signature Page by <? data.expiry_date ?>. If it is not signed by all parties at that time, this agreement shall be null and void and of no effect.
+<para_1>This agreement must be executed by all parties listed on the Signature Page by <?= data.expiry_date ?>. If it is not signed by all parties at that time, this agreement shall be null and void and of no effect.
 </para_1>
 <chapter_header>Signatures</chapter_header>
 <para_1>Intending to be bound by this agreement, the Parties on this Signature Page now set their hands:
