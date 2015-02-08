@@ -7,9 +7,9 @@
 <table_enclosing_para class="signatureblock" unmailed="<?= data._include._unmailed ?>"<? if(data._include._unmailed) { ?><?!= " esnum=\"" + data._include._es_num + "\"" ?><? } ?>>
 <Table aid:table="table" aid:tcols="1" aid:trows="<?= rowcount ?>" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
 <? for (i in rows) { ?>
-<Cell aid:ccols="1" aid:ccolwidth="150" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell><? if (i==1) { ?><span_smallcaps><? } ?><?=
+<Cell aid:ccols="1" aid:ccolwidth="150" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell><? if (i==1) { ?><span_ucnum><? } ?><?=
 rows[i] != undefined ? rows[i].map(function(r){return data._include[r]}).join(" ") : ""
-?><? if (i==1) { ?></span_smallcaps><? } ?></cell></Cell>
+?><? if (i==1) { ?></span_ucnum><? } ?></cell></Cell>
 <? } if (data.signature_comment != undefined) { ?>
 <Cell aid:ccols="1" aid:ccolwidth="150" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell><?= data.signature_comment ?></cell></Cell>
 <? } ?>
