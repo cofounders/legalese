@@ -100,7 +100,7 @@ articulate their sustainable competitive advantage
 show an MVP already launched
 started acquiring users or customers
 </bullets>
-<para_1>Teams which do not meet these criteria by <?= data.validate_start-date ?> will be considered for a subsequent bootcamp.</para_1>
+<para_1>Teams which do not meet these criteria by <?= data.validate_start_date ?> will be considered for a subsequent bootcamp.</para_1>
 <numbered_1_para>Within two weeks of formal acceptance into the Accelerate phase, the Founders shall <? if (data.previously_incorporated) { ?>have incorporated the Startup as a Singapore Private Limited legal entity and <? } ?>have opened a Singapore corporate bank account.
 Subsequent to formal acceptance, and once the Startup&#8217;s Singapore bank account is ready, JFDI.2014 will invest S$10,000 (ten thousand Singapore dollars), that being the first tranche of its total cash investment.
 The second tranche payment of S$15,000 (fifteen thousand Singapore dollars) shall be conditional upon the Startup remaining in Singapore, demonstrating product/market fit in the form of a revenue commitment from at least two external, arms-length customers, or otherwise as determined by JFDI.Asia in its sole discretion.
