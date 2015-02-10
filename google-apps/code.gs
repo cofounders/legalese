@@ -76,19 +76,17 @@ function onOpen() {
   { name:"Send to EchoSign", functionName:"uploadAgreement"},
   { name:"faux MegaSign", functionName:"fauxMegaSign"},
   { name:"quicktest", functionName:"quicktest"},
-  { name:"Generate Papers, controlled", functionName:"fillOtherTemplates"},
-  { name:"Send to EchoSign, controlled", functionName:"uploadOtherAgreement"},
   ];
   spreadsheet.addMenu("Legalese", entries);
   // when we release this as an add-on the menu-adding will change.
 
 //  resetDocumentProperties("oauth2.echosign");
 
+// next time we uncomment this we need to take legalese.uniq.x into account
 // resetDocumentProperties("legalese.folder.id");
 // resetDocumentProperties("legalese.rootfolder");
 
-//  getEchoSignService().reset();
-  // blow away the previous oauth, because there's a problem with using the refresh token after the access token expires after the first hour.
+  PropertiesService.getDocumentProperties().deleteProperty("legalese.muteFormActiveSheetWarnings");
 
   showSidebar(sheet);
 };
@@ -106,7 +104,7 @@ function getSheetById(ss, id) {
 }
 
 function formActiveSheetChanged(sheet) {
-  var formActiveSheetId = PropertiesService.getDocumentProperties().getProperty("legalese.formActiveSheetId");
+  var formActiveSheetId = PropertiesService.getDocumentProperties().getProperty("legalese."+sheet.getParent().getId()+".formActiveSheetId");
   if (formActiveSheetId == undefined)              { return false }
   if (            sheet == undefined)              { return false }
   if (sheet.getParent().getFormUrl() == undefined) { return false }
@@ -127,6 +125,8 @@ function muteFormActiveSheetWarnings(setter) {
 	PropertiesService.getDocumentProperties().setProperty("legalese.muteFormActiveSheetWarnings", JSON.stringify(setter));
   }
 }
+
+// todo: rethink all this to work with both controller and native sheet mode. now that we save the sheetid into the uniq'ed 
 
 function templateActiveSheetChanged(sheet) {
   var templateActiveSheetId = PropertiesService.getDocumentProperties().getProperty("legalese.templateActiveSheetId");
@@ -159,7 +159,7 @@ function alertIfActiveSheetChanged(sheet) {
 	 ! muteFormActiveSheetWarnings()) {
 
 	var ui = SpreadsheetApp.getUi();
-	var formActiveSheet = getSheetById(sheet.getParent(), PropertiesService.getDocumentProperties().getProperty("legalese.formActiveSheetId"));
+	var formActiveSheet = getSheetById(sheet.getParent(), PropertiesService.getDocumentProperties().getProperty("legalese."+sheet.getParent().getId()+".formActiveSheetId"));
 	
 	var response = ui.alert("Potential Form Mismatch",
 							"Your form submits to " + formActiveSheet.getSheetName() + " but you are working on " + sheet.getSheetName() +".\nMute this warning?",
@@ -185,22 +185,20 @@ function alertIfActiveSheetChanged(sheet) {
   }
 }
 
-function nativeOrImported(sheet) {
-  if (sheet.getRange("A1").getFormula()) {
-	return "imported";
-  } else {
-	return "native";
-  }
-}
-
 // ---------------------------------------------------------------------------------------------------------------- setupForm
 /**
  * establish a form for parties to fill in their personal details
  *
  */
-function setupForm_() {
-  var sheet = SpreadsheetApp.getActiveSheet();
-  // this has to be done from within the native spreadsheet, not the controller. so it doesn't take a sheet argument.
+function setupForm_(sheet) {
+
+  var sheetPassedIn = ! (sheet == undefined);
+  if (! sheetPassedIn && SpreadsheetApp.getActiveSheet().getName() == "controller") {
+	Logger.log("in controller mode, switching to setupOtherForms_()");
+	setupOtherForms();
+	return;
+  }
+  var sheet = sheet || SpreadsheetApp.getActiveSheet();
 
   var ss = sheet.getParent();
   var data_config = readRows_(sheet);
@@ -215,7 +213,7 @@ function setupForm_() {
     var response = ui.prompt('A form was previously created.', 'Reset it?', ui.ButtonSet.YES_NO);
 
 	if (response.getSelectedButton() == ui.Button.NO) { return }
-	if (nativeOrImported(sheet) == "native") { cell.setValue("resetting form"); SpreadsheetApp.flush(); }
+	cell.setValue("resetting form"); SpreadsheetApp.flush();
     form = FormApp.openByUrl(form);
 	var items = form.getItems();
 	for (var i in items) {
@@ -223,7 +221,7 @@ function setupForm_() {
 	}
   }	  
   else {
-	if (nativeOrImported(sheet) == "native") { cell.setValue("creating form"); SpreadsheetApp.flush(); }
+	cell.setValue("creating form"); SpreadsheetApp.flush();
 	var form_title = config.form_title != undefined ? config.form_title.value : ss.getName();
 	var form_description = config.form_description != undefined ? config.form_description.value : "Please fill in your details.";
 	form = FormApp.create(form_title)
@@ -248,7 +246,7 @@ function setupForm_() {
   // Create the form and add a multiple-choice question for each timeslot.
   form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
   Logger.log("setting form destination to %s", ss.getId());
-  PropertiesService.getDocumentProperties().setProperty("legalese.formActiveSheetId", sheet.getSheetId().toString());
+  PropertiesService.getDocumentProperties().setProperty("legalese."+ss.getId()+".formActiveSheetId", sheet.getSheetId().toString());
   Logger.log("setting formActiveSheetId to %s", sheet.getSheetId().toString());
 
   var origpartyfields = data._origpartyfields;
@@ -300,7 +298,7 @@ function setupForm_() {
   var form_url = form.getPublishedUrl();
   var short_url = form.shortenFormUrl(form_url);
 
-  if (nativeOrImported(sheet) == "native") { cell.setValue(short_url); SpreadsheetApp.flush(); }
+  cell.setValue(short_url); SpreadsheetApp.flush();
 
   var legalese_root = legaleseRootFolder_();
   legalese_root.addFile(DriveApp.getFileById(form.getId()));
@@ -380,7 +378,8 @@ function treeify_(root, arr) {
  */
 function onFormSubmit(e) {
   Logger.log("onFormSubmit: beginning");
-  var sheetId = PropertiesService.getDocumentProperties().getProperty("legalese.formActiveSheetId");
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheetId = PropertiesService.getDocumentProperties().getProperty("legalese."+ss.getId()+".formActiveSheetId");
 
   if (sheetId == undefined) { // uh-oh
 	Logger.log("onFormSubmit: no formActiveSheetId property, so I don't know which sheet to record party data into. bailing.");
@@ -436,7 +435,7 @@ function onFormSubmit(e) {
 
 	var newcell = newrow.getCell(1,parseInt(partyfield.column));
 	Logger.log("onFormSubmit: setting value of cell to " + e.namedValues[partyfield.fieldname]);
-	if (nativeOrImported(sheet) == "native")  { newcell.setValue(e.namedValues[partyfield.fieldname][0]); }
+	newcell.setValue(e.namedValues[partyfield.fieldname][0]);
   }
 }
 
@@ -758,50 +757,86 @@ function showclause_(clausetext) {
 }
 
 
-function otherSheet() {
+function otherSheets() {
   var activeRange = SpreadsheetApp.getActiveRange(); // user-selected range
-  var myRow = activeRange.getSheet().getRange(activeRange.getRow(), 1, 1, 10);
-  Logger.log("you are interested in row " + myRow.getValues()[0]);
-  var ss;
-  try { ss = SpreadsheetApp.openById(myRow.getValues()[0][0]) } catch (e) {
-	Logger.log("couldn't open indicated spreadsheet ... probably on wrong row. %s", e);
-	SpreadsheetApp.getUi().alert("unable to open a separate spreadsheet -- is your selection on the correct row?");
-	return;
+  var rangeValues = activeRange.getValues();
+  var toreturn = [];
+  for (var i = 0; i < rangeValues.length; i++) {
+	var myRow = activeRange.getSheet().getRange(activeRange.getRow()+i, 1, 1, 10);
+	Logger.log("you are interested in row " + myRow.getValues()[0]);
+	var ss;
+	try { ss = SpreadsheetApp.openById(myRow.getValues()[0][0]) } catch (e) {
+	  Logger.log("couldn't open indicated spreadsheet ... probably on wrong row. %s", e);
+	  SpreadsheetApp.getUi().alert("unable to open a separate spreadsheet -- is your selection on the correct row?");
+	  return;
+	}
+	var sheet = getSheetById(ss, myRow.getValues()[0][1])
+	myRow.getCell(1,3).setValue("=HYPERLINK(\""
+								+sheet.getParent().getUrl()
+								+"#gid="
+								+sheet.getSheetId()
+								+"\",\""
+								+sheet.getName()
+								+"\")");
+	toreturn.push(sheet);
   }
-  var sheet = getSheetById(ss, myRow.getValues()[0][1])
-  myRow.getCell(1,3).setValue(sheet.getName());
-  return sheet;
+  return toreturn;
 }
 
 // ---------------------------------------------------------------------------------------------------------------- quicktest
 function quicktest() {
-  var sheet = otherSheet();
+  var sheets = otherSheets();
+}
+
+function uniqueKey(sheet) {
+  var ss = sheet.getParent();
+  return ss.getId() + "/" + sheet.getSheetId();
+}
+
+// ---------------------------------------------------------------------------------------------------------------- quicktest
+function setupOtherForms() {
+  var sheets = otherSheets();
+  for (var i = 0; i < sheets.length; i++) {
+	var sheet = sheets[i];
+	setupForm_(sheet);
+  }
 }
 
 // ---------------------------------------------------------------------------------------------------------------- quicktest
 function fillOtherTemplates() {
-  var sheet = otherSheet();
-  Logger.log("will generate template for " + sheet.getName());
-  fillTemplates(sheet);
+  var sheets = otherSheets();
+  for (var i = 0; i < sheets.length; i++) {
+	var sheet = sheets[i];
+	Logger.log("will generate template for " + sheet.getName());
+	fillTemplates(sheet);
 
-  var myRow = activeRange.getSheet().getRange(activeRange.getRow(), 1, 1, 10);
-  myRow.getCell(1,4).setValue("=HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"
-							  +JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese.folder.id"))
-							  +"\",\""
-							  +JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese.folder.name"))
-							  +"\")");
+	var uniq = uniqueKey(sheet);
 
-  myRow.getCell(1,5).setValue("unsent");
+	var myRow = SpreadsheetApp.getActiveSheet().getRange(SpreadsheetApp.getActiveRange().getRow()+i, 1, 1, 10);
+	myRow.getCell(1,4).setValue("=HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"
+								+JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese."+uniq+".folder.id"))
+								+"\",\""
+								+JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese."+uniq+".folder.name"))
+								+"\")");
+
+	myRow.getCell(1,5).setValue("unsent");
+  }
 }
 
 // ---------------------------------------------------------------------------------------------------------------- quicktest
-function uploadOtherAgreement() {
-  var sheet = otherSheet();
-  var myRow = activeRange.getSheet().getRange(activeRange.getRow(), 1, 1, 10);
-  myRow.getCell(1,3).setValue(sheet.getName());
-  Logger.log("will send to EchoSign for " + sheet.getName());
-  uploadAgreement(sheet);
-  myRow.getCell(1,5).setValue("sent at "+ Utilities.formatDate(new Date(), sheet.getParent().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss"));
+function uploadOtherAgreements() {
+  var sheets = otherSheets();
+  for (var i = 0; i < sheets.length; i++) {
+	var sheet = sheets[i];
+	var myRow = SpreadsheetApp.getActiveSheet().getRange(SpreadsheetApp.getActiveRange().getRow()+i, 1, 1, 10);
+	var result = uploadAgreement(sheet);
+	if (result == "sent") {
+	  myRow.getCell(1,5).setValue("sent at "+ Utilities.formatDate(new Date(), sheet.getParent().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss"));
+	}
+	else {
+	  myRow.getCell(1,5).setValue(result);
+	}
+  }
 }
 
 /** Template generation is as follows:
@@ -892,6 +927,11 @@ function obtainTemplate_(url) {
 function fillTemplates(sheet) {
 
   var sheetPassedIn = ! (sheet == undefined);
+  if (! sheetPassedIn && SpreadsheetApp.getActiveSheet().getName() == "controller") {
+	Logger.log("in controller mode, switching to fillOtherTemplates()");
+	fillOtherTemplates();
+	return;
+  }
   sheet = sheet || SpreadsheetApp.getActiveSheet();
   var data_config = readRows_(sheet);
   var templatedata   = data_config[0];
@@ -901,17 +941,19 @@ function fillTemplates(sheet) {
 
   if (! sheetPassedIn) { alertIfActiveSheetChanged(sheet); }
 
+  var uniq = uniqueKey(sheet);
+
   var folder = createFolder_(sheet); var readme = createReadme_(folder, config, sheet);
-  PropertiesService.getDocumentProperties().setProperty("legalese.folder.id", JSON.stringify(folder.getId()));
-  PropertiesService.getDocumentProperties().setProperty("legalese.folder.name", JSON.stringify(folder.getName()));
+  PropertiesService.getDocumentProperties().setProperty("legalese."+uniq+".folder.id", JSON.stringify(folder.getId()));
+  PropertiesService.getDocumentProperties().setProperty("legalese."+uniq+".folder.name", JSON.stringify(folder.getName()));
   PropertiesService.getDocumentProperties().setProperty("legalese.templateActiveSheetId", sheet.getSheetId());
-  Logger.log("fillTemplates: property set legalese.folder.id = %s", folder.getId());
-  Logger.log("fillTemplates: property set legalese.templateActiveSheetId = %s", sheet.getSheetId());
+  Logger.log("fillTemplates: property set legalese.%s.folder.id = %s", uniq, folder.getId());
+  Logger.log("fillTemplates: property set legalese.%s.templateActiveSheetId = %s", uniq, sheet.getSheetId());
 
   var cell = sheet.getRange("E6");
 
   // let's insert the Drive version not the Docs version of the folder url
-  if (nativeOrImported(sheet) == "native") cell.setValue("=HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"+folder.getId()+"\",\""+folder.getName()+"\")");
+  cell.setValue("=HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"+folder.getId()+"\",\""+folder.getName()+"\")");
   Logger.log("I have set the value to =HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"+folder.getId()+"\",\""+folder.getName()+"\")");
 
   var availables = availableTemplates_();
@@ -1063,12 +1105,14 @@ function createReadme_(folder, config, sheet) { // under the parent folder
   var text = para.appendText(spreadsheet.getName() + ", " + sheet.getName());
   text.setLinkUrl(spreadsheet.getUrl() + "#gid=" + sheet.getSheetId());
   Logger.log("run started");
-  PropertiesService.getDocumentProperties().setProperty("legalese.readme.id", JSON.stringify(doc.getId()));
+  var uniq = uniqueKey(sheet);
+  PropertiesService.getDocumentProperties().setProperty("legalese."+uniq+".readme.id", JSON.stringify(doc.getId()));
   return doc;
 }
 
-function getReadme_() {
-  var id = PropertiesService.getDocumentProperties().getProperty("legalese.readme.id");
+function getReadme_(sheet) {
+  var uniq = uniqueKey(sheet);
+  var id = PropertiesService.getDocumentProperties().getProperty("legalese."+uniq+".readme.id");
   if (id != undefined) {
 	return DocumentApp.openById(JSON.parse(id));
   }
@@ -1189,14 +1233,21 @@ function getEchoSignService() {
 // ---------------------------------------------------------------------------------------------------------------- showSidebar
 function showSidebar(sheet) {
   var echosignService = getEchoSignService();
-  if (!echosignService.hasAccess()) {
+  echosignService.reset();
+  // blow away the previous oauth, because there's a problem with using the refresh token after the access token expires after the first hour.
+
+  if (echosignService.hasAccess()) {
+	Logger.log("showSidebar: we have access. doing nothing.");
+  } else {
+	Logger.log("showSidebar: we lack access. showing sidebar");
     var authorizationUrl = echosignService.getAuthorizationUrl();
 
 	var myTemplate = '<p><a href="<?= authorizationUrl ?>" target="_blank">Authorize EchoSign</a>. ' +
       'Close this sidebar when authorization completes.</p>';
 
 	if (templateActiveSheetChanged(sheet)) {
-	  myTemplate = myTemplate + '<h2>Potential Form Mismatch</h2><p>BTW, Your form submits to ' + formActiveSheet.getSheetName() + " but you are working on " + sheet.getSheetName() +".</p><p>If you\'re working with this sheet, you might want to recreate the form so that form submissions go here instead of to " + formActiveSheet.getSheetName() + ".</p>"
+	  var formActiveSheet = PropertiesService.getDocumentProperties().getProperty("legalese."+sheet.getParent().getId()+".formActiveSheetId");
+	  myTemplate = myTemplate + '<h2>Potential Form Mismatch</h2><p>Active sheet may have changed. If you\'re working with this sheet, you might want to recreate the form so that form submissions go here instead.</p>';
 	}
 
     var template = HtmlService.createTemplate(myTemplate);
@@ -1209,10 +1260,6 @@ function showSidebar(sheet) {
 	SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
       .showSidebar(page);
 
-  } else {
-    // we already have echosign access
-//	var ui = SpreadsheetApp.getUi(); // Same variations.
-//	ui.alert("we already have OAuth access to EchoSign.");
   }
 }
 
@@ -1248,13 +1295,16 @@ function allPDFs(folder) {
 // ---------------------------------------------------------------------------------------------------------------- uploadPDFsToEchoSign
 // upload all the PDFs in the Folder
 // returns an array of the transientDocumentIds of all the PDFs uploaded to Echosign.
-function uploadPDFsToEchoSign() {
+function uploadPDFsToEchoSign(sheet) {
   var api = getEchoSignService();
   var o = { headers: { "Access-Token": api.getAccessToken() } };
   o.method = "post";
 
-  var folderId = JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese.folder.id"));
-  Logger.log("uploadPDFsToEchoSign: property get legalese.folder.id = %s", folderId);
+  var uniq = uniqueKey(sheet);
+
+  var folderId   = JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese."+uniq+".folder.id"));
+  var folderName = JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese."+uniq+".folder.name"));
+  Logger.log("uploadPDFsToEchoSign: for spreadsheet %s, folder.id = %s", uniq, folderId);
   if (folderId == undefined) {
 	SpreadsheetApp.getUi().alert("Not sure which folder contains PDFs.\nPlease regenerate documents by clicking Legalese / Generate Docs");
 	return;
@@ -1405,7 +1455,24 @@ function fauxMegaSign(sheet) {
 function uploadAgreement(sheet) {
   // TODO: we need to confirm that the docs generated match the current sheet.
 
+  var echosignService = getEchoSignService();
+  // blow away the previous oauth, because there's a problem with using the refresh token after the access token expires after the first hour.
+  if (!echosignService.hasAccess()) {
+	SpreadsheetApp.getUi().alert("we don't have echosign access.");
+	return "echosign fail";
+  }
+  else {
+	Logger.log("uploadAgreement: we have echosignService hasAccess = true");
+  }
+
+
   var sheetPassedIn = ! (sheet == undefined);
+
+  if (! sheetPassedIn && SpreadsheetApp.getActiveSheet().getName() == "controller") {
+	Logger.log("in controller mode, switching to uploadOtherAgreements()");
+	uploadOtherAgreements();
+	return;
+  }
 
   sheet = sheet || SpreadsheetApp.getActiveSheet();
   var ss = sheet.getParent();
@@ -1417,18 +1484,18 @@ function uploadAgreement(sheet) {
   alertIfActiveSheetChanged(sheet);
 
   var parties = readrows.parties;
-  var transientDocumentIds = uploadPDFsToEchoSign();
+  var transientDocumentIds = uploadPDFsToEchoSign(sheet);
   var emailInfo = [];
   var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"});
   var cc2_list = [];
   var commit_updates_to = [];
   var commit_updates_cc = [];
-  var readmeDoc = getReadme_();
+  var readmeDoc = getReadme_(sheet);
 
-  if (transientDocumentIds.length == 0) {
+  if (transientDocumentIds == undefined || transientDocumentIds.length == 0) {
 	Logger.log("nothing uploaded to EchoSign. not uploading agreement.");
 	if (readmeDoc != undefined) readmeDoc.getBody().appendParagraph("nothing uploaded to EchoSign. not uploading agreement.");
-	return;
+	return "no docs found!";
   }
 
   // does the spreadsheet have a "Legalese Status" field?
@@ -1454,7 +1521,7 @@ function uploadAgreement(sheet) {
 
   if (emailInfo.length == 0) {
 	SpreadsheetApp.getUi().alert("There doesn't seem to be anybody for us to mail this to! Check the Legalese Status column.");
-	return;
+	return "no recipients!";
   }
 
   // TODO: who shall we cc to? everybody whose legalese status == "cc".
@@ -1486,7 +1553,7 @@ function uploadAgreement(sheet) {
 								cc_list,
 								config,
 								readmeDoc
-	);
+							);
 
 	Logger.log("uploadAgreement: well, that seems to have worked!");
 
@@ -1495,6 +1562,7 @@ function uploadAgreement(sheet) {
   }
 
   Logger.log("uploadAgreement: that's all, folks!");
+  return "sent";
 }
 
 function postAgreement_(fileInfos, recipients, message, name, cc_list, config, readmeDoc, agreementCreationInfo) {
