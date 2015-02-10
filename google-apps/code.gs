@@ -94,7 +94,9 @@ function onOpen() {
 function getSheetById(ss, id) {
   var sheets = ss.getSheets();
   for (var i=0; i<sheets.length; i++) {
+	Logger.log("does sheet " + i + " ( " + sheets[i].getSheetName() + " have id " + id + "?");
     if (sheets[i].getSheetId() == id) {
+	  Logger.log("yes: " + sheets[i].getSheetId() + " = " + id + "?");
       return sheets[i];
     }
   }
@@ -210,8 +212,10 @@ function setupForm_() {
   }	  
   else {
 	cell.setValue("creating form"); SpreadsheetApp.flush();
-	form = FormApp.create('Personal Particulars - ' + ss.getName())
-      .setDescription('Please fill in your details.')
+	var form_title = config.form_title != undefined ? config.form_title.value : ss.getName();
+	var form_description = config.form_description != undefined ? config.form_description.value : "Please fill in your details.";
+	form = FormApp.create(form_title)
+      .setDescription(form_description)
       .setConfirmationMessage('Thanks for responding!')
       .setAllowResponseEdits(true)
       .setAcceptingResponses(true)
@@ -232,8 +236,8 @@ function setupForm_() {
   // Create the form and add a multiple-choice question for each timeslot.
   form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
   Logger.log("setting form destination to %s", ss.getId());
-  PropertiesService.getDocumentProperties().setProperty("legalese.formActiveSheetId", sheet.getSheetId());
-  Logger.log("setting formActiveSheetId to %s", sheet.getSheetId());
+  PropertiesService.getDocumentProperties().setProperty("legalese.formActiveSheetId", sheet.getSheetId().toString());
+  Logger.log("setting formActiveSheetId to %s", sheet.getSheetId().toString());
 
   var origpartyfields = data._origpartyfields;
   Logger.log("origpartyfields = " + origpartyfields);
@@ -270,13 +274,15 @@ function setupForm_() {
 	}	  
   }
 
-  for (var i in config.form_extras.values) {
-	var field = asvar_(config.form_extras.values[i]);
-	form.addListItem()
-	  .setTitle(config[field].dict["name"][0])
-	  .setRequired(config[field].dict["required"][0])
-	  .setChoiceValues(config[field].dict["choicevalues"])
-	  .setHelpText(config[field].dict["helptext"][0]);
+  if (config["form_extras"] != undefined) {
+	for (var i in config.form_extras.values) {
+	  var field = asvar_(config.form_extras.values[i]);
+	  form.addListItem()
+		.setTitle(config[field].dict["name"][0])
+		.setRequired(config[field].dict["required"][0])
+		.setChoiceValues(config[field].dict["choicevalues"])
+		.setHelpText(config[field].dict["helptext"][0]);
+	}
   }
 
   var form_url = form.getPublishedUrl();
@@ -365,8 +371,11 @@ function onFormSubmit(e) {
   var sheetId = PropertiesService.getDocumentProperties().getProperty("legalese.formActiveSheetId");
 
   if (sheetId == undefined) { // uh-oh
-	Logger.log("no formActiveSheetId property, so I don't know which sheet to record party data into. bailing.");
+	Logger.log("onFormSubmit: no formActiveSheetId property, so I don't know which sheet to record party data into. bailing.");
 	return;
+  }
+  else {
+	Logger.log("onFormSubmit: formActiveSheetId property = %s", sheetId);
   }
 
   var sheet = getSheetById(SpreadsheetApp.getActiveSpreadsheet(), sheetId);
@@ -375,26 +384,46 @@ function onFormSubmit(e) {
   var config = data_config[1];
 
   // add a row and insert the investor fields
-  Logger.log("inserting a row after " + (parseInt(data._last_party_row)+1));
+  Logger.log("onFormSubmit: inserting a row after " + (parseInt(data._last_party_row)+1));
   sheet.insertRowAfter(data._last_party_row+1); // might need to update the commitment sum range
   var newrow = sheet.getRange(data._last_party_row+2,1,1,sheet.getMaxColumns());
 //  newrow.getCell(0,0).setValue("bar");
 
   // loop through the origpartyfields inserting the new data in the right place.
   for (names in e.namedValues) {
-	Logger.log("e.namedValues = " + names + ":"+e.namedValues[names][0]);
+	Logger.log("onFormSubmit: e.namedValues = " + names + ": "+e.namedValues[names][0]);
   }
 
   var origpartyfields = data._origpartyfields;
   Logger.log("onFormSubmit: origpartyfields = " + origpartyfields);
-  newrow.getCell(1,1).setValue(e.namedValues["Party Role"][0]);
 
-  for (var i in origpartyfields) {
+  for (var i = 0; i < origpartyfields.length; i++) {
 	var partyfield = origpartyfields[i];
-	Logger.log("partyfield "+i+" (" + partyfield.fieldname+") (column="+partyfield.column+") = " + e.namedValues[partyfield.fieldname][0]);
+
+	// fill in the default party role
+	if (i == 0 && partyfield == undefined) {
+	  partyfield = { fieldname: "_party_role", column: 1 };
+	  e.namedValues["_party_role"] = [ config.default_party_role.value ];
+	  Logger.log("setting default party row in column 1 to %s", config.default_party_role.value);
+	}
+	  
+	// fill in any fields which are hidden and have a default value configured. maybe in future we should extend the default-filling to all blank submissions
+	else if (e.namedValues[partyfield.fieldname] == undefined) {
+	  Logger.log("did not receive form submission for %s", partyfield.fieldname);
+
+	  if (partyfield["default"] != undefined) {
+		Logger.log("filling with default value %s", partyfield["default"]);
+		e.namedValues[partyfield.fieldname] = [ partyfield["default"] ];
+	  }
+	  else {
+		continue;
+	  }
+	}
+
+	Logger.log("onFormSubmit: partyfield "+i+" (" + partyfield.fieldname+") (column="+partyfield.column+") = " + e.namedValues[partyfield.fieldname][0]);
 
 	var newcell = newrow.getCell(1,parseInt(partyfield.column));
-	Logger.log("setting value of cell to " + e.namedValues[partyfield.fieldname]);
+	Logger.log("onFormSubmit: setting value of cell to " + e.namedValues[partyfield.fieldname]);
 	newcell.setValue(e.namedValues[partyfield.fieldname][0]);
   }
 }
@@ -406,8 +435,7 @@ function onFormSubmit(e) {
  * the TERMS go into data.* directly.
  * if a availabletemplate is marked as binary then we iterate through the investors and set data.investor.* each time
  */
-function readRows_() {
-  var sheet = SpreadsheetApp.getActiveSheet();
+function readRows_(sheet) {
   Logger.log("readRows_: will use sheet " + sheet.getName());
   var rows = sheet.getDataRange();
   var numRows = rows.getNumRows();
@@ -457,6 +485,12 @@ function readRows_() {
 										  }
     else if (row[0] == "PARTYFORM_ITEMTYPE") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||partyfieldorder[ki]==undefined){continue}
 																					 origpartyfields[partyfieldorder[ki]].itemtype = row[ki];
+																				   }
+											continue;
+										  }
+    else if (row[0] == "PARTYFORM_DEFAULT") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||partyfieldorder[ki]==undefined||row[ki].length==0){continue}
+																					Logger.log("learned default value for %s = %s", partyfieldorder[ki], row[ki]);
+																					 origpartyfields[partyfieldorder[ki]]["default"] = row[ki];
 																				   }
 											continue;
 										  }
@@ -652,7 +686,7 @@ function formatify_(format, string) {
     else if (format.match(/yyyy/)) {
     // Thu Dec 18 09:03:28 PST 2014 INFO: expanding term Fri Dec 19 2014 00:00:00 GMT+0800 (HKT) with format yyyy"-"mm"-"dd
     // Thu Dec 18 09:03:28 PST 2014 INFO: expanding term Thu Jan 15 2015 00:00:00 GMT+0800 (HKT) with format yyyy"-"mm"-"dd
-      toreturn = string.toString().substr(0,15);
+      toreturn = string.toString().substr(0,15).replace(/ 0/, " ");  // Jan 01 2015 => Jan 1 2015
     } else { toreturn = string }
   }
   else { toreturn = string }
@@ -853,7 +887,7 @@ function fillTemplates() {
 	if (explosion == "all in one doc") {
 	  Logger.log("doing investors all in one doc ... " + sourceTemplate.url);
 	  newTemplate.data._explosion.investor = false;
-	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder);
+	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder); // todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
 	  readme.getBody().appendParagraph("created " + sourceTemplate.title);
 	}
 	else {
