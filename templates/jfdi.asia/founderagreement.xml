@@ -90,7 +90,7 @@ else if (data.valuation_basis == "existing") { ?>, and determined on the basis o
 else if (data.valuation_basis == "discussion") { ?>, and determined as agreed by the Parties.<? }
 else if (data.valuation_basis == "fixed") { ?> at <?= data.agreed_percentage ?>.<? } ?>
 <numbered_1_para>The Founders shall travel to and from Singapore at their own expense. JFDI.Asia and JFDI.2014 shall not be obligated to reimburse any expenses incurred, or transfer any funds to the Founders or to their Startup, prior to formal acceptance to the Accelerate phase.
-Formal acceptance to the Accelerate phase is conditional upon the Founders demonstrating, at JFDI.Asia's sole discretion, that they can:
+Formal acceptance to the Accelerate phase will be offered as soon the Founders demonstrate, to JFDI.Asia's satisfaction, that they can:
 </numbered_1_para><bullets>articulate their innovation insight
 articulate their industry dynamics
 show that they have done market research and refined their early adopter customer archetype
@@ -99,7 +99,9 @@ describe their competitive analysis and positioning
 articulate their sustainable competitive advantage
 show an MVP already launched
 started acquiring users or customers
-</bullets><numbered_1_para>Within two weeks of formal acceptance into the Accelerate phase, the Founders shall <? if (data.previously_incorporated) { ?>have incorporated the Startup as a Singapore Private Limited legal entity and <? } ?>have opened a Singapore corporate bank account.
+</bullets>
+<para_1>Teams which do not meet these criteria by <?= data.validate_start-date ?> will be considered for a subsequent bootcamp.</para_1>
+<numbered_1_para>Within two weeks of formal acceptance into the Accelerate phase, the Founders shall <? if (data.previously_incorporated) { ?>have incorporated the Startup as a Singapore Private Limited legal entity and <? } ?>have opened a Singapore corporate bank account.
 Subsequent to formal acceptance, and once the Startup&#8217;s Singapore bank account is ready, JFDI.2014 will invest S$10,000 (ten thousand Singapore dollars), that being the first tranche of its total cash investment.
 The second tranche payment of S$15,000 (fifteen thousand Singapore dollars) shall be conditional upon the Startup remaining in Singapore, demonstrating product/market fit in the form of a revenue commitment from at least two external, arms-length customers, or otherwise as determined by JFDI.Asia in its sole discretion.
 Conditional upon demonstrating further traction, the Startup will also be offered a chance to pitch to potential investors on Demo Day. If the Startup is struggling to show traction, JFDI.Asia may cancel the pitch, or defer it to a future Demo Day. For the avoidance of doubt, a Startup which does not qualify to pitch will not be invited to Demo Day, not even to be in the audience.
