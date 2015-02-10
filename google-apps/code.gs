@@ -76,6 +76,8 @@ function onOpen() {
   { name:"Send to EchoSign", functionName:"uploadAgreement"},
   { name:"faux MegaSign", functionName:"fauxMegaSign"},
   { name:"quicktest", functionName:"quicktest"},
+  { name:"Generate Papers, controlled", functionName:"fillOtherTemplates"},
+  { name:"Send to EchoSign, controlled", functionName:"uploadOtherAgreement"},
   ];
   spreadsheet.addMenu("Legalese", entries);
   // when we release this as an add-on the menu-adding will change.
@@ -183,14 +185,24 @@ function alertIfActiveSheetChanged(sheet) {
   }
 }
 
+function nativeOrImported(sheet) {
+  if (sheet.getRange("A1").getFormula()) {
+	return "imported";
+  } else {
+	return "native";
+  }
+}
+
 // ---------------------------------------------------------------------------------------------------------------- setupForm
 /**
  * establish a form for parties to fill in their personal details
  *
  */
 function setupForm_() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getActiveSheet();
+  var sheet = SpreadsheetApp.getActiveSheet();
+  // this has to be done from within the native spreadsheet, not the controller. so it doesn't take a sheet argument.
+
+  var ss = sheet.getParent();
   var data_config = readRows_(sheet);
   var data   = data_config[0];
   var config = data_config[1];
@@ -203,7 +215,7 @@ function setupForm_() {
     var response = ui.prompt('A form was previously created.', 'Reset it?', ui.ButtonSet.YES_NO);
 
 	if (response.getSelectedButton() == ui.Button.NO) { return }
-	cell.setValue("resetting form"); SpreadsheetApp.flush();
+	if (nativeOrImported(sheet) == "native") { cell.setValue("resetting form"); SpreadsheetApp.flush(); }
     form = FormApp.openByUrl(form);
 	var items = form.getItems();
 	for (var i in items) {
@@ -211,7 +223,7 @@ function setupForm_() {
 	}
   }	  
   else {
-	cell.setValue("creating form"); SpreadsheetApp.flush();
+	if (nativeOrImported(sheet) == "native") { cell.setValue("creating form"); SpreadsheetApp.flush(); }
 	var form_title = config.form_title != undefined ? config.form_title.value : ss.getName();
 	var form_description = config.form_description != undefined ? config.form_description.value : "Please fill in your details.";
 	form = FormApp.create(form_title)
@@ -288,7 +300,7 @@ function setupForm_() {
   var form_url = form.getPublishedUrl();
   var short_url = form.shortenFormUrl(form_url);
 
-  cell.setValue(short_url); SpreadsheetApp.flush();
+  if (nativeOrImported(sheet) == "native") { cell.setValue(short_url); SpreadsheetApp.flush(); }
 
   var legalese_root = legaleseRootFolder_();
   legalese_root.addFile(DriveApp.getFileById(form.getId()));
@@ -424,7 +436,7 @@ function onFormSubmit(e) {
 
 	var newcell = newrow.getCell(1,parseInt(partyfield.column));
 	Logger.log("onFormSubmit: setting value of cell to " + e.namedValues[partyfield.fieldname]);
-	newcell.setValue(e.namedValues[partyfield.fieldname][0]);
+	if (nativeOrImported(sheet) == "native")  { newcell.setValue(e.namedValues[partyfield.fieldname][0]); }
   }
 }
 
@@ -746,12 +758,50 @@ function showclause_(clausetext) {
 }
 
 
+function otherSheet() {
+  var activeRange = SpreadsheetApp.getActiveRange(); // user-selected range
+  var myRow = activeRange.getSheet().getRange(activeRange.getRow(), 1, 1, 10);
+  Logger.log("you are interested in row " + myRow.getValues()[0]);
+  var ss;
+  try { ss = SpreadsheetApp.openById(myRow.getValues()[0][0]) } catch (e) {
+	Logger.log("couldn't open indicated spreadsheet ... probably on wrong row. %s", e);
+	SpreadsheetApp.getUi().alert("unable to open a separate spreadsheet -- is your selection on the correct row?");
+	return;
+  }
+  var sheet = getSheetById(ss, myRow.getValues()[0][1])
+  myRow.getCell(1,3).setValue(sheet.getName());
+  return sheet;
+}
+
 // ---------------------------------------------------------------------------------------------------------------- quicktest
 function quicktest() {
- var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
- for (var i = 0; i < sheets.length; i++) {
-   Logger.log("sheet %s is named %s", i, sheets[i].getName());
- }
+  var sheet = otherSheet();
+}
+
+// ---------------------------------------------------------------------------------------------------------------- quicktest
+function fillOtherTemplates() {
+  var sheet = otherSheet();
+  Logger.log("will generate template for " + sheet.getName());
+  fillTemplates(sheet);
+
+  var myRow = activeRange.getSheet().getRange(activeRange.getRow(), 1, 1, 10);
+  myRow.getCell(1,4).setValue("=HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"
+							  +JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese.folder.id"))
+							  +"\",\""
+							  +JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese.folder.name"))
+							  +"\")");
+
+  myRow.getCell(1,5).setValue("unsent");
+}
+
+// ---------------------------------------------------------------------------------------------------------------- quicktest
+function uploadOtherAgreement() {
+  var sheet = otherSheet();
+  var myRow = activeRange.getSheet().getRange(activeRange.getRow(), 1, 1, 10);
+  myRow.getCell(1,3).setValue(sheet.getName());
+  Logger.log("will send to EchoSign for " + sheet.getName());
+  uploadAgreement(sheet);
+  myRow.getCell(1,5).setValue("sent at "+ Utilities.formatDate(new Date(), sheet.getParent().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss"));
 }
 
 /** Template generation is as follows:
@@ -839,25 +889,30 @@ function obtainTemplate_(url) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------- fillTemplates
-function fillTemplates() {
+function fillTemplates(sheet) {
 
-  var sheet = SpreadsheetApp.getActiveSheet();
+  var sheetPassedIn = ! (sheet == undefined);
+  sheet = sheet || SpreadsheetApp.getActiveSheet();
   var data_config = readRows_(sheet);
   var templatedata   = data_config[0];
   var config         = data_config[1];
   templatedata.clauses = {};
   templatedata._config = config;
 
-  alertIfActiveSheetChanged(sheet);
+  if (! sheetPassedIn) { alertIfActiveSheetChanged(sheet); }
 
-  var folder = createFolder_(sheet); var readme = createReadme_(folder, config);
+  var folder = createFolder_(sheet); var readme = createReadme_(folder, config, sheet);
   PropertiesService.getDocumentProperties().setProperty("legalese.folder.id", JSON.stringify(folder.getId()));
+  PropertiesService.getDocumentProperties().setProperty("legalese.folder.name", JSON.stringify(folder.getName()));
   PropertiesService.getDocumentProperties().setProperty("legalese.templateActiveSheetId", sheet.getSheetId());
   Logger.log("fillTemplates: property set legalese.folder.id = %s", folder.getId());
   Logger.log("fillTemplates: property set legalese.templateActiveSheetId = %s", sheet.getSheetId());
 
   var cell = sheet.getRange("E6");
-  cell.setValue("=HYPERLINK(\""+folder.getUrl()+"\",\""+folder.getName()+"\")");
+
+  // let's insert the Drive version not the Docs version of the folder url
+  if (nativeOrImported(sheet) == "native") cell.setValue("=HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"+folder.getId()+"\",\""+folder.getName()+"\")");
+  Logger.log("I have set the value to =HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"+folder.getId()+"\",\""+folder.getName()+"\")");
 
   var availables = availableTemplates_();
   var desireds = desiredTemplates_(config);
@@ -986,21 +1041,20 @@ function legaleseRootFolder_() {
 function createFolder_(sheet) {
   var legalese_root = legaleseRootFolder_();
   Logger.log("attempting createfolder");
-  var folder = legalese_root.createFolder(SpreadsheetApp.getActiveSpreadsheet().getName() + " "
+  var folder = legalese_root.createFolder(sheet.getParent().getName() + " "
 										  + sheet.getSheetName() + " "
-										  + Utilities.formatDate(new Date(), SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss"));
+										  + Utilities.formatDate(new Date(), sheet.getParent().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss"));
   Logger.log("createfolder returned " + folder);
 
-  legalese_root.addFile(DriveApp.getFileById(SpreadsheetApp.getActiveSpreadsheet().getId()));
+  legalese_root.addFile(DriveApp.getFileById(sheet.getParent().getId()));
 
   return folder;
 };
 
 // ---------------------------------------------------------------------------------------------------------------- createReadme_
-function createReadme_(folder, config) { // under the parent folder
-  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+function createReadme_(folder, config, sheet) { // under the parent folder
+  var spreadsheet = sheet.getParent();
   var doc = DocumentApp.create("README for " + spreadsheet.getName());
-  var sheet = spreadsheet.getActiveSheet();
 
   folder.addFile(DriveApp.getFileById(doc.getId()));
   doc.getBody().appendParagraph("this was created by Legalese.");
@@ -1261,8 +1315,9 @@ function fauxMegaUpload() {
 
 // ---------------------------------------------------------------------------------------------------------------- fauxMegaSign
 // send a particular document from the template library for faux megasign
-function fauxMegaSign() {
-  var sheet = SpreadsheetApp.getActiveSheet();
+function fauxMegaSign(sheet) {
+  var sheetPassedIn = ! (sheet == undefined);
+  sheet = sheet || SpreadsheetApp.getActiveSheet();
   var data_config = readRows_(sheet);
   var readrows    = data_config[0];
   var config      = data_config[1];
@@ -1284,7 +1339,7 @@ function fauxMegaSign() {
 	return;
   }
 
-  var now = Utilities.formatDate(new Date(), SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
+  var now = Utilities.formatDate(new Date(), sheet.getParent().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
   
   for (var p in parties._unmailed) {
 	var party = parties._unmailed[p];
@@ -1317,7 +1372,7 @@ function fauxMegaSign() {
   Logger.log("To: %s", to_list.join(", "));
   Logger.log("CC: %s", cc_list.join(", "));
 
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = sheet.getParent();
 
   for (var p in to_list) {
 	var party = to_list[p];
@@ -1334,12 +1389,12 @@ function fauxMegaSign() {
 	
 	party._commit_update_to.legalese_status.setValue("mailed echosign " + now);
 
-	Logger.log("uploadAgreement: well, that seems to have worked!");
+	Logger.log("fauxMegaSign: well, that seems to have worked!");
 
-	var cell = ss.getActiveSheet().getRange("E8");
+	var cell = sheet.getRange("E8");
 	cell.setValue("=HYPERLINK(\""+acr.url+"\",\"EchoSign\")")
   }
-  Logger.log("uploadAgreement: that's all, folks!");
+  Logger.log("fauxMegaSign: that's all, folks!");
 }
 
 // ---------------------------------------------------------------------------------------------------------------- uploadAgreement
@@ -1347,10 +1402,14 @@ function fauxMegaSign() {
 // if the PDFs don't exist, send them to InDesign for creation and wait.
 // for extra credit, define a usercallback and associate it with a StateToken so InDesign can proactively trigger a pickup.
 // for now, just looking for the PDFs in the folder seems to be good enough.
-function uploadAgreement() {
+function uploadAgreement(sheet) {
   // TODO: we need to confirm that the docs generated match the current sheet.
 
-  var sheet = SpreadsheetApp.getActiveSheet();
+  var sheetPassedIn = ! (sheet == undefined);
+
+  sheet = sheet || SpreadsheetApp.getActiveSheet();
+  var ss = sheet.getParent();
+
   var data_config = readRows_(sheet);
   var readrows    = data_config[0];
   var config      = data_config[1];
@@ -1375,7 +1434,7 @@ function uploadAgreement() {
   // does the spreadsheet have a "Legalese Status" field?
   // if not, create a column in the spreadsheet, to the right of the rightmost filled column.
 
-  var now = Utilities.formatDate(new Date(), SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
+  var now = Utilities.formatDate(new Date(), ss.getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
   
   // update the party's Legalese Status cell to indicate we've sent the mail.
   
@@ -1413,8 +1472,6 @@ function uploadAgreement() {
   readmeDoc.appendParagraph("To: " + emailInfo.map(function(party){return party.email}).join(", "));
   readmeDoc.appendParagraph("CC: " + cc_list.join(", "));
 
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-
   for (var i in transientDocumentIds) {
 	var transientDocumentId = transientDocumentIds[i];
 	Logger.log("turning transientDocument %s into an agreement", transientDocumentId);
@@ -1433,7 +1490,7 @@ function uploadAgreement() {
 
 	Logger.log("uploadAgreement: well, that seems to have worked!");
 
-	var cell = ss.getActiveSheet().getRange("E8");
+	var cell = sheet.getRange("E8");
 	cell.setValue("=HYPERLINK(\""+acr.url+"\",\"EchoSign\")")
   }
 
