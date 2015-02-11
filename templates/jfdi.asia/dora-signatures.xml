@@ -45,7 +45,7 @@
     <parties><?!= include("inc_party", data, data.parties.existing_shareholder[0]) ?>;</parties>
 <para_1>(collectively the "Current Shareholders" and individually a "Current Shareholder"); and</para_1>
     <parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
-    <para_1>Whereas:</para_1>
+<para_1><span_smallcaps>Whereas:</span_smallcaps></para_1>
     <recitals>A shareholders&#8217; agreement was entered into on <?= data.previous_shareholder_agreement_date ?> by and among the Current Shareholders and the Company (as may have been modified, amended or supplemented from time to time) (the "Shareholders&#8217; Agreement"), a copy of which the New Shareholder hereby confirms that it has been supplied with and acknowledges the terms therein. </recitals>
     <recitals>The New Shareholder is or will be issued <?= data.parties.new_investor[0].num_shares ?> <?= data.security_type ?> ("New Shares") in the capital of the Company, by virtue of the subscription agreement dated <?= data.agreement_date ?> in respect thereof.</recitals>
     <recitals>In accordance with the provisions of the Shareholders&#8217; Agreement, it is a condition precedent to the registration by the Company of the issuance and allotment to the New Shareholder of the New Shares that the New Shareholder executes this Deed.</recitals>

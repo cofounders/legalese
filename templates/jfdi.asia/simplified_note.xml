@@ -37,24 +37,17 @@
 <Story_Main><chapter_header>Convertible Loan Agreement</chapter_header>
 <para_1><span_smallcaps>This agreement</span_smallcaps> is made on <textvar name="Output Date" /> between</para_1>
 <? for (var i in data.parties.investor) { ?>
-<parties><?=    data.parties.investor[i].name ?> (<?= data.parties.investor[i].idtype ?> <span_ucnum><?= data.parties.investor[i].id ?></span_ucnum>), <? if (data.parties.investor[i].investortype == "company") { ?>
-a company incorporated in <?= data.parties.investor[i].state ?> with its registered office at <?= data.parties.investor[i].address ?>
-<?     } else { ?>
-a citizen of <?= data.parties.investor[i].state ?> resident at (or receiving official notices at) <?= data.parties.investor[i].address ?>
-<?     } ?>
-</parties>
+<parties><?!= include("inc_party", data, data.parties.investor[i]) ?></parties>
 <? } ?>
-<para_2><?   if (data.parties.investor.length > 1)           { ?>(the "Investors")
-<?   } else                                          { ?>(the "Investor")<?  } ?></para_2>
+<para_1><?   if (data.parties.investor.length > 1)           { ?>(the "Investors")
+<?   } else                                          { ?>(the "Investor")<?  } ?></para_1>
 
-<? for (var i in data.parties.company) { ?>
-<parties><?=    data.parties.company[i].name ?> (<?= data.parties.company[i].idtype ?> <span_ucnum><?= data.parties.company[i].id ?></span_ucnum>), a company incorporated in <?= data.parties.company[i].state ?> with its registered office at <?= data.parties.company[i].address ?></parties>
-<?  } ?>
-<para_2>(the "Company")</para_2>
+<parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
 <para_1>(collectively, the "Parties")</para_1>
 
 <para_1><span_smallcaps>Whereas:</span_smallcaps></para_1>
   <recitals>The Company is a private company incorporated in Singapore limited by shares.</recitals>
+  <recitals>The Investor wishes to invest in the Company.</recitals>
   <recitals>The Investor and the Company desire and wish to enter into this Agreement to regulate the affairs of the Company and the relationship between the Parties.</recitals>
   <para_1><span_smallcaps>It is hereby agreed</span_smallcaps> as follows:</para_1>
 
@@ -62,7 +55,7 @@ a citizen of <?= data.parties.investor[i].state ?> resident at (or receiving off
 
   <a_left_sidehead>Definitions</a_left_sidehead>
   <numbered_2_para>In this Agreement, except to the extent that the context otherwise requires, the following terms shall have the meanings set forth below:</numbered_2_para>
-  <definition>Qualified Financing	The issuing of equity securities (&#8220;Equity Securities&#8221;) in a transaction or series of related transactions resulting in aggregate gross proceeds to the Company of at least <?= data.qualified_financing ?> including conversion of the Notes and any other indebtedness.</definition>
+  <definition>Qualified Financing	The issuing of equity securities (&#8220;Equity Securities&#8221;) in a transaction or series of related transactions resulting in aggregate gross proceeds to the Company of at least <?= data.qualified_financing ?> excluding conversion of the Notes and any other indebtedness.</definition>
   <a_left_sidehead>Subscription</a_left_sidehead>
   <numbered_2_para>The Investor agrees to invest a total consideration worth <?= data.parties.investor[0].commitment ?> (the &#8220;Investment Amount&#8221;) in the Company by way of convertible promissory notes (the &#8220;Notes&#8221;) issued by the Company to the Investor.</numbered_2_para>
 
@@ -70,7 +63,7 @@ a citizen of <?= data.parties.investor[i].state ?> resident at (or receiving off
   <numbered_2_para>The Notes issued to the Investor form part of a series of such Notes issued on essentially identical terms except that the Investor, Investment Amount<?= data.variable_terms ?> and Closing Date may change from Note to Note. The total amount of the Series shall not exceed <?= data.amount_raising ?> without the written agreement of all the holders of the Notes in the Series currently outstanding.</numbered_2_para>
 
   <a_left_sidehead>Maturity Date</a_left_sidehead>
-  <numbered_2_para>The Notes and unpaid accrued interest on the Notes will be due and payable <?= data.term ?> from the date of the signing of this Agreement (the &#8220;<b>Maturity Date</b>&#8221;).</numbered_2_para>
+  <numbered_2_para>The Principal <? if (data.interest != 0) { ?>and unpaid accrued interest on<? } else { ?>of<? } ?> the Notes will be due and payable <?= data.term ?> from the date of the signing of this Agreement (the &#8220;<b>Maturity Date</b>&#8221;).</numbered_2_para>
 
 
   <a_left_sidehead>Interest</a_left_sidehead>
@@ -106,8 +99,8 @@ The Notes shall bear no interest. <? } ?>
 
 
 
-  <a_left_sidehead>Participation Rights</a_left_sidehead>
-  <numbered_2_para>After converting to Equity Securities upon the conditions laid out in clauses 6 and 7, Investor will have the rights to participate in subsequent financing rounds of the Company in order to maintain their percentage shareholding in the Company, calculated on fully-diluted basis.</numbered_2_para>
+  <a_left_sidehead>Participation Right</a_left_sidehead>
+  <numbered_2_para>After converting to Equity Securities upon the conditions laid out in clauses 6 and 7, Investor will have the right to participate in the Qualified Financing and in subsequent financing rounds of the Company in order to maintain their percentage shareholding in the Company, calculated on fully-diluted basis. Should the Company issue equity securities or securities convertible to equity, subsequent to the current Series, but prior to the Qualified Financing, the Company shall give the Investor notice of the terms of that financing. If the terms of that financing are superior to the present terms, then the Investor shall possess the right to participate in such a financing.</numbered_2_para>
 
 
   <a_left_sidehead>Amendment and Waiver</a_left_sidehead>

@@ -47,7 +47,7 @@
 <Table aid:table="table" aid:tcols="2" aid:trows="18" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
 <?!= cell_l ?>Issuer</cell></Cell>
 <?!= cell_r ?><?= data.company.name ?> (the "Company")</cell_fl></Cell>
-<?!= cell_l ?>Financing Amount</cell></Cell>
+<?!= cell_l ?>Total Financing Amount</cell></Cell>
 <?!= cell_r ?>Up to <?= data.amount_raising ?> worth of <?= data.security_type_plural ?> (the "<?= data.security_type_short_plural ?>")</cell_fl></Cell>
 <?!= cell_l ?>Closings</cell></Cell>
 <?!= cell_r ?>The Company may close the sale of the <?= data.security_type_short_plural ?> in one or more closings with one or more purchasers of the <?= data.security_type_short_plural ?> acceptable to the Company (the "Investors") with identical terms and on the same form as set forth herein<?
@@ -56,7 +56,7 @@
 <?!= cell_l ?>Investment Amount</cell></Cell>
 <?!= cell_r ?>The amount invested by an Investor for the purchase of such Investor's <?= data.security_type_plural ?> (the "Investment Amount")</cell_fl></Cell>
 <?!= cell_l ?>Definitive Agreement</cell></Cell>
-<?!= cell_r ?>The <?= data.security_type_short_plural ?> will be issued and sold pursuant to a purchase agreement prepared by the Company's legal counsel (the "<?= data.security_type_short_singular ?> Purchase Agreement").</cell_fl></Cell>
+<?!= cell_r ?>The <?= data.security_type_short_plural ?> will be issued and sold pursuant to a purchase agreement prepared by the Company (the "<?= data.security_type_short_singular ?> Purchase Agreement").</cell_fl></Cell>
 <? var and_interest_on = "of" ?>
 <?!= cell_l ?>Interest</cell></Cell>
 <?!= cell_r ?><? if (data.interest > 0) { ?>
@@ -88,7 +88,9 @@ if (data.converts_to.match(/Ordinary Shares|Common Stock/i)) { ?>ordinary voting
 <cell_numbered_1 restart="true">the Investor shall receive a payment equal to <?= data.acquisition_preference ?> times the Notes, or
 the entire Investment Amount shall convert into Equity Securities at the Valuation Cap.</cell_numbered_1></Cell>
 <?!= cell_l ?>Pre-Payment</cell></Cell>
-<?!= cell_r ?>The principal <?= and_interest_on ?> the <? data.security_type_short_plural ?> may not be prepaid unless approved in writing by Investors holding Notes whose aggregate principal amount represents a majority of the outstanding principal amount of all then-outstanding Notes (the "Requisite Holders").</cell_fl></Cell>
+<?!= cell_r ?>The principal <?= and_interest_on ?> the <?= data.security_type_short_plural ?> may not be prepaid unless approved in writing by Investors holding Notes whose aggregate principal amount represents a majority of the outstanding principal amount of all then-outstanding Notes (the "Requisite Holders").</cell_fl></Cell>
+<?!= cell_l ?>Participation Right</cell></Cell>
+<?!= cell_r ?>Investor shall hold pre-emptive rights to participate in any future issue of equity securities (or securities convertible to equity), including the Qualified Financing.</cell></Cell>
 <?!= cell_l ?>Amendment and Waiver</cell></Cell>
 <?!= cell_r ?>The Note Purchase Agreement and the Notes may be amended, or any term thereof waived, upon the written consent of the Company and the Requisite Holders.</cell_fl></Cell>
 <?!= cell_l ?>No Security Interest</cell></Cell>
