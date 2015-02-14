@@ -44,7 +44,7 @@
 // 
 // But some routines are not launched from the Legalese menu. The form's submission callback writes to a sheet. How will it know which sheet to write to?
 //
-// Whenever we create a form, we shall record the ID of the then activeSheet into a DocumentProperty, "formActiveSheetId".
+// Whenever we create a form, we shall record the ID of the then activeSheet into a UserProperty, "formActiveSheetId".
 // Until the form is re-created, all submissions will feed that sheet.
 //
 // What happens if the user starts working on a different sheet? The user may expect that form submissions will magically follow their activity.
@@ -104,7 +104,7 @@ function getSheetById(ss, id) {
 }
 
 function formActiveSheetChanged(sheet) {
-  var formActiveSheetId = PropertiesService.getDocumentProperties().getProperty("legalese."+sheet.getParent().getId()+".formActiveSheetId");
+  var formActiveSheetId = PropertiesService.getUserProperties().getProperty("legalese."+sheet.getParent().getId()+".formActiveSheetId");
   if (formActiveSheetId == undefined)              { return false }
   if (            sheet == undefined)              { return false }
   if (sheet.getParent().getFormUrl() == undefined) { return false }
@@ -159,7 +159,7 @@ function alertIfActiveSheetChanged(sheet) {
 	 ! muteFormActiveSheetWarnings()) {
 
 	var ui = SpreadsheetApp.getUi();
-	var formActiveSheet = getSheetById(sheet.getParent(), PropertiesService.getDocumentProperties().getProperty("legalese."+sheet.getParent().getId()+".formActiveSheetId"));
+	var formActiveSheet = getSheetById(sheet.getParent(), PropertiesService.getUserProperties().getProperty("legalese."+sheet.getParent().getId()+".formActiveSheetId"));
 	
 	var response = ui.alert("Potential Form Mismatch",
 							"Your form submits to " + formActiveSheet.getSheetName() + " but you are working on " + sheet.getSheetName() +".\nMute this warning?",
@@ -246,14 +246,14 @@ function setupForm_(sheet) {
   // Create the form and add a multiple-choice question for each timeslot.
   form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
   Logger.log("setting form destination to %s", ss.getId());
-  PropertiesService.getDocumentProperties().setProperty("legalese."+ss.getId()+".formActiveSheetId", sheet.getSheetId().toString());
+  PropertiesService.getUserProperties().setProperty("legalese."+ss.getId()+".formActiveSheetId", sheet.getSheetId().toString());
   Logger.log("setting formActiveSheetId to %s", sheet.getSheetId().toString());
 
   var origpartyfields = data._origpartyfields;
   Logger.log("origpartyfields = " + origpartyfields);
   for (var i in origpartyfields) {
 	var partyfield = origpartyfields[i];
-	Logger.log("partyfield "+i+" = " + partyfield);
+	Logger.log("partyfield "+i+" = " + partyfield.fieldname);
 	if (partyfield.itemtype.match(/^list/)) {
 	  var enums = partyfield.itemtype.split(' ');
 	  enums.shift();
@@ -379,7 +379,7 @@ function treeify_(root, arr) {
 function onFormSubmit(e) {
   Logger.log("onFormSubmit: beginning");
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheetId = PropertiesService.getDocumentProperties().getProperty("legalese."+ss.getId()+".formActiveSheetId");
+  var sheetId = PropertiesService.getUserProperties().getProperty("legalese."+ss.getId()+".formActiveSheetId");
 
   if (sheetId == undefined) { // uh-oh
 	Logger.log("onFormSubmit: no formActiveSheetId property, so I don't know which sheet to record party data into. bailing.");
@@ -771,12 +771,13 @@ function otherSheets() {
 	  return;
 	}
 	var sheet = getSheetById(ss, myRow.getValues()[0][1])
+	Logger.log("smoochy says otherSheets: sheet %s is on row %s", i.toString(), myRow.getRowIndex().toString());
 	myRow.getCell(1,3).setValue("=HYPERLINK(\""
 								+sheet.getParent().getUrl()
 								+"#gid="
 								+sheet.getSheetId()
 								+"\",\""
-								+sheet.getName()
+								+sheet.getParent().getName()
 								+"\")");
 	toreturn.push(sheet);
   }
@@ -799,6 +800,11 @@ function setupOtherForms() {
   for (var i = 0; i < sheets.length; i++) {
 	var sheet = sheets[i];
 	setupForm_(sheet);
+	var myRow = SpreadsheetApp.getActiveRange().getSheet().getRange(SpreadsheetApp.getActiveRange().getRow()+i, 1, 1, 10);
+	Logger.log("smoochy says setupOtherForms: sheet %s is on row %s", i.toString(), myRow.getRowIndex().toString());
+	myRow.getCell(1,7).setValue('=IMPORTRANGE(A'
+								+myRow.getRowIndex()
+								+',"Founder Agreement!e4")');
   }
 }
 
@@ -813,11 +819,15 @@ function fillOtherTemplates() {
 	var uniq = uniqueKey(sheet);
 
 	var myRow = SpreadsheetApp.getActiveSheet().getRange(SpreadsheetApp.getActiveRange().getRow()+i, 1, 1, 10);
+
 	myRow.getCell(1,4).setValue("=HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"
 								+JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese."+uniq+".folder.id"))
 								+"\",\""
 								+JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese."+uniq+".folder.name"))
 								+"\")");
+
+	// this loses the hyperlink
+	// myRow.getCell(1,4).setValue('=IMPORTRANGE(A' +myRow.getRowIndex() +',"Founder Agreement!e6")');
 
 	myRow.getCell(1,5).setValue("unsent");
   }
@@ -1438,11 +1448,7 @@ function fauxMegaSign(sheet) {
 							);
 	
 	party._commit_update_to.legalese_status.setValue("mailed echosign " + now);
-
 	Logger.log("fauxMegaSign: well, that seems to have worked!");
-
-	var cell = sheet.getRange("E8");
-	cell.setValue("=HYPERLINK(\""+acr.url+"\",\"EchoSign\")")
   }
   Logger.log("fauxMegaSign: that's all, folks!");
 }
@@ -1557,8 +1563,6 @@ function uploadAgreement(sheet) {
 
 	Logger.log("uploadAgreement: well, that seems to have worked!");
 
-	var cell = sheet.getRange("E8");
-	cell.setValue("=HYPERLINK(\""+acr.url+"\",\"EchoSign\")")
   }
 
   Logger.log("uploadAgreement: that's all, folks!");
