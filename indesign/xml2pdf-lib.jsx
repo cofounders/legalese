@@ -17,11 +17,15 @@ function xmls2pdf(xmlFiles, indtFile, showingWindow) {
 	  var doc = importXmlIntoTemplate(xmlFile, indtFile, showingWindow);
 	  doc.recompose(); // force smart text reflow otherwise the signature fields won't add properly.
 	  addCrossReferences(doc);
+	  doc.recompose();
+	  logToFile("xmls2pdf: about to constructFormFields");
 	  constructFormFields(doc);
 	  // findAndReplace(doc); change " to ''
 	  // trim trailing newlines from the document. not quite sure how to do this.
 	  doc.recompose();
+	  logToFile("xmls2pdf: about to exportToPDF");
 	  exportToPDF(doc, xmlFile);
+	  logToFile("xmls2pdf: about to saveAsIndd");
 	  saveAsIndd(doc, xmlFile);
 	  if (! showingWindow) doc.close();
 	  logToFile("xmls2pdf: finished " + xmlFile.fullName);
@@ -129,6 +133,12 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
 
   doc.mapXMLTagsToStyles();
 
+
+  // findReplaceFixes
+  findReplaceFixes(doc, doc.stories);
+
+  doc.stories.everyItem().recompose();
+
   __processRuleSet(doc.xmlElements.item(0), [new RestartParagraphNumbering(doc,importMaps)
 											]);
 
@@ -161,6 +171,46 @@ function AddReturns(doc, importMaps){
 	}
     return false;
   }
+}
+
+// -------------------------------------------------- findReplaceFixes
+function findReplaceFixes(doc, stories) { 
+    //Clear the find/change text preferences.
+    app.findTextPreferences = NothingEnum.nothing;
+    app.changeTextPreferences = NothingEnum.nothing;
+
+    //Set the find options.
+    app.findChangeTextOptions.caseSensitive = false;
+    app.findChangeTextOptions.includeFootnotes = false;
+    app.findChangeTextOptions.includeHiddenLayers = false;
+    app.findChangeTextOptions.includeLockedLayersForFind = false;
+    app.findChangeTextOptions.includeLockedStoriesForFind = false;
+    app.findChangeTextOptions.includeMasterPages = false;
+    app.findChangeTextOptions.wholeWord = false;
+
+    // equivalent to the preset that replaces dumb doublequotes with smart doublequotes
+    app.findTextPreferences.findWhat = '^"';
+    app.changeTextPreferences.changeTo = '"';
+    stories.everyItem().changeText();
+
+    // equivalent to the preset that replaces dumb singlequotes with smart singlequotes
+    app.findTextPreferences.findWhat = '^\'';
+    app.changeTextPreferences.changeTo = '\'';
+    stories.everyItem().changeText();
+
+    // replace triple dashes with single emdash
+    app.findTextPreferences.findWhat = '---';
+    app.changeTextPreferences.changeTo = '^_';
+    stories.everyItem().changeText();
+
+    // equivalent to the preset that replaces a double dash with a single endash
+    app.findTextPreferences.findWhat = '--';
+    app.changeTextPreferences.changeTo = '^=';
+    stories.everyItem().changeText();
+
+    //Clear the find/change text preferences after the search.
+    app.findTextPreferences = NothingEnum.nothing;
+    app.changeTextPreferences = NothingEnum.nothing;
 }
 
 
@@ -221,8 +271,18 @@ function AddFormFields(doc) {
 //	app.layoutWindows.item(0).zoom(ZoomOptions.FIT_PAGE);
 
 	var myInsertionPoint = el.paragraphs.item(0).insertionPoints.item(2);
+
+	// this is really weird. every other time i run this, it dies trying to add a signaturefield.
+	if (! myInsertionPoint.isValid) {
+	  alert("insertion point is invalid.");
+	} else {
+//	  alert("insertion point is valid: " + myInsertionPoint);
+	}
+	
+	$.sleep(1000);
 	
 	var signatureField = myInsertionPoint.signatureFields.add({geometricBounds:[0,0,55,216], pinPosition:false});
+//	alert("created signatureField. recomposing.");
 	doc.recompose(); // recompose because adding that newline may have caused text to overset.
 
 	signatureField.geometricBounds = [0,0,55,216];
