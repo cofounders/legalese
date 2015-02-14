@@ -274,18 +274,30 @@ function AddFormFields(doc) {
 
 	// this is really weird. every other time i run this, it dies trying to add a signaturefield.
 	if (! myInsertionPoint.isValid) {
+	  logToFile("insertion point is invalid.");
 	  alert("insertion point is invalid.");
 	} else {
+	  logToFile("insertion point is valid.");
+	  if (myInsertionPoint.signatureFields != undefined) {
+		logToFile("insertion point signaturefields is " + myInsertionPoint.signatureFields);
+	  }		
+		
 //	  alert("insertion point is valid: " + myInsertionPoint);
 	}
 	
-	$.sleep(1000);
-	
 	var signatureField = myInsertionPoint.signatureFields.add({geometricBounds:[0,0,55,216], pinPosition:false});
+
+	// {geometricBounds:[0,0,55,216], pinPosition:false});
+
 //	alert("created signatureField. recomposing.");
+	logToFile("created signatureField. recomposing. " +signatureField );
+
 	doc.recompose(); // recompose because adding that newline may have caused text to overset.
 
-	signatureField.geometricBounds = [0,0,55,216];
+	logToFile("recompose complete. signatureField is " + signatureField);
+	logToFile("recompose complete. signatureField.isValid is " + signatureField.isValid);
+	logToFile("signatureField properties = "+ signatureField.properties.toString());
+	logToFile("signatureField geometricbounds = "+ signatureField["geometricBounds"]);
 	with(signatureField.anchoredObjectSettings){
 	  anchoredPosition = AnchorPosition.anchored;
 	  anchorPoint = AnchorPoint.topLeftAnchor;
@@ -298,14 +310,17 @@ function AddFormFields(doc) {
 	}
 	// https://secure.echosign.com/doc/TextFormsTutorial.pdf
 	// http://bgsfin.com/Add-Ons/SmartFormsTutorial.pdf
+	logToFile("anchoredObjectSettings done.");
 
-	logToFile("el.xmlAttributes.item(unmailed) = " + el.xmlAttributes.item("unmailed").value);
-
-	if (el.xmlAttributes.item("unmailed").value == "true") {
-	  var signatureCount = el.xmlAttributes.item("esnum").value;
-	  signatureField.name = "legalese_es_signer" + signatureCount + "_signature";
+	if (el.xmlAttributes.item("unmailed").isValid) {
+	  logToFile("el.xmlAttributes.item(unmailed) = " + el.xmlAttributes.item("unmailed").value);
+	  
+	  if (el.xmlAttributes.item("unmailed").value == "true") {
+		var signatureCount = el.xmlAttributes.item("esnum").value;
+		signatureField.name = "legalese_es_signer" + signatureCount + "_signature";
+	  }
 	}
-
+	
 	doc.recompose();
 
 	return false;
