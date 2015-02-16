@@ -284,20 +284,12 @@ function AddFormFields(doc) {
 		
 //	  alert("insertion point is valid: " + myInsertionPoint);
 	}
+
+	logToFile("about to attempt .add(), which is a " + myInsertionPoint.signatureFields.add );
 	
-	var signatureField = myInsertionPoint.signatureFields.add({geometricBounds:[0,0,55,216], pinPosition:false});
+	var signatureField = myInsertionPoint.signatureFields.add();
+	logToFile("created signatureField. setting anchored object settings. " +signatureField );
 
-	// {geometricBounds:[0,0,55,216], pinPosition:false});
-
-//	alert("created signatureField. recomposing.");
-	logToFile("created signatureField. recomposing. " +signatureField );
-
-	doc.recompose(); // recompose because adding that newline may have caused text to overset.
-
-	logToFile("recompose complete. signatureField is " + signatureField);
-	logToFile("recompose complete. signatureField.isValid is " + signatureField.isValid);
-	logToFile("signatureField properties = "+ signatureField.properties.toString());
-	logToFile("signatureField geometricbounds = "+ signatureField["geometricBounds"]);
 	with(signatureField.anchoredObjectSettings){
 	  anchoredPosition = AnchorPosition.anchored;
 	  anchorPoint = AnchorPoint.topLeftAnchor;
@@ -307,10 +299,21 @@ function AddFormFields(doc) {
 	  verticalReferencePoint = VerticallyRelativeTo.lineBaseline;
 	  anchorYoffset = 0;
 	  anchorSpaceAbove = 0;
+	  pinPosition = false;
 	}
+
+	logToFile("settings set. resizing. " +signatureField );
+	signatureField.geometricBounds = [0,0,55,216];
+
+	logToFile("resize complete. recomposing. " +signatureField );
+	doc.recompose(); // recompose because adding that newline may have caused text to overset.
+
+	logToFile("recompose complete. signatureField is " + signatureField);
+	logToFile("recompose complete. signatureField.isValid is " + signatureField.isValid);
+	logToFile("signatureField properties = "+ signatureField.properties.toString());
+	logToFile("signatureField geometricbounds = "+ signatureField["geometricBounds"]);
 	// https://secure.echosign.com/doc/TextFormsTutorial.pdf
 	// http://bgsfin.com/Add-Ons/SmartFormsTutorial.pdf
-	logToFile("anchoredObjectSettings done.");
 
 	if (el.xmlAttributes.item("unmailed").isValid) {
 	  logToFile("el.xmlAttributes.item(unmailed) = " + el.xmlAttributes.item("unmailed").value);
