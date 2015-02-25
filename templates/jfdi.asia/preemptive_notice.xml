@@ -68,7 +68,7 @@ I would like to subscribe for $			 worth of those securities, with the understan
 <b_left_sidehead>Sign only if you want to participate in the round.</b_left_sidehead>
 
 <? for (var i = 0; i < data.parties.investor.length; i++) { ?>
-<?!= include("inc_signature", data, data.parties.shareholder[i]) ?>
+<?!= include("inc_signature", data, data.parties.investor[i]) ?>
 <? } ?>
 
 </Story_Main>
