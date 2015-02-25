@@ -90,7 +90,7 @@ the entire Investment Amount shall convert into Equity Securities at the Valuati
 <?!= cell_l ?>Pre-Payment</cell></Cell>
 <?!= cell_r ?>The principal <?= and_interest_on ?> the <?= data.security_type_short_plural ?> may not be prepaid unless approved in writing by Investors holding Notes whose aggregate principal amount represents a majority of the outstanding principal amount of all then-outstanding Notes (the "Requisite Holders").</cell_fl></Cell>
 <?!= cell_l ?>Participation Right</cell></Cell>
-<?!= cell_r ?>Investor shall hold pre-emptive rights to participate in any future issue of equity securities (or securities convertible to equity), including the Qualified Financing.</cell></Cell>
+<?!= cell_r ?>Investor shall hold pre-emptive rights to participate in any future issue of equity securities (or securities convertible to equity), including the Qualified Financing.</cell_fl></Cell>
 <?!= cell_l ?>Amendment and Waiver</cell></Cell>
 <?!= cell_r ?>The Note Purchase Agreement and the Notes may be amended, or any term thereof waived, upon the written consent of the Company and the Requisite Holders.</cell_fl></Cell>
 <?!= cell_l ?>No Security Interest</cell></Cell>
