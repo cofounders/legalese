@@ -85,7 +85,7 @@
 <b_left_sidehead>The Current Shareholders</b_left_sidehead>
 
 <? for (var i = 0; i < data.parties.existing_shareholder.length; i++) { ?>
-<?!= include("inc_signature", data, data.existing_shareholder.company[i]) ?>
+<?!= include("inc_signature", data, data.parties.existing_shareholder[i]) ?>
 <? } ?>
 
 </Story_Main>
