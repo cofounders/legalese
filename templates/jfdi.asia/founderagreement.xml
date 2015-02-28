@@ -68,11 +68,11 @@ Upon demonstrating early traction and a complete team, the Founders will be invi
 <bullets>scalable traction: sales and user growth that does not require direct involvement by the Founders.
 proof of revenue: that some percentage of leads or users are willing to pay.</bullets>
 <numbered_1_para>JFDI.2014 shall, at time of admission to the &#8220;Accelerate&#8221; phase, invest a total of <?= data.parties.investor[0].commitment ?> into the Startup;</numbered_1_para>
-<para_2>and <? if (! data.previously_incorporated) { ?>the Founders shall procure that <? } ?>in consideration of this investment <? if (data.intangibles_clause) { ?>and for other good and valuable consideration which the Parties agree to value at s$150,000,
+<para_2>and <? if (! data.previously_incorporated) { ?>the Founders shall procure that <? } ?>in consideration of this investment <? if (data.intangibles_clause) { ?>and for other good and valuable consideration which the Parties agree to value at S$150,000,
 <? } ?>
-the Startup shall authorise and issue convertible debt, equity, or other such security in the corporation such that, immediately prior to the Next External Financing, JFDI.2014 will own a certain percentage (the &#8220;Conversion Percentage&#8221;) of the total capital in the Startup, on a fully-diluted, as-if-converted basis.</para_2>
-<numbered_1_para>The Next External Financing refers to the first financing event subsequent to JFDI.2014&#8217;s investment in which the Startup raises more than <?= data.qualified_financing_round_size ?> within one round or series.
-The Conversion Percentage shall be fixed at the start of the &#8220;Accelerate&#8221; phase<?
+the Startup shall authorise and issue <? if (data.jfdi_standard_valuation == true) { ?>convertible debt, equity, or other such security in the corporation such that, immediately prior to the Next External Financing, JFDI.2014 will own a certain percentage (the &#8220;Conversion Percentage&#8221;) of the total capital in the Startup, on a fully-diluted, as-if-converted basis.<? } else { ?><?= data.nonstandard_valuation_text ?><? } ?></para_2>
+<numbered_1_para>The Next External Financing refers to the first financing event subsequent to JFDI.2014&#8217;s investment in which the Startup raises more than <?= data.qualified_financing_round_size ?> within one round or series<? if (data.qualified_round_type != undefined) { ?> of <?= data.qualified_round_type ?> securities<? } ?>.
+<? if (data.jfdi_standard_valuation == true ) { ?>The Conversion Percentage shall be fixed at the start of the &#8220;Accelerate&#8221; phase<?
 if (data.valuation_basis == "table") { ?>, and determined according to the following valuation table, or as agreed between the Startup and JFDI.2014.
 </numbered_1_para>
 <table_enclosing_para><Table aid:table="table" aid:tcols="2" aid:trows="6" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
@@ -92,7 +92,7 @@ if (data.valuation_basis == "table") { ?>, and determined according to the follo
 else if (data.valuation_basis == "existing") { ?>, and determined on the basis of the valuation set in the previous round of financing by professional investors.<? }
 else if (data.valuation_basis == "discussion") { ?>, and determined as agreed by the Parties.<? }
 else if (data.valuation_basis == "fixed") { ?> at <?= data.agreed_percentage ?>.<? } ?>
-<numbered_1_para>The Founders shall travel to and from Singapore at their own expense. JFDI.Asia and JFDI.2014 shall not be obligated to reimburse any expenses incurred, or transfer any funds to the Founders or to their Startup, prior to formal acceptance to the Accelerate phase.
+<? } ?><numbered_1_para>The Founders shall travel to and from Singapore at their own expense. JFDI.Asia and JFDI.2014 shall not be obligated to reimburse any expenses incurred, or transfer any funds to the Founders or to their Startup, prior to formal acceptance to the Accelerate phase.
 Formal acceptance to the Accelerate phase will be offered as soon the Founders demonstrate, to JFDI.Asia's satisfaction, that they can:
 </numbered_1_para><bullets>articulate their innovation insight
 articulate their industry dynamics
