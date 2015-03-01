@@ -53,11 +53,13 @@
  by virtue of a Convertible Loan Agreement executed on or about <?= data.original_agreement_date ?>, in the total amount of <?= data.principal_amount ?><?
    if (data.interest != 0) { ?> (plus any accrued and unpaid interest)<? } ?>
  (the "Loan Amount");</para_1>
-<para_1>In view of the Company's expressed intention to cease operations, we<?
+<para_1><i>In view of the Company's expressed intention to cease operations,</i>
+We<?
    if (data.parties.investor.filter(function(inv){return inv.investortype == "company"})) { ?>, being appointed corporate representatives of<? } ?>
 <?  if (data.parties.investor.length > 1)           { ?> the Investors<?   }
     else                                            { ?> the Investor<?  } ?>
- do hereby agree and declare that we irrevocably and unconditionally waive with immediate effect the Loan Amount due and owing by the Company in its entirety, and that we release and discharge the Company absolutely from the said loan, so that the Company may be struck off with a minimum of difficulty.
+ do hereby agree and declare that we irrevocably and unconditionally waive with immediate effect the Loan Amount due and owing by the Company in its entirety, and that we release and discharge the Company absolutely from the said loan,
+<i>so that the Company may be struck off with a minimum of difficulty.</i>
 
 
 
