@@ -42,8 +42,8 @@
 <?   if (data.parties.investor.length > 1)           { ?><parties><? } ?>
 <?!= include("inc_party", data, data.parties.investor[i]) ?>
 <?   if (data.parties.investor.length > 1)           { ?></parties>
-<?   } else                                          { ?> <? } ?>
-<? } ?>
+<?   } else                                          { ?> <? } ?><?
+ } ?>
 <?   if (data.parties.investor.length > 1)           { ?><para_1>(the "Investors")
 <?   } else                                          {         ?>(the "Investor")<?  } ?>
 </para_1>
