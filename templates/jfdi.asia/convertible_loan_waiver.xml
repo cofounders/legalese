@@ -40,7 +40,7 @@
    for (var i in data.parties.investor) { ?>
 <?   if (data.parties.investor.length > 1 && i == 0) { ?></para_1><? } ?>
 <?   if (data.parties.investor.length > 1)           { ?><parties><? } ?>
-<?!= include("lib_party", data, data.parties.investor[i]) ?>
+<?!= include("inc_party", data, data.parties.investor[i]) ?>
 <?   if (data.parties.investor.length > 1)           { ?></parties>
 <?   } else                                          { ?> <? } ?>
 <? } ?>
@@ -69,42 +69,21 @@
 
 
 
-<!-- rephrase the below so that xml2html doesn't barf on the protect problem -->
-
 <? if (data.parties.investor.length == 1) { ?>
 
 <b_left_sidehead>For the Investor <?= data.parties.investor[0].name ?></b_left_sidehead>
 
-<? var columnWidth = "<Cell aid:ccols=\"1\" aid:ccolwidth=\"150\" aid:crows=\"1\" aid:table=\"cell\">"; ?>
-<? var endCell = "</Cell>"; ?>
 <? for (var i = 0; i < data.parties.corporate_representative.length; i++) { ?>
-<?   var party = data.parties.corporate_representative[i]; ?>
-<para_1 class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
-<Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
-<?!= columnWidth ?><cell><?= party.name  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.signatory_role ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= data.parties.investor[0].name ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
-</Table></para_1>
+<?!= include("inc_signature", data, data.parties.corporate_representative[i]) ?>
 <? } ?>
 
-<? } else { /* mulitple investors */ ?>
+<? } else { ?>
 
-<? var columnWidth = "<Cell aid:ccols=\"1\" aid:ccolwidth=\"150\" aid:crows=\"1\" aid:table=\"cell\">"; ?>
-<? var endCell = "</Cell>"; ?>
 <? for (var i = 0; i < data.parties.investor.length; i++) { ?>
-<?   var party = data.parties.investor[i]; ?>
-<para_1 class="signatureblock" unmailed="<?= party._unmailed ?>"<? if(party._unmailed) { ?><?!= " esnum=\"" + party._es_num + "\"" ?><? } ?>>
-<Table aid:table="table" aid:tcols="1" aid:trows="4" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
-<?!= columnWidth ?><cell><?= party.signatory_name  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.signatory_role  ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.name ?></cell><?!= endCell ?>
-<?!= columnWidth ?><cell><?= party.email  ?></cell><?!= endCell ?>
-</Table></para_1>
+<?!= include("inc_signature", data, data.parties.investor[i]) ?>
 <? } ?>
 
 <? } ?>
-
 
 </Story_Main>
 </Root>
