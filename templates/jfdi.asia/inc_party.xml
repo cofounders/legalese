@@ -4,4 +4,3 @@ a company incorporated in <?= data._include.state ?> with its registered office 
 <?     } else { ?>
 a citizen of <?= data._include.state ?> resident at (or receiving official notices at) <?= data._include.address ?>
 <?     } ?>
-
