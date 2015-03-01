@@ -27,7 +27,7 @@
 </CoverBottom_Address>
 
 <CoverBottom_series>
-<centered><textvar name="Output Date" />&#8195;<textvar name="output time" /></centered>
+<centered><textvar name="Output Date" />&#8195;<span_smallcaps><textvar name="output time" /></span_smallcaps></centered>
 <centered>version 1.0.0</centered>
 </CoverBottom_series>
 
