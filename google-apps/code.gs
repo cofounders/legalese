@@ -214,6 +214,10 @@ function setupForm_(sheet) {
 
 	if (response.getSelectedButton() == ui.Button.NO) { return }
 	cell.setValue("resetting form"); SpreadsheetApp.flush();
+
+	// resetting the form internals isn't enough because the form title may have changed.
+	// TODO: delete the old form. delete the old onSubmit Trigger. then recreate the form entirely from scratch.
+
     form = FormApp.openByUrl(form);
 	var items = form.getItems();
 	for (var i in items) {
@@ -1191,11 +1195,12 @@ function getEchoSignService() {
       .setPropertyStore(PropertiesService.getDocumentProperties())
 
       // Set the scopes to request (space-separated for Google services).
-      .setScope('agreement_read agreement_send agreement_write user_login library_read library_write');
+      .setScope('agreement_read agreement_send agreement_write user_login');
 
   var ssid = SpreadsheetApp.getActiveSpreadsheet().getId();
   var ssname = SpreadsheetApp.getActiveSpreadsheet().getName();
 
+  // TODO: see line 1254 of showSidebar. refactor this chunk so that it's available for showSidebar's purposes.
   var esApps = {
 	"2014B DD3 Disclaimer" : { 
 	  clientId:"BGT7YYB6QWXA7F", 
@@ -1245,6 +1250,10 @@ function showSidebar(sheet) {
   var echosignService = getEchoSignService();
   echosignService.reset();
   // blow away the previous oauth, because there's a problem with using the refresh token after the access token expires after the first hour.
+
+  // TODO: don't show the sidebar if our spreadsheet's project doesn't have an associated openid at the echosign end.
+  // because sometimes the controller does the thing, and this version of code.gs is only used for the form submit callback,
+  // but not for Send to EchoSign.
 
   if (echosignService.hasAccess()) {
 	Logger.log("showSidebar: we have access. doing nothing.");
