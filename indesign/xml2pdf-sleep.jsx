@@ -37,7 +37,7 @@ function main() {
 	// you should just create the stop-please.txt file by hand.
   }
   else {
-	alert("starting sleep run. to stop, touch " + ROOTFOLDER + "/" + IPC_FILE);
+	alert("starting sleep run.\nto stop, touch " + ROOTFOLDER + "/" + IPC_FILE);
 	i_am_running(rootFolder);
 	while (still_want_to_run) {
 	  sleep_for_a_while(rootFolder);
