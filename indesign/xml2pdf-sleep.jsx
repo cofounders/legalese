@@ -33,9 +33,11 @@ function main() {
   if (i_was_previously_running(rootFolder)) {
 	tell_the_previous_run_to_stop(rootFolder);
 //	alert("telling previous run to stop.");
+	// i don't think this actually works because the scripts are not multithreaded.
+	// you should just create the stop-please.txt file by hand.
   }
   else {
-//	alert("previous run not found, so i am going to run. still_want_to_run = " + still_want_to_run);
+	alert("starting sleep run. to stop, touch " + ROOTFOLDER + "/" + IPC_FILE);
 	i_am_running(rootFolder);
 	while (still_want_to_run) {
 	  sleep_for_a_while(rootFolder);
