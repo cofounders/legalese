@@ -10,22 +10,30 @@
 function xmls2pdf(xmlFiles, indtFile, showingWindow) {
   if (showingWindow == undefined) showingWindow = false;
   var errors = [];
+  app.textPreferences.smartTextReflow = false;
   for (var i in xmlFiles) {
 	var xmlFile = xmlFiles[i];
 	try {
 	  logToFile("xmls2pdf: starting " + xmlFile.fullName);
 	  var doc = importXmlIntoTemplate(xmlFile, indtFile, showingWindow);
+	  doc.textPreferences.smartTextReflow = false;
+//	  doc.textPreferences.limitToMasterTextFrames = false;
+//	  doc.textPreferences.deleteEmptyPages = true;
+
 	  doc.recompose(); // force smart text reflow otherwise the signature fields won't add properly.
 	  addCrossReferences(doc);
-	  doc.recompose();
-	  logToFile("xmls2pdf: about to constructFormFields");
+	  logToFile("xmls2pdf: about to save to indd, for the first time");
+
+	  saveAsIndd(doc, xmlFile);
+
+	  logToFile("xmls2pdf: about to constructFormFields. page length is " + doc.pages.length);
 	  constructFormFields(doc);
 	  // findAndReplace(doc); change " to ''
 	  // trim trailing newlines from the document. not quite sure how to do this.
 	  doc.recompose();
 	  logToFile("xmls2pdf: about to exportToPDF");
 	  exportToPDF(doc, xmlFile);
-	  logToFile("xmls2pdf: about to saveAsIndd");
+	  logToFile("xmls2pdf: about to saveAsIndd, for the second time");
 	  saveAsIndd(doc, xmlFile);
 	  if (! showingWindow) doc.close();
 	  logToFile("xmls2pdf: finished " + xmlFile.fullName);
@@ -239,6 +247,22 @@ function RestartParagraphNumbering(doc, importMaps){
 }
 
 
+function myGetBounds(myDocument, myPage){
+	var myPageWidth = myDocument.documentPreferences.pageWidth;
+	var myPageHeight = myDocument.documentPreferences.pageHeight
+	if(myPage.side == PageSideOptions.leftHand){
+		var myX2 = myPage.marginPreferences.left;
+		var myX1 = myPage.marginPreferences.right;
+	}
+	else{
+		var myX1 = myPage.marginPreferences.left;
+		var myX2 = myPage.marginPreferences.right;
+	}
+	var myY1 = myPage.marginPreferences.top;
+	var myX2 = myPageWidth - myX2;
+	var myY2 = myPageHeight - myPage.marginPreferences.bottom;
+	return [myY1, myX1, myY2, myX2];
+}
 
 
 // -------------------------------------------------- constructFormFields
@@ -253,10 +277,77 @@ function constructFormFields(doc) {
   doc.viewPreferences.horizontalMeasurementUnits = MeasurementUnits.points;
   doc.viewPreferences.verticalMeasurementUnits = MeasurementUnits.points;
 
-//  alert("processRuleSet AddFormFields starting");
+  // if smart text reflow has not completed,
+  // then the signaturepage is in the overset region, and adding an anchored object
+  // is eventually going to barf when we try to do anything with geometricbounds.
+
+  // so we kludge by adding a last page to the document
+  // we add a text frame to that page
+  // and we manually thread the text frame
+  // https://forums.adobe.com/thread/1675713	
+  if (true) {
+	
+	doc.textPreferences.smartTextReflow = false;
+	//doc.textPreferences.limitToMasterTextFrames = false;
+	//doc.textPreferences.deleteEmptyPages = false;
+	//doc.textPreferences.addPages = AddPageOptions.END_OF_DOCUMENT;
+
+	var lastpage = doc.pages.item(-1);
+	var lasttextframe = lastpage.textFrames.item(-1);
+	logToFile("the lastpage is " + lastpage.name);
+	logToFile("the last textframe is " + lasttextframe.name);
+
+	doc.recompose();
+	logToFile("the lastpage is " + lastpage.name);
+
+	var pages_to_add = 10;
+	var new_pages = [];
+
+	logToFile("creating " + pages_to_add + " pages because smart text reflow page addition doesn't run right under scripting and creates invalid object errors when i try to create an anchored signature box.");
+	for (var i = 0; i < pages_to_add; i++) {
+	  var np = doc.pages.add();
+	  var np_textframe = np.textFrames.add({geometricBounds: myGetBounds(doc, np)});
+	  new_pages[i] = np;
+	  if (i > 0 && (i < pages_to_add-1)) { new_pages[i-1].textFrames.item(0).nextTextFrame = new_pages[i].textFrames.item(0); }
+	}
+
+	lasttextframe.nextTextFrame = new_pages[0].textFrames.item(0);
+
+	logToFile("against all odds, that succeeded");
+  }
+
+  doc.recompose();
+
+  logToFile("about to processRuleSet AddFormFields");
   __processRuleSet(doc.xmlElements.item(0), [new AddFormFields(doc)
 											]);
-//  alert("processRuleSet AddFormFields completed successfully");
+
+  logToFile("processRuleSet AddFormFields completed successfully. removing last page.");
+  // now we get rid of the excess pages.
+	doc.textPreferences.smartTextReflow = true;
+	doc.textPreferences.limitToMasterTextFrames = false;
+	doc.textPreferences.deleteEmptyPages = true;
+
+  // trigger smart text reflow by adding a new textframe.
+
+  logToFile("trigger reflow by linking last text frames");
+  var lasttextframe = doc.pages.item(-2).textFrames.item(0);
+  var  newtextframe = doc.pages.item(-1).textFrames.item(0);
+  logToFile("attaching text frames");
+  lasttextframe.nextTextFrame = newtextframe;
+  logToFile("new text frame added.");
+
+	var myProfile = app.preflightProfiles.item(0);
+	var myProcess = app.preflightProcesses.add(doc, myProfile);
+	logToFile("giving time for smart text reflow");
+	myProcess.waitForProcess(20);
+	myProcess.remove();
+//	alert("giving time for smart text reflow. page length is " + doc.pages.length);
+
+//  np.remove();
+  doc.recompose();
+
+  doc.pages.item(-1).textFrames.item(0).select();
 }
 
 
@@ -266,31 +357,13 @@ function AddFormFields(doc) {
   this.xpath = "//table_enclosing_para[@class='signatureblock' and @unmailed='true']";
   this.apply = function(el, myRuleProcessor){
 
-// this won't work when running in background idle mode
-//	app.layoutWindows.item(0).activePage = el.paragraphs.item(0).parentTextFrames[0].parentPage;
-//	app.layoutWindows.item(0).zoom(ZoomOptions.FIT_PAGE);
-
 	var myInsertionPoint = el.paragraphs.item(0).insertionPoints.item(2);
 
-	// this is really weird. every other time i run this, it dies trying to add a signaturefield.
-	if (! myInsertionPoint.isValid) {
-	  logToFile("insertion point is invalid.");
-	  alert("insertion point is invalid.");
-	} else {
-	  logToFile("insertion point is valid.");
-	  if (myInsertionPoint.signatureFields != undefined) {
-		logToFile("insertion point signaturefields is " + myInsertionPoint.signatureFields);
-	  }		
-		
-//	  alert("insertion point is valid: " + myInsertionPoint);
-	}
-
-	logToFile("about to attempt .add(), which is a " + myInsertionPoint.signatureFields.add );
-	
 	var signatureField = myInsertionPoint.signatureFields.add();
 	logToFile("created signatureField. setting anchored object settings. " +signatureField );
 
 	with(signatureField.anchoredObjectSettings){
+	  pinPosition = false;
 	  anchoredPosition = AnchorPosition.anchored;
 	  anchorPoint = AnchorPoint.topLeftAnchor;
 	  horizontalReferencePoint = AnchoredRelativeTo.anchorLocation;
@@ -299,19 +372,15 @@ function AddFormFields(doc) {
 	  verticalReferencePoint = VerticallyRelativeTo.lineBaseline;
 	  anchorYoffset = 0;
 	  anchorSpaceAbove = 0;
-	  pinPosition = false;
 	}
 
-	logToFile("settings set. resizing. " +signatureField );
+	// maybe preflighting will give the system time for a recompose?
+	doc.recompose();
+
+	logToFile("will i die?");
 	signatureField.geometricBounds = [0,0,55,216];
+	logToFile("probably died.");
 
-	logToFile("resize complete. recomposing. " +signatureField );
-	doc.recompose(); // recompose because adding that newline may have caused text to overset.
-
-	logToFile("recompose complete. signatureField is " + signatureField);
-	logToFile("recompose complete. signatureField.isValid is " + signatureField.isValid);
-	logToFile("signatureField properties = "+ signatureField.properties.toString());
-	logToFile("signatureField geometricbounds = "+ signatureField["geometricBounds"]);
 	// https://secure.echosign.com/doc/TextFormsTutorial.pdf
 	// http://bgsfin.com/Add-Ons/SmartFormsTutorial.pdf
 
@@ -320,6 +389,7 @@ function AddFormFields(doc) {
 	  
 	  if (el.xmlAttributes.item("unmailed").value == "true") {
 		var signatureCount = el.xmlAttributes.item("esnum").value;
+		logToFile("setting signature field name to " + "legalese_es_signer" + signatureCount + "_signature");
 		signatureField.name = "legalese_es_signer" + signatureCount + "_signature";
 	  }
 	}
