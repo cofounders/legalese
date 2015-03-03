@@ -35,7 +35,8 @@ function xmls2pdf(xmlFiles, indtFile, showingWindow) {
 	  exportToPDF(doc, xmlFile);
 	  logToFile("xmls2pdf: about to saveAsIndd, for the second time");
 	  saveAsIndd(doc, xmlFile);
-	  if (! showingWindow) doc.close();
+	  if (! showingWindow) doc.close()
+	  else doc.pages.item(-1).textFrames.item(0).select();
 	  logToFile("xmls2pdf: finished " + xmlFile.fullName);
 	}
 	catch (error) {
@@ -347,7 +348,6 @@ function constructFormFields(doc) {
 //  np.remove();
   doc.recompose();
 
-  doc.pages.item(-1).textFrames.item(0).select();
 }
 
 
