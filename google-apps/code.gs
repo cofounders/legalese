@@ -879,6 +879,11 @@ function availableTemplates_() {
 // you can also create an HTML file in the code editor and just give the filename directly.
 // the url will be something like termsheet_xml.html instead of termsheet.xml.
 
+// you may be tempted to open this up so that the spreadsheet can specify any URL.
+// this is unwise, because the XML template runs with the same privileges as this script,
+// and if you randomly execute templates from all over the Internet, sooner or later you will regret it.
+
+  { name:"strikeoff_shareholders_xml", url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_shareholders.xml",       title:"Striking Off for Shareholders" },
   { name:"test_templatespec_xml", url:"http://www.legalese.io/templates/jfdi.asia/test-templatespec.xml",       title:"Test templateSpec" },
   { name:"employment_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/employment-agreement.xml",       title:"Employment Agreement" },
   { name:"termsheet_xml",         url:"http://www.legalese.io/templates/jfdi.asia/termsheet.xml",       title:"Seed Term Sheet" },
@@ -991,33 +996,39 @@ function fillTemplates(sheet) {
     var url = sourceTemplate.url;
     var newTemplate = obtainTemplate_(url);
     newTemplate.data = templatedata;
-    newTemplate.data._explosion = newTemplate.data._explosion || {};
 	var sans_xml = sourceTemplate.name.replace(/_xml|xml_/,"");
 
 	// TODO: respect the "all in one doc" vs "one per doc" for all categories not just investors
+	// but for each given template we need to know which party category to explode.
+	// so maybe we should have the configuration logic be more about
+	// explode: founder
+	// only one party type is allowed to explode for a given template otherwise we get
+	// a combinatorial explosion.
 
-    var investors = templatedata.parties.investor;
-	var explosion = "all in one doc";
-	try { explosion = config.templates.tree[sans_xml]["Investor"] } catch (e) { Logger.log("ERROR: explosion exploded: %s", e); }
-	if (explosion == "all in one doc") {
-	  Logger.log("doing investors all in one doc ... " + sourceTemplate.url);
-	  newTemplate.data._explosion.investor = false;
-	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder); // todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
-	  readme.getBody().appendParagraph("created " + sourceTemplate.title);
-	}
-	else {
-	  Logger.log("doing investors one per doc ... " + sourceTemplate.url);
-	  newTemplate.data._explosion.investor = true;
-      for (var j in investors) {
+	var to_explode;
+	try { to_explode = config.templates.tree[sans_xml]["explode"] } catch (e) { Logger.log("ERROR: no explode partytype") }
+	if (to_explode != undefined) {
+	  Logger.log("will explode %s", to_explode);
+	  readme.getBody().appendParagraph("will explode template with one per doc for " + to_explode);
+
+      for (var j in newTemplate.data.parties[to_explode]) {
 		// we step through the multiple data.parties.{founder,investor,company}.* arrays.
 		// we set the singular as we step through.
-		newTemplate.data.investor = investors[j];
-		var mytitle = sourceTemplate.title + " for " + templatedata.investor.name;
-		Logger.log("starting " + mytitle);
+		newTemplate.data[to_explode] = newTemplate.data.parties[to_explode][j];
+		var mytitle = sourceTemplate.title + " for " + newTemplate.data[to_explode].name;
+		Logger.log("producing exploded %s for %s %s", mytitle, to_explode, newTemplate.data[to_explode].name);
 		fillTemplate_(newTemplate, sourceTemplate, mytitle, folder);
-		readme.getBody().appendParagraph("created " + mytitle);
+		readme.getBody().appendParagraph("created " + mytitle
+										 + " for " + to_explode
+										 + " " + newTemplate.data[to_explode].name);
 	  }
-    }
+
+	} else {
+	  Logger.log("doing all parties in one doc ... " + sourceTemplate.url);
+	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder); // todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
+	  readme.getBody().appendParagraph("created " + sourceTemplate.title);
+	  readme.getBody().appendParagraph("doing all parties in one doc. to do one doc for each party, set explode=investor or whatever partytype in the configuration section of the spreadsheet.");
+	}
 	Logger.log("finished suitable %s", url);
   }
   Logger.log("that's all folks!");
@@ -1521,6 +1532,8 @@ function uploadAgreement(sheet) {
   // if not, create a column in the spreadsheet, to the right of the rightmost filled column.
 
   var now = Utilities.formatDate(new Date(), ss.getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
+
+  // TODO: handle explosion scenarios where each party gets a separate agreement.
   
   // update the party's Legalese Status cell to indicate we've sent the mail.
   
