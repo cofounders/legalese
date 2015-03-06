@@ -1,5 +1,8 @@
 /* TODO
  *
+** we need a way for a spreadsheet to say "Get your Party Information from somewhere else".
+ *
+ *
 ** import the termsheets from "How to invest in a JFDI Startup"
  *
 **  move the "templates:" configurator from the README to the ActiveSheet. refactor the config processing logic so readrows and readconfig both
@@ -876,6 +879,7 @@ function availableTemplates_() {
 // you can also create an HTML file in the code editor and just give the filename directly.
 // the url will be something like termsheet_xml.html instead of termsheet.xml.
 
+  { name:"test_templatespec_xml", url:"http://www.legalese.io/templates/jfdi.asia/test-templatespec.xml",       title:"Test templateSpec" },
   { name:"employment_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/employment-agreement.xml",       title:"Employment Agreement" },
   { name:"termsheet_xml",         url:"http://www.legalese.io/templates/jfdi.asia/termsheet.xml",       title:"Seed Term Sheet" },
   { name:"preemptive_notice_xml", url:"http://www.legalese.io/templates/jfdi.asia/preemptive_notice.xml",       title:"Pre-Emptive Notice to Shareholders" },
