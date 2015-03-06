@@ -1,6 +1,10 @@
 <Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
-<CoverTop>
-<cover_title>Waiver of Convertible Loan</cover_title>
+<CoverTop><? 
+if (data.security     == undefined) { data.security     = "Convertible Loan" }
+if (data.relationship_singular == undefined) { data.relationship_singular = "creditor to" }
+if (data.relationship_plural   == undefined) { data.relationship_plural   = "creditors to" }
+ ?>
+<cover_title>Waiver of <?= data.security ?></cover_title>
 <cover_company_name>
 
 
@@ -35,7 +39,7 @@
 </Firstpage_Sidebar>
 
 <Story_Main>
-    <chapter_header>Waiver of Convertible Loan</chapter_header>
+    <chapter_header>Waiver of <?= data.security ?></chapter_header>
     <para_1><span_smallcaps>This deed</span_smallcaps> is made on <textvar name="Output Date" /> by <?
    for (var i in data.parties.investor) { ?>
 <?   if (data.parties.investor.length > 1 && i == 0) { ?></para_1><? } ?>
@@ -49,16 +53,18 @@
 </para_1>
     <para_1><span_smallcaps>in favour of</span_smallcaps> <?= data.company.name ?> (<?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum>), a company incorporated in <?= data.company.state ?> with its registered office at <?= data.company.address ?> (the "Company").</para_1>
     <para_1><span_smallcaps>Whereas</span_smallcaps> the <?
-   if (data.parties.investor.length == 1) { ?>Investor is a creditor to the Company<? } else { ?>Investors are creditors to the Company<? } ?>
- by virtue of a Convertible Loan Agreement executed on or about <?= data.original_agreement_date ?>, in the total amount of <?= data.principal_amount ?><?
+   if (data.parties.investor.length == 1) { ?>Investor is a <?= data.relationship_singular ?> the Company<? } else { ?>Investors are <?= data.relationship_plural ?> the Company<? } ?>
+ by virtue of a <?= data.security_title ?> executed on or about <?= data.original_agreement_date ?>, in the total amount of <?= data.principal_amount ?><?
    if (data.interest != 0) { ?> (plus any accrued and unpaid interest)<? } ?>
- (the "Loan Amount");</para_1>
-<para_1><i>In view of the Company's expressed intention to cease operations,</i>
+ (the "<?= data.security_shortname ?> Amount");</para_1>
+<para_1><i>In view of the Company's expressed intention to cease operations,</i><?
+ if (data.extra_text_1 != undefined) { ?><?= data.extra_text_1 ?><? } ?>
 We<?
    if (data.parties.investor.filter(function(inv){return inv.investortype == "company"})) { ?>, being appointed corporate representatives of<? } ?>
 <?  if (data.parties.investor.length > 1)           { ?> the Investors<?   }
     else                                            { ?> the Investor<?  } ?>
- do hereby agree and declare that we irrevocably and unconditionally waive with immediate effect the Loan Amount due and owing by the Company in its entirety, and that we release and discharge the Company absolutely from the said loan,
+ do hereby agree and declare that we irrevocably and unconditionally waive with immediate effect the <?= data.security ?> due by the Company in its entirety, and that we release and discharge the Company absolutely from the said <?= data.security_shortname ?>,<?
+ if (data.extra_text_2 != undefined) { ?><?= data.extra_text_2 ?><? } ?>
 <i>so that the Company may be struck off with a minimum of difficulty.</i>
 
 
