@@ -7,7 +7,7 @@
 #include "/Applications/Adobe InDesign CC/Scripts/XML Rules/glue code.jsx"
 
 // -------------------------------------------------- xmls2pdf
-function xmls2pdf(xmlFiles, indtFile, showingWindow) {
+function xmls2pdf(xmlFiles, showingWindow) {
   if (showingWindow == undefined) showingWindow = false;
   var errors = [];
   app.textPreferences.smartTextReflow = false;
@@ -15,6 +15,13 @@ function xmls2pdf(xmlFiles, indtFile, showingWindow) {
 	var xmlFile = xmlFiles[i];
 	try {
 	  logToFile("xmls2pdf: starting " + xmlFile.fullName);
+
+	  // maybe each xmlFile can specify its desired indt template filename?
+	  var indtFile = identifyIndtFile("fromXML", // fromXML | hardcoded | queryUser
+									  "~/non-db-src/legalese/build/00 legalese template.indt",
+									  xmlFile
+									 );
+
 	  var doc = importXmlIntoTemplate(xmlFile, indtFile, showingWindow);
 	  doc.textPreferences.smartTextReflow = false;
 //	  doc.textPreferences.limitToMasterTextFrames = false;
@@ -22,10 +29,6 @@ function xmls2pdf(xmlFiles, indtFile, showingWindow) {
 
 	  doc.recompose(); // force smart text reflow otherwise the signature fields won't add properly.
 	  addCrossReferences(doc);
-	  logToFile("xmls2pdf: about to save to indd, for the first time");
-
-	  saveAsIndd(doc, xmlFile);
-
 	  logToFile("xmls2pdf: about to constructFormFields. page length is " + doc.pages.length);
 	  constructFormFields(doc);
 	  // findAndReplace(doc); change " to ''
@@ -101,12 +104,34 @@ function identifyXmlFiles(mode, rootFolder) {
 }
 
 // -------------------------------------------------- identifyIndtFile
-function identifyIndtFile(mode, path) {
+function identifyIndtFile(mode, path, xmlFile) {
   var indtFile;
+  if (mode == "fromXML") {
+	xmlFile.open("r");
+	var myXML = new XML(xmlFile.read());
+	xmlFile.close();
+
+	var templateSpec = myXML.attribute("templateSpec");
+	if (templateSpec != undefined) {
+	  if (templateSpec == "singlepage.indt") {
+		path = "~/non-db-src/legalese/build/" + templateSpec;
+		mode = "hardcoded";
+	  }
+	  else {
+		mode = "queryUser";
+	  }
+	}
+	else {
+	  if (path.length)	mode = "hardcoded";
+	  else				mode = "queryUser";
+	} 
+  }
+  // not an else if because we cascade from above
   if (mode == "hardcoded") {
 	indtFile = new File(path);
 	if (indtFile.exists) return indtFile else mode = "queryUser";
   } 
+  // not an else if because we cascade from above
   if (mode == "queryUser"
 	  || mode == undefined
 	 ) {
