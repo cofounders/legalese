@@ -10,11 +10,10 @@
 <chapter_header>Notice of Striking Off</chapter_header>
 
 <para_1><?= data.shareholder.name ?></para_1>
-<basic_para>
-<?= data.shareholder.idtype ?> <span_ucnum><?= data.shareholder.id ?></span_ucnum>
-<?= data.shareholder.address ?>
+<basic_para><?= data.shareholder.address ?>
 </basic_para>
 <para_1>
+
 <b>Regarding <?= data.company.name ?> (the "Company")</b>
 Notice is hereby given to all members of the Company that the Directors intend to apply to the Accounting and Corporate Regulatory Authority (ACRA) to consider taking action under Section 344 of the Companies Act (Cap. 50) to strike the name of the Company off the register.
 In this connection, we wish to seek your written consent for the aforesaid application. Kindly indicate your consent by signing and returning the duplicate copy of this letter.
