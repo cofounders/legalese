@@ -31,6 +31,7 @@ function xmls2pdf(xmlFiles, showingWindow) {
 	  addCrossReferences(doc);
 	  logToFile("xmls2pdf: about to constructFormFields. page length is " + doc.pages.length);
 	  constructFormFields(doc);
+	  deleteEmptyStories(doc);
 	  // findAndReplace(doc); change " to ''
 	  // trim trailing newlines from the document. not quite sure how to do this.
 	  doc.recompose();
@@ -290,6 +291,29 @@ function myGetBounds(myDocument, myPage){
 	return [myY1, myX1, myY2, myX2];
 }
 
+
+// -------------------------------------------------- deleteEmptyStories
+function deleteEmptyStories(doc) {
+  logToFile("about to processRuleSet deleteEmptyStories_");
+  __processRuleSet(doc.xmlElements.item(0), [new deleteEmptyStories_(doc)
+											]);
+}
+
+// -------------------------------------------------- deleteEmptyStories_
+function deleteEmptyStories_(doc) {
+  this.name = "deleteEmptyStories_";
+  this.xpath = "//*[@delete_if_empty='true']";
+  this.apply = function(el, myRuleProcessor){
+//	alert("found an xmlElement with delete_if_empty = true\nparagraphs.length is " + el.paragraphs.length);
+	if (el.paragraphs.length == 0) {
+	  var pTF = el.insertionPoints.item(0).parent.texts.item(0).parentTextFrames[0];
+	  pTF.remove();
+	  __skipChildren(myRuleProcessor);
+	  el.remove();
+	}
+	return true;
+  }
+}
 
 // -------------------------------------------------- constructFormFields
 function constructFormFields(doc) {
