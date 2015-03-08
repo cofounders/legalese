@@ -31,7 +31,6 @@
 
 <Firstpage_Sidebar>
 </Firstpage_Sidebar>
-
 <Story_Main><chapter_header>KISS(Sing) Agreement</chapter_header>
 <para_1>This KISS (Singapore) agreement (the "Agreement") is made on <?= data.kissing_agreement_date ?> (the "Date of Issuance") between:</para_1>
 <parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
@@ -41,16 +40,16 @@
 <para_1>(the "Founders")</para_1>
 <parties><?!= include("inc_party", data, data.investor) ?> (the "Investor")</parties>
 
-<para_1>The Company, the Founders, and the Investor shall collectively be known as the <b>"Parties"</b> and each, a <b>"Party"</b>. </para_1>
-<para_1><span_smallcaps>Whereas</span_smallcaps>: </para_1>
+<para_1>The Company, the Founders, and the Investor shall collectively be known as the <b>"Parties"</b> and each, a <b>"Party"</b>.</para_1>
+<para_1><span_smallcaps>Whereas</span_smallcaps>:</para_1>
 <recitals>The Company is a private company incorporated in Singapore limited by shares.
 The Investor and the Company desire and wish to enter into this Agreement to record and regulate an investment by the Investor into the Company.
 The investment takes the form of a "Keep It Simple Security", essentially a convertible debenture, authored by <span_ucnum>500</span_ucnum> Startups and subsequently adapted for Singapore law by JFDI.Asia.
 The parties anticipate that this investment will be succeeded by a seed, bridge, or equity financing, and that this KISS (if all goes well) will eventually convert to equity shares issued pursuant to subsequent financing.This KISS may be one of a series of KISSes issued by the Company to investors with essentially identical terms and on the same form as set forth herein (collectively, the "Series"), except that the Investor, Valuation Cap, Purchase Price, and Date of Issuance may differ in each specific KISS, as well as terms relating to Discounted Conversion price, a Limited Power of Attorney, and Information Rights).
 </recitals>
-<para_1><span_smallcaps>It is hereby agreed</span_smallcaps> as follows: </para_1>
-<a_left_sidehead>Definitions </a_left_sidehead>
-<para_1>In this Agreement, except to the extent that the context otherwise requires, the following terms shall have the meanings set forth below: </para_1>
+<para_1><span_smallcaps>It is hereby agreed</span_smallcaps> as follows:</para_1>
+<a_left_sidehead>Definitions</a_left_sidehead>
+<para_1>In this Agreement, except to the extent that the context otherwise requires, the following terms shall have the meanings set forth below:</para_1>
 <definition>Valuation Cap	shall mean <?= data.pre_money_valuation ?>
 Discount	shall mean <?= data.discount ?>%.
 Interest Rate	shall mean <?= data.interest ?>%.
@@ -65,13 +64,13 @@ with respect to a conversion pursuant to Clause 2.3 (Maturity Conversion), share
 with respect to a conversion pursuant to Clause 2.4 (Optional Conversion), Ordinary Shares of the Company's Common Stock.
 </definition_list>
 <definition>Conversion Price	shall equal:</definition>
-<definition_list>with respect to a conversion pursuant to Clause 2.1 (Next Equity Financing), the lower of </definition_list>
-<definition_list_inner_2>the product of </definition_list_inner_2>
-<definition_list_inner_3>one (1) minus the Discount and </definition_list_inner_3>
-<definition_list_inner_3>the price paid per share for Preferred Stock by the investors in the Next Equity Financing or </definition_list_inner_3>
-<definition_list_inner_2>the quotient resulting from dividing </definition_list_inner_2>
-<definition_list_inner_3>the Valuation Cap by </definition_list_inner_3>
-<definition_list_inner_3>the Fully-Diluted Capitalization immediately prior to the closing of the Next Equity Financing; </definition_list_inner_3>
+<definition_list>with respect to a conversion pursuant to Clause 2.1 (Next Equity Financing), the lower of</definition_list>
+<definition_list_inner_2>the product of</definition_list_inner_2>
+<definition_list_inner_3>one (1) minus the Discount and</definition_list_inner_3>
+<definition_list_inner_3>the price paid per share for Preferred Stock by the investors in the Next Equity Financing or</definition_list_inner_3>
+<definition_list_inner_2>the quotient resulting from dividing</definition_list_inner_2>
+<definition_list_inner_3>the Valuation Cap by</definition_list_inner_3>
+<definition_list_inner_3>the Fully-Diluted Capitalization immediately prior to the closing of the Next Equity Financing;</definition_list_inner_3>
 <definition_list>with respect to a conversion pursuant to Clause 2.2 (Corporate Transaction), the quotient resulting from dividing (A) the Valuation Cap by (B) the Fully-Diluted Capitalization immediately prior to the closing of the Corporate Transaction; and
 with respect to a conversion pursuant to Clause 2.3 (Maturity Conversion) or to Clause 2.4 (Optional Conversion), the quotient resulting from dividing (A) the Valuation Cap by (B) the Fully-Diluted Capitalization immediately prior to the conversion.
 </definition_list>
@@ -90,8 +89,8 @@ Equity Securities	shall mean the Company's Common Stock or Preferred Stock or an
 Financial Statements	shall mean an income statement, balance sheet, statement of stockholders' equity, and/or a statement of cash flows, in each case as of the end of (i) each of the first three (3) fiscal quarters and (ii) each fiscal year of the Company.
 Fully-Diluted Capitalization	shall mean the number of shares of outstanding Common Stock of the Company on a fully-diluted basis, including
 </definition>
-<definition_list>conversion or exercise of all securities convertible into or exercisable for Common Stock, </definition_list>
-<definition_list>exercise of all outstanding options and warrants to purchase Common Stock and, </definition_list>
+<definition_list>conversion or exercise of all securities convertible into or exercisable for Common Stock,</definition_list>
+<definition_list>exercise of all outstanding options and warrants to purchase Common Stock and,</definition_list>
 <definition_list>in the case of Clause 1.8.1 and 1.8.3 only, the shares reserved or authorized for issuance under the Company's existing stock option plan or any stock option plan created or increased in connection with such transaction; but excluding, for this purpose, the conversion contemplated by the applicable provision of Clause 2.</definition_list>
 <definition>
 Holder	shall mean a member of the KISS Group that holds a KISS (including, without limitation, the Investor, for so long as the Investor holds this KISS).
@@ -101,9 +100,9 @@ Majority in Interest	shall mean members of the KISS Group holding a majority in 
 Maturity Date	shall mean the date that is thirty-six (36) months following the Date of Issuance.
 Participation Amount	shall mean an amount equal to the Purchase Price.
 Shadow Series	shall mean shares of a class of the Company's Preferred Stock that is identical in all respects to the shares of Preferred Stock issued in the Next Equity Financing (e.g., if the Company sells Series A Preferred Stock in the Next Equity Financing, the Shadow Series would be Series A-<span_allcaps>1</span_allcaps> Preferred Stock), except that the liquidation preference per share of the Shadow Series shall equal the Conversion Price (as determined pursuant to Clause 1.8.1), with corresponding adjustments to any price-based antidilution and dividend rights provisions.</definition>
-<para_1>Except where the context otherwise requires, words importing the singular include the plural and vice versa, words importing a gender include every gender and references to persons include bodies corporate or unincorporated, any state or any agency thereof and any other entity. </para_1>
-<para_2>Headings, marginal sidenotes, and graphic art are for ease of reference only and have no legal effect. Reference to Clauses are to Clauses of this Agreement and references to this Agreement include any amendments or supplementals thereto. </para_2>
-<para_2>Except where the context otherwise requires, references to any person include its successors and permitted assignees. Except where the context otherwise requires, Clauses which refer to the "Company" shall apply mutatis mutandis to subsidiaries or successors of the Company which may from time to time be established. </para_2>
+<para_1>Except where the context otherwise requires, words importing the singular include the plural and vice versa, words importing a gender include every gender and references to persons include bodies corporate or unincorporated, any state or any agency thereof and any other entity.</para_1>
+<para_2>Headings, marginal sidenotes, and graphic art are for ease of reference only and have no legal effect. Reference to Clauses are to Clauses of this Agreement and references to this Agreement include any amendments or supplementals thereto.</para_2>
+<para_2>Except where the context otherwise requires, references to any person include its successors and permitted assignees. Except where the context otherwise requires, Clauses which refer to the "Company" shall apply mutatis mutandis to subsidiaries or successors of the Company which may from time to time be established.</para_2>
 <para_2>References in this Agreement to a time of day are to Singapore time. References to dollars or <span_ucnum>$</span_ucnum> not otherwise specified are to Singapore Dollars (SGD).</para_2>
 <a_left_sidehead>Conversion of the KISS</a_left_sidehead>
 <numbered_2_firstbold>Next Equity Financing. Upon the closing of the Next Equity Financing, this KISS will be automatically converted into that number of Conversion Shares equal to the quotient obtained by dividing the Purchase Price by the Conversion Price. At least five (5) days prior to the closing of the Next Equity Financing, the Company shall notify the Investor in writing of the terms under which the Preferred Stock of the Company will be sold in such financing. The issuance of Conversion Shares pursuant to the conversion of this KISS shall be upon and subject to the same terms and conditions applicable to the Preferred Stock sold in the Next Equity Financing (or the Shadow Series, as applicable).
@@ -111,7 +110,7 @@ Corporate Transaction. In the event of a Corporate Transaction prior to the conv
 Maturity Conversion. Unless earlier converted to Conversion Shares or paid pursuant to Clause 2.1 or 2.2, at the election of the Majority in Interest at any time on or after the Maturity Date, this KISS shall be converted into that number of Conversion Shares equal to the quotient obtained by dividing the Purchase Price by the Conversion Price.
 Optional Conversion. At any time prior to the Maturity Date, this KISS may be converted at the election of the Investor to that number of Ordinary Shares equal to the quotient obtained by dividing the Purchase Price by the Conversion Price.
 No Fractional Shares. Upon the conversion of this KISS into Conversion Shares, in lieu of any fractional shares to which the holder of this KISS would otherwise be entitled, the Company shall pay the holder cash equal to such fraction multiplied by the Conversion Price.
-Mechanics of Conversion. As promptly as practicable after the conversion of this KISS, the Company at its expense will issue and deliver to the Investor, upon surrender of this KISS, a certificate or certificates for the number of Conversion Shares. Conversion of this KISS may be made contingent upon the closing of the Next Equity Financing or Corporate Transaction. </numbered_2_firstbold>
+Mechanics of Conversion. As promptly as practicable after the conversion of this KISS, the Company at its expense will issue and deliver to the Investor, upon surrender of this KISS, a certificate or certificates for the number of Conversion Shares. Conversion of this KISS may be made contingent upon the closing of the Next Equity Financing or Corporate Transaction.</numbered_2_firstbold>
 <a_left_sidehead>Representations and Warranties of the Company</a_left_sidehead>
 <para_1>In connection with the transactions provided for herein, the Company hereby represents and warrants to the Investor that:</para_1>
 <numbered_2_firstbold>
@@ -125,7 +124,7 @@ Intellectual Property. To its knowledge, the Company owns or possesses or believ
 Litigation. To the Company's knowledge, there is no private or governmental action, suit, proceeding, claim, arbitration or investigation pending before any agency, court or tribunal, foreign or domestic, or threatened against the Company or any of its properties or any of its officers or managers (in their capacities as such). There is no judgment, decree or order against the Company, or, to the knowledge of the Company, any of its directors or managers (in their capacities as such), that could prevent, enjoin, or materially alter or delay any of the transactions contemplated by this KISS, or that could reasonably be expected to have a material adverse effect on the Company.
 </numbered_2_firstbold>
 <a_left_sidehead>Representations and Warranties of the Investor</a_left_sidehead>
-<para_1>In connection with the transactions provided for herein, the Investor hereby represents and warrants to the Company that: </para_1>
+<para_1>In connection with the transactions provided for herein, the Investor hereby represents and warrants to the Company that:</para_1>
 <numbered_2_firstbold>
 Authorization. This KISS constitutes Investor's valid and legally binding obligation, enforceable in accordance with its terms, except as may be limited by (i) applicable bankruptcy, insolvency, reorganization, or similar laws relating to or affecting the enforcement of creditors' rights and (ii) laws relating to the availability of specific performance, injunctive relief or other equitable remedies.
 Purchase Entirely for Own Account. Investor acknowledges that this KISS is issued to Investor in reliance upon Investor's representation to the Company that the KISS will be acquired for investment for Investor's own account, not as a nominee or agent, and not with a view to the resale or distribution of any part thereof, and that such Investor has no present intention of selling, granting any participation in, or otherwise distributing the same.
@@ -137,15 +136,15 @@ Exempt Security. Investor understands that this KISS is offered in reliance on o
 <a_left_sidehead>Limited Powers of Attorney for Maintenance of Good Standing</a_left_sidehead>
 <?   if (data.founders_give_company_lpa) { ?>
 <numbered_2_firstbold>Company as Agent. Each Founder hereby irrevocably designates and appoints the Company and its duly authorized officers and agents as his agent and attorney in fact, to act for and on his behalf and stead,</numbered_2_firstbold>
-<para_2>if and only if the Company is unable because of any Founder's unavailability, unreachability, uncontactability, or mental or physical incapacity or for any other reason to secure the Founder's signature or other authorisation to effect any compliance paperwork or other filings necessary to maintain the Company's good standing status with government authorities, </para_2>
-<para_2>to execute and file any such applications or documents and to do all other lawfully permitted acts to further the application for, prosecution and issuance including striking off or winding down of the Company, thereon with the same legal force and effect as if originally executed by the Founder. The Founder hereby waives and irrevocably quits claim to the Company any and all claims, of any nature whatsoever, which the Founder now or hereafter has for infringement of any and all rights assigned to the Company. </para_2>
+<para_2>if and only if the Company is unable because of any Founder's unavailability, unreachability, uncontactability, or mental or physical incapacity or for any other reason to secure the Founder's signature or other authorisation to effect any compliance paperwork or other filings necessary to maintain the Company's good standing status with government authorities,</para_2>
+<para_2>to execute and file any such applications or documents and to do all other lawfully permitted acts to further the application for, prosecution and issuance including striking off or winding down of the Company, thereon with the same legal force and effect as if originally executed by the Founder. The Founder hereby waives and irrevocably quits claim to the Company any and all claims, of any nature whatsoever, which the Founder now or hereafter has for infringement of any and all rights assigned to the Company.</para_2>
 <?   } ?>
 <?   if (data.company_gives_investors_lpa && data.investor.power_of_attorney) { ?>
 <numbered_2_firstbold>Investor as Agent. The Company hereby irrevocably designates and appoints the Investor and its duly authorized officers and agents as its agent and attorney in fact, to act for and on its behalf and stead, if and only if the Company's directors or members are themselves unavailable, unreachable, uncontactable, or incapacitated, to the extent that the Company is unable to maintain good standing status with government authorities, to execute and file any such applications or documents and to do all other lawfully permitted acts to further the application for, prosecution and issuance including striking off or winding down of the Company, thereon with the same legal force and effect as if originally executed by the Company. The Company hereby waives and irrevocably quits claim to the Investor any and all claims, of any nature whatsoever, which the Company now or hereafter has for infringement of any and all rights assigned to the Investor.</numbered_2_firstbold>
 <?   } ?>
 <? } ?>
 <a_left_sidehead>Miscellaneous</a_left_sidehead>
-<numbered_2_firstbold>Other Rights. The Investor shall also enjoy the following rights: </numbered_2_firstbold>
+<numbered_2_firstbold>Other Rights. The Investor shall also enjoy the following rights:</numbered_2_firstbold>
 <numbered_3_firstbold>Information Rights.To the extent that the Company prepares Financial Statements, the Company shall deliver to the Investor such Financial Statements upon request, as soon as practicable, but in any event within thirty (30) days after the end of each of the first three (3) quarters of each fiscal year of the Company and within ninety (90) days after the end of each fiscal year of the Company. Such Financial Statements shall be in reasonable detail and prepared on a consistent basis. Additionally, regardless of whether the Company prepares Financial Statements, the Company shall deliver to the Investor such information relating to the financial condition, business or corporate affairs of the Company as such Investor may from time to time reasonably request. Notwithstanding anything to the contrary in this Clause 6.1.1, the Company shall not be obligated under this Clause 6.1.1 to provide information that (a) it deems in good faith to be a trade secret or highly confidential information or (b) the disclosure of which would adversely affect the attorney-client privilege between the Company and its counsel; and the Investor agrees to maintain the confidentiality of all of the information provided to the Investor under this Clause 6.1.1 and agrees not to use such information other than for a purpose reasonably related to the Investor's investment in the Company.
 Participation Rights. Each time the Company proposes to offer any Equity Securities at any time through and including the closing of the Next Equity Financing, the Company shall provide the Investor with at least ten (10) business days prior written notice of such offering, including the price and terms thereof. The Investor shall have a right of first offer to participate in such offering(s), on the same terms and for the same price as all other investors in such offering(s), by purchasing an aggregate number of Equity Securities (whether in one offering or across multiple offerings) valued at up to the Participation Amount. The Investor's right of first offer set forth in this Clause 6.1.2 shall be subject to compliance with applicable securities laws, the Articles of Association of the Company, and any shareholder agreements to which it is a party.</numbered_3_firstbold>
 <numbered_2_firstbold>
@@ -179,23 +178,16 @@ Notwithstanding the foregoing, each of the Parties reserves its right to immedia
 This Clause 7 shall survive the termination of this Agreement for any reason whatsoever.</numbered_2_para>
 <a_left_sidehead>Approval</a_left_sidehead>
 <numbered_2_para>The Company hereby represents that its Board of Directors, in the exercise of its fiduciary duty, has approved the Company's execution of this KISS based upon a reasonable belief that the Purchase Price provided hereunder is appropriate for the Company after reasonable inquiry concerning the Company's financing objectives and financial situation. In addition, the Company hereby represents that it intends to use the Purchase Price primarily for the operations of its business, and not for any personal, family or household purpose.</numbered_2_para>
-<chapter_header>Signatures </chapter_header>
-<para_1><span_smallcaps>Intending to be bound</span_smallcaps> by this agreement, the Parties now set their hands. </para_1>
+<chapter_header>Signatures</chapter_header>
+<para_1><span_smallcaps>Intending to be bound</span_smallcaps> by this agreement, the Parties now set their hands.</para_1>
 <b_left_sidehead>for and on behalf of the Investor <?= data.investor.name ?></b_left_sidehead>
-
 <?!= include("inc_signature", data, data.investor) ?>
-
 <b_left_sidehead>for and on behalf of the Company <?= data.company.name ?></b_left_sidehead>
-
 <?!= include("inc_signature", data, data.company) ?>
-
 <b_left_sidehead>The Founders</b_left_sidehead>
-
 <? data.signature_comment = "Founder" ?>
 <? for (var i = 0; i < data.parties.founder.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.founder) ?>
 <? } ?>
-
-
 </Story_Main>
 </Root>
