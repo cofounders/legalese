@@ -169,7 +169,6 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
   }
 
   __processRuleSet(doc.xmlElements.item(0), [new InsertTextVariables(doc,importMaps) ]);
-//  alert("processRuleSet AddReturns completed successfully");
 
   doc.mapXMLTagsToStyles();
 
@@ -207,6 +206,7 @@ function AddReturns(doc, importMaps){
 		   )
 	   ) {
 	  logToFile("appending newline to element " + myElement.markupTag.name);
+	  logToFile(" contents = '" + myElement.contents + "'");
       myElement.insertTextAsContent("\r", XMLElementPosition.ELEMENT_END);
 	}
     return false;
@@ -266,7 +266,7 @@ function InsertTextVariables(doc, importMaps){
 }
 
 // TODO: look for a restart=true attribute and tell the paragraph bullet & numbering to restart.
-// -------------------------------------------------- AddReturns
+// -------------------------------------------------- RestartParagraphNumbering
 function RestartParagraphNumbering(doc, importMaps){
   this.name = "RestartParagraphNumbering";
   this.xpath = "//*[@restart='true']";
