@@ -881,6 +881,7 @@ function availableTemplates_() {
 // this is unwise, because the XML template runs with the same privileges as this script,
 // and if you randomly execute templates from all over the Internet, sooner or later you will regret it.
 
+  { name:"kissing_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing.xml",       title:"KISS (Singapore)" },
   { name:"strikeoff_shareholders_xml", url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_shareholders.xml",       title:"Striking Off for Shareholders" },
   { name:"test_templatespec_xml", url:"http://www.legalese.io/templates/jfdi.asia/test-templatespec.xml",       title:"Test templateSpec" },
   { name:"employment_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/employment-agreement.xml",       title:"Employment Agreement" },
@@ -964,6 +965,8 @@ function fillTemplates(sheet) {
 
   var uniq = uniqueKey(sheet);
 
+  // in the future we will probably need several subfolders, one for each template family.
+  // and when that time comes we won't want to just send all the PDFs -- we'll need a more structured way to let the user decide which PDFs to send to echosign.
   var folder = createFolder_(sheet); var readme = createReadme_(folder, config, sheet);
   PropertiesService.getDocumentProperties().setProperty("legalese."+uniq+".folder.id", JSON.stringify(folder.getId()));
   PropertiesService.getDocumentProperties().setProperty("legalese."+uniq+".folder.name", JSON.stringify(folder.getName()));
@@ -1069,25 +1072,16 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   clauseroot = [];
   clausetext2num = {};
   var filledHTML = newTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
-  var htmlfile;
+  var xmlfile;
 
-  if (sourceTemplate.url.match(/^xml|xml$/)) {
-	htmlfile = DriveApp.createFile(mytitle+".xml", filledHTML, 'text/xml');
+  if (sourceTemplate.url.match(/\.xml$/)) {
+	xmlfile = DriveApp.createFile(mytitle+".xml", filledHTML, 'text/xml');
+	folder.addFile(xmlfile);
   }
   else {
-	htmlfile = DriveApp.createFile(mytitle+".html", filledHTML, 'text/html');
-	var blob = htmlfile.getBlob();
-	var resource = { title: mytitle, convert: true, mimeType: 'application/vnd.google-apps.document' };
-	var drive_file = Drive.Files.insert(resource,blob);  // advanced Drive API needed to autoconvert HTML
-	var docs_file = DriveApp.getFileById(drive_file.id); // regular Drive API
-	resetStyles_(DocumentApp.openById(drive_file.id));   // regular DocumentApp API
-	folder.addFile(docs_file);                          
-
-	// in the future we will probably need several subfolders, one for each template family.
-	// and when that time comes we won't want to just send all the PDFs -- we'll need a more structured way to let the user decide which PDFs to send to echosign.
+	Logger.log("we only support xml file types");
   }
 
-  folder.addFile(htmlfile);
   Logger.log("finished " + mytitle);
 }
 
