@@ -128,7 +128,7 @@ function readDrive() {
   if (sheet == undefined) sheet = ss.insertSheet("ls -R");
 
   var range = sheet.getDataRange();
-  sheet.deleteRows(1,range.getNumRows());
+  sheet.clear();
   
   // things in my drive
   var rootFolder = DriveApp.getRootFolder();
