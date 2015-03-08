@@ -882,6 +882,7 @@ function availableTemplates_() {
 // and if you randomly execute templates from all over the Internet, sooner or later you will regret it.
 
   { name:"kissing_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing.xml",       title:"KISS (Singapore)" },
+  { name:"kissing2_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing2.xml",       title:"KISS (Singapore)" },
   { name:"strikeoff_shareholders_xml", url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_shareholders.xml",       title:"Striking Off for Shareholders" },
   { name:"test_templatespec_xml", url:"http://www.legalese.io/templates/jfdi.asia/test-templatespec.xml",       title:"Test templateSpec" },
   { name:"employment_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/employment-agreement.xml",       title:"Employment Agreement" },
@@ -1495,6 +1496,7 @@ function fauxMegaSign(sheet) {
 // for now, just looking for the PDFs in the folder seems to be good enough.
 function uploadAgreement(sheet) {
   // TODO: we need to confirm that the docs generated match the current sheet.
+  // exploded docs need to have a different set of email recipients for each document.
 
   var echosignService = getEchoSignService();
   // blow away the previous oauth, because there's a problem with using the refresh token after the access token expires after the first hour.
