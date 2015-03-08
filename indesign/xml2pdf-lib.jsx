@@ -163,7 +163,7 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
 
   if (doc.xmlElements.item(0).xmlAttributes.item("addnewline").isValid &&
 	  doc.xmlElements.item(0).xmlAttributes.item("addnewline").value == "false") {
-	Logger.log("not adding newlines");
+	logToFile("not adding newlines");
   } else {
 	__processRuleSet(doc.xmlElements.item(0), [new AddReturns(doc,importMaps) ]);
   }
