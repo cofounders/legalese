@@ -1,16 +1,21 @@
 <Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
 <CoverTop>
-<cover_title>KISS(Sing) Agreement</cover_title>
+<cover_title>KISS(Sing) Agreement
+</cover_title>
 <cover_company_name>
 
 
 
 
-<?= data.company.name ?></cover_company_name>
-<cover_company_id><?= data.company.idtype ?> <?= data.company.id ?></cover_company_id>
+<?= data.company.name ?>
+</cover_company_name>
+<cover_company_id><?= data.company.idtype ?> <?= data.company.id ?>
+</cover_company_id>
 <cover_company_name>
-<?= data.investor.name ?></cover_company_name>
-<cover_company_id><?= data.investor.idtype ?> <?= data.investor.id ?></cover_company_id>
+<?= data.investor.name ?>
+</cover_company_name>
+<cover_company_id><?= data.investor.idtype ?> <?= data.investor.id ?>
+</cover_company_id>
 </CoverTop>
 <CoverMid>
 </CoverMid>
@@ -20,12 +25,13 @@
 </CoverBottom_Logotype>
 
 <CoverBottom_Address>
-<cover_address_block>Blk 71 Ayer Rajah Crescent</cover_address_block>
-<cover_address_block>#05-16   Singapore 139951</cover_address_block>
+<cover_address_block>Blk 71 Ayer Rajah Crescent
+#05-16   Singapore 139951</cover_address_block>
 </CoverBottom_Address>
 
 <CoverBottom_series>
-<centered><textvar name="Output Date" />&#8195;<span_smallcaps><textvar name="output time" /></span_smallcaps></centered>
+<centered><textvar name="Output Date" />&#8195;<span_smallcaps><textvar name="output time" /></span_smallcaps>
+</centered>
 <centered>version 1.0.0</centered>
 </CoverBottom_series>
 
@@ -39,7 +45,6 @@
 <? } ?>
 <para_1>(the "Founders")</para_1>
 <parties><?!= include("inc_party", data, data.investor) ?> (the "Investor")</parties>
-
 <para_1>The Company, the Founders, and the Investor shall collectively be known as the <b>"Parties"</b> and each, a <b>"Party"</b>.</para_1>
 <para_1><span_smallcaps>Whereas</span_smallcaps>:</para_1>
 <recitals>The Company is a private company incorporated in Singapore limited by shares.
