@@ -193,7 +193,7 @@ This Clause 7 shall survive the termination of this Agreement for any reason wha
 
   <b_left_sidehead>The Founders</b_left_sidehead>
 
-<? data.signature_comment = "Founder" ?>
+<? data.signature_comment = "Founder"; ?>
 <? for (var i = 0; i < data.parties.founder.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.founder) ?>
 <? } ?>
