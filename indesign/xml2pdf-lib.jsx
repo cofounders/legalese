@@ -161,9 +161,14 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
 
   doc.xmlElements.item(0).importXML(xmlFile);
 
-  __processRuleSet(doc.xmlElements.item(0), [new AddReturns(doc,importMaps),
-											 new InsertTextVariables(doc,importMaps)
-											]);
+  if (doc.xmlElements.item(0).xmlAttributes.item("addnewline").isValid &&
+	  doc.xmlElements.item(0).xmlAttributes.item("addnewline").value == "false") {
+	Logger.log("not adding newlines");
+  } else {
+	__processRuleSet(doc.xmlElements.item(0), [new AddReturns(doc,importMaps) ]);
+  }
+
+  __processRuleSet(doc.xmlElements.item(0), [new InsertTextVariables(doc,importMaps) ]);
 //  alert("processRuleSet AddReturns completed successfully");
 
   doc.mapXMLTagsToStyles();
@@ -350,7 +355,7 @@ function constructFormFields(doc) {
 	doc.recompose();
 	logToFile("the lastpage is " + lastpage.name);
 
-	var pages_to_add = 10;
+	var pages_to_add = 20;
 	var new_pages = [];
 
 	logToFile("creating " + pages_to_add + " pages because smart text reflow page addition doesn't run right under scripting and creates invalid object errors when i try to create an anchored signature box.");
