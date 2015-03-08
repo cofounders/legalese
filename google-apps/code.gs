@@ -73,14 +73,12 @@ function onOpen() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = spreadsheet.getActiveSheet();
 
-  var entries = [
-  { name:"Create Form", functionName:"setupForm_"},
-  { name:"Generate Papers", functionName:"fillTemplates"},
-  { name:"Send to EchoSign", functionName:"uploadAgreement"},
-  { name:"faux MegaSign", functionName:"fauxMegaSign"},
-  { name:"quicktest", functionName:"quicktest"},
-  ];
-  spreadsheet.addMenu("Legalese", entries);
+  SpreadsheetApp.getUi().createAddonMenu()
+	.addItem("Create Form", "setupForm_")
+	.addItem("Generate PDFs", "fillTemplates")
+	.addItem("Send to EchoSign", "uploadAgreement")
+      .addToUi();
+
   // when we release this as an add-on the menu-adding will change.
 
 //  resetDocumentProperties("oauth2.echosign");
@@ -903,7 +901,7 @@ return availables;
 // ---------------------------------------------------------------------------------------------------------------- desiredTemplates_
 function desiredTemplates_(config) {
   var toreturn = [];
-  for (var i in config.templates.dict) {
+  for (var i in config.templates.tree) {
 	var field = asvar_(i);
 	toreturn.push(field);
   }
@@ -993,6 +991,9 @@ function fillTemplates(sheet) {
 
   for (var i in suitables) {
     var sourceTemplate = suitables[i];
+
+	readme.getBody().appendParagraph(sourceTemplate.name).setHeading(DocumentApp.ParagraphHeading.HEADING2);
+
     var url = sourceTemplate.url;
     var newTemplate = obtainTemplate_(url);
     newTemplate.data = templatedata;
@@ -1031,6 +1032,11 @@ function fillTemplates(sheet) {
 	}
 	Logger.log("finished suitable %s", url);
   }
+
+  var ROBOT = 'robot@legalese.io';
+  Logger.log("sharing %s with %s", folder.getName(), ROBOT);
+  folder.addEditor(ROBOT);
+
   Logger.log("that's all folks!");
 };
 
@@ -1072,7 +1078,7 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
 	htmlfile = DriveApp.createFile(mytitle+".html", filledHTML, 'text/html');
 	var blob = htmlfile.getBlob();
 	var resource = { title: mytitle, convert: true, mimeType: 'application/vnd.google-apps.document' };
-	var drive_file = Drive.Files.insert(resource,blob);  // advanced Drive API
+	var drive_file = Drive.Files.insert(resource,blob);  // advanced Drive API needed to autoconvert HTML
 	var docs_file = DriveApp.getFileById(drive_file.id); // regular Drive API
 	resetStyles_(DocumentApp.openById(drive_file.id));   // regular DocumentApp API
 	folder.addFile(docs_file);                          
@@ -1133,6 +1139,12 @@ function createReadme_(folder, config, sheet) { // under the parent folder
   var para = doc.getBody().appendParagraph("The origin spreadsheet is ");
   var text = para.appendText(spreadsheet.getName() + ", " + sheet.getName());
   text.setLinkUrl(spreadsheet.getUrl() + "#gid=" + sheet.getSheetId());
+
+  doc.getBody().appendParagraph("You will see a bunch of XMLs in the folder. To create PDFs, share the folder with mengwong@jfdi.asia");
+
+  var logs_para = doc.getBody().appendParagraph("Logs");
+  logs_para.setHeading(DocumentApp.ParagraphHeading.HEADING1);
+
   Logger.log("run started");
   var uniq = uniqueKey(sheet);
   PropertiesService.getDocumentProperties().setProperty("legalese."+uniq+".readme.id", JSON.stringify(doc.getId()));
@@ -1230,13 +1242,16 @@ function getEchoSignService() {
 	  clientSecret:"417e13ac801250d2146892eb0266d16e", 
 	  projectKey:"MaupJZ_cPWIZT_FzZJu5q9XYH5ITXFjPS" },
   "default" : { 
-	clientId:"B9HLGY92L5Z4H5", 
-	clientSecret:"ff4c883e539571273980245c41199b70", 
+	clientId:"B9HLGXXT4F246T", 
+	clientSecret:"3b92fc357f3bc9cb23ecd18adb3694b5", 
 	projectKey:"M6VMONjB762l0FdR-z7tWO3YH5ITXFjPS" },
   };
 
   if (esApps[ssid] != undefined) { ssname = ssid }
-  if (esApps[ssname] == undefined) { ssname = "default" }
+  if (esApps[ssname] == undefined) {
+	Logger.log("unable to identify EchoSign OAuth credentials for this spreadsheet / project.");
+	return null;
+  }
 
   Logger.log("ssname has become %s", ssname);
 
@@ -1263,6 +1278,8 @@ function getEchoSignService() {
 // ---------------------------------------------------------------------------------------------------------------- showSidebar
 function showSidebar(sheet) {
   var echosignService = getEchoSignService();
+  if (echosignService == null) { return } // don't show the sidebar if we're not associated with an echosign api.
+
   echosignService.reset();
   // blow away the previous oauth, because there's a problem with using the refresh token after the access token expires after the first hour.
 
@@ -1488,7 +1505,7 @@ function uploadAgreement(sheet) {
   var echosignService = getEchoSignService();
   // blow away the previous oauth, because there's a problem with using the refresh token after the access token expires after the first hour.
   if (!echosignService.hasAccess()) {
-	SpreadsheetApp.getUi().alert("we don't have echosign access.");
+	SpreadsheetApp.getUi().alert("we don't have echosign access. Reload this page so the sidebar appears, then click on the OAuth link.");
 	return "echosign fail";
   }
   else {
@@ -1614,6 +1631,8 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, config, r
 	  }
 	};
 
+	// TODO: if the data.expiry_date is defined then add 24 hours to it and stick it in
+	// but also set the configuration option that decides if we should honour it or not.
 	if (config.expire_after != undefined && config.expire_after.values[0] > 0) {
 	  agreementCreationInfo.daysUntilSigningDeadline = config.expire_after.values[0];
 	}
