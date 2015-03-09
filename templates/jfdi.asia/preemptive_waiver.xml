@@ -4,7 +4,7 @@
 <Firstpage_Sidebar>
 <sidebar><?= data.company.name ?></sidebar>
 <sidebar><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></sidebar>
-<sidebar><?= data.company.address ?></sidebar>
+<? data.whitespace_handling_use_characters ?><sidebar><?= data.company.address ?></sidebar>
 </Firstpage_Sidebar>
 <Story_Main>
 <basic_para>
@@ -12,6 +12,7 @@
 
 
 </basic_para>
+<? data.whitespace_handling_use_tags ?>
 <chapter_header>Consent to Share Allotment and Waiver of Pre-Emptive Rights</chapter_header>
 
 <para_1><?= data.shareholder.name ?></para_1>
