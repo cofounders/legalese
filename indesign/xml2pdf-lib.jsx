@@ -31,6 +31,7 @@ function xmls2pdf(xmlFiles, showingWindow) {
 	  addCrossReferences(doc);
 	  logToFile("xmls2pdf: about to constructFormFields. page length is " + doc.pages.length);
 	  constructFormFields(doc);
+	  setSignaturePageToAMaster(doc);
 	  deleteEmptyStories(doc);
 	  // findAndReplace(doc); change " to ''
 	  // trim trailing newlines from the document. not quite sure how to do this.
@@ -159,6 +160,7 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
 	importMaps[doc.xmlImportMaps.item(i).markupTag.name] = doc.xmlImportMaps.item(i).mappedStyle;
   }
 
+  
   doc.xmlElements.item(0).importXML(xmlFile);
 
   if (doc.xmlElements.item(0).xmlAttributes.item("addnewline").isValid &&
@@ -184,7 +186,16 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
   return doc;
 }
 
+// -------------------------------------------------- setSignaturePageToAMaster
+function setSignaturePageToAMaster(doc) {
+  // normally we use a B master because it contains the running sub right which is a schedule header
+  // but the signature page should be on an A master because it has no schedule header
+  // so, starting from the back, we look for the page that contains paragraph style chapter header with text Signature
+  // maybe we use the Find command for this
+  // and we then set the current page to the A master, and all subsequent pages too.
 
+
+}
 
 // -------------------------------------------------- AddReturns
 function AddReturns(doc, importMaps){
@@ -355,7 +366,7 @@ function constructFormFields(doc) {
 	doc.recompose();
 	logToFile("the lastpage is " + lastpage.name);
 
-	var pages_to_add = 20;
+	var pages_to_add = 30;
 	var new_pages = [];
 
 	logToFile("creating " + pages_to_add + " pages because smart text reflow page addition doesn't run right under scripting and creates invalid object errors when i try to create an anchored signature box.");
