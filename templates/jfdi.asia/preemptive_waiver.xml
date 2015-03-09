@@ -4,7 +4,7 @@
 <Firstpage_Sidebar>
 <sidebar><?= data.company.name ?></sidebar>
 <sidebar><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></sidebar>
-<? data.whitespace_handling_use_characters ?><sidebar><?= data.company.address ?></sidebar>
+<sidebar><?= data.company.address ?></sidebar>
 </Firstpage_Sidebar>
 <Story_Main>
 <basic_para>
@@ -12,13 +12,13 @@
 
 
 </basic_para>
-<? data.whitespace_handling_use_tags ?>
 <chapter_header>Consent to Share Allotment and Waiver of Pre-Emptive Rights</chapter_header>
 
 <para_1><?= data.shareholder.name ?></para_1>
-<basic_para><?= data.shareholder.address ?>
+<? data.whitespace_handling_use_characters ?><basic_para><?= data.shareholder.address ?>
 
 </basic_para>
+<? data.whitespace_handling_use_tags ?>
 <para_1><b>Regarding the allotment of shares in <?= data.company.name ?> (the "Company")</b></para_1>
 <para_1>Notice is hereby given to all members of the Company that the Directors intend to issue and allot <?= data.number_of_shares ?> shares to <?= data.parties.new_investor[0].name ?>.</para_1>
 <? if (data.explanation) { ?><para_1><?= data.explanation ?></para_1><? } ?>
