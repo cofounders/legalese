@@ -25,7 +25,7 @@
 <para_1>As a member of the Company, you possess the right under Articles 44 of the Company's Articles of Association to participate in any issue of new shares. We seek your waiver in writing of this right to participate in this issue. Kindly indicate your consent by signing below.</para_1>
 <para_1>If we do not hear from you within 7 days from the date of this letter, we will deem that you have no objection to the issue of new shares, and do not wish to participate.</para_1>
 <? data.signature_comment = "Director" ?>
-<?!= include("inc_signature", data, data.parties.director[0]) ?>
+<?!= include("inc_signature", data, data.company) ?>
 </Story_Main>
 <Bottom_Box>
 <para_1>I, <?= data.shareholder.name ?> (<?= data.shareholder.idtype ?> <span_ucnum><?= data.shareholder.id ?></span_ucnum>), being a shareholder of <?= data.company.name ?> hereby give my consent to the allotment of <?= data.number_of_shares ?> new shares to <?= data.parties.new_investor[0].name ?> and waive my right to subscribe for any shares in this issue.
