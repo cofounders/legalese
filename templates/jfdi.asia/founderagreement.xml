@@ -34,7 +34,7 @@
 <CoverBottom_series>
 <centered>document 00 in a series &#8211; JFDI Founder Agreement</centered>
 <centered><textvar name="Output Date" />&#8195;<span_smallcaps><textvar name="output time" /></span_smallcaps></centered>
-<centered>version 1.0.0</centered>
+<centered>version <?= data.document_version || "1.0.0" ?></centered>
 
 </CoverBottom_series>
 <Firstpage_Sidebar>
