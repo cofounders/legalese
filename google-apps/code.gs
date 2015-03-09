@@ -309,6 +309,10 @@ function setupForm_(sheet) {
   legalese_root.addFile(DriveApp.getFileById(form.getId()));
   legalese_root.addFile(DriveApp.getFileById(ss.getId()));
   Logger.log("added to legalese root folder");
+
+  DriveApp.getRootFolder().removeFile(DriveApp.getFileById(form.getId()));
+  DriveApp.getRootFolder().removeFile(DriveApp.getFileById(ss.getId()));
+
 }
 
 function treeify_(root, arr) {
@@ -883,6 +887,9 @@ function availableTemplates_() {
 
   { name:"kissing_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing.xml",       title:"KISS (Singapore)" },
   { name:"kissing2_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing2.xml",       title:"KISS (Singapore)" },
+  { name:"kissing3_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing3.xml",       title:"KISS (Singapore)" },
+  { name:"kissing4_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing4.xml",       title:"KISS (Singapore)" },
+  { name:"soweird_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing4.xml",       title:"KISS (Singapore)" },
   { name:"strikeoff_shareholders_xml", url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_shareholders.xml",       title:"Striking Off for Shareholders" },
   { name:"test_templatespec_xml", url:"http://www.legalese.io/templates/jfdi.asia/test-templatespec.xml",       title:"Test templateSpec" },
   { name:"employment_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/employment-agreement.xml",       title:"Employment Agreement" },
@@ -982,12 +989,18 @@ function fillTemplates(sheet) {
   Logger.log("I have set the value to =HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"+folder.getId()+"\",\""+folder.getName()+"\")");
 
   var availables = availableTemplates_();
+  Logger.log("available templates are %s", availables);
   var desireds = desiredTemplates_(config);
   var suitables = intersect_(availables, desireds);
+  // this is slightly buggy. kissing, kissing1, kissing2, didn't work
 
   Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
 
   Logger.log("templatedata.parties = %s", JSON.stringify(templatedata.parties));
+  
+  templatedata.xml_declaration = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+  templatedata.whitespace_handling_use_tags = '<?whitespace-handling use-tags?>';
+  templatedata.whitespace_handling_use_characters = '<?whitespace-handling use-characters?>';
 
   templatedata.company = templatedata.parties.company[0];
   Logger.log("templatedata.company = %s", templatedata.company);
@@ -1078,6 +1091,7 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   if (sourceTemplate.url.match(/\.xml$/)) {
 	xmlfile = DriveApp.createFile(mytitle+".xml", filledHTML, 'text/xml');
 	folder.addFile(xmlfile);
+	DriveApp.getRootFolder().removeFile(xmlfile);
   }
   else {
 	Logger.log("we only support xml file types");
@@ -1127,15 +1141,17 @@ function createFolder_(sheet) {
 function createReadme_(folder, config, sheet) { // under the parent folder
   var spreadsheet = sheet.getParent();
   var doc = DocumentApp.create("README for " + spreadsheet.getName());
+  var docfile = DriveApp.getFileById(doc.getId());
+  folder.addFile(docfile);
+  DriveApp.getRootFolder().removeFile(docfile);
 
-  folder.addFile(DriveApp.getFileById(doc.getId()));
   doc.getBody().appendParagraph("this was created by Legalese.");
 
   var para = doc.getBody().appendParagraph("The origin spreadsheet is ");
   var text = para.appendText(spreadsheet.getName() + ", " + sheet.getName());
   text.setLinkUrl(spreadsheet.getUrl() + "#gid=" + sheet.getSheetId());
 
-  doc.getBody().appendParagraph("You will see a bunch of XMLs in the folder. To create PDFs, share the folder with mengwong@jfdi.asia");
+  doc.getBody().appendParagraph("You will see a bunch of XMLs in the folder. To create PDFs, share the folder with robot@legalese.io");
 
   var logs_para = doc.getBody().appendParagraph("Logs");
   logs_para.setHeading(DocumentApp.ParagraphHeading.HEADING1);
