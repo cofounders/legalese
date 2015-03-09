@@ -2,11 +2,11 @@
 <CoverTop>
 <cover_title>Notice Regarding Pre-Emptive Rights
 </cover_title>
-<centered>
-
-
-<i>to the shareholders of</i>
-</centered>
+<centered></centered>
+<centered></centered>
+<centered></centered>
+<centered></centered>
+<centered><i>to the shareholders of</i></centered>
 <cover_company_name><?= data.parties.company[0].name ?></cover_company_name>
 <cover_company_id><?= data.parties.company[0].idtype ?> <?= data.parties.company[0].id ?></cover_company_id>
 </CoverTop>
@@ -67,8 +67,8 @@ I would like to subscribe for $			 worth of those securities, with the understan
 
 <b_left_sidehead>Sign only if you want to participate in the round.</b_left_sidehead>
 
-<? for (var i = 0; i < data.parties.investor.length; i++) { ?>
-<?!= include("inc_signature", data, data.parties.investor[i]) ?>
+<? for (var i = 0; i < data.parties.shareholder.length; i++) { ?>
+<?!= include("inc_signature", data, data.parties.shareholder[i]) ?>
 <? } ?>
 
 </Story_Main>
