@@ -480,12 +480,14 @@ function readRows_(sheet) {
 
   var es_num = 1; // for email ordering the EchoSign fields
 
+  var seen_parties_before = false;
+
   for (var i = 0; i <= numRows - 1; i++) {
     var row = values[i];
 	Logger.log("readRows: row " + i + ": processing row "+row[0]);
 	// process header rows
     if      (row[0] == "KEY TERMS") { section=row[0]; terms_row_offset = i; continue; }
-    else if (row[0] == "IGNORE") { 
+    else if (row[0] == "IGNORE" || row[0] == "IMPORT FROM CAP TABLE") { 
 	  section = row[0];
 	  continue;
 	}
@@ -521,20 +523,24 @@ function readRows_(sheet) {
 											continue;
 										  }
     else if (row[0] == "PARTIES")   {
-	  section = row[0]; partyfields = row;
-	  while (row[row.length-1] === "") { row.pop() }
-	  terms._parties_last_filled_column = row.length-1;
-	  Logger.log("readRows: _parties_last_filled_column = %s", terms._parties_last_filled_column);
-
-      for (var ki in partyfields) {
-		if (ki < 1 || row[ki] == undefined) { continue }
-        origpartyfields[partyfieldorder[ki]] = origpartyfields[partyfieldorder[ki]] || {};
-        origpartyfields[partyfieldorder[ki]].fieldname = row[ki];
-		// Logger.log("readRows: learned origpartyfields["+partyfieldorder[ki]+"].fieldname="+row[ki]);
-        partyfields[ki] = asvar_(partyfields[ki]);
-		Logger.log("readRows: recorded partyfield[%s]=%s", ki, partyfields[ki]);
-      }
-      continue;
+	  section = row[0];
+	  if (! seen_parties_before) {
+		seen_parties_before = true;
+		partyfields = row;
+		while (row[row.length-1] === "") { row.pop() }
+		terms._parties_last_filled_column = row.length-1;
+		Logger.log("readRows: _parties_last_filled_column = %s", terms._parties_last_filled_column);
+		
+		for (var ki in partyfields) {
+		  if (ki < 1 || row[ki] == undefined) { continue }
+          origpartyfields[partyfieldorder[ki]] = origpartyfields[partyfieldorder[ki]] || {};
+          origpartyfields[partyfieldorder[ki]].fieldname = row[ki];
+		  // Logger.log("readRows: learned origpartyfields["+partyfieldorder[ki]+"].fieldname="+row[ki]);
+          partyfields[ki] = asvar_(partyfields[ki]);
+		  Logger.log("readRows: recorded partyfield[%s]=%s", ki, partyfields[ki]);
+		}
+		continue;
+	  }
 	}
 	else if (row[0] == "CONFIGURATION") { section = row[0]; continue }
 
@@ -704,9 +710,17 @@ function formatify_(format, string) {
       toreturn = (string * 100).toFixed(2);
     }
     else if (format.match(/yyyy/)) {
-    // Thu Dec 18 09:03:28 PST 2014 INFO: expanding term Fri Dec 19 2014 00:00:00 GMT+0800 (HKT) with format yyyy"-"mm"-"dd
-    // Thu Dec 18 09:03:28 PST 2014 INFO: expanding term Thu Jan 15 2015 00:00:00 GMT+0800 (HKT) with format yyyy"-"mm"-"dd
-      toreturn = string.toString().substr(0,15).replace(/ 0/, " ");  // Jan 01 2015 => Jan 1 2015
+    // INFO: expanding term Fri Dec 19 2014 00:00:00 GMT+0800 (HKT) with format yyyy"-"mm"-"dd
+    // INFO: expanding term Thu Jan 15 2015 00:00:00 GMT+0800 (HKT) with format yyyy"-"mm"-"dd
+      // toreturn = string.toString().substr(0,15).replace(/ 0/, " ");  // Jan 01 2015 => Jan 1 2015
+
+	  if (string.toString().length == 0) { return "" }
+	  Logger.log("input date: " + string.toString().substr(0,15));
+	  toreturn = Utilities.formatDate(new Date(string.toString().substr(0,15)),
+									  "UTC",
+									  "EEEE d MMMM YYYY");
+	  Logger.log("output date: " + toreturn);
+
     } else { toreturn = string }
   }
   else { toreturn = string }
@@ -885,16 +899,14 @@ function availableTemplates_() {
 // this is unwise, because the XML template runs with the same privileges as this script,
 // and if you randomly execute templates from all over the Internet, sooner or later you will regret it.
 
+  { name:"jfdi_2014_rcps_xml", url:"jfdi_2014_rcps_xml.html",       title:"JFDI.2014 Subscription Agreement" },
   { name:"kissing_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing.xml",       title:"KISS (Singapore)" },
-  { name:"kissing2_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing2.xml",       title:"KISS (Singapore)" },
-  { name:"kissing3_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing3.xml",       title:"KISS (Singapore)" },
-  { name:"kissing4_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing4.xml",       title:"KISS (Singapore)" },
-  { name:"soweird_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing4.xml",       title:"KISS (Singapore)" },
   { name:"strikeoff_shareholders_xml", url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_shareholders.xml",       title:"Striking Off for Shareholders" },
   { name:"test_templatespec_xml", url:"http://www.legalese.io/templates/jfdi.asia/test-templatespec.xml",       title:"Test templateSpec" },
   { name:"employment_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/employment-agreement.xml",       title:"Employment Agreement" },
   { name:"termsheet_xml",         url:"http://www.legalese.io/templates/jfdi.asia/termsheet.xml",       title:"Seed Term Sheet" },
   { name:"preemptive_notice_xml", url:"http://www.legalese.io/templates/jfdi.asia/preemptive_notice.xml",       title:"Pre-Emptive Notice to Shareholders" },
+  { name:"preemptive_waiver_xml", url:"http://www.legalese.io/templates/jfdi.asia/preemptive_waiver.xml",       title:"Pre-Emptive Notice for Waiver" },
   { name:"loan_waiver_xml",		  url:"http://www.legalese.io/templates/jfdi.asia/convertible_loan_waiver.xml", title:"Waiver of Convertible Loan" },
   { name:"simplified_note_xml",   url:"http://www.legalese.io/templates/jfdi.asia/simplified_note.xml",         title:"Simplified Convertible Loan Agreement" },
   { name:"founder_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/founderagreement.xml",        title:"JFDI Accelerate Founder Agreement" },
@@ -925,8 +937,8 @@ function intersect_(array1, array2) {
 }
 
 // obtainTemplate
-// initially we just assume the template is available as one of the project's HTML files.
-// in future we may pull a generic HTML template from somewhere else.
+// we can pull a generic HTML template from somewhere else,
+// or it can be one of the project's HTML files.
 function obtainTemplate_(url) {
   Logger.log("obtainTemplate_(%s) called", url);
 
@@ -1088,13 +1100,13 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   var filledHTML = newTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
   var xmlfile;
 
-  if (sourceTemplate.url.match(/\.xml$/)) {
+  if (sourceTemplate.url.match(/[._]xml(\.html)?$/)) {
 	xmlfile = DriveApp.createFile(mytitle+".xml", filledHTML, 'text/xml');
 	folder.addFile(xmlfile);
 	DriveApp.getRootFolder().removeFile(xmlfile);
   }
   else {
-	Logger.log("we only support xml file types");
+	Logger.log("we only support xml file types. i am not happy about %s", sourceTemplate.url);
   }
 
   Logger.log("finished " + mytitle);
@@ -1534,8 +1546,15 @@ function uploadAgreement(sheet) {
   }
 
   sheet = sheet || SpreadsheetApp.getActiveSheet();
-  var ss = sheet.getParent();
 
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert("Send to EchoSign?",
+						  "Are you sure you want to send to EchoSign?\nThis feature is not working very well for exploded (one per investor) type documents.",
+						  ui.ButtonSet.YES_NO);
+  
+  if (response == ui.Button.NO) return;
+  
+  var ss = sheet.getParent();
   var data_config = readRows_(sheet);
   var readrows    = data_config[0];
   var config      = data_config[1];
