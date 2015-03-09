@@ -64,7 +64,7 @@ proof of revenue: that some percentage of leads or users are willing to pay.</bu
 <numbered_1_para> <? }
  else { ?>Bootcamp. <? }
  ?>JFDI.2014 shall, at the start of the &#8220;Accelerate&#8221; phase, invest a total of <?= data.parties.investor[0].commitment ?> into the Startup;</numbered_1_para>
-<para_2>and <? if (! data.previously_incorporated) { ?>the Founders shall procure that <? } ?>in consideration of this investment <? if (data.intangibles_clause) { ?>and for other good and valuable consideration which the Parties agree to value at S$150,000,
+<para_2>and <? if (! data.previously_incorporated) { ?>the Founders shall procure that <? } ?>in consideration of this investment <? if (data.intangibles_clause) { ?>and for other good and valuable consideration described in Clause 8 which the Parties agree to value at S$150,000,
 <? } ?>
 the Startup shall authorise and issue <? if (data.jfdi_standard_valuation != false) { ?>convertible debt, equity, or other such security in the corporation such that, immediately prior to the Next External Financing, JFDI.2014 will own a certain percentage (the &#8220;Conversion Percentage&#8221;) of the total capital in the Startup, on a fully-diluted, as-if-converted basis.<? } else { ?><?= data.nonstandard_valuation_text ?><? } ?></para_2>
 <numbered_1_para>The Next External Financing refers to the first financing event subsequent to JFDI.2014&#8217;s investment in which the Startup raises more than <?= data.qualified_financing_round_size ?> within one round or series<? if (data.qualified_round_type != undefined) { ?> of <?= data.qualified_round_type ?> securities<? } ?>.<? if (data.jfdi_standard_valuation == false ) { ?></numbered_1_para><? } else { ?>
@@ -108,7 +108,7 @@ Conditional upon demonstrating further traction, the Startup will also be offere
 <? } else { ?>S$25,000 in one tranche.<? } ?>
 The Founders shall attend substantially all of the Bootcamp. During the course of the Bootcamp the Founders shall treat the Startup as their exclusive work priority.
 The Founders are responsible for finding housing and for ensuring that their presence in Singapore complies with employment and immigration regulations.
-During the Bootcamp, JFDI.Asia shall invest time and energy working with the Startup, providing mentoring, office space, and administrative guidance.
+During the Bootcamp, JFDI.Asia shall invest time and energy working with the Startup, providing coaching, counseling, mentoring, office space, administrative guidance, and the opportunity to pitch before investors on Demo Day. The primary focus of the Bootcamp is to give first-time founders an experiential understanding of the requirements of venture investors. Founders will be given the opportunity to make the best possible case for investment. JFDI will coordinate mentors to give guidance and feedback on the Startup's likelihood of raising investment.
 JFDI.Asia shall provide standardised legal paperwork such as an Investment Agreement, Shareholder Agreement, Volunteer and Employment Agreement, Memorandum and Articles of Association, etc.
 If the Founders already own an existing Singapore Private Limited company (an &#8220;Existing Company&#8221;), then the Founders may, in lieu of incorporating a new Startup, disclose to JFDI.Asia in writing prior to the beginning of the Bootcamp:
 </numbered_1_para><numbered_2_para_noupspace>the Existing Company&#8217;s corporate documentation including its Memorandum and Articles of Association, Shareholders Agreements, Directors Agreements, etc.;
