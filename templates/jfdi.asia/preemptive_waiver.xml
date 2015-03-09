@@ -20,7 +20,7 @@
 </basic_para>
 <?!= data.whitespace_handling_use_tags ?>
 <para_1><b>Regarding the allotment of shares in <?= data.company.name ?> (the "Company")</b></para_1>
-<para_1>Notice is hereby given to all members of the Company that the Directors intend to issue and allot <?= data.number_of_shares ?> <?= data.security_type ?> to <?= data.parties.new_investor[0].name ?>.</para_1>
+<para_1>Notice is hereby given to all members of the Company that the Directors intend to issue and allot <?= data.number_of_shares ?> <?= data.security_type ?> to <?= data.parties.new_investor[0].name ?></para_1>
 <? if (data.explanation) { ?><para_1><?= data.explanation ?></para_1><? } ?>
 <para_1>As a member of the Company, you possess the right under Articles 44 of the Company's Articles of Association to participate in any issue of shares. We seek your waiver in writing of your right to participate. Kindly indicate your consent by signing below.</para_1>
 <para_1>If we do not hear from you within 7 days from the date of this letter, we will deem that you have no objection to the issue of new shares, and do not wish to participate.</para_1>
