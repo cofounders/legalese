@@ -12,8 +12,10 @@
 <cover_company_id><?= data.parties.company[0].idtype ?> <?= data.parties.company[0].id ?></cover_company_id>
 </CoverTop>
 <CoverMid>
+<centered></centered>
 <centered><span_smallcaps>CONFIDENTIAL</span_smallcaps></centered>
-
+<centered></centered>
+<centered></centered>
 <noindent_justified>This newsletter is intended for holders of Preferred &#8216;A&#8217; Shares in <?= data.parties.company[0].name ?> The information set forth is being furnished on a confidential basis to the recipient. This document is confidential and has been prepared solely for the information of the intended recipient. It may not be reproduced, distributed, or used for any other purpose. Nothing contained herein constitutes financial, legal, or tax advice. We make no representation that the information and opinions expressed herein are accurate, complete, or current. This is not an offer for shares.</noindent_justified>
 
 </CoverMid>
