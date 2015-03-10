@@ -10,6 +10,8 @@
 <centered></centered>
 <cover_company_name><?= data.parties.company[0].name ?></cover_company_name>
 <cover_company_id><?= data.parties.company[0].idtype ?> <?= data.parties.company[0].id ?></cover_company_id>
+<cover_company_id><i>regarding</i></cover_company_id>
+<cover_company_name><?= data.parties.startup[0].name ?></cover_company_name>
 </CoverTop>
 <CoverMid>
 <centered></centered>
