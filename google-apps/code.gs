@@ -479,6 +479,7 @@ function readRows_(sheet) {
   var config = {};
   var previous = [];
   var relations = {};
+  var partiesByName = {};
 
   Logger.log("readRows: starting.");
 
@@ -596,6 +597,7 @@ function readRows_(sheet) {
 
       parties[partytype].push(singleparty);
 	  parties._allparties.push(singleparty);
+	  partiesByName[singleparty.name] = singleparty;
 
 	  // set up the _unmailed attribute
 	  if (singleparty.legalese_status == undefined || singleparty.legalese_status === "") {
@@ -681,7 +683,7 @@ function readRows_(sheet) {
 	party.roles = party.roles || {};
 	for (var r in party_relations) {
 	  Logger.log("ROLE: %s has a relation %s with %s", party.name, r, party_relations[r]);
-	  party.roles[asvar_(r)] = party_relations[r];
+	  party.roles[asvar_(r)] = party_relations[r].map(function(p){return partiesByName[p]}); // XXX TODO: error checking -- what if the party name does not correspond to a party object?
 	}
   }
 
