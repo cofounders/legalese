@@ -1698,8 +1698,12 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, config, r
 
 	// TODO: if the data.expiry_date is defined then add 24 hours to it and stick it in
 	// but also set the configuration option that decides if we should honour it or not.
-	if (config.expire_after != undefined && config.expire_after.values[0] > 0) {
-	  agreementCreationInfo.daysUntilSigningDeadline = config.expire_after.values[0];
+	if (config.echosign_expires != undefined && config.echosign_expires.values[0]
+	   && readrows.expiry_date != undefined) {
+	  
+	  var days_until = ((new Date(readrows._orig_expiry_date)).getTime() - (new Date()).getTime()) / (24 * 60 * 60 * 1000);
+	  Logger.log("expiry date is %s days in the future", days_until);
+	  agreementCreationInfo.daysUntilSigningDeadline = days_until;
 	}
   }
 
