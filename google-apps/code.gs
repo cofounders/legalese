@@ -1386,10 +1386,10 @@ function showSidebar(sheet) {
 	var myTemplate = '<p><a href="<?= authorizationUrl ?>" target="_blank">Authorize EchoSign</a>. ' +
       'Close this sidebar when authorization completes.</p>';
 
-	if (templateActiveSheetChanged_(sheet)) {
-	  var formActiveSheet = PropertiesService.getDocumentProperties().getProperty("legalese."+sheet.getParent().getId()+".formActiveSheetId");
-	  myTemplate = myTemplate + '<h2>Potential Form Mismatch</h2><p>Active sheet may have changed. If you\'re working with this sheet, you might want to recreate the form so that form submissions go here instead.</p>';
-	}
+//	if (templateActiveSheetChanged_(sheet)) {
+//	  var formActiveSheet = PropertiesService.getDocumentProperties().getProperty("legalese."+sheet.getParent().getId()+".formActiveSheetId");
+//	  myTemplate = myTemplate + '<h2>Potential Form Mismatch</h2><p>Active sheet may have changed. If you\'re working with this sheet, you might want to recreate the form so that form submissions go here instead.</p>';
+//	}
 
     var template = HtmlService.createTemplate(myTemplate);
     template.authorizationUrl = authorizationUrl;
