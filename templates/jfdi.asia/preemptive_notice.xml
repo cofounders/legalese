@@ -43,7 +43,7 @@ How do pre-emptive rights work? <span_ucnum><?= data.parties.company[0].short_na
 <Story_Main><chapter_header>Investor Notice Regarding Pre-Emptive Rights</chapter_header>
     <para_1>Dear <span_ucnum><?= data.parties.company[0].short_name ?></span_ucnum> shareholder,</para_1>
     <centered>Re: Investment into <?= data.parties.company[0].short_name ?> startup <?= data.parties.startup[0].name ?></centered>
-    <para_1>We are pleased to announce that one of our portfolio startups <?= data.parties.startup[0].name ?> (&#8220;<?= data.parties.startup[0].short_name ?>&#8221;) has received an investment proposition which they intend to accept. They seek to raise up to <?= data.amount_raising ?> in the form of <?= data.security_type ?> at a pre-money valuation of <?= data.pre_money_valuation ?>.</para_1>
+    <para_1>We are pleased to announce that one of our portfolio startups <?= data.parties.startup[0].name ?> (&#8220;<?= data.parties.startup[0].short_name ?>&#8221;) has received an investment proposition which they intend to accept. They seek to raise up to <?= data.amount_raising ?> by issuing <?= data.security_type ?> at a pre-money valuation of <?= data.pre_money_valuation ?>.</para_1>
     <para_2>For background, please refer to our previous communication, the <i>Investor Newsletter for Holders of Preferred &#8216;A&#8217; Shares Regarding Pre-Emptive Rights</i>.</para_2>
     <para_2>There are two ways for you to participate in this round: directly, or indirectly through <span_ucnum><?= data.parties.company[0].short_name ?></span_ucnum>.</para_2>
     <b_left_sidehead>Direct Route to Investment</b_left_sidehead>
