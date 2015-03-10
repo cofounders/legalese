@@ -38,12 +38,12 @@
 
 </CoverBottom_series>
 <Firstpage_Sidebar>
-<sidebar>This foundational document confirms the Founders&#8217; acceptance of the offer made by JFDI to participate in the next Accelerate Bootcamp.</sidebar>
+<sidebar>This foundational document confirms the Founders' acceptance of the offer made by JFDI to participate in the next Accelerate Bootcamp.</sidebar>
 </Firstpage_Sidebar>
 <Story_Main>
 <chapter_header>Founder Agreement
 </chapter_header>
-<para_1>This Agreement legally binds the following Parties with respect to the JFDI.Asia Accelerate Bootcamp <span_ucnum><?= data.jfdi_accelerate_batch ?></span_ucnum> (the &#8220;Bootcamp&#8221;):
+<para_1>This Agreement legally binds the following Parties with respect to the JFDI.Asia Accelerate Bootcamp <span_ucnum><?= data.jfdi_accelerate_batch ?></span_ucnum> (the "Bootcamp"):
 </para_1>
 <? for (var i in data.parties.founder) { ?>
 <parties><?!= include("inc_party", data, data.parties.founder[i]) ?></parties>
@@ -55,20 +55,20 @@
 JFDI.Asia Pte. Ltd, the operator of the Bootcamp
 </parties>
 <para_1>By this Agreement the Parties express a mutual understanding as follows:</para_1>
-<numbered_1_para>The <span_ucnum><?= data.jfdi_accelerate_batch ?></span_ucnum> Bootcamp shall run in two phases. The "Validate" phase begins on <?= data.validate_start_date ?>. The &#8220;Accelerate&#8221; phase begins on <?= data.accelerate_start_date ?>. The Bootcamp ends with Demo Day, on or around <?= data.demo_day_date ?>. The Founders should be prepared to remain in Singapore through <?= data.remainder_date ?> to negotiate funding.
-Upon acceptance of this Agreement, the Founders will be admitted to the <? if (data.skip_hoops != true) { ?>&#8220;Validate&#8221; phase of the Bootcamp. During this phase, the Founders are not required to be present in Singapore. The Founders should work on customer development, product development, and early traction through a Minimum Viable Product (concierge or scalable or both.) JFDI will work with the Founders online to prepare them for Accelerate. The Founders should also recruit as needed to ensure that the team contains a complete mix of capabilities: product, customer, and business development.
+<numbered_1_para>The <span_ucnum><?= data.jfdi_accelerate_batch ?></span_ucnum> Bootcamp shall run in two phases. The "Validate" phase begins on <?= data.validate_start_date ?>. The "Accelerate" phase begins on <?= data.accelerate_start_date ?>. The Bootcamp ends with Demo Day, on or around <?= data.demo_day_date ?>. The Founders should be prepared to remain in Singapore through <?= data.remainder_date ?> to negotiate funding.
+Upon acceptance of this Agreement, the Founders will be admitted to the <? if (data.skip_hoops != true) { ?>"Validate" phase of the Bootcamp. During this phase, the Founders are not required to be present in Singapore. The Founders should work on customer development, product development, and early traction through a Minimum Viable Product (concierge or scalable or both.) JFDI will work with the Founders online to prepare them for Accelerate. The Founders should also recruit as needed to ensure that the team contains a complete mix of capabilities: product, customer, and business development.
 Upon demonstrating early traction and a complete team, the Founders will be invited to the "Accelerate" phase in Singapore. During this phase, the Startup should aim to demonstrate:
 </numbered_1_para>
 <bullets>scalable traction: sales and user growth that does not require direct involvement by the Founders.
 proof of revenue: that some percentage of leads or users are willing to pay.</bullets>
 <numbered_1_para> <? }
  else { ?>Bootcamp. <? }
- ?>JFDI.2014 shall, at the start of the &#8220;Accelerate&#8221; phase, invest a total of <?= data.parties.investor[0].commitment ?> into the Startup;</numbered_1_para>
+ ?>JFDI.2014 shall, at the start of the "Accelerate" phase, invest a total of <?= data.parties.investor[0].commitment ?> into the Startup;</numbered_1_para>
 <para_2>and <? if (! data.previously_incorporated) { ?>the Founders shall procure that <? } ?>in consideration of this investment <? if (data.intangibles_clause) { ?>and for other good and valuable consideration described in Clause 8 which the Parties agree to value at S$150,000,
 <? } ?>
-the Startup shall authorise and issue <? if (data.jfdi_standard_valuation != false) { ?>convertible debt, equity, or other such security in the corporation such that, immediately prior to the Next External Financing, JFDI.2014 will own a certain percentage (the &#8220;Conversion Percentage&#8221;) of the total capital in the Startup, on a fully-diluted, as-if-converted basis.<? } else { ?><?= data.nonstandard_valuation_text ?><? } ?></para_2>
-<numbered_1_para>The Next External Financing refers to the first financing event subsequent to JFDI.2014&#8217;s investment in which the Startup raises more than <?= data.qualified_financing_round_size ?> within one round or series<? if (data.qualified_round_type != undefined) { ?> of <?= data.qualified_round_type ?> securities<? } ?>.<? if (data.jfdi_standard_valuation == false ) { ?></numbered_1_para><? } else { ?>
-The Conversion Percentage shall be fixed at the start of the &#8220;Accelerate&#8221; phase<?
+the Startup shall authorise and issue <? if (data.jfdi_standard_valuation != false) { ?>convertible debt, equity, or other such security in the corporation such that, immediately prior to the Next External Financing, JFDI.2014 will own a certain percentage (the "Conversion Percentage") of the total capital in the Startup, on a fully-diluted, as-if-converted basis.<? } else { ?><?= data.nonstandard_valuation_text ?><? } ?></para_2>
+<numbered_1_para>The Next External Financing refers to the first financing event subsequent to JFDI.2014's investment in which the Startup raises more than <?= data.qualified_financing_round_size ?> within one round or series<? if (data.qualified_round_type != undefined) { ?> of <?= data.qualified_round_type ?> securities<? } ?>.<? if (data.jfdi_standard_valuation == false ) { ?></numbered_1_para><? } else { ?>
+The Conversion Percentage shall be fixed at the start of the "Accelerate" phase<?
 if (data.valuation_basis == "table") { ?>, and determined according to the following valuation table, or as agreed between the Startup and JFDI.2014.
 </numbered_1_para>
 <table_enclosing_para><Table aid:table="table" aid:tcols="2" aid:trows="6" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
@@ -102,7 +102,7 @@ started acquiring users or customers
 <para_1>Teams which do not meet these criteria by <?= data.accelerate_start_date ?> will be considered for a subsequent bootcamp.</para_1>
 <numbered_1_para><? } ?>
 Within four weeks of the start of the Accelerate phase, the Founders shall <? if (data.previously_incorporated) { ?>have incorporated the Startup as a Singapore Private Limited legal entity and <? } ?>have opened a Singapore corporate bank account.
-After Accelerate begins and after the Startup&#8217;s Singapore bank account is ready, JFDI.2014 will invest <? if (data.skip_hoops != true) { ?>S$10,000 (ten thousand Singapore dollars), that being the first tranche of its total cash investment.
+After Accelerate begins and after the Startup's Singapore bank account is ready, JFDI.2014 will invest <? if (data.skip_hoops != true) { ?>S$10,000 (ten thousand Singapore dollars), that being the first tranche of its total cash investment.
 The second tranche payment of S$15,000 (fifteen thousand Singapore dollars) shall be conditional upon the Startup remaining in Singapore, demonstrating product/market fit in the form of a revenue commitment from at least two external, arms-length customers, or otherwise as determined by JFDI.Asia in its sole discretion.
 Conditional upon demonstrating further traction, the Startup will also be offered a chance to pitch to potential investors on Demo Day. If the Startup is struggling to show traction, JFDI.Asia may cancel the pitch, or defer it to a future Demo Day. For the avoidance of doubt, a Startup which does not qualify to pitch will not be invited to Demo Day, not even to be in the audience.
 <? } else { ?>S$25,000 in one tranche.
@@ -111,11 +111,11 @@ The Founders shall attend substantially all of the Bootcamp. During the course o
 The Founders are responsible for finding housing and for ensuring that their presence in Singapore complies with employment and immigration regulations.
 During the Bootcamp, JFDI.Asia shall invest time and energy working with the Startup, providing coaching, counseling, mentoring, office space, administrative guidance, and the opportunity to pitch before investors on Demo Day. The primary focus of the Bootcamp is to give first-time founders an experiential understanding of the requirements of venture investors. Founders will be given the opportunity to make the best possible case for investment. JFDI will coordinate mentors to give guidance and feedback on the Startup's likelihood of raising investment.
 JFDI.Asia shall provide standardised legal paperwork such as an Investment Agreement, Shareholder Agreement, Volunteer and Employment Agreement, Memorandum and Articles of Association, etc.
-If the Founders already own an existing Singapore Private Limited company (an &#8220;Existing Company&#8221;), then the Founders shall, in lieu of incorporating a new Startup, disclose to JFDI.Asia in writing prior to the beginning of the Bootcamp:
-</numbered_1_para><numbered_2_para_noupspace>the Existing Company&#8217;s corporate documentation including its Memorandum and Articles of Association, Shareholders Agreements, Directors Agreements, etc.;
+If the Founders already own an existing Singapore Private Limited company (an "Existing Company"), then the Founders shall, in lieu of incorporating a new Startup, disclose to JFDI.Asia in writing prior to the beginning of the Bootcamp:
+</numbered_1_para><numbered_2_para_noupspace>the Existing Company's corporate documentation including its Memorandum and Articles of Association, Shareholders Agreements, Directors Agreements, etc.;
 the capitalisation table of the Existing Company; and
 all material liabilities and contractual agreements of the Existing Company;
-</numbered_2_para_noupspace><para_2>and &#8220;Startup&#8221; in this Agreement shall refer to the Existing Company.</para_2>
+</numbered_2_para_noupspace><para_2>and "Startup" in this Agreement shall refer to the Existing Company.</para_2>
 <numbered_1_para>In the event that proprietary assets to be used in the Startup (including but not limited to intellectual property assets) reside with individuals or in another legal entity whether such individuals or entities are in Singapore or abroad, the Founders shall, within four weeks of formal acceptance, cause said assets to be transferred into the Singapore Startup legal entity, free and clear of any pledge, reservation of right, or other encumbrance.
 As an investor, JFDI.2014 shall hold the following rights which the Founders and/or other shareholders may or may not also hold:
 </numbered_1_para>
@@ -131,7 +131,7 @@ extraordinary protective provisions regarding future financings.
 The Founders shall have the responsibility to maintain the Startup as a legal entity in good standing with the Singapore authorities.
 Unless otherwise agreed in writing, if none of the Founders are Singapore citizens or permanent residents, and therefore require JFDI staff to act as a local director, then the Founders and the Startup shall execute a limited power of attorney and/or a proxy to empower JFDI.2014 and its representatives, in the event the Startup fails, to wind up or strike off the company in the absence of the Founders.
 The Founders shall cause the Startup to ratify this agreement by corporate resolution, and otherwise agree to promptly undertake such actions as JFDI.Asia may request from time to time in writing to give effect to this agreement, including but not limited to a novation of this agreement, if requested.
-The division of equity in the Startup amongst the Founders and/or other employees, advisors and consultants is a matter for the Founders to agree on, so long as JFDI.2014&#8217;s interests are not diluted prior to the Next External Financing.
+The division of equity in the Startup amongst the Founders and/or other employees, advisors and consultants is a matter for the Founders to agree on, so long as JFDI.2014's interests are not diluted prior to the Next External Financing.
 The Founders warrant that they have no reason to believe that any other party may lay exclusive claim to any intellectual property, asset, or other proprietary interest of the Startup.
 This offer may be rescinded should the Founders be unable to comply with the requirements herein, or fail to deliver other supporting documents requested by JFDI.Asia.
 </numbered_1_para><b_left_sidehead>Expiry</b_left_sidehead>
