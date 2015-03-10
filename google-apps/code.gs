@@ -556,7 +556,8 @@ function readRows_(sheet) {
 	// process data rows
     if (section == "KEY TERMS") {
       if ( row[0].length == 0) { continue }
-      terms[asvar_(row[0])] = formatify_(term_formats[i][0], row[1]);
+      terms[           asvar_(row[0])] = formatify_(term_formats[i][0], row[1], sheet);
+	  terms["_orig_" + asvar_(row[0])] = row[1];
     }
     else if (section == "PARTIES") { // Name	partygroup	Email	IDtype	ID	Address	State	InvestorType Commitment etc
       var singleparty = { _spreadsheet_row:i+1, _unmailed:false };
@@ -567,7 +568,7 @@ function readRows_(sheet) {
       for (var ki in partyfields) {
         if (ki < 1) { continue }
         var k = partyfields[ki];
-        var v = formatify_(party_formats[0][ki],row[ki]);
+        var v = formatify_(party_formats[0][ki],row[ki], sheet);
 
         singleparty[k] = v;
       }
@@ -630,6 +631,7 @@ function readRows_(sheet) {
 			&& (! (rowvalues[j] === ""))) { leftmost_nonblank = j }
 	  }
 	  Logger.log("leftmost_nonblank=%s", leftmost_nonblank);
+
 	  for (var j = 0; j < leftmost_nonblank; j++) {
 		descended[j] = previous[j];
 	  }
@@ -700,7 +702,7 @@ function asvar_(str) {
 // Wed Dec 17 05:17:57 PST 2014 INFO: term 0.2 has format 0%
 
 // google's raw format expresses 1% as 0.01.
-function formatify_(format, string) {
+function formatify_(format, string, sheet) {
   var toreturn;
   if (format != undefined) {
     var matches;
@@ -726,7 +728,7 @@ function formatify_(format, string) {
 	  if (string.toString().length == 0) { return "" }
 	  Logger.log("input date: " + string.toString().substr(0,15));
 	  toreturn = Utilities.formatDate(new Date(string.toString().substr(0,15)),
-									  "UTC",
+									  sheet.getParent().getSpreadsheetTimeZone(),
 									  "EEEE d MMMM YYYY");
 	  Logger.log("output date: " + toreturn);
 
@@ -832,13 +834,13 @@ function quicktest() {
   toreturn = toreturn + "spreadsheet timezone = " + SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone() + "\n";
   Logger.log(toreturn);
 
-# [15-03-10 13:29:05:951 HKT] date: Sun Mar 01 2015 20:02:03 GMT+0800 (HKT)
-# mar 1 UTC: Sunday 1 March 2015 12:02:03
-# mar 1 SGT: Sunday 1 March 2015 12:02:03
-# mar 1 HKT: Sunday 1 March 2015 12:02:03
-# mar 1 GMT: Sunday 1 March 2015 12:02:03
-# mar 1 Asia/Singapore:   Sunday 1 March 2015 20:02:03
-# spreadsheet timezone = Asia/Singapore
+ // [15-03-10 13:29:05:951 HKT] date: Sun Mar 01 2015 20:02:03 GMT+0800 (HKT)
+ // mar 1 UTC: Sunday 1 March 2015 12:02:03
+ // mar 1 SGT: Sunday 1 March 2015 12:02:03
+ // mar 1 HKT: Sunday 1 March 2015 12:02:03
+ // mar 1 GMT: Sunday 1 March 2015 12:02:03
+ // mar 1 Asia/Singapore:   Sunday 1 March 2015 20:02:03
+ //  spreadsheet timezone = Asia/Singapore
 
   
 }
@@ -1145,6 +1147,13 @@ function include(name, data, _include) {
   }
   Logger.log("unable to find template named %s", name);
   return;
+}
+
+// ---------------------------------------------------------------------------------------------------------------- newlinesToCommas
+// used inside <? ?> to convert a multiline address to a singleline address for party-section purposes
+function newlinesToCommas(str) {
+  Logger.log("converting newlinesToCommas");
+  return str.replace(/\n/g, ", ");
 }
 
 
@@ -1542,6 +1551,7 @@ function fauxMegaSign(sheet) {
 								config.echosign.tree.message,
 								config.echosign.tree.title,
 								cc_list,
+								readrows,
 								config,
 								null
 							);
@@ -1661,17 +1671,23 @@ function uploadAgreement(sheet) {
 	for (var cu in commit_updates_to) { commit_updates_to[cu].legalese_status.setValue("mailed echosign " + now) }
 	for (var cu in commit_updates_cc) { commit_updates_cc[cu].legalese_status.setValue("CC'ed echosign " + now) }
 
-	var acr = postAgreement_(	{ "transientDocumentId": transientDocumentId },
+	if (config.skip_echosign && config.skip_echosign.values[0] == true) {
+	  Logger.log("skipping the sending to echosign");
+	}
+	else {
+	  Logger.log("actually posting to echosign");
+	  var acr = postAgreement_(	{ "transientDocumentId": transientDocumentId },
 								emailInfo,
 								config.echosign.tree.message,
 								config.echosign.tree.title,
 								cc_list,
+								readrows,
 								config,
-								readmeDoc
+								readmeDoc,
+								null
 							);
-
+	}
 	Logger.log("uploadAgreement: well, that seems to have worked!");
-
   }
 
   Logger.log("uploadAgreement: that's all, folks!");
@@ -1679,7 +1695,7 @@ function uploadAgreement(sheet) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------- postAgreement_
-function postAgreement_(fileInfos, recipients, message, name, cc_list, config, readmeDoc, agreementCreationInfo) {
+function postAgreement_(fileInfos, recipients, message, name, cc_list, readrows, config, readmeDoc, agreementCreationInfo) {
   var api = getEchoSignService_();
 
   if (agreementCreationInfo == undefined) {
@@ -1704,8 +1720,8 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, config, r
 	   && readrows.expiry_date != undefined) {
 	  
 	  var days_until = ((new Date(readrows._orig_expiry_date)).getTime() - (new Date()).getTime()) / (24 * 60 * 60 * 1000);
-	  Logger.log("expiry date is %s days in the future", days_until);
-	  agreementCreationInfo.daysUntilSigningDeadline = days_until;
+	  Logger.log("expiry date is %s days in the future. will give an extra day for leeway", days_until);
+	  agreementCreationInfo.daysUntilSigningDeadline = days_until + 1;
 	}
   }
 
