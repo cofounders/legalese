@@ -492,8 +492,10 @@ function readRows_(sheet) {
     var row = values[i];
 	Logger.log("readRows: row " + i + ": processing row "+row[0]);
 	// process header rows
+	if (row.filter(function(c){return c.length > 0}).length == 0) { Logger.log("row %s is blank, skipping", i);  continue; }
     if      (row[0] == "KEY TERMS") { section=row[0]; terms_row_offset = i; continue; }
-    else if (row[0] == "IGNORE" || row[0] == "IMPORT FROM CAP TABLE") { 
+    else if (row[0] == "IGNORE" ||
+			 row[0] == "IMPORT FROM CAP TABLE") { 
 	  section = row[0];
 	  continue;
 	}
