@@ -106,6 +106,25 @@ to the folder build/indesign2xml
 
 **** run xml_pp -s format_c < indesign2xml/SomeOtherBoilerplate.xml > 
 
+20150310-00:13:33 mengwong@venice:~/non-db-src/legalese/templates/jfdi.asia% perl -ple 's/<\/?i>//g' < ~/non-db-src/legalese/templates/jfdi.asia/rcps\ subscription\ agreement.xml | xml_pp -s record  > jfdi_2014_rcps.xml
+
+blow away all leading spaces
+(replace-regexp "^ *" "" nil (if (and transient-mark-mode mark-active) (region-beginning)) (if (and transient-mark-mode mark-active) (region-end)))
+
+sometimes there will be opening tags that appear by themselves on a line. delete the terminal newline.
+**** set whitespace-handling
+
+it may be necessary to set <?whitespace-handling use-tags?>
+
+**** it may be necessary to add a restart=true attribute to certain paragraphs
+
+**** get rid of extraneous m(s+</)
+
+**** for the sake of readability in the XML side, change
+| 8220 | " |
+| 8221 | " |
+| 8217 | ' |
+
 *** Migrated Documents
 **** TODO 00 founder agreement.indd
 
