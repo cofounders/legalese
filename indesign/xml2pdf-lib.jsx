@@ -193,8 +193,29 @@ function setSignaturePageToAMaster(doc) {
   // so, starting from the back, we look for the page that contains paragraph style chapter header with text Signature
   // maybe we use the Find command for this
   // and we then set the current page to the A master, and all subsequent pages too.
+  var story = doc.pages.item(-1).textFrames.item(0).parentStory;
 
+  // search backward for a chapter header titled Signatures
+  var signatures_para;
 
+  for (var i=story.paragraphs.length-1; i > 0; i--) {
+	var para = story.paragraphs.item(i);
+	if (para.appliedParagraphStyle.name == "chapter header" &&
+		para.contents.match(/Signature/i)
+	   ) {
+	  signatures_para = para;
+	  break;
+	}
+  }
+  if (signatures_para == undefined) return;
+
+  var signatures_page = signatures_para.parentTextFrames[0].parentPage;
+  if (signatures_page == undefined || ! signatures_page.isValid) return;
+
+  // set A master for the current page and all subsequent pages
+  for (var i=signatures_page.documentOffset; i < doc.pages.length; i++) {
+	doc.pages[i].appliedMaster = doc.masterSpreads.item("A-Master");
+  }
 }
 
 // -------------------------------------------------- AddReturns
