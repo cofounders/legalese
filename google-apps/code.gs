@@ -478,6 +478,7 @@ function readRows_(sheet) {
   var terms_row_offset;
   var config = {};
   var previous = [];
+  var relations = {};
 
   Logger.log("readRows: starting.");
 
@@ -551,7 +552,10 @@ function readRows_(sheet) {
 	  continue;
 	}
 	else if (row[0] == "CONFIGURATION") { section = row[0]; continue }
-	else if (row[0] == "ROLES") { section = row[0]; continue }
+	else if (row[0] == "ROLES") {
+	  section = row[0];
+	  continue;
+	}
 
 	// process data rows
     if (section == "KEY TERMS") {
@@ -559,6 +563,15 @@ function readRows_(sheet) {
       terms[           asvar_(row[0])] = formatify_(term_formats[i][0], row[1], sheet);
 	  terms["_orig_" + asvar_(row[0])] = row[1];
     }
+	else if (section == "ROLES") { // principal relation entity. these are all strings. we attach roles later.
+	  var principal = row[0];
+	  var relation  = row[1];
+	  var entity    = row[2];
+
+	  relations[principal]           = relations[principal]           || {};
+	  relations[principal][relation] = relations[principal][relation] || [];
+	  relations[principal][relation].push(entity);
+	}
     else if (section == "PARTIES") { // Name	partygroup	Email	IDtype	ID	Address	State	InvestorType Commitment etc
       var singleparty = { _spreadsheet_row:i+1, _unmailed:false };
       var party_formats = sheet.getRange(i+1,1,1,row.length).getNumberFormats();
@@ -578,8 +591,8 @@ function readRows_(sheet) {
       Logger.log("readRows: learning entire %s, %s", partytype, singleparty);
 	  if (parties[partytype] == undefined) { parties[partytype] = [] }
 
-	  if (singleparty.legalese_status.toLowerCase() == "ignore") { Logger.log("ignoring %s line", partytype);
-																   continue }
+	  if (singleparty.legalese_status == undefined) { SpreadsheetApp.getUi().alert("the sheet we're working on has no legalese status! onoes."); throw new Error("onoes"); }
+	  if (singleparty.legalese_status.toLowerCase() == "ignore") { Logger.log("ignoring %s line", partytype); continue }
 
       parties[partytype].push(singleparty);
 	  parties._allparties.push(singleparty);
@@ -659,8 +672,19 @@ function readRows_(sheet) {
 	  config[columna].dict[columnb] = columns_cde;
 	  Logger.log("%s", columna+".dict."+columnb+"=" + config[columna].dict[columnb].join(","));
 	}
-
   }
+  // connect up the parties based on the relations learned from the ROLES section.
+  for (var i = 0; i < parties._allparties.length; i++) {
+	var party = parties._allparties[i];
+	var party_relations = relations[party.name];
+	if (party_relations == undefined) { continue }
+	party.roles = party.roles || {};
+	for (var r in party_relations) {
+	  Logger.log("ROLE: %s has a relation %s with %s", party.name, r, party_relations[r]);
+	  party.roles[asvar_(r)] = party_relations[r];
+	}
+  }
+
   terms._origpartyfields = origpartyfields;
   terms._partyfields = partyfields;
   terms.parties = parties;
@@ -689,7 +713,7 @@ function getPartyCells_(sheet, readrows, party) {
 // ---------------------------------------------------------------------------------------------------------------- asvar_
 function asvar_(str) {
   if (str == undefined) { return undefined }
-  return str.toString().replace(/[ -.]/g, "_").replace(/:/g, "").toLowerCase();
+  return str.toString().replace(/:/g, "").toLowerCase().replace(/\W/g, "_").toLowerCase();
 }
 
 // ---------------------------------------------------------------------------------------------------------------- formatify_
