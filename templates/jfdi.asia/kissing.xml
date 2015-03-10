@@ -36,8 +36,7 @@
 <centered>version 1.0.0</centered>
 </CoverBottom_series>
 
-<Firstpage_Sidebar>
-</Firstpage_Sidebar>
+<Firstpage_Sidebar delete_if_empty="true"></Firstpage_Sidebar>
 <Story_Main><chapter_header>KISS(Sing) Agreement</chapter_header>
 <para_1>This KISS (Singapore) agreement (the "Agreement") is made on <?= data.kissing_agreement_date ?> (the "Date of Issuance") between:</para_1>
 <parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
