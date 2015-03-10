@@ -1,7 +1,13 @@
 /* TODO
  *
+ * todo -- normalize PARTIES to PARTIES,ROLES with a join
+ * todo -- do the right thing with emailing exploded people. set esnum to contiguous 1,2,3 in each exploded file.
+ * todo -- write to the Readme the list of To: and CC: for when the user is submitting to EchoSign manually.
+ *
+** we need a way for a spreadsheet to say "Get your Party Information from somewhere else".
 ** we need a way for a spreadsheet to say "Get your Party Information from somewhere else".
  *
+ * we need a high level way to say "generate workflow W containing agreements X1, X2, X3 for company Y".
  *
 ** import the termsheets from "How to invest in a JFDI Startup"
  *
@@ -729,6 +735,7 @@ function formatify_(format, string) {
   return toreturn;
 }
 
+
 // ---------------------------------------------------------------------------------------------------------------- clauseroot / clausetext2num
 // this is a hints db which hasn't been implemented yet. For InDesign we indicate cross-references in the XML already.
 // but for the non-InDesign version we have to then number by hand.
@@ -781,6 +788,7 @@ function showclause_(clausetext) {
 }
 
 
+// ---------------------------------------------------------------------------------------------------------------- otherSheets
 function otherSheets_() {
   var activeRange = SpreadsheetApp.getActiveRange(); // user-selected range
   var rangeValues = activeRange.getValues();
@@ -810,16 +818,6 @@ function otherSheets_() {
 
 // ---------------------------------------------------------------------------------------------------------------- quicktest
 function quicktest() {
-  var sheets = otherSheets_();
-}
-
-function uniqueKey_(sheet) {
-  var ss = sheet.getParent();
-  return ss.getId() + "/" + sheet.getSheetId();
-}
-
-// ---------------------------------------------------------------------------------------------------------------- setupOtherForms_
-function setupOtherForms_() {
 
   var toreturn = "";
   var mydate = new Date("Mar 1 2015 12:02:03 GMT+0000 (UTC)");
@@ -841,6 +839,17 @@ function setupOtherForms_() {
 # spreadsheet timezone = Asia/Singapore
 
   
+}
+
+// ---------------------------------------------------------------------------------------------------------------- uniqueKey_
+function uniqueKey_(sheet) {
+  var ss = sheet.getParent();
+  return ss.getId() + "/" + sheet.getSheetId();
+}
+
+// ---------------------------------------------------------------------------------------------------------------- setupOtherForms_
+function setupOtherForms_() {
+  var sheets = otherSheets_();
   for (var i = 0; i < sheets.length; i++) {
 	var sheet = sheets[i];
 	setupForm_(sheet);
@@ -852,7 +861,7 @@ function setupOtherForms_() {
   }
 }
 
-// ---------------------------------------------------------------------------------------------------------------- quicktest
+// ---------------------------------------------------------------------------------------------------------------- fillOtherTemplates_
 function fillOtherTemplates_() {
   var sheets = otherSheets_();
   for (var i = 0; i < sheets.length; i++) {
@@ -877,7 +886,7 @@ function fillOtherTemplates_() {
   }
 }
 
-// ---------------------------------------------------------------------------------------------------------------- quicktest
+// ---------------------------------------------------------------------------------------------------------------- uploadOtherAgreements_
 function uploadOtherAgreements_() {
   var sheets = otherSheets_();
   for (var i = 0; i < sheets.length; i++) {
@@ -957,6 +966,7 @@ function intersect_(array1, array2) {
   return array1.filter(function(n) { return array2.indexOf(n.name) != -1 || array2.indexOf(n.name.replace(/_xml/,"")) != -1 });
 }
 
+// ---------------------------------------------------------------------------------------------------------------- obtainTemplate_
 // obtainTemplate
 // we can pull a generic HTML template from somewhere else,
 // or it can be one of the project's HTML files.
@@ -1099,21 +1109,6 @@ function fillTemplates(sheet) {
 //
 // so, we define an include() function.
 
-function include(name, data, _include) {
-  Logger.log("running include for %s", name);
-  var filtered = availableTemplates_().filter(function(t){return t.name == name});
-  if (filtered.length == 1) {
-	var template = filtered[0];
-	var childTemplate = obtainTemplate_(template.url);
-	childTemplate.data = data;
-	childTemplate.data._include = _include;
-	var filledHTML = childTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
-	return filledHTML;
-  }
-  Logger.log("unable to find template named %s", name);
-  return;
-}
-
 function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   // reset "globals"
   clauseroot = [];
@@ -1132,6 +1127,24 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
 
   Logger.log("finished " + mytitle);
 }
+
+// ---------------------------------------------------------------------------------------------------------------- include
+// used inside <? ?>
+function include(name, data, _include) {
+  Logger.log("running include for %s", name);
+  var filtered = availableTemplates_().filter(function(t){return t.name == name});
+  if (filtered.length == 1) {
+	var template = filtered[0];
+	var childTemplate = obtainTemplate_(template.url);
+	childTemplate.data = data;
+	childTemplate.data._include = _include;
+	var filledHTML = childTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+	return filledHTML;
+  }
+  Logger.log("unable to find template named %s", name);
+  return;
+}
+
 
 // ---------------------------------------------------------------------------------------------------------------- legaleseRootFolder_
 function legaleseRootFolder_() {
@@ -1218,7 +1231,7 @@ function resetStyles_(doc) {
   }
 }
 
-// ---------------------------------------------------------------------------------------------------------------- showStyleAttributes
+// ---------------------------------------------------------------------------------------------------------------- showStyleAttributes_
 function showStyleAttributes_() {
   var body = DocumentApp.getActiveDocument.getBody();
   var listitems = body.getListItems();
@@ -1231,7 +1244,7 @@ function showStyleAttributes_() {
   }
 }
 
-// ---------------------------------------------------------------------------------------------------------------- resetDocumentProperties
+// ---------------------------------------------------------------------------------------------------------------- resetDocumentProperties_
 // utility function to reset userproperties
 function resetDocumentProperties_(which) {
   var props = PropertiesService.getDocumentProperties();
@@ -1239,15 +1252,13 @@ function resetDocumentProperties_(which) {
   else props.deleteProperty(which);
 }
 
-// ---------------------------------------------------------------------------------------------------------------- getEchoSignService
+// ---------------------------------------------------------------------------------------------------------------- getEchoSignService_
 // oAuth integration with EchoSign
 // EchoSign uses OAuth 2
 // so we grabbed https://github.com/googlesamples/apps-script-oauth2
 // and we turned on the library.
 //
 // the redirect url is https://script.google.com/macros/d/{PROJECT KEY}/usercallback
-
-
 
 function getEchoSignService_() {
   // Create a new service with the given name. The name will be used when 
@@ -1369,6 +1380,7 @@ function authCallback(request) {
   }
 }
 
+// ---------------------------------------------------------------------------------------------------------------- getLibraryDocuments_
 function getLibraryDocuments_() {
   var api = getEchoSignService_();
   var response = UrlFetchApp.fetch(api.APIbaseUrl + '/libraryDocuments',
@@ -1387,7 +1399,7 @@ function allPDFs_(folder) {
   return pdfs;
 }
 
-// ---------------------------------------------------------------------------------------------------------------- uploadPDFsToEchoSign
+// ---------------------------------------------------------------------------------------------------------------- uploadPDFsToEchoSign_
 // upload all the PDFs in the Folder
 // returns an array of the transientDocumentIds of all the PDFs uploaded to Echosign.
 function uploadPDFsToEchoSign_(sheet) {
@@ -1437,7 +1449,7 @@ function uploadPDFsToEchoSign_(sheet) {
   return toreturn;
 }
 
-// ---------------------------------------------------------------------------------------------------------------- showDocumentProperties
+// ---------------------------------------------------------------------------------------------------------------- showDocumentProperties_
 function showDocumentProperties_() {
   Logger.log("userProperties: %s", JSON.stringify(PropertiesService.getDocumentProperties().getProperties()));
   Logger.log("scriptProperties: %s", JSON.stringify(PropertiesService.getScriptProperties().getProperties()));
@@ -1452,13 +1464,13 @@ function email_to_cc_(email) {
   return [to, emails];
 }
 
-// ---------------------------------------------------------------------------------------------------------------- fauxMegaUpload
+// ---------------------------------------------------------------------------------------------------------------- fauxMegaUpload_
 // upload a document to the template library
 function fauxMegaUpload_() {
   // we do this using the web UI
 }
 
-// ---------------------------------------------------------------------------------------------------------------- fauxMegaSign
+// ---------------------------------------------------------------------------------------------------------------- fauxMegaSign_
 // send a particular document from the template library for faux megasign
 function fauxMegaSign(sheet) {
   var sheetPassedIn = ! (sheet == undefined);
@@ -1664,6 +1676,7 @@ function uploadAgreement(sheet) {
   return "sent";
 }
 
+// ---------------------------------------------------------------------------------------------------------------- postAgreement_
 function postAgreement_(fileInfos, recipients, message, name, cc_list, config, readmeDoc, agreementCreationInfo) {
   var api = getEchoSignService_();
 
@@ -1724,6 +1737,7 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, config, r
 }
 
   
+// ---------------------------------------------------------------------------------------------------------------- mylogger
 function mylogger(input) {
   Logger.log(input);
 }
