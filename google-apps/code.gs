@@ -539,8 +539,8 @@ function readRows_(sheet) {
           partyfields[ki] = asvar_(partyfields[ki]);
 		  Logger.log("readRows: recorded partyfield[%s]=%s", ki, partyfields[ki]);
 		}
-		continue;
 	  }
+	  continue;
 	}
 	else if (row[0] == "CONFIGURATION") { section = row[0]; continue }
 
