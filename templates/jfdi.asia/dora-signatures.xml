@@ -61,7 +61,7 @@
 
 <para_1>and</para_1>
 <? for (var i in data.parties.shareholder) { ?>
-<parties><?!= include("inc_party", data, data.parties.shareholder[i]) ?><? if (data.parties.shareholder.length == 1) { ?> (the "Current Shareholder")<?}?></parties>
+<parties><?!= include("inc_party", data, data.parties.shareholder[i]) ?><? if (data.parties.shareholder.length == 1) { ?> (the "Current Shareholder")<?}?>;</parties>
 <? } ?>
 <?   if (data.parties.shareholder.length > 1)           { ?><para_1>(collectively the "Current Shareholders" and individually a "Current Shareholder");</para_1><?}?>
 
