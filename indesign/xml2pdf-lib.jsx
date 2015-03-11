@@ -312,13 +312,8 @@ function RestartParagraphNumbering(doc, importMaps){
   this.xpath = "//*[@restart='true']";
   this.apply = function(myElement, myRuleProcessor){
 
-	var overrides = myElement.xmlAttributes.item("override").value.split(/ /); // TODO: a more sophisticated parser would be nice to allow expressions to contain spaces
-	for (var i=0; i<overrides.length; i++) {
-	  var kv = overrides[i].split(/=/);
-	  var key = kv[0];
-	  var val = kv.splice(1).join("=");
-	  try { myElement.paragraphs.item(0)[key] = eval(val); } catch (e) { logToFile("error trying to set paragraph override " + key + "=" + val) };
-	}
+	myElement.paragraphs.item(0).numberingContinue = false;
+
     return true;
   }
 }
@@ -330,7 +325,14 @@ function ParagraphOverrides(doc, importMaps){
   this.xpath = "//*[@override]";
   this.apply = function(myElement, myRuleProcessor){
 
-	myElement.paragraphs.item(0).numberingContinue = false;
+	var overrides = myElement.xmlAttributes.item("override").value.split(/ /); // TODO: a more sophisticated parser would be nice to allow expressions to contain spaces
+	for (var i=0; i<overrides.length; i++) {
+	  var kv = overrides[i].split("=");
+	  var key = kv[0];
+	  var val = kv.splice(1).join("=");
+	  logToFile("trying to set paragraph override " + key + "=" + val);
+	  try { myElement.paragraphs.item(0)[key] = eval(val); } catch (e) { logToFile("error trying to set paragraph override " + key + "=" + val) };
+	}
 
     return false;
   }
