@@ -215,9 +215,14 @@ function setSignaturePageToAMaster(doc) {
   var signatures_page = signatures_para.parentTextFrames[0].parentPage;
   if (signatures_page == undefined || ! signatures_page.isValid) return;
 
+  var signatureMaster = doc.masterSpreads.item(
+	doc.xmlElements.item(0).xmlAttributes.item("signatureMaster").isValid
+	  ? doc.xmlElements.item(0).xmlAttributes.item("signatureMaster").value;
+	  : "A-Master");
+
   // set A master for the current page and all subsequent pages
   for (var i=signatures_page.documentOffset; i < doc.pages.length; i++) {
-	doc.pages[i].appliedMaster = doc.masterSpreads.item("A-Master");
+	doc.pages[i].appliedMaster = signatureMaster;
   }
 }
 
