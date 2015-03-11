@@ -7,7 +7,9 @@
 <cover_company_name><?= data.company.name ?></cover_company_name>
 <cover_company_id><?= data.company.idtype ?> <?= data.company.id ?></cover_company_id>
 <noindent_centered addnewline="true"></noindent_centered>
-<cover_company_name><?= data.parties.new_investor.map(function(p){return p.name}).join(" &#183; ") ?></cover_company_name>
+<? for (var i = 0; i < data.parties.new_investor.length; i++) { ?>
+<cover_parties>&#9;<?= data.parties.new_investor[i].name ?>&#9;<?= data.parties.new_investor[i].id ?></cover_parties>
+<? } ?>
 </CoverTop>
 <CoverMid>
 <? for (var i = 0; i < data.parties.shareholder.length; i++) { ?>
