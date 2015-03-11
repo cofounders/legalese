@@ -1,4 +1,4 @@
-<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" defaultMaster="A-Master">
+<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" defaultMaster="B-Master" signatureMaster="A-Master">
 <CoverTop>
 <? if (data.parties.new_investor.length == 1) { ?>
 <cover_title>Deed of &#8232;Ratification and &#8232;Accession</cover_title>
@@ -99,8 +99,7 @@
 <Cell aid:ccols="1" aid:ccolwidth="110" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= name ?></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= idtype ?> <?= id ?></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="190" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= address ?></cell_c></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="42" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= num_shares ?>
-<?= share_type ?></cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="42" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= num_shares ?>&#8232;<?= share_type ?></cell_c></Cell>
 <? } } ?>
 </Table>
 </p>
