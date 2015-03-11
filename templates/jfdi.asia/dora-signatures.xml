@@ -2,7 +2,7 @@
 <CoverTop>
 <? if (data.parties.new_investor.length == 1) { ?>
 <cover_title>Deed of &#8232;Ratification and &#8232;Accession</cover_title>
-<?   for (var i=data.parties.new_investor.length; i<4; i++) {
+<?   for (var i=data.parties.new_investor.length; i<4; i++) { ?>
 <noindent_centered addnewline="true"></noindent_centered>
 <?   } ?>
 <? } else { ?>
