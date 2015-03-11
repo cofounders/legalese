@@ -29,7 +29,7 @@ commaAnd([data.company.roles.promoter[0].name].concat(
 </Table>
 </para_1>
 <numbered_1_para>That the Common seal of the Company be affixed in accordance with the Company's Articles of Association to the share certificate to be issued to the aforesaid investor.</numbered_1_para>
-<numbered_1_para>That <?= data.company.roles.corporate_secretary[0].name ?> and/or its designated agents be authorized to file electronically to the <?= data.company.roles.state_regulator[0].name ?> (<?= data.company.roles.state_regulator[0].short_name ?>) on the aforesaid allotment of <?= data.security_type_short ?>.
+<numbered_1_para>That <?= data.company.roles.corporate_secretary[0].name ?> and/or its designated agents be authorized to file electronically to the <?= data.company.roles.state_regulator[0].name ?> (<?= data.company.roles.state_regulator[0].short_name ?>) on the aforesaid allotment of <?= data.security_type_short ?>.</numbered_1_para>
 <para_1>Dated this <?= data.agreement_date ?></para_1>
 <? data.signature_comment = "Director" ?>
 <? for (var i=0;i<data.company.roles.director.length;i++) { ?>
