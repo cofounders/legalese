@@ -1785,6 +1785,36 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, readrows,
 }
 
   
+// ---------------------------------------------------------------------------------------------------------------- localization
+
+function plural(num, singular, plural, locale) {
+  if (locale == undefined) { locale = "en-US" }
+  if (num.constructor.name == "Array") { num = num.length }
+  if (locale == "en-US") {
+	if (plural == undefined) { plural = singular + "s" }
+	if (num  > 1) { return plural }
+	if (num == 1) { return singular }
+	if (num == 0) { return plural }
+  }
+}
+
+function plural_verb(num, singular, plural, locale) {
+  if (locale == undefined) { locale = "en-US" }
+  if (num.constructor.name == "Array") { num = num.length }
+  if (locale == "en-US") {
+	if (plural == undefined) {
+	  if (singular == "is") { plural = "are"; }
+	  else                  { plural = singular.replace(/s$/,""); }
+	}
+	if (num  > 1) { return plural }
+	if (num == 1) { return singular }
+	if (num == 0) { return plural }
+  }
+}
+
+// ---------------------------------------------------------------------------------------------------------------- mylogger
+// ---------------------------------------------------------------------------------------------------------------- mylogger
+
 // ---------------------------------------------------------------------------------------------------------------- mylogger
 function mylogger(input) {
   Logger.log(input);
