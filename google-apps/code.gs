@@ -592,7 +592,7 @@ function readRows_(sheet) {
       Logger.log("readRows: learning entire %s, %s", partytype, singleparty);
 	  if (parties[partytype] == undefined) { parties[partytype] = [] }
 
-	  if (singleparty.legalese_status == undefined) { SpreadsheetApp.getUi().alert("the sheet we're working on has no legalese status! onoes."); throw new Error("onoes"); }
+	  if (singleparty.legalese_status == undefined) { SpreadsheetApp.getUi().alert("the sheet we're working on has no legalese status! You probably want to be on a different tab."); throw new Error("never mind, i will try again"); }
 	  if (singleparty.legalese_status.toLowerCase() == "ignore") { Logger.log("ignoring %s line", partytype); continue }
 
       parties[partytype].push(singleparty);
@@ -1078,6 +1078,7 @@ function fillTemplates(sheet) {
   templatedata.company = templatedata.parties.company[0];
   Logger.log("templatedata.company = %s", templatedata.company);
   templatedata.founders = templatedata.parties.founder;
+  templatedata._timezone = sheet.getParent().getSpreadsheetTimeZone();
 
   for (var i in suitables) {
     var sourceTemplate = suitables[i];
@@ -1816,7 +1817,14 @@ function plural_verb(num, singular, plural, locale) {
   }
 }
 
-// ---------------------------------------------------------------------------------------------------------------- mylogger
+// ---------------------------------------------------------------------------------------------------------------- commaAnd
+function commaAnd(mylist) {
+  if      (mylist.length == 0) { return "" }
+  else if (mylist.length == 1) { return mylist[0] }
+  else if (mylist.length == 2) { return mylist.join(" and ") }
+  else                         { return [mylist.splice(0,mylist.length-1).join(", "), mylist[mylist.length-1]].join(", and ") }
+}
+
 // ---------------------------------------------------------------------------------------------------------------- mylogger
 
 // ---------------------------------------------------------------------------------------------------------------- mylogger
