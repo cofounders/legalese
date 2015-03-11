@@ -38,10 +38,7 @@
 <chapter_header>Deed of Ratification and Accession</chapter_header>
 <para_1><span_smallcaps>This deed</span_smallcaps> is made on <?= data.agreement_date ?> between</para_1>
 
-<? for (var i in data.parties.shareholder) { ?>
-<parties><?!= include("inc_party", data, data.parties.shareholder[i]) ?><? if (data.parties.shareholder.length == 1) { ?> (the "Current Shareholder")<?}?></parties>
-<? } ?>
-<?   if (data.parties.shareholder.length > 1)           { ?><para_1>(collectively the "Current Shareholders" and individually a "Current Shareholder");</para_1><?}?>
+<parties><?!= include("inc_party", data, data.company) ?> (the "Company");</parties>
 
 <? for (var i in data.parties.new_investor) { ?>
 <parties><?!= include("inc_party", data, data.parties.new_investor[i]) ?><? if (data.parties.new_investor.length == 1) { ?> (the "New Investor")<?}?></parties>
@@ -49,7 +46,11 @@
 <?   if (data.parties.new_investor.length > 1)           { ?><para_1>(collectively the "New Shareholders" and individually a "New Shareholder"); and</para_1><?}?>
 
 <para_1>and</para_1>
-<parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
+<? for (var i in data.parties.shareholder) { ?>
+<parties><?!= include("inc_party", data, data.parties.shareholder[i]) ?><? if (data.parties.shareholder.length == 1) { ?> (the "Current Shareholder")<?}?></parties>
+<? } ?>
+<?   if (data.parties.shareholder.length > 1)           { ?><para_1>(collectively the "Current Shareholders" and individually a "Current Shareholder");</para_1><?}?>
+
 <para_1><span_smallcaps>Whereas:</span_smallcaps></para_1>
 <recitals>A shareholders' agreement was entered into on <?= data.previous_shareholder_agreement_date ?> by and among the Current New <?= plural(data.parties.shareholder, "Shareholder") ?> and the Company (as may have been modified, amended or supplemented from time to time) (the "Shareholders' Agreement"), a copy of which the New <?= plural(data.parties.new_investor, "Shareholder") ?> hereby <?= plural_verb(data.parties.new_investor, "confirms") ?> that <?= plural(data.parties.new_investor, "it has been", "they have been") ?> supplied with and <?= plural_verb(data.parties.new_investor, "acknowledges") ?> the terms therein.</recitals>
 <recitals>The New <?= plural(data.parties.new_investor, "Shareholder") ?> <?= plural_verb(data.parties.new_investor, "is") ?> or will be issued <?= data.security_type ?> ("New Shares") in the capital of the Company.</recitals>
