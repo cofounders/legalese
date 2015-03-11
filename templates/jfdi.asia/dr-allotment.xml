@@ -36,4 +36,5 @@ commaAnd([data.company.roles.promoter[0].name].concat(
 <?!= include("inc_signature", data, data.company.roles.director[i]) ?>
 <? } ?>
 </Story_Main>
+<Bottom_Box delete_if_empty="true" />
 </Root>
