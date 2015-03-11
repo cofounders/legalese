@@ -43,9 +43,9 @@
 <parties><?!= include("inc_party", data, data.company) ?> (the "Company");</parties>
 
 <? for (var i in data.parties.new_investor) { ?>
-<parties><?!= include("inc_party", data, data.parties.new_investor[i]) ?><? if (data.parties.new_investor.length == 1) { ?> (the "New Investor")<?}?></parties>
+<parties><?!= include("inc_party", data, data.parties.new_investor[i]) ?><? if (data.parties.new_investor.length == 1) { ?> (the "New Shareholder");<?}?></parties>
 <? } ?>
-<?   if (data.parties.new_investor.length > 1)           { ?><para_1>(collectively the "New Shareholders" and individually a "New Shareholder"); and</para_1><?}?>
+<?   if (data.parties.new_investor.length > 1)           { ?><para_1>(collectively the "New Shareholders" and individually a "New Shareholder");</para_1><?}?>
 
 <para_1>and</para_1>
 <? for (var i in data.parties.shareholder) { ?>
@@ -54,16 +54,16 @@
 <?   if (data.parties.shareholder.length > 1)           { ?><para_1>(collectively the "Current Shareholders" and individually a "Current Shareholder");</para_1><?}?>
 
 <para_1><span_smallcaps>Whereas:</span_smallcaps></para_1>
-<recitals>A shareholders' agreement was entered into on <?= data.previous_shareholder_agreement_date ?> by and among the Current New <?= plural(data.parties.shareholder, "Shareholder") ?> and the Company (as may have been modified, amended or supplemented from time to time) (the "Shareholders' Agreement"), a copy of which the New <?= plural(data.parties.new_investor, "Shareholder") ?> hereby <?= plural_verb(data.parties.new_investor, "confirms") ?> that <?= plural(data.parties.new_investor, "it has been", "they have been") ?> supplied with and <?= plural_verb(data.parties.new_investor, "acknowledges") ?> the terms therein.</recitals>
+<recitals>A shareholders' agreement was entered into on <?= data.previous_shareholder_agreement_date ?> by and among the Current <?= plural(data.parties.shareholder, "Shareholder") ?> and the Company (as may have been modified, amended or supplemented from time to time) (the "Shareholders' Agreement"), a copy of which the New <?= plural(data.parties.new_investor, "Shareholder") ?> hereby <?= plural_verb(data.parties.new_investor, "confirms") ?> that <?= plural(data.parties.new_investor, "it has been", "they have been") ?> supplied with and <?= plural_verb(data.parties.new_investor, "acknowledges") ?> the terms therein.</recitals>
 <recitals>The New <?= plural(data.parties.new_investor, "Shareholder") ?> <?= plural_verb(data.parties.new_investor, "is") ?> or will be issued <?= data.security_type ?> ("New Shares") in the capital of the Company.</recitals>
 <recitals>In accordance with the provisions of the Shareholders' Agreement, it is a condition precedent to the registration by the Company of the issuance and allotment to the New <?= plural(data.parties.new_investor, "Shareholder") ?> of the New Shares that the New <?= plural(data.parties.new_investor, "Shareholder") ?> <?= plural(data.parties.new_investor, "execute") ?> this Deed.</recitals>
 <para_1><span_smallcaps>Now this deed witnesseth</span_smallcaps> as follows:</para_1>
 <a_left_sidehead>Terms Defined or Construed in the Shareholders' Agreement</a_left_sidehead>
 <para_1>In this Deed, unless the context otherwise requires, words and expressions respectively defined or construed in the Shareholders' Agreement shall have the same meanings when used or referred to herein.</para_1>
 <a_left_sidehead>Ratification by New Shareholder</a_left_sidehead>
-<para_1>The New Shareholder hereby accedes to and ratifies the Shareholders' Agreement and covenants and agrees with the Current Shareholders and the Company, with effect from the date on which the New Shareholder is registered as a shareholder of the Company, to be bound by the terms and conditions of the Shareholders' Agreement as if it had been a party thereto and to duly and punctually perform and discharge all liabilities and obligations whatsoever from time to time to be performed or discharged by it under or by virtue of the Shareholders' Agreement in all respects as if named as a party therein.</para_1>
+<para_1>The New <?= plural(data.parties.new_investor, "Shareholder") ?> hereby <?= plural_verb(data.parties.new_investor, "accedes") ?> to and <?= plural_verb(data.parties.new_investor, "ratifies", "ratify") ?> the Shareholders' Agreement and covenants and <?= plural_verb(data.parties.new_investor, "agrees") ?> with the Current Shareholders and the Company, with effect from the date on which the New <?= plural(data.parties.new_investor, "Shareholder") ?> <?= plural_verb(data.parties.new_investor, "is") ?> registered as <?= plural(data.parties.new_investor, "a shareholder", "shareholders") ?> of the Company, to be bound by the terms and conditions of the Shareholders' Agreement as if <?= plural(data.parties.new_investor, "it", "they") ?> had been a party thereto and to duly and punctually perform and discharge all liabilities and obligations whatsoever from time to time to be performed or discharged by it under or by virtue of the Shareholders' Agreement in all respects as if named as a party therein.</para_1>
 <a_left_sidehead>Covenant by Current Shareholders and the Company</a_left_sidehead>
-<para_1>Each of the Current Shareholders and the Company covenants and agrees that the New Shareholder shall be entitled to all the benefits of the terms and conditions of the Shareholders' Agreement to the intent and effect that the New Shareholder shall be deemed, with effect from the date on which the New Shareholder is registered as a shareholder of the Company, to be a party to the Shareholders' Agreement.</para_1>
+<para_1>Each of the Current Shareholders and the Company covenants and agrees that the New <?= plural(data.parties.new_investor, "Shareholder") ?> shall be entitled to all the benefits of the terms and conditions of the Shareholders' Agreement to the intent and effect that the New <?= plural(data.parties.new_investor, "Shareholder") ?> shall be deemed, with effect from the date on which the New <?= plural(data.parties.new_investor, "Shareholder") ?> <?= plural_verb(data.parties.new_investor, "is") ?> registered as <?= plural(data.parties.new_investor, "a shareholder", "shareholders") ?> of the Company, to be party to the Shareholders' Agreement.</para_1>
 <a_left_sidehead>Deed to be Construed in Conjunction with Shareholders' Agreement</a_left_sidehead>
 <para_1>This Deed shall hereafter be read and construed in conjunction and as one document with the Shareholders' Agreement and references in the Shareholders' Agreement to "the Agreement" or "this Agreement", and references in all other instruments and documents executed thereunder or pursuant thereto to the Shareholders' Agreement, shall for all purposes refer to the Shareholders' Agreement incorporating and as supplemented by this Deed.  Except to the extent that it is expressly amended by this Deed, the Shareholders' Agreement and all other documents or instruments executed pursuant to, or in connection with, the Shareholders' Agreement shall remain in full force and effect.</para_1>
 <a_left_sidehead>Execution of Deed</a_left_sidehead>
@@ -72,7 +72,7 @@
 <para_1>This Deed shall be governed by, and construed in accordance with, the laws of Singapore.  In relation to any legal action or proceedings arising out of or in connection with this Agreement, each of the parties hereto hereby irrevocably submits to the non-exclusive jurisdiction of the courts of Singapore.</para_1>
 
 <chapter_header>Signatures</chapter_header>
-<para_1><span_smallcaps>In witness whereof</span_smallcaps> this Deed has been entered into by the New New <?= plural(data.parties.new_investor, "Shareholder") ?> on the date first above written.
+<para_1><span_smallcaps>In witness whereof</span_smallcaps> this Deed has been entered into by the New <?= plural(data.parties.new_investor, "Shareholder") ?> on the date first above written.
 
 </para_1>
 
