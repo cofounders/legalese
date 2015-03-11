@@ -2,20 +2,18 @@
 <CoverTop>
 <cover_title>Deed of Ratification and Accession
 </cover_title>
-<cover_company_name>
-
-
-
-<?= data.parties.company[0].name ?>
-
-</cover_company_name>
-<cover_company_id><?= data.parties.company[0].idtype ?> <?= data.parties.company[0].id ?>
-</cover_company_id>
+<CoverTop><cover_title>RCPS Subscription Agreement</cover_title>
+<noindent_centered addnewline="true"></noindent_centered>
+<noindent_centered addnewline="true"></noindent_centered>
+<noindent_centered addnewline="true"></noindent_centered>
+<cover_company_name><?= data.company.name ?></cover_company_name>
+<cover_company_id><?= data.company.idtype ?> <?= data.company.id ?></cover_company_id>
+<noindent_centered addnewline="true"></noindent_centered>
+<cover_company_name><?= data.parties.new_investor.map(function(p){return p.name}).join(" &#183; ") ?></cover_company_name>
 </CoverTop>
 <CoverMid>
-<? for (var i in data.parties.investor) { ?>
-<cover_parties_centered><?= data.parties.investor[i].name ?></cover_parties_centered>
-<? } ?>
+<? for (var i = 0; i < data.parties.shareholder.length; i++) { ?>
+<cover_parties_centered><?= data.parties.shareholder[i].name ?></cover_parties_centered>
 </CoverMid>
 
 <CoverBottom_Logotype>
@@ -30,47 +28,53 @@
 <CoverBottom_series>
 <centered>custom work
 </centered>
-<centered><textvar name="Output Date" /> <textvar name="output time" /></centered>
+<centered><textvar name="Output Date" />&#8195;<span_smallcaps><textvar name="output time" /></span_smallcaps>
 <centered>version 1.1.0</centered>
 </CoverBottom_series>
 
-<Firstpage_Sidebar>
+<Firstpage_Sidebar><sidebar>Every time a new shareholder joins the company, it is unfortunately necessary for all existing shareholders to sign this deed. If they didn't, then there would be no agreement between the parties.</sidebar>
 </Firstpage_Sidebar>
 
 <Story_Main>
-    <chapter_header>Deed of Ratification and Accession</chapter_header>
-    <para_1><span_smallcaps>This deed</span_smallcaps> is made on <?= data.agreement_date ?> between</para_1>
+<chapter_header>Deed of Ratification and Accession</chapter_header>
+<para_1><span_smallcaps>This deed</span_smallcaps> is made on <?= data.agreement_date ?> between</para_1>
 
-    <parties><?!= include("inc_party", data, data.parties.new_investor[0]) ?> (the "New Shareholder");</parties>
-    <parties><?!= include("inc_party", data, data.parties.existing_shareholder[0]) ?>;</parties>
-<para_1>(collectively the "Current Shareholders" and individually a "Current Shareholder"); and</para_1>
-    <parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
+<? for (var i in data.parties.shareholder) { ?>
+<parties><?!= include("inc_party", data, data.parties.shareholder[i]) ?><? if (data.parties.shareholder.length > 1) { ?>(the "Current Shareholder")<?}?></parties>
+<? } ?>
+<?   if (data.parties.shareholder.length > 1)           { ?><para_1>(collectively the "Current Shareholders" and individually a "Current Shareholder");</para_1><?}?>
+
+<? for (var i in data.parties.new_investor) { ?>
+<parties><?!= include("inc_party", data, data.parties.new_investor[i]) ?><? if (data.parties.new_investor.length > 1) { ?>(the "New Investor")<?}?></parties>
+<? } ?>
+<?   if (data.parties.new_investor.length > 1)           { ?><para_1>(collectively the "New Shareholders" and individually a "New Shareholder"); and</para_1><?}?>
+
+<para_1>and</para_1>
+<parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
 <para_1><span_smallcaps>Whereas:</span_smallcaps></para_1>
-    <recitals>A shareholders&#8217; agreement was entered into on <?= data.previous_shareholder_agreement_date ?> by and among the Current Shareholders and the Company (as may have been modified, amended or supplemented from time to time) (the "Shareholders&#8217; Agreement"), a copy of which the New Shareholder hereby confirms that it has been supplied with and acknowledges the terms therein. </recitals>
-    <recitals>The New Shareholder is or will be issued <?= data.parties.new_investor[0].num_shares ?> <?= data.security_type ?> ("New Shares") in the capital of the Company, by virtue of the subscription agreement dated <?= data.agreement_date ?> in respect thereof.</recitals>
-    <recitals>In accordance with the provisions of the Shareholders&#8217; Agreement, it is a condition precedent to the registration by the Company of the issuance and allotment to the New Shareholder of the New Shares that the New Shareholder executes this Deed.</recitals>
-    <para_1><span_smallcaps>Now this deed witnesseth</span_smallcaps> as follows:</para_1>
-    <a_left_sidehead>Terms Defined or Construed in the Shareholders&#8217; Agreement</a_left_sidehead>
-    <para_1>In this Deed, unless the context otherwise requires, words and expressions respectively defined or construed in the Shareholders&#8217; Agreement shall have the same meanings when used or referred to herein.</para_1>
-    <a_left_sidehead>Ratification by New Shareholder</a_left_sidehead>
-    <para_1>The New Shareholder hereby accedes to and ratifies the Shareholders&#8217; Agreement and covenants and agrees with the Current Shareholders and the Company, with effect from the date on which the New Shareholder is registered as a shareholder of the Company, to be bound by the terms and conditions of the Shareholders&#8217; Agreement as if it had been a party thereto and to duly and punctually perform and discharge all liabilities and obligations whatsoever from time to time to be performed or discharged by it under or by virtue of the Shareholders&#8217; Agreement in all respects as if named as a party therein.</para_1>
-    <a_left_sidehead>Covenant by Current Shareholders and the Company</a_left_sidehead>
-    <para_1>Each of the Current Shareholders and the Company covenants and agrees that the New Shareholder shall be entitled to all the benefits of the terms and conditions of the Shareholders&#8217; Agreement to the intent and effect that the New Shareholder shall be deemed, with effect from the date on which the New Shareholder is registered as a shareholder of the Company, to be a party to the Shareholders&#8217; Agreement.</para_1>
-    <a_left_sidehead>Deed to be Construed in Conjunction with Shareholders&#8217; Agreement</a_left_sidehead>
-    <para_1>This Deed shall hereafter be read and construed in conjunction and as one document with the Shareholders&#8217; Agreement and references in the Shareholders&#8217; Agreement to "the Agreement" or "this Agreement", and references in all other instruments and documents executed thereunder or pursuant thereto to the Shareholders&#8217; Agreement, shall for all purposes refer to the Shareholders&#8217; Agreement incorporating and as supplemented by this Deed.  Except to the extent that it is expressly amended by this Deed, the Shareholders&#8217; Agreement and all other documents or instruments executed pursuant to, or in connection with, the Shareholders&#8217; Agreement shall remain in full force and effect.</para_1>
-    <a_left_sidehead>Execution of Deed</a_left_sidehead>
-    <para_1>This Deed may be executed in any number of counterparts, all of which taken together shall constitute one and the same instrument.  Any party may enter into this Deed by signing any such counterpart.</para_1>
-    <a_left_sidehead>Governing Law and Jurisdiction</a_left_sidehead>
-    <para_1>This Deed shall be governed by, and construed in accordance with, the laws of Singapore.  In relation to any legal action or proceedings arising out of or in connection with this Agreement, each of the parties hereto hereby irrevocably submits to the non-exclusive jurisdiction of the courts of Singapore.</para_1>
+<recitals>A shareholders' agreement was entered into on <?= data.previous_shareholder_agreement_date ?> by and among the Current New <?= plural(data.parties.shareholder, "Shareholder") ?> and the Company (as may have been modified, amended or supplemented from time to time) (the "Shareholders' Agreement"), a copy of which the New <?= plural(data.parties.new_investor, "Shareholder") ?> hereby <?= plural_verb(data.parties.new_investor, "confirms") ?> that <?= plural(data.parties.new_investor, "it has been", "they have been") ?> supplied with and <?= plural_verb(data.parties.new_investor, "acknowledges") ?> the terms therein.</recitals>
+<recitals>The New <?= plural(data.parties.new_investor, "Shareholder") ?> <?= plural_verb(data.parties.new_investor, "is") ?> or will be issued <?= data.security_type ?> ("New Shares") in the capital of the Company.</recitals>
+<recitals>In accordance with the provisions of the Shareholders' Agreement, it is a condition precedent to the registration by the Company of the issuance and allotment to the New <?= plural(data.parties.new_investor, "Shareholder") ?> of the New Shares that the New <?= plural(data.parties.new_investor, "Shareholder") ?> <?= plural(data.parties.new_investor, "execute") ?> this Deed.</recitals>
+<para_1><span_smallcaps>Now this deed witnesseth</span_smallcaps> as follows:</para_1>
+<a_left_sidehead>Terms Defined or Construed in the Shareholders' Agreement</a_left_sidehead>
+<para_1>In this Deed, unless the context otherwise requires, words and expressions respectively defined or construed in the Shareholders' Agreement shall have the same meanings when used or referred to herein.</para_1>
+<a_left_sidehead>Ratification by New Shareholder</a_left_sidehead>
+<para_1>The New Shareholder hereby accedes to and ratifies the Shareholders' Agreement and covenants and agrees with the Current Shareholders and the Company, with effect from the date on which the New Shareholder is registered as a shareholder of the Company, to be bound by the terms and conditions of the Shareholders' Agreement as if it had been a party thereto and to duly and punctually perform and discharge all liabilities and obligations whatsoever from time to time to be performed or discharged by it under or by virtue of the Shareholders' Agreement in all respects as if named as a party therein.</para_1>
+<a_left_sidehead>Covenant by Current Shareholders and the Company</a_left_sidehead>
+<para_1>Each of the Current Shareholders and the Company covenants and agrees that the New Shareholder shall be entitled to all the benefits of the terms and conditions of the Shareholders' Agreement to the intent and effect that the New Shareholder shall be deemed, with effect from the date on which the New Shareholder is registered as a shareholder of the Company, to be a party to the Shareholders' Agreement.</para_1>
+<a_left_sidehead>Deed to be Construed in Conjunction with Shareholders' Agreement</a_left_sidehead>
+<para_1>This Deed shall hereafter be read and construed in conjunction and as one document with the Shareholders' Agreement and references in the Shareholders' Agreement to "the Agreement" or "this Agreement", and references in all other instruments and documents executed thereunder or pursuant thereto to the Shareholders' Agreement, shall for all purposes refer to the Shareholders' Agreement incorporating and as supplemented by this Deed.  Except to the extent that it is expressly amended by this Deed, the Shareholders' Agreement and all other documents or instruments executed pursuant to, or in connection with, the Shareholders' Agreement shall remain in full force and effect.</para_1>
+<a_left_sidehead>Execution of Deed</a_left_sidehead>
+<para_1>This Deed may be executed in any number of counterparts, all of which taken together shall constitute one and the same instrument.  Any party may enter into this Deed by signing any such counterpart.</para_1>
+<a_left_sidehead>Governing Law and Jurisdiction</a_left_sidehead>
+<para_1>This Deed shall be governed by, and construed in accordance with, the laws of Singapore.  In relation to any legal action or proceedings arising out of or in connection with this Agreement, each of the parties hereto hereby irrevocably submits to the non-exclusive jurisdiction of the courts of Singapore.</para_1>
 
 <chapter_header>Signatures</chapter_header>
-<para_1><span_smallcaps>In witness whereof</span_smallcaps> this Deed has been entered into by the New Shareholder on the date first above written.
+<para_1><span_smallcaps>In witness whereof</span_smallcaps> this Deed has been entered into by the New New <?= plural(data.parties.new_investor, "Shareholder") ?> on the date first above written.
 
 </para_1>
 
-<!-- rephrase the below so that xml2html doesn't barf on the protect problem -->
-
-<b_left_sidehead>The New Shareholder</b_left_sidehead>
+<b_left_sidehead>The New <?= plural(data.parties.new_investor, "Shareholder") ?></b_left_sidehead>
 
 <? for (var i = 0; i < data.parties.new_investor.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.new_investor[i]) ?>
@@ -78,14 +82,12 @@
 
 <b_left_sidehead>The Company</b_left_sidehead>
 
-<? for (var i = 0; i < data.parties.company.length; i++) { ?>
-<?!= include("inc_signature", data, data.parties.company[i]) ?>
-<? } ?>
+<?!= include("inc_signature", data, data.company) ?>
 
-<b_left_sidehead>The Current Shareholders</b_left_sidehead>
+<b_left_sidehead>The Current <?= plural(data.parties.shareholder, "Shareholder") ?></b_left_sidehead>
 
-<? for (var i = 0; i < data.parties.existing_shareholder.length; i++) { ?>
-<?!= include("inc_signature", data, data.parties.existing_shareholder[i]) ?>
+<? for (var i = 0; i < data.parties.shareholder.length; i++) { ?>
+<?!= include("inc_signature", data, data.parties.shareholder[i]) ?>
 <? } ?>
 
 </Story_Main>
