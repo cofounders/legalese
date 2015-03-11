@@ -90,7 +90,7 @@
 
 <schedule_header>Current Shareholders</schedule_header>
 <b_left_sidehead_nonum>Holders of RCPS</b_left_sidehead_nonum>
-
+<p>
 <Table aid:table="table" aid:tcols="4" aid:trows="<?= data.parties.shareholder.length+1 ?>" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
 <Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell_c>Name</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="36" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_c>ID</cell_c></Cell>
@@ -103,7 +103,7 @@
 <Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c><?= num_shares ?></cell_c></Cell>
 <? } } ?>
 </Table>
-
+</p>
 <chapter_header>Signatures</chapter_header>
 <para_1><span_smallcaps>In witness whereof</span_smallcaps> this Deed has been declared and delivered on the date first above written.
 
