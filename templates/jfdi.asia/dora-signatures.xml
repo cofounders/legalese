@@ -59,7 +59,7 @@
 <? } ?>
 <?   if (data.parties.new_investor.length > 1)           { ?><para_1>(collectively the "New Shareholders" and individually a "New Shareholder");</para_1><?}?>
 
-<para_1>and the persons whose names are set out in Schedule 1 of this Deed (collectively the <b>"Current Shareholders"</b> and individually a "Current Shareholder").</para_1><?}?>
+<para_1>and the persons whose names are set out in Schedule 1 of this Deed (collectively the <b>"Current Shareholders"</b> and individually a "Current Shareholder").</para_1>
 
 <para_1><span_smallcaps>Whereas:</span_smallcaps></para_1>
 <recitals>A shareholders' agreement was entered into on <?= data.previous_shareholder_agreement_date ?> by and among the Current <?= plural(data.parties.shareholder, "Shareholder") ?> and the Company (as may have been modified, amended or supplemented from time to time) (the "Shareholders' Agreement"), a copy of which the New <?= plural(data.parties.new_investor, "Shareholder") ?> hereby <?= plural_verb(data.parties.new_investor, "confirms") ?> that <?= plural(data.parties.new_investor, "it has been", "they have been") ?> supplied with and <?= plural_verb(data.parties.new_investor, "acknowledges") ?> the terms therein.</recitals>
@@ -87,6 +87,12 @@
 <Cell aid:ccols="1" aid:ccolwidth="36" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_c>ID</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Address</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Number of RCPS held</cell_c></Cell>
+<? for (var i = 0; i<data.parties.shareholder.length; i++) { with(data.parties.shareholder[i]) { ?>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell_c><?= "name" ?></cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="36" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_c><?= "idtype" ?> <?= "id" ?></cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c><?= "address" ?></cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c><?= "num_shares" ?></cell_c></Cell>
+<? } } ?>
 </Table>
 
 <chapter_header>Signatures</chapter_header>
