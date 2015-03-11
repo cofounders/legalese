@@ -23,7 +23,7 @@
  for cash consideration;
 subscription monies amounting to <?= data._total_commitment ?> have been received by the Company in respect of the allotment of <?= data._total_new_shares ?> RCPS in the capital of the Company; and
 we have established the identity of the new <?= plural(data.parties.new_investor, "investor") ?>, <?= commaAnd(data.parties.new_investor.map(function(p){return p.name})) ?>, 
-and confirm that all is in order. </numbered_2_para>
+and we confirm that all is in order. </numbered_2_para>
 
 <numbered_1_para>Kindly proceed with the lodgment of the returns on allotment of shares with the <?= data.company.roles.state_regulator[0].name ?>.</numbered_1_para>
 
