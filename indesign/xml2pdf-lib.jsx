@@ -177,13 +177,13 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
 
   doc.mapXMLTagsToStyles();
 
-
   // findReplaceFixes
   findReplaceFixes(doc, doc.stories);
 
   doc.stories.everyItem().recompose();
 
-  __processRuleSet(doc.xmlElements.item(0), [new RestartParagraphNumbering(doc,importMaps)
+  __processRuleSet(doc.xmlElements.item(0), [new RestartParagraphNumbering(doc,importMaps),
+											 new ParagraphOverrides(doc,importMaps)
 											]);
 
   return doc;
@@ -310,6 +310,24 @@ function InsertTextVariables(doc, importMaps){
 function RestartParagraphNumbering(doc, importMaps){
   this.name = "RestartParagraphNumbering";
   this.xpath = "//*[@restart='true']";
+  this.apply = function(myElement, myRuleProcessor){
+
+	var overrides = myElement.xmlAttributes.item("override").value.split(/ /); // TODO: a more sophisticated parser would be nice to allow expressions to contain spaces
+	for (var i=0; i<overrides.length; i++) {
+	  var kv = overrides[i].split(/=/);
+	  var key = kv[0];
+	  var val = kv.splice(1).join("=");
+	  try { myElement.paragraphs.item(0)[key] = eval(val); } catch (e) { logToFile("error trying to set paragraph override " + key + "=" + val) };
+	}
+    return true;
+  }
+}
+
+// <someparagraph override="property=value">
+// -------------------------------------------------- ParagraphOverrides
+function ParagraphOverrides(doc, importMaps){
+  this.name = "ParagraphOverrides";
+  this.xpath = "//*[@override]";
   this.apply = function(myElement, myRuleProcessor){
 
 	myElement.paragraphs.item(0).numberingContinue = false;
