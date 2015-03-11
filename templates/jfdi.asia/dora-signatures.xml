@@ -87,12 +87,12 @@
 <Cell aid:ccols="1" aid:ccolwidth="36" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_c>ID</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Address</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Number of RCPS held</cell_c></Cell>
-<? for (var i = 0; i<data.parties.shareholder.length; i++) { with(data.parties.shareholder[i]) { ?>
+<? for (var i = 0; i<data.parties.shareholder.length; i++) {  ?>
 <Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell_c><?= "name" ?></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="36" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_c><?= "idtype" ?> <?= "id" ?></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c><?= "address" ?></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c><?= "num_shares" ?></cell_c></Cell>
-<? } } ?>
+<? } ?>
 </Table>
 
 <chapter_header>Signatures</chapter_header>
