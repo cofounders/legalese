@@ -959,6 +959,7 @@ function availableTemplates_() {
 // this is unwise, because the XML template runs with the same privileges as this script,
 // and if you randomly execute templates from all over the Internet, sooner or later you will regret it.
 
+  { name:"dr_allotment_xml", url:"http://www.legalese.io/templates/jfdi.asia/dr-allotment.xml",       title:"Directors' Resolution for Allotment" },
   { name:"jfdi_2014_rcps_xml", url:"jfdi_2014_rcps_xml.html",       title:"JFDI.2014 Subscription Agreement" },
   { name:"kissing_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing.xml",       title:"KISS (Singapore)" },
   { name:"strikeoff_shareholders_xml", url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_shareholders.xml",       title:"Striking Off for Shareholders" },
