@@ -839,7 +839,7 @@ function otherSheets_() {
 								+"#gid="
 								+sheet.getSheetId()
 								+"\",\""
-								+sheet.getParent().getName()
+								+sheet.getParent().getName() + " / " + sheet.getName()
 								+"\")");
 	toreturn.push(sheet);
   }
