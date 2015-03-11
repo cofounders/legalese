@@ -70,7 +70,7 @@ I would like to subscribe for $			 worth of those securities, with the understan
 
 <chapter_header>Expressions of Interest</chapter_header>
 
-<b_left_sidehead>Sign only if you want to participate in the round.</b_left_sidehead>
+<b_left_sidehead_nonum>Sign only if you want to participate in the round.</b_left_sidehead_nonum>
 
 <? for (var i = 0; i < data.parties.shareholder.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.shareholder[i]) ?>

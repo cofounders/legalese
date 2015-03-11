@@ -83,7 +83,7 @@ We<?
 
 <? if (data.parties.investor.length == 1) { ?>
 
-<b_left_sidehead>For the Investor <?= data.parties.investor[0].name ?></b_left_sidehead>
+<b_left_sidehead_nonum>For the Investor <?= data.parties.investor[0].name ?></b_left_sidehead_nonum>
 
 <? for (var i = 0; i < data.parties.corporate_representative.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.corporate_representative[i]) ?>

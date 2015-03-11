@@ -169,11 +169,11 @@
 <numbered_2_para>The Company hereby represents that its Board of Directors, in the exercise of its fiduciary duty, has approved the Company's execution of this KISS based upon a reasonable belief that the Purchase Price provided hereunder is appropriate for the Company after reasonable inquiry concerning the Company's financing objectives and financial situation. In addition, the Company hereby represents that it intends to use the Purchase Price primarily for the operations of its business, and not for any personal, family or household purpose.</numbered_2_para>
 <chapter_header>Signatures</chapter_header>
 <para_1><span_smallcaps>Intending to be bound</span_smallcaps> by this agreement, the Parties now set their hands.</para_1>
-<b_left_sidehead>for and on behalf of the Investor <?= data.investor.name ?></b_left_sidehead>
+<b_left_sidehead_nonum>for and on behalf of the Investor <?= data.investor.name ?></b_left_sidehead_nonum>
 <?!= include("inc_signature", data, data.investor) ?>
-<b_left_sidehead>for and on behalf of the Company <?= data.company.name ?></b_left_sidehead>
+<b_left_sidehead_nonum>for and on behalf of the Company <?= data.company.name ?></b_left_sidehead_nonum>
 <?!= include("inc_signature", data, data.company) ?>
-<b_left_sidehead>The Founders</b_left_sidehead>
+<b_left_sidehead_nonum>The Founders</b_left_sidehead_nonum>
 <? data.signature_comment = "Founder" ?>
 <? for (var i = 0; i < data.parties.founder.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.founder) ?>

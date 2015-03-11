@@ -150,11 +150,11 @@ The Cliff Period shall include the Probation Period.</numbered_2_para><? } ?>
 
 <chapter_header>Signatures</chapter_header>
 <para_1>Intending to be bound by this agreement the Parties hereby set their hands:</para_1>
-<b_left_sidehead>The Employee<?= data.parties.employee.length == 1 ? "" : "s" ?></b_left_sidehead>
+<b_left_sidehead_nonum>The Employee<?= data.parties.employee.length == 1 ? "" : "s" ?></b_left_sidehead_nonum>
 <? for (var i = 0; i < data.parties.employee.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.employee[i]) ?>
 <? } ?>
-<b_left_sidehead>For the Company <?= data.parties.company[0].name ?></b_left_sidehead>
+<b_left_sidehead_nonum>For the Company <?= data.parties.company[0].name ?></b_left_sidehead_nonum>
 <? for (var i = 0; i < data.parties.company.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.company[i]) ?>
 <? } ?>

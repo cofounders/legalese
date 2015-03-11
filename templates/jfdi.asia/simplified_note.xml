@@ -126,11 +126,11 @@ The Investor shall have no information rights over the financials of the company
 
 <chapter_header>Signatures</chapter_header>
     <para_1><span_smallcaps>In witness whereof</span_smallcaps> we have hereunto set our hands.</para_1>
-<b_left_sidehead>The Investor<?= data.parties.investor.length == 1 ? "" : "s" ?></b_left_sidehead>
+<b_left_sidehead_nonum>The Investor<?= data.parties.investor.length == 1 ? "" : "s" ?></b_left_sidehead_nonum>
 <? for (var i = 0; i < data.parties.investor.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.investor[i]) ?>
 <? } ?>
-<b_left_sidehead>For the Company <?= data.parties.company[0].name ?></b_left_sidehead>
+<b_left_sidehead_nonum>For the Company <?= data.parties.company[0].name ?></b_left_sidehead_nonum>
 <? for (var i = 0; i < data.parties.company.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.company[i]) ?>
 <? } ?>
