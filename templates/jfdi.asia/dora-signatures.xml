@@ -9,10 +9,15 @@
 <noindent_centered addnewline="true"></noindent_centered>
 <noindent_centered addnewline="true"></noindent_centered>
 <cover_company_name><?= data.company.name ?></cover_company_name>
-<cover_company_id><?= data.company.idtype ?> </cover_company_id>
+<cover_company_id><?= data.company.idtype ?> <?= data.company.id?></cover_company_id>
 <noindent_centered addnewline="true"></noindent_centered>
-<? for (var i = 0; i < data.parties.new_investor.length; i++) { ?>
+<? if (data.parties.new_investor.length == 1) { ?>
+<cover_company_name><?= data.parties.new_investor[0].name ?></cover_company_name>
+<cover_company_id><?= data.parties.new_investor[0].idtype ?> <?= data.parties.new_investor[0].id ?></cover_company_id>
+<? } else { ?>
+<?   for (var i = 0; i < data.parties.new_investor.length; i++) { ?>
 <cover_parties>&#9;<?= data.parties.new_investor[i].name ?>&#9;<?= data.parties.new_investor[i].idtype ?> <span_ucnum><?= data.parties.new_investor[i].id ?></span_ucnum></cover_parties>
+<?   } ?>
 <? } ?>
 </CoverTop>
 <CoverMid>
