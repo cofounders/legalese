@@ -217,7 +217,7 @@ function setSignaturePageToAMaster(doc) {
 
   var signatureMaster = doc.masterSpreads.item(
 	doc.xmlElements.item(0).xmlAttributes.item("signatureMaster").isValid
-	  ? doc.xmlElements.item(0).xmlAttributes.item("signatureMaster").value;
+	  ? doc.xmlElements.item(0).xmlAttributes.item("signatureMaster").value
 	  : "A-Master");
 
   // set A master for the current page and all subsequent pages
