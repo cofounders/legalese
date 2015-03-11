@@ -160,6 +160,9 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
 	importMaps[doc.xmlImportMaps.item(i).markupTag.name] = doc.xmlImportMaps.item(i).mappedStyle;
   }
 
+  // define the default master for body text
+  if (doc.xmlElements.item(0).xmlAttributes.item("defaultMaster").isValid)
+	doc.pages.item(-1).appliedMaster = doc.masterSpreads.item(doc.xmlElements.item(0).xmlAttributes.item("defaultMaster").value);
   
   doc.xmlElements.item(0).importXML(xmlFile);
 
