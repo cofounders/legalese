@@ -1086,6 +1086,10 @@ function fillTemplates(sheet) {
 
     var url = sourceTemplate.url;
     var newTemplate = obtainTemplate_(url);
+	Logger.log("here is where we decide to dump template.");
+	if (config.dump_template && config.dump_template.values[0] == true) {
+	  Logger.log("TEMPLATE: " + newTemplate.getCode());
+	}
     newTemplate.data = templatedata;
 	var sans_xml = sourceTemplate.name.replace(/_xml|xml_/,"");
 
