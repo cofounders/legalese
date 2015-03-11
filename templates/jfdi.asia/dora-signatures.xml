@@ -65,7 +65,8 @@
   return Utilities.formatDate(new Date(p.date_of_subscription_agreement),
                               data._timezone,
                              "d MMMM YYYY")});
-   if (data._subscription_agreement_dates.filter(function(d){return d===data._subscription_agreement_dates[0]})) { // all the same
+   if (data._subscription_agreement_dates.filter(function(d){return d===data._subscription_agreement_dates[0]}).length
+                                                                          == data._subscription_agreement_dates.length) { // all the same
       data._subscription_agreement_dates = data._subscription_agreement_dates.splice(0,1);
    }
    data._subscription_agreement_dates = commaAnd(data._subscription_agreement_dates);
