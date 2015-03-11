@@ -13,7 +13,7 @@
 </CoverTop>
 <CoverMid>
 <? for (var i = 0; i < data.parties.shareholder.length; i++) { ?>
-<cover_parties_centered><?= data.parties.shareholder[i].name ?></cover_parties_centered>
+<cover_parties_centered><?= newlinesToCommas(data.parties.shareholder[i].name) ?></cover_parties_centered>
 <? } ?>
 </CoverMid>
 
