@@ -97,7 +97,7 @@
 <Cell aid:ccols="1" aid:ccolwidth="42" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Number of Shares Held</cell_c></Cell>
 <? for (var i = 0; i<data.parties.shareholder.length; i++) { with(data.parties.shareholder[i]) { ?>
 <Cell aid:ccols="1" aid:ccolwidth="110" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= name ?></cell_c></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= idtype ?> <?= id ?></cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= idtype ?> <span_smallcaps><?= id ?></span_smallcaps></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="190" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= address ?></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="42" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= num_shares ?>&#8232;<?= share_type ?></cell_c></Cell>
 <? } } ?>
