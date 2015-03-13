@@ -46,7 +46,7 @@
 <para_1>This Agreement legally binds the following Parties with respect to the JFDI.Asia Accelerate Bootcamp <span_ucnum><?= data.jfdi_accelerate_batch ?></span_ucnum> (the "Bootcamp"):
 </para_1>
 <? for (var i in data.parties.founder) { ?>
-<parties><?!= include("inc_party", data, data.parties.founder[i]) ?><? if (data.parties.founder.length == 1) { ?> (the "Founder")<? } ?><?</parties>
+<parties><?!= include("inc_party", data, data.parties.founder[i]) ?><? if (data.parties.founder.length == 1) { ?> (the "Founder")<? } ?></parties>
 <? } ?>
 <? if (data.parties.founder.length > 1) { ?><para_1>(the "Founders")</para_1><? } } ?>
 <parties><? if (data.company.id != undefined && data.company.id.length > 0) { ?><?!= include("inc_party", data, data.company) ?><? } else { ?>
