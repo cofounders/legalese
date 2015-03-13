@@ -70,7 +70,9 @@ the Startup shall authorise and issue <? if (data.jfdi_standard_valuation != fal
 <numbered_1_para>The Next External Financing refers to the first financing event subsequent to JFDI.2014's investment in which the Startup raises more than <?= data.qualified_financing_round_size ?> within one round or series<? if (data.qualified_round_type != undefined) { ?> of <?= data.qualified_round_type ?> securities<? } ?>.
 <? if (data.jfdi_standard_valuation == false ) { ?></numbered_1_para><? } else { ?>
 The Conversion Percentage shall be<?
-if (data.valuation_basis == "table") { ?> determined according to the following valuation table, or as agreed between the Startup and JFDI.2014.
+if (data.valuation_basis == "table") { ?>
+<?if (data.jfdi_standard_valuation != false) { ?> based on <?= data.parties.investor[0].commitment ?> and<? } ?>
+ determined according to the following valuation table, or as agreed between the Startup and JFDI.2014.
 </numbered_1_para>
 <? if (data.nonstandard_valuation_table) { ?><table_enclosing_para><?!= data.nonstandard_valuation_table ?></table_enclosing_para><? } else { ?>
 <table_enclosing_para><Table aid:table="table" aid:tcols="2" aid:trows="6" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
