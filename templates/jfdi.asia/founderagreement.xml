@@ -49,7 +49,7 @@
 <parties><?!= include("inc_party", data, data.parties.founder[i]) ?><? if (data.parties.founder.length == 1) { ?> (the "Founder")<? } ?></parties>
 <? } ?>
 <? if (data.parties.founder.length > 1) { ?><para_1>(the "Founders")</para_1><? } } ?>
-<parties><? if (data.company.id != undefined && data.company.id.length > 0) { ?><?!= include("inc_party", data, data.company) ?><? } else { ?>
+<parties><? if (data.company.id != undefined && data.company.id.length > 0) { ?><?!= include("inc_party", data, data.company) ?><? } ?>
 <?= data.company.name ?>, a Singapore Private Limited Company promoted by the Founders<? } ?> (the "Startup")
 <?= data.parties.investor[0].name ?>, an investor into the Startup
 JFDI.Asia Pte. Ltd, the operator of the Bootcamp
