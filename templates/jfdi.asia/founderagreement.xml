@@ -50,7 +50,7 @@
 <parties><? if (data.company.id != undefined && data.company.id.length > 0) { ?><?!= include("inc_party", data, data.company) ?><? } else { ?>
 <?= data.company.name ?>, a Singapore Private Limited Company promoted by the Founders<? } ?> (the "Startup")
 <?= data.parties.investor[0].name ?>, an investor into the Startup
-JFDI.Asia Pte. Ltd, the operator of the Bootcamp</parties>
+JFDI.Asia Pte. Ltd, the operator of the Bootcamp, bound by its management agreement with JFDI.2014</parties>
 <para_1>By this Agreement the Parties express a mutual understanding as follows:</para_1>
 <numbered_1_para>The <span_ucnum><?= data.jfdi_accelerate_batch ?></span_ucnum> Bootcamp shall run in two phases. The "Validate" phase begins on <?= data.validate_start_date ?>. The "Accelerate" phase begins on <?= data.accelerate_start_date ?>. The Bootcamp ends with Demo Day, on or around <?= data.demo_day_date ?>. The Founders should be prepared to remain in Singapore through <?= data.remainder_date ?> to negotiate funding.
 Upon acceptance of this Agreement, the Founders will be admitted to the <? if (data.skip_hoops != true) { ?>"Validate" phase of the Bootcamp. During this phase, the Founders are not required to be present in Singapore. The Founders should work on customer development, product development, and early traction through a Minimum Viable Product (concierge or scalable or both.) JFDI will work with the Founders online to prepare them for Accelerate. The Founders should also recruit as needed to ensure that the team contains a complete mix of capabilities: product, customer, and business development.
@@ -150,9 +150,6 @@ This offer may be rescinded should the Founders be unable to comply with the req
 <? } ?>
 <? for (var i = 0; i < data.parties.investor.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.investor[i]) ?>
-<? } ?>
-<? if (data.parties.operator) { ?>
-<?!= include("inc_signature", data, data.parties.operator[0]) ?>
 <? } ?>
 </Story_Main>
 </Root>
