@@ -139,7 +139,7 @@ function readDrive() {
     toplevels[folder.getId()] = folder.getName();
   }
 
-  var height = showTree(sheet, [1, 1], rootFolder, "folder");
+  var height = showTree(sheet, [1, 1], rootFolder, "folder", ["done"]);
 
   height++;
   // things shared with me
@@ -185,7 +185,7 @@ function listShared() {
 }
 
 
-function showTree(sheet, xy, me, filetype) {
+function showTree(sheet, xy, me, filetype, exclusions) {
   var height = 0;
   // first display myself
   // then display child folders
@@ -193,18 +193,27 @@ function showTree(sheet, xy, me, filetype) {
 
   setCellLink(sheet, xy, me.getName() + (filetype == 'folder' ? "/" : ""), me.getUrl()); // sometimes i am a file, sometimes a folder.
 
+  Logger.log("exclusions = %s", exclusions);
+
   if (filetype == "folder") {
-    var fo = []; var folders = me.getFolders(); while (folders.hasNext()) { fo.push(folders.next()); }
-    // todo: sort by last-modified
-    var fi = []; var files = me.getFiles(); while (files.hasNext()) { fi.push(files.next()); }
+	var exclusions_match = exclusions.filter(function(e){return e === me.getName()});
+	if (exclusions_match.length) {
+	  Logger.log("pruning exclusion %s" + exclusions_match);
+	  setCellLink(sheet, [xy[0]+1, xy[1]], "pruned");
+	}
+	else {
+      var fo = []; var folders = me.getFolders(); while (folders.hasNext()) { fo.push(folders.next()); }
+      // todo: sort by last-modified
+      var fi = []; var files = me.getFiles(); while (files.hasNext()) { fi.push(files.next()); }
+	  
+      for (var i = 0; i < fo.length; i++) {
+		height = height + showTree(sheet, [xy[0]+1, xy[1]+height], fo[i], "folder", exclusions);
+      }
 
-    for (var i = 0; i < fo.length; i++) {
-      height = height + showTree(sheet, [xy[0]+1, xy[1]+height], fo[i], "folder");
-    }
-
-    for (var i = 0; i < fi.length; i++) {
-      height = height + showTree(sheet, [xy[0]+1, xy[1]+height], fi[i], "file");
-    }
+      for (var i = 0; i < fi.length; i++) {
+		height = height + showTree(sheet, [xy[0]+1, xy[1]+height], fi[i], "file", exclusions);
+      }
+	}
   }
   if (height == 0) height++;
   return height;
@@ -212,5 +221,6 @@ function showTree(sheet, xy, me, filetype) {
 
 function setCellLink(sheet, xy, text, url) {
   var cell = sheet.getRange(xy[1], xy[0]);
-  cell.setValue('=HYPERLINK("'+ url + '","' + text +'")');
+  if (url) { cell.setValue('=HYPERLINK("'+ url + '","' + text +'")'); }
+  else     { cell.setValue(text) }
 }
