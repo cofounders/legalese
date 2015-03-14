@@ -100,6 +100,14 @@ function onOpen() {
 
   PropertiesService.getDocumentProperties().deleteProperty("legalese.muteFormActiveSheetWarnings");
 
+  // if we're on the Natural Language UI, reset C2's data validation to the appropriate range.
+  if (sheet.getName() == "UI") {
+	var sectionRange = sectionRangeNamed(sheet,"Entity Groups");
+	var myRange = sheet.getRange(sectionRange[0], 2, sectionRange[1]-sectionRange[0]+1, 1);
+	Logger.log("resetting C2 datavalidation range to " + myRange.getA1Notation());
+	setDataValidation(sheet, "C2", myRange.getA1Notation());
+  }
+  
   showSidebar(sheet);
 };
 
@@ -471,16 +479,13 @@ function readRows_(sheet) {
   var rows = sheet.getDataRange();
   var numRows = rows.getNumRows();
   var values = rows.getValues();
-  var terms = { _parties_last_filled_column: 0,
-				_first_party_row: 0,
-			  };
+  var terms = {};
   var section = "prologue";
   var partyfields = [];
   var origpartyfields = [];
   var partyfieldorder = []; // table that remaps column number to order-in-the-form
   var parties = { _allparties:[], _unmailed:[], founder:[], existing_shareholder:[], company:[], investor:[] }; // types don't need to be defined here really
   // maybe we should do it this way and just synthesize the partygroups as needed, along with any other filters.
-  var terms_row_offset;
   var config = {};
   var previous = [];
   var relations = {};
@@ -500,10 +505,21 @@ function readRows_(sheet) {
 	Logger.log("readRows: row " + i + ": processing row "+row[0]);
 	// process header rows
 	if (row.filter(function(c){return c.length > 0}).length == 0) { Logger.log("row %s is blank, skipping", i);  continue; }
-    if      (row[0] == "KEY TERMS") { section=row[0]; terms_row_offset = i; continue; }
-    else if (row[0] == "IGNORE" ||
-			 row[0] == "IMPORT FROM CAP TABLE") { 
+    if      (row[0] == "KEY TERMS") { section=row[0]; continue; }
+    else if (row[0] == "IGNORE") { 
 	  section = row[0];
+	  continue;
+	}
+    else if (row[0] == "IMPORT") {
+	  var imported_data_config = readRows_(sheet.getParent().getSheetByName(row[1]));
+	  for(var key in imported_data_config[0]) {
+		if(! imported_data_config[0].hasOwnProperty(key)) { continue; }
+		terms[key] = imported_data_config[0][key];
+	  }	  
+	  for(var key in imported_data_config[1]) {
+		if(! imported_data_config[0].hasOwnProperty(key)) { continue; }
+		config[key] = imported_data_config[1][key];
+	  }	  
 	  continue;
 	}
     else if (row[0] == "PARTYFORM_ORDER") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||!row[ki]){continue}
@@ -543,8 +559,6 @@ function readRows_(sheet) {
 		seen_parties_before = true;
 		partyfields = row;
 		while (row[row.length-1] === "") { row.pop() }
-		terms._parties_last_filled_column = row.length-1;
-		Logger.log("readRows: _parties_last_filled_column = %s", terms._parties_last_filled_column);
 		
 		for (var ki in partyfields) {
 		  if (ki < 1 || row[ki] == undefined) { continue }
@@ -566,6 +580,8 @@ function readRows_(sheet) {
 	// process data rows
     if (section == "KEY TERMS") {
       if ( row[0].length == 0) { continue }
+
+	  // do we need to ignore situations where row[0] !~ /:$/ ? subsection headings might be noisy.
       terms[           asvar_(row[0])] = formatify_(term_formats[i][0], row[1], sheet);
 	  terms["_orig_" + asvar_(row[0])] = row[1];
     }
@@ -581,7 +597,6 @@ function readRows_(sheet) {
     else if (section == "PARTIES") { // Name	partygroup	Email	IDtype	ID	Address	State	InvestorType Commitment etc
       var singleparty = { _spreadsheet_row:i+1, _unmailed:false };
       var party_formats = sheet.getRange(i+1,1,1,row.length).getNumberFormats();
-	  if (terms._first_party_row == 0) terms._first_party_row = i;
 	  terms._last_party_row = i;
 
       for (var ki in partyfields) {
@@ -1843,4 +1858,106 @@ function mylogger(input) {
 // how many parties are there in all of the investors? if there's only one investor and it's a natural person then the answer is 1.
 // otherwise the answer is probably plural.
 // used by the convertible_loan_waiver.
+
+
+function onEdit(e){
+  // Set a comment on the edited cell to indicate when it was changed.
+  var range = e.range;
+  var sheet = range.getSheet();
+  Logger.log("onEdit trigger firing: "+ e.range.getA1Notation());
+  if (range.getA1Notation() == "C2") { // selected Entity Group
+	sheet.getRange("D2").setFontStyle("italic");
+	sheet.getRange("D2").setValue("wait...");
+	sheet.getRange("D2").setBackground('yellow');
+
+	sheet.getRange("C4").setBackground('white');
+	sheet.getRange("C4").setValue("");
+
+	Logger.log("updated C2, so we need to set D2");
+	var sectionRange = sectionRangeNamed(sheet,"Entity Groups");
+	var myv = myVLookup_(sheet, range.getValue(), sectionRange[0], sectionRange[1], 2);
+	Logger.log("myVLookup returned " + myv);
+	setDataValidation(sheet, "D2", myv); 
+
+	sheet.getRange("D2").setValue("");
+	sheet.getRange("D2").setFontStyle("normal");
+;	sheet.getRange("D2").activate();
+
+	sheet.getRange("C3").setValue("");
+	sheet.getRange("C3").setBackground('white');
+
+	sheet.getRange("C2").setBackground('lightyellow');
+  }
+  if (range.getA1Notation() == "D2") { // selected Entity
+	sheet.getRange("D2").setBackground('lightyellow');
+
+	sheet.getRange("C4").setBackground('white');
+	sheet.getRange("C4").setValue("");
+
+	sheet.getRange("C3").setValue("");
+	sheet.getRange("C3").setBackground('yellow');
+	sheet.getRange("C3").activate();
+  }
+  if (range.getA1Notation() == "C3") { // selected Template
+	sheet.getRange("C3").setBackground('lightyellow');
+	sheet.getRange("C4").setFontStyle("italic");
+	sheet.getRange("C4").setValue("processing...");
+	sheet.getRange("C4").activate();
+  }
+}
+
+function sectionRangeNamed(sheet, sectionName) {
+  // the rows that have data, after the row where [0]=="SOURCES" && [1]==sectionName
+
+  // manual runtesting from the web ui
+  if (sheet == null) { sheet = SpreadsheetApp.getActiveSheet(); }
+  if (sectionName == null) { sectionName = "Entity Groups" }
+
+  var dataRange = sheet.getDataRange();
+  var dataRangeValues = dataRange.getValues();
+
+  var startRow;
+  var endRow;
+  var inRange = false;
+
+  for (var i = 0; i < dataRangeValues.length; i++) {
+	var row = dataRangeValues[i];
+	if      (! inRange && row[0] == "SOURCES" && row[1] == sectionName) { startRow = i+2; inRange=true;  continue }
+	else if (  inRange && row[0] == "SOURCES" && row[1] != sectionName) {                 inRange=false; break    }
+	else if (  inRange &&                        row[1]               ) {   endRow = i+1;                         }
+  }
+  Logger.log("found section named "+sectionName+" from row " + startRow + " to " + endRow );
+  return [startRow, endRow];
+}
+
+function myVLookup_(sheet, str, rowStart, rowEnd, colIndex) {
+  // return the data range for the row in which str matches col
+  Logger.log("myVLookup: starting with rowStart="+rowStart+", rowEnd="+rowEnd + ", colIndex="+colIndex);
+  var searchRange = sheet.getRange(rowStart, colIndex, rowEnd-rowStart+1);
+  Logger.log("myVLookup: searching range " + searchRange.getA1Notation());
+  for (var i = 1; i <= searchRange.getNumRows(); i++) {
+	Logger.log("myVLookup: considering row " + (rowStart + i - 1) + " whose getCell("+i+",1) value is " + searchRange.getCell(i, 1).getValue());
+	if (searchRange.getCell(i, 1).getValue() == str) { var toreturn = sheet.getRange(rowStart + i - 1, 3, 1, sheet.getLastColumn()).getA1Notation();
+													   // SpreadsheetApp.getUi().alert("found " + str + "; returning " + toreturn);
+													   return toreturn;
+													 }
+  }
+  SpreadsheetApp.getUi().alert("falling off the end");
+  return null;
+}
+
+
+function setDataValidation(sheet, dest, source) {
+ var destinationRange = sheet.getRange(dest);
+ var sourceRange = sheet.getRange(source);
+ var rule = SpreadsheetApp.newDataValidation().requireValueInRange(sourceRange).build();
+ var rules = destinationRange.getDataValidations();
+ for (var i = 0; i < rules.length; i++) {
+   for (var j = 0; j < rules[i].length; j++) {
+     rules[i][j] = rule;
+   }
+ }
+ destinationRange.setDataValidations(rules);
+}
+
 
