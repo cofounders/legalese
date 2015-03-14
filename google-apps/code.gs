@@ -79,11 +79,16 @@ function onOpen() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = spreadsheet.getActiveSheet();
 
-  SpreadsheetApp.getUi().createAddonMenu()
+  var addOnMenu = SpreadsheetApp.getUi().createAddonMenu()
 	.addItem("Create Form", "setupForm_")
-	.addItem("Generate PDFs", "fillTemplates")
-	.addItem("Send to EchoSign", "uploadAgreement")
-      .addToUi();
+	.addItem("Generate PDFs", "fillTemplates");
+
+  var echosignService = getEchoSignService_();
+  if (echosignService != null) { 
+	  addOnMenu.addItem("Send to EchoSign", "uploadAgreement");
+  }
+
+  addOnMenu.addToUi();
 
   // when we release this as an add-on the menu-adding will change.
 
