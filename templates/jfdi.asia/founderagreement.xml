@@ -42,7 +42,7 @@
 </Firstpage_Sidebar>
 <Story_Main>
 <chapter_header>Founder Agreement</chapter_header>
-<para_1>This Agreement legally binds the following Parties with respect to the JFDI.Asia Accelerate Bootcamp <span_ucnum><?= data.jfdi_accelerate_batch ?></span_ucnum> (the "Bootcamp"):</para_1>
+<para_1>This Agreement legally binds the following individuals and organizations (the "Parties") with respect to the JFDI.Asia Accelerate Bootcamp <span_ucnum><?= data.jfdi_accelerate_batch ?></span_ucnum> (the "Bootcamp"):</para_1>
 <? for (var i in data.parties.founder) { ?>
 <parties><?!= include("inc_party", data, data.parties.founder[i]) ?><? if (data.parties.founder.length == 1) { ?> (the "Founder")<? } ?></parties>
 <? } ?>
@@ -111,13 +111,19 @@ Conditional upon demonstrating further traction, the Startup will also be offere
 The Founders shall attend substantially all of the Bootcamp. During the course of the Bootcamp the Founders shall treat the Startup as their exclusive work priority.
 The Founders are responsible for finding housing and for ensuring that their presence in Singapore complies with employment and immigration regulations.
 During the Bootcamp, JFDI.Asia shall invest time and energy working with the Startup, providing coaching, counseling, mentoring, office space, administrative guidance, and the opportunity to pitch before investors on Demo Day. The primary focus of the Bootcamp is to give first-time founders an experiential understanding of the requirements of venture investors. Founders will be given the opportunity to make the best possible case for investment. JFDI will coordinate mentors to give guidance and feedback on the Startup's likelihood of raising investment.
-JFDI.Asia shall provide standardised legal paperwork such as an Investment Agreement, Shareholder Agreement, Volunteer and Employment Agreement, Memorandum and Articles of Association, etc.
-If the Founders already own an existing Singapore Private Limited company (an "Existing Company"), then the Founders shall, in lieu of incorporating a new Startup, disclose to JFDI.Asia in writing prior to the beginning of the Bootcamp:
-</numbered_1_para><numbered_2_para_noupspace>the Existing Company's corporate documentation including its Memorandum and Articles of Association, Shareholders Agreements, Directors Agreements, etc.;
-the capitalisation table of the Existing Company; and
-all material liabilities and contractual agreements of the Existing Company;
-</numbered_2_para_noupspace><para_2>and "Startup" in this Agreement shall refer to the Existing Company.</para_2>
-<numbered_1_para>In the event that proprietary assets to be used in the Startup (including but not limited to intellectual property assets) reside with individuals or in another legal entity whether such individuals or entities are in Singapore or abroad, the Founders shall, within four weeks of formal acceptance, cause said assets to be transferred into the Singapore Startup legal entity, free and clear of any pledge, reservation of right, or other encumbrance.
+The majority of startups entering JFDI have not yet incorporated their businesses. JFDI.Asia shall provide standardised legal paperwork such as an Investment Agreement, Shareholder Agreement, Volunteer and Employment Agreement, Memorandum and Articles of Association, etc (the "Subsequent Agreements"). The terms of this Agreement will be set out in detail in those Subsequent Agreements.
+Should the Parties not execute the relevant Subsequent Agreements by the beginning of the Accelerate phase, then this Agreement will terminate at that time.
+JFDI.2014 can only make its investment in a Singapore Private Limited company.</numbered_1_para>
+<numbered_2_para>
+If the Startup has already been incorporated in Singapore as a Private Limited company (an "Existing Local Company"), then JFDI shall make its investment in that company instead of requiring incorporation of a new entity, and "Startup" in this Agreement shall refer to the Existing Local Company.
+If the Startup was previously incorporated outside Singapore (an "Existing Foreign Company"), then the Founders shall reincorporate the Startup in Singapore and transfer the capital structure of the existing company to the new Singapore entity; the existing company will then become a wholly owned subsidiary of the Singapore entity.
+In either case, the Founders shall disclose to JFDI.Asia in writing as soon as possible after the execution of this Agreement:
+</numbered_2_para>
+<numbered_3_para>the Existing Company's corporate documentation including its Memorandum and Articles of Association, Shareholders Agreements, Directors Agreements, etc.;
+the capitalisation table of the Existing Company including all debt and equity issues; and
+all material liabilities and contractual agreements of the Existing Company.</numbered_3_para>
+<numbered_1_para>If the Founders have incorporated more than one entity to hold the business, then JFDI.2014 can only invest in the holding company which wholly owns all the other entities. If it is not possible to re-organize the corporate structure accordingly to the satisfaction of JFDI.2014 by the start of the Bootcamp, then this agreement will terminate at that time.
+In the event that proprietary assets to be used in the Startup (including but not limited to intellectual property assets) reside with individuals or in another legal entity whether such individuals or entities are in Singapore or abroad, the Founders shall, within four weeks of formal acceptance, cause said assets to be transferred into the Singapore Startup legal entity, free and clear of any pledge, reservation of right, or other encumbrance.
 As an investor, JFDI.2014 shall hold the following rights which the Founders and/or other shareholders may or may not also hold:
 </numbered_1_para>
 <numbered_2_para_noupspace>transferable pre-emptive right of first refusal in all future issues of equity securities or securities convertible to equity;
