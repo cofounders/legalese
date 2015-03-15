@@ -48,8 +48,8 @@ and we confirm that all is in order. </numbered_2_para>
 
 <para_1>Yours faithfully,</para_1>
 <? data.signature_comment = "Director" ?>
-<? for (var i=0;i<data.company.roles.director.length;i++) { ?>
-<?!= include("inc_signature", data, data.company.roles.director[i]) ?>
+<? for (var i=0;i<data.parties.director.length;i++) { ?>
+<?!= include("inc_signature", data, data.parties.director[i]) ?>
 <? } ?>
 </Story_Main>
 <Bottom_Box delete_if_empty="true" />
