@@ -495,7 +495,7 @@ function readRows_(sheet, include_mode, toreturn) {
   var entitiesByName = toreturn.entitiesByName;
   var origentityfields = toreturn._origentityfields; // used by the form
   var entityfields = toreturn._entityfields;
-  var principal;
+  var principal, roles = {};
 
   var section = "prologue";
   var entityfieldorder = []; // table that remaps column number to order-in-the-form
@@ -536,6 +536,7 @@ function readRows_(sheet, include_mode, toreturn) {
 
 	  Logger.log("readRows: encountered INCLUDE %s", row[1]);
 	  readRows_(include_sheet, true, toreturn);
+	  Logger.log("readRows: back from INCLUDE %s; toreturn.principal = %s", row[1], toreturn.principal ? toreturn.principal.name : undefined);
 	  // reads into toreturn directly
 	  continue;
 	}
@@ -571,8 +572,8 @@ function readRows_(sheet, include_mode, toreturn) {
 																				   }
 											continue;
 										  }
-    else if (row[0] == "ENTITIES")   {
-	  section = row[0];
+    else if (row[0] == "ENTITIES" || row[0] == "PARTIES")   {
+	  section = "ENTITIES";
 	  if (! seen_entities_before) {
 		seen_entities_before = true;
 		entityfields = row;
@@ -604,8 +605,8 @@ function readRows_(sheet, include_mode, toreturn) {
 	  var relation  = asvar_(row[0]);
 	  var entityname    = row[1];
 
-	  principal.roles[relation] = principal.roles[relation] || [];
-	  principal.roles[relation].push(entityname);
+	  roles[relation] = roles[relation] || [];
+	  roles[relation].push(entityname);
       Logger.log("readRows:         ROLES: learning party role %s = %s", relation, entityname);
 	}
     else if (section == "ENTITIES") {
@@ -632,9 +633,8 @@ function readRows_(sheet, include_mode, toreturn) {
   // this establishes PRINCIPAL.roles.RELATION_NAME = [ party1, party2, ..., partyN ]
   // for instance, companyParty.roles.shareholder = [ alice, bob ]
       Logger.log("readRows: learning party entity (core relation = %s), %s", coreRelation, entity);
-	  principal.roles = principal.roles || {};
-	  principal.roles[coreRelation] = principal.roles[coreRelation] || [];
-	  principal.roles[coreRelation].push(entity.name);
+	  roles[coreRelation] = roles[coreRelation] || [];
+	  roles[coreRelation].push(entity.name);
 
 	  // this is okay if we're running inside an INCLUDE context.
 	  if (! include_mode && entity.legalese_status == undefined) { SpreadsheetApp.getUi().alert("the sheet we're working on has no legalese status! You probably want to be on a different tab."); throw new Error("never mind, i will try again"); }
@@ -703,14 +703,21 @@ function readRows_(sheet, include_mode, toreturn) {
 	  Logger.log("CONF: %s", columna+".dict."+columnb+"=" + config[columna].dict[columnb].join(","));
 	}
   }
-  if (principal) {
+
+  if (toreturn.principal) {
+	Logger.log("readRows: leaving principal untouched as %s (would otherwise have set it to %s)", toreturn.principal.name, principal ? principal.name : undefined);
+  } else if (principal) {
 	Logger.log("readRows: setting principal = %s", principal.name);
 	toreturn.principal = principal;
   }
-  else if (toreturn.principal) {
-	Logger.log("readRows: leaving principal untouched = %s", toreturn.principal.name);
+
+
+// TODO: sort out the clobbering implicit in passing the toreturn{} by reference into multiple INCLUDEs.
+
+  toreturn.principal.roles = toreturn.principal.roles || {};
+  for (var k in roles) {
+	toreturn.principal.roles[k] = roles[k];
   }
-  Logger.log("readRows: terms.parties = %s", terms.parties);
   Logger.log("readRows: entitiesByName = %s", entitiesByName);
   Logger.log("readRows: config = %s\n", JSON.stringify(config,null,"  "));
   return toreturn;
@@ -719,11 +726,11 @@ function readRows_(sheet, include_mode, toreturn) {
 // ---------------------------------------------------------------------------------------------------------------- getPartyCells_
 // TODO: make this go away -- let's just log the mailing output in one place, rather than row by row.
 function getPartyCells_(sheet, readrows, party) {
-  Logger.log("looking to return a dict of entityfieldname to cell, for party %s", party.name);
-  Logger.log("party %s comes from spreadsheet row %s", party.name, party._spreadsheet_row);
-  Logger.log("the fieldname map looks like this: %s", readrows._entityfields);
-  Logger.log("so the cell that matters for legalese_status should be row %s, col %s", party._spreadsheet_row, readrows._entityfields.indexOf("legalese_status")+1);
-  Logger.log("calling (getRange %s,%s,%s,%s)", party._spreadsheet_row, 1, 1, readrows._entityfields.length+1);
+  Logger.log("getPartyCells: looking to return a dict of entityfieldname to cell, for party %s", party.name);
+  Logger.log("getPartyCells: party %s comes from spreadsheet row %s", party.name, party._spreadsheet_row);
+  Logger.log("getPartyCells: the fieldname map looks like this: %s", readrows._entityfields);
+  Logger.log("getPartyCells: so the cell that matters for legalese_status should be row %s, col %s", party._spreadsheet_row, readrows._entityfields.indexOf("legalese_status")+1);
+  Logger.log("getPartyCells: calling (getRange %s,%s,%s,%s)", party._spreadsheet_row, 1, 1, readrows._entityfields.length+1);
   var range = sheet.getRange(party._spreadsheet_row, 1, 1, readrows._entityfields.length+1);
   Logger.log("pulled range %s", JSON.stringify(range.getValues()));
   var toreturn = {};
@@ -981,7 +988,9 @@ function availableTemplates_() {
 // this is unwise, because the XML template runs with the same privileges as this script,
 // and if you randomly execute templates from all over the Internet, sooner or later you will regret it.
 
-  { name:"corpsec_allotment_xml", url:"http://www.legalese.io/templates/jfdi.asia/corpsec-allotment.xml",       title:"Instruction to Corpsec for Allotment" },
+  { name:"corpsec_allotment_xml", url:"http://www.legalese.io/templates/jfdi.asia/corpsec-allotment.xml",       title:"Instruction to Corpsec for Allotment",
+	parties:{to:["director"], cc:["corporate_secretary"], also:["new_investor", "state_regulator"]},
+  },
   { name:"dr_allotment_xml", url:"http://www.legalese.io/templates/jfdi.asia/dr-allotment.xml",       title:"Directors' Resolution for Allotment" },
   { name:"jfdi_2014_rcps_xml", url:"jfdi_2014_rcps_xml.html",       title:"JFDI.2014 Subscription Agreement" },
   { name:"kissing_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing.xml",       title:"KISS (Singapore)" },
@@ -1061,14 +1070,26 @@ function templateParties(sheet, readRows, sourceTemplate) {
    * we also track the mailing status here
    */
   Logger.log("templateParties: running for %s", sourceTemplate.name);
-
   var es_num = 1;
-
   var parties = { _allparties:[], _unmailed:[], company:[readRows.principal] };
   // consult the Template DTD to see what roles are involved in the template
 
   Logger.log("templateParties: hardcoding parties.company = %s", parties.company);
   Logger.log("templateParties: template parties = %s", sourceTemplate.parties);
+
+  // each role shows a list of names. populate the parties array with a list of expanded entity objects.
+  for (var role in readRows.principal.roles) {
+	for (var i in readRows.principal.roles[role]) {
+	  var partyName = readRows.principal.roles[role][i];
+	  if (readRows.entitiesByName[partyName]) {
+		parties[role] = parties[role] || [];
+		parties[role].push(readRows.entitiesByName[partyName]);
+	  }
+	  else {
+		Logger.log("WARNING: the Roles section defines a party %s which is not defined in an Entities section, so omitting from the data.parties list.", partyName);
+	  }
+	}
+  }
 
   for (var mailtype in sourceTemplate.parties) {
 	Logger.log("templateParties: mailtype %s", mailtype);
@@ -1076,7 +1097,13 @@ function templateParties(sheet, readRows, sourceTemplate) {
 	  var partytype = sourceTemplate.parties[mailtype][i];
 	  Logger.log("templateParties: discovered %s: %s", mailtype, partytype);
 	  Logger.log("templateParties:   principal is %s", readRows.principal.name);
-	  parties[partytype] = readRows.principal.roles[partytype].map(function(p){return readRows.entitiesByName[p]});
+	  if (readRows.principal.roles[partytype] == undefined) {
+		Logger.log("templateParties:   principal does not possess a defined %s role!");
+		continue;
+	  }
+	  // not needed now, because it is present above.
+	  // parties[partytype] = readRows.principal.roles[partytype].map(function(p){return readRows.entitiesByName[p]});
+	  // or maybe we can just flesh out all the roles.
 	  Logger.log("templateParties:   parties are %s", parties[partytype].map(function(e){return e.name}).join(", "));
 	  
 	  for (var j in parties[partytype]) {
@@ -1166,15 +1193,8 @@ function fillTemplates(sheet) {
 	Logger.log("templatedata.parties = %s", JSON.stringify(templatedata.parties));
 	templatedata.company = templatedata.parties.company[0];
 	Logger.log("templatedata.company = %s", templatedata.company);
-	templatedata.founders = templatedata.parties.founder;
 
-	// TODO: respect the "all in one doc" vs "one per doc" for all categories not just investors
-	// but for each given template we need to know which party category to explode.
-	// so maybe we should have the configuration logic be more about
-	// explode: founder
-	// only one party type is allowed to explode for a given template otherwise we get
-	// a combinatorial explosion.
-
+	// under Configuration, say: Templates: templatename explode partytype
 	var to_explode;
 	try { to_explode = config.templates.tree[sans_xml]["explode"] } catch (e) { Logger.log("ERROR: no explode partytype") }
 	if (to_explode != undefined) {
@@ -1194,7 +1214,7 @@ function fillTemplates(sheet) {
 	  }
 
 	} else {
-	  Logger.log("doing all parties in one doc ... " + sourceTemplate.url);
+	  Logger.log("no explosion; doing all parties in one doc ... " + sourceTemplate.url);
 	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder); // todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
 	  readme.getBody().appendParagraph("created " + sourceTemplate.title);
 	  readme.getBody().appendParagraph("doing all parties in one doc. to do one doc for each party, set explode=investor or whatever partytype in the configuration section of the spreadsheet.");
