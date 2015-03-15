@@ -1,11 +1,7 @@
 /* TODO
  *
- * todo -- normalize PARTIES to PARTIES,ROLES with a join
  * todo -- do the right thing with emailing exploded people. set esnum to contiguous 1,2,3 in each exploded file.
  * todo -- write to the Readme the list of To: and CC: for when the user is submitting to EchoSign manually.
- *
-** we need a way for a spreadsheet to say "Get your Party Information from somewhere else".
-** we need a way for a spreadsheet to say "Get your Party Information from somewhere else".
  *
  * we need a high level way to say "generate workflow W containing agreements X1, X2, X3 for company Y".
  *
@@ -47,7 +43,7 @@
 //
 // a brief discussion regarding state.
 // 
-// A spreadsheet may contain one or more sheets with deal-terms and party particulars.
+// A spreadsheet may contain one or more sheets with deal-terms and entity particulars.
 // 
 // When the user launches a routine from the Legalese menu, the routine usually takes its configuration from the ActiveSheet.
 // 
@@ -221,9 +217,9 @@ function setupForm_(sheet) {
   var sheet = sheet || SpreadsheetApp.getActiveSheet();
 
   var ss = sheet.getParent();
-  var data_config = readRows_(sheet);
-  var data   = data_config[0];
-  var config = data_config[1];
+  var readRows = readRows_(sheet);
+  var data   = readRows.terms;
+  var config = readRows.config;
 
   var cell = sheet.getRange("E4");
   var form = ss.getFormUrl();
@@ -273,37 +269,37 @@ function setupForm_(sheet) {
   PropertiesService.getUserProperties().setProperty("legalese."+ss.getId()+".formActiveSheetId", sheet.getSheetId().toString());
   Logger.log("setting formActiveSheetId to %s", sheet.getSheetId().toString());
 
-  var origpartyfields = data._origpartyfields;
-  Logger.log("origpartyfields = " + origpartyfields);
-  for (var i in origpartyfields) {
-	var partyfield = origpartyfields[i];
-	Logger.log("partyfield "+i+" = " + partyfield.fieldname);
-	if (partyfield.itemtype.match(/^list/)) {
-	  var enums = partyfield.itemtype.split(' ');
+  var origentityfields = data._origentityfields;
+  Logger.log("origentityfields = " + origentityfields);
+  for (var i in origentityfields) {
+	var entityfield = origentityfields[i];
+	Logger.log("entityfield "+i+" = " + entityfield.fieldname);
+	if (entityfield.itemtype.match(/^list/)) {
+	  var enums = entityfield.itemtype.split(' ');
 	  enums.shift();
 
 	  // TODO: get this out of the Data Validation https://developers.google.com/apps-script/reference/spreadsheet/data-validation
 	  // instead of the Config section.
 	  form.addListItem()
-		.setTitle(partyfield.fieldname)
-		.setRequired(partyfield.required)
+		.setTitle(entityfield.fieldname)
+		.setRequired(entityfield.required)
 		.setChoiceValues(enums)
-		.setHelpText(partyfield.helptext);
+		.setHelpText(entityfield.helptext);
 	}
-	else if (partyfield.itemtype.match(/^(email|number)/)) {
+	else if (entityfield.itemtype.match(/^(email|number)/)) {
 	  form.addTextItem()
-		.setTitle(partyfield.fieldname)
-		.setRequired(partyfield.required)
-		.setHelpText(partyfield.helptext);
+		.setTitle(entityfield.fieldname)
+		.setRequired(entityfield.required)
+		.setHelpText(entityfield.helptext);
 	  // in the future, when Google Apps Scripts adds validation to its FormApp, validate the input as a valid email address or number as appropriate.
 	}
-	else if (partyfield.itemtype.match(/^text/)) {
+	else if (entityfield.itemtype.match(/^text/)) {
 	  form.addTextItem()
-		.setTitle(partyfield.fieldname)
-		.setRequired(partyfield.required)
-		.setHelpText(partyfield.helptext);
+		.setTitle(entityfield.fieldname)
+		.setRequired(entityfield.required)
+		.setHelpText(entityfield.helptext);
 	}	  
-	else if (partyfield.itemtype.match(/^hidden/)) {
+	else if (entityfield.itemtype.match(/^hidden/)) {
 	  // we don't want to display the Legalese Status field.
 	}	  
   }
@@ -418,222 +414,234 @@ function onFormSubmit(e) {
   }
 
   var sheet = getSheetById_(SpreadsheetApp.getActiveSpreadsheet(), sheetId);
-  var data_config = readRows_(sheet);
-  var data   = data_config[0];
-  var config = data_config[1];
+  var readRows = readRows_(sheet);
+  var data   = readRows.terms;
+  var config = readRows.config;
 
   // add a row and insert the investor fields
-  Logger.log("onFormSubmit: inserting a row after " + (parseInt(data._last_party_row)+1));
-  sheet.insertRowAfter(data._last_party_row+1); // might need to update the commitment sum range
-  var newrow = sheet.getRange(data._last_party_row+2,1,1,sheet.getMaxColumns());
+  Logger.log("onFormSubmit: inserting a row after " + (parseInt(readRows._last_entity_row)+1));
+  sheet.insertRowAfter(readRows._last_entity_row+1); // might need to update the commitment sum range
+  var newrow = sheet.getRange(readRows._last_entity_row+2,1,1,sheet.getMaxColumns());
 //  newrow.getCell(0,0).setValue("bar");
 
-  // loop through the origpartyfields inserting the new data in the right place.
+  // loop through the origentityfields inserting the new data in the right place.
   for (names in e.namedValues) {
 	Logger.log("onFormSubmit: e.namedValues = " + names + ": "+e.namedValues[names][0]);
   }
 
-  var origpartyfields = data._origpartyfields;
-  Logger.log("onFormSubmit: origpartyfields = " + origpartyfields);
+  var origentityfields = data._origentityfields;
+  Logger.log("onFormSubmit: origentityfields = " + origentityfields);
 
-  for (var i = 0; i < origpartyfields.length; i++) {
-	var partyfield = origpartyfields[i];
+  for (var i = 0; i < origentityfields.length; i++) {
+	var entityfield = origentityfields[i];
 
 	// fill in the default party role
-	if (i == 0 && partyfield == undefined) {
-	  partyfield = { fieldname: "_party_role", column: 1 };
+	if (i == 0 && entityfield == undefined) {
+	  entityfield = { fieldname: "_party_role", column: 1 };
 	  e.namedValues["_party_role"] = [ config.default_party_role.value ];
 	  Logger.log("setting default party row in column 1 to %s", config.default_party_role.value);
 	}
 	  
 	// fill in any fields which are hidden and have a default value configured. maybe in future we should extend the default-filling to all blank submissions
-	else if (e.namedValues[partyfield.fieldname] == undefined) {
-	  Logger.log("did not receive form submission for %s", partyfield.fieldname);
+	else if (e.namedValues[entityfield.fieldname] == undefined) {
+	  Logger.log("did not receive form submission for %s", entityfield.fieldname);
 
-	  if (partyfield["default"] != undefined) {
-		Logger.log("filling with default value %s", partyfield["default"]);
-		e.namedValues[partyfield.fieldname] = [ partyfield["default"] ];
+	  if (entityfield["default"] != undefined) {
+		Logger.log("filling with default value %s", entityfield["default"]);
+		e.namedValues[entityfield.fieldname] = [ entityfield["default"] ];
 	  }
 	  else {
 		continue;
 	  }
 	}
 
-	Logger.log("onFormSubmit: partyfield "+i+" (" + partyfield.fieldname+") (column="+partyfield.column+") = " + e.namedValues[partyfield.fieldname][0]);
+	Logger.log("onFormSubmit: entityfield "+i+" (" + entityfield.fieldname+") (column="+entityfield.column+") = " + e.namedValues[entityfield.fieldname][0]);
 
-	var newcell = newrow.getCell(1,parseInt(partyfield.column));
-	Logger.log("onFormSubmit: setting value of cell to " + e.namedValues[partyfield.fieldname]);
-	newcell.setValue(e.namedValues[partyfield.fieldname][0]);
+	var newcell = newrow.getCell(1,parseInt(entityfield.column));
+	Logger.log("onFormSubmit: setting value of cell to " + e.namedValues[entityfield.fieldname]);
+	newcell.setValue(e.namedValues[entityfield.fieldname][0]);
   }
 }
 
 // ---------------------------------------------------------------------------------------------------------------- readRows
 /**
- * populate the data.* structure
- * the PARTIES go into data.parties.founder.*, data.parties.existing_shareholder.*, data.parties.company.*, data.parties.investor.* as arrays
+ * populate a number of data structures, all kept in "toreturn".
+ * you can think of this as a constructor, basically, that represents the sheet, but is agnostic as to the specific data.parties that are needed by each template.
+ * the data.parties get filled in by the template matcher, because different templates involve different parties.
+ *
+ * the ENTITIES go into entitiesByName
  * the TERMS go into data.* directly.
  * if a availabletemplate is marked as binary then we iterate through the investors and set data.investor.* each time
  */
-function readRows_(sheet) {
+function readRows_(sheet, include_mode, toreturn) {
   Logger.log("readRows_: will use sheet " + sheet.getName());
   var rows = sheet.getDataRange();
-  var numRows = rows.getNumRows();
-  var values = rows.getValues();
-  var terms = {};
-  var section = "prologue";
-  var partyfields = [];
-  var origpartyfields = [];
-  var partyfieldorder = []; // table that remaps column number to order-in-the-form
-  var parties = { _allparties:[], _unmailed:[], founder:[], existing_shareholder:[], company:[], investor:[] }; // types don't need to be defined here really
-  // maybe we should do it this way and just synthesize the partygroups as needed, along with any other filters.
-  var config = {};
-  var previous = [];
-  var relations = {};
-  var partiesByName = {};
+  var numRows  = rows.getNumRows();
+  var values   = rows.getValues();
+  var formulas = rows.getFormulas();
 
-  Logger.log("readRows: starting.");
+  if (toreturn == undefined) {
+	toreturn =   { terms            : {},
+				   config           : {},
+				   entitiesByName   : {},
+				   _origentityfields: [],
+				   _entityfields    : [],
+				   _last_entity_row : null,
+				 };
+  }
+
+  var terms = toreturn.terms;
+  var config = toreturn.config;
+  var entitiesByName = toreturn.entitiesByName;
+  var origentityfields = toreturn._origentityfields; // used by the form
+  var entityfields = toreturn._entityfields;
+  var principal;
+
+  var section = "prologue";
+  var entityfieldorder = []; // table that remaps column number to order-in-the-form
+  // maybe we should do it this way and just synthesize the partygroups as needed, along with any other filters.
+  var previous = [];
+
+  Logger.log("readRows: starting to parse %s / %s", sheet.getParent().getName(), sheet.getSheetName());
 
 // get the formats for the B column -- else we won't know what currency the money fields are in.
   var term_formats = sheet.getRange(1,2,numRows).getNumberFormats();
 
   var es_num = 1; // for email ordering the EchoSign fields
 
-  var seen_parties_before = false;
+  var seen_entities_before = false;
 
   for (var i = 0; i <= numRows - 1; i++) {
     var row = values[i];
 	Logger.log("readRows: row " + i + ": processing row "+row[0]);
 	// process header rows
 	if (row.filter(function(c){return c.length > 0}).length == 0) { Logger.log("row %s is blank, skipping", i);  continue; }
-    if      (row[0] == "KEY TERMS") { section=row[0]; continue; }
-    else if (row[0] == "IGNORE") { 
-	  section = row[0];
-	  continue;
-	}
-    else if (row[0] == "IMPORT") {
-	  var imported_data_config = readRows_(sheet.getParent().getSheetByName(row[1]));
-	  for(var key in imported_data_config[0]) {
-		if(! imported_data_config[0].hasOwnProperty(key)) { continue; }
-		terms[key] = imported_data_config[0][key];
-	  }	  
-	  for(var key in imported_data_config[1]) {
-		if(! imported_data_config[0].hasOwnProperty(key)) { continue; }
-		config[key] = imported_data_config[1][key];
-	  }	  
+    if      (row[0] == "KEY TERMS" ||
+			 row[0] == "TERMS") { section="TERMS"; continue; }
+    else if (row[0] == "IGNORE") { section = row[0]; continue; }
+    else if (row[0] == "INCLUDE") {
+	  // the typical startup spreadsheet should import JFDI's base ENTITIES table which knows about JFDI.2014, JFDI.Asia, etc.
+	  var include_sheet;
+	  var formula = formulas[i][1];
+	  if (formula) {
+		// =HYPERLINK("https://docs.google.com/a/jfdi.asia/spreadsheets/d/1Ix5OYS7EpmEIqA93S4_JWxV1OO82tRM0MLNj9C8IwHU/edit#gid=1249418813","Entities JFDI.2014")
+		var res = formula.match(/=HYPERLINK\(".*\/([^/]+)\/edit#gid=(\d+)/);
+		if (res) {
+		  include_sheet = getSheetById_(SpreadsheetApp.openById(res[1]), res[2]);
+		}
+	  }
+	  else {
+		include_sheet = sheet.getParent().getSheetByName(row[1]);
+	  }
+
+	  Logger.log("readRows: encountered INCLUDE %s", row[1]);
+	  readRows_(include_sheet, true, toreturn);
+	  // reads into toreturn directly
 	  continue;
 	}
     else if (row[0] == "PARTYFORM_ORDER") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||!row[ki]){continue}
-																				  partyfieldorder[ki] = row[ki];
-																				  origpartyfields[partyfieldorder[ki]] = origpartyfields[partyfieldorder[ki]]||{};
-																				  origpartyfields[partyfieldorder[ki]].column = parseInt(ki)+1;
-																				  origpartyfields[partyfieldorder[ki]].row    = i+1;
-																				  Logger.log("readRows: learned that field with order "+row[ki]+ " is in row %s column %s ", origpartyfields[partyfieldorder[ki]].row, origpartyfields[partyfieldorder[ki]].column);
+																				  entityfieldorder[ki] = row[ki];
+																				  Logger.log("readRows: PARTYFORM_ORDER: entityfieldorder[%s] = %s", ki, row[ki]);
+																				  origentityfields[entityfieldorder[ki]] = origentityfields[entityfieldorder[ki]]||{};
+																				  origentityfields[entityfieldorder[ki]].column = parseInt(ki)+1;
+																				  origentityfields[entityfieldorder[ki]].row    = i+1;
+																				  Logger.log("readRows: learned that field with order "+row[ki]+ " is in row %s column %s ", origentityfields[entityfieldorder[ki]].row, origentityfields[entityfieldorder[ki]].column);
 																				}
 											continue;
 										  }
-    else if (row[0] == "PARTYFORM_HELPTEXT") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||partyfieldorder[ki]==undefined){continue}
-																					 origpartyfields[partyfieldorder[ki]].helptext = row[ki];
+    else if (row[0] == "PARTYFORM_HELPTEXT") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||entityfieldorder[ki]==undefined){continue}
+																					 origentityfields[entityfieldorder[ki]].helptext = row[ki];
 																				   }
 											continue;
 										  }
-    else if (row[0] == "PARTYFORM_ITEMTYPE") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||partyfieldorder[ki]==undefined){continue}
-																					 origpartyfields[partyfieldorder[ki]].itemtype = row[ki];
+    else if (row[0] == "PARTYFORM_ITEMTYPE") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||entityfieldorder[ki]==undefined){continue}
+																					 origentityfields[entityfieldorder[ki]].itemtype = row[ki];
 																				   }
 											continue;
 										  }
-    else if (row[0] == "PARTYFORM_DEFAULT") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||partyfieldorder[ki]==undefined||row[ki].length==0){continue}
-																					Logger.log("learned default value for %s = %s", partyfieldorder[ki], row[ki]);
-																					 origpartyfields[partyfieldorder[ki]]["default"] = row[ki];
+    else if (row[0] == "PARTYFORM_DEFAULT") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||entityfieldorder[ki]==undefined||row[ki].length==0){continue}
+																					Logger.log("readRows: learned default value for %s = %s", entityfieldorder[ki], row[ki]);
+																					 origentityfields[entityfieldorder[ki]]["default"] = row[ki];
 																				   }
 											continue;
 										  }
-    else if (row[0] == "PARTYFORM_REQUIRED") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||partyfieldorder[ki]==undefined){continue}
-																					 Logger.log("readRows: line "+i+" col "+ki+": learned that field with order "+partyfieldorder[ki]+ " has required="+row[ki]);
-																					 origpartyfields[partyfieldorder[ki]].required = row[ki];
+    else if (row[0] == "PARTYFORM_REQUIRED") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||entityfieldorder[ki]==undefined){continue}
+																					 Logger.log("readRows: line "+i+" col "+ki+": learned that field with order "+entityfieldorder[ki]+ " has required="+row[ki]);
+																					 origentityfields[entityfieldorder[ki]].required = row[ki];
 																				   }
 											continue;
 										  }
-    else if (row[0] == "PARTIES")   {
+    else if (row[0] == "ENTITIES")   {
 	  section = row[0];
-	  if (! seen_parties_before) {
-		seen_parties_before = true;
-		partyfields = row;
+	  if (! seen_entities_before) {
+		seen_entities_before = true;
+		entityfields = row;
 		while (row[row.length-1] === "") { row.pop() }
 		
-		for (var ki in partyfields) {
+		for (var ki in entityfields) {
 		  if (ki < 1 || row[ki] == undefined) { continue }
-          origpartyfields[partyfieldorder[ki]] = origpartyfields[partyfieldorder[ki]] || {};
-          origpartyfields[partyfieldorder[ki]].fieldname = row[ki];
-		  // Logger.log("readRows: learned origpartyfields["+partyfieldorder[ki]+"].fieldname="+row[ki]);
-          partyfields[ki] = asvar_(partyfields[ki]);
-		  Logger.log("readRows: recorded partyfield[%s]=%s", ki, partyfields[ki]);
+          origentityfields[entityfieldorder[ki]] = origentityfields[entityfieldorder[ki]] || {};
+          origentityfields[entityfieldorder[ki]].fieldname = row[ki];
+		  // Logger.log("readRows: learned origentityfields["+entityfieldorder[ki]+"].fieldname="+row[ki]);
+          entityfields[ki] = asvar_(entityfields[ki]);
+		  Logger.log("readRows: recorded entityfield[%s]=%s", ki, entityfields[ki]);
 		}
 	  }
 	  continue;
 	}
 	else if (row[0] == "CONFIGURATION") { section = row[0]; continue }
-	else if (row[0] == "ROLES") {
-	  section = row[0];
-	  continue;
-	}
+	else if (row[0] == "ROLES") { section = row[0]; continue; }
 
 	// process data rows
-    if (section == "KEY TERMS") {
+    if (section == "TERMS") {
       if ( row[0].length == 0) { continue }
 
-	  // do we need to ignore situations where row[0] !~ /:$/ ? subsection headings might be noisy.
+	  // TODO: do we need to ignore situations where row[0] !~ /:$/ ? subsection headings might be noisy.
       terms[           asvar_(row[0])] = formatify_(term_formats[i][0], row[1], sheet);
 	  terms["_orig_" + asvar_(row[0])] = row[1];
     }
 	else if (section == "ROLES") { // principal relation entity. these are all strings. we attach roles later.
-	  var principal = row[0];
-	  var relation  = row[1];
-	  var entity    = row[2];
+	  var relation  = asvar_(row[0]);
+	  var entityname    = row[1];
 
-	  relations[principal]           = relations[principal]           || {};
-	  relations[principal][relation] = relations[principal][relation] || [];
-	  relations[principal][relation].push(entity);
+	  principal.roles[relation] = principal.roles[relation] || [];
+	  principal.roles[relation].push(entityname);
+      Logger.log("readRows:         ROLES: learning party role %s = %s", relation, entityname);
 	}
-    else if (section == "PARTIES") { // Name	partygroup	Email	IDtype	ID	Address	State	InvestorType Commitment etc
-      var singleparty = { _spreadsheet_row:i+1, _unmailed:false };
-      var party_formats = sheet.getRange(i+1,1,1,row.length).getNumberFormats();
-	  terms._last_party_row = i;
+    else if (section == "ENTITIES") {
+      var entity = { _origin_spreadsheet_id:sheet.getParent().getId(),
+					 _origin_sheet_id:sheet.getSheetId(),
+					 _spreadsheet_row:i+1,
+				   };
+      var entity_formats = sheet.getRange(i+1,1,1,row.length).getNumberFormats();
+	  toreturn._last_entity_row = i;
 
-      for (var ki in partyfields) {
+      for (var ki in entityfields) {
         if (ki < 1) { continue }
-        var k = partyfields[ki];
-        var v = formatify_(party_formats[0][ki],row[ki], sheet);
-
-        singleparty[k] = v;
+        var k = entityfields[ki];
+        var v = formatify_(entity_formats[0][ki],row[ki], sheet);
+        entity[k] = v;
       }
-      var partytype = asvar_(row[0]);
-	  if (partytype == undefined || ! partytype.length) { continue }
+      var coreRelation = asvar_(row[0]);
+	  if (coreRelation == undefined || ! coreRelation.length) { continue }
 
-      Logger.log("readRows: learning entire %s, %s", partytype, singleparty);
-	  if (parties[partytype] == undefined) { parties[partytype] = [] }
+	  // all coreRelation relations in the ENTITIES section are defined relative to the principal, which is hardcoded as the Company
+	  if (coreRelation == "company" && principal == undefined) { principal = entity }
 
-	  if (singleparty.legalese_status == undefined) { SpreadsheetApp.getUi().alert("the sheet we're working on has no legalese status! You probably want to be on a different tab."); throw new Error("never mind, i will try again"); }
-	  if (singleparty.legalese_status.toLowerCase() == "ignore") { Logger.log("ignoring %s line", partytype); continue }
+  // connect up the parties based on the relations learned from the ROLES section.
+  // this establishes PRINCIPAL.roles.RELATION_NAME = [ party1, party2, ..., partyN ]
+  // for instance, companyParty.roles.shareholder = [ alice, bob ]
+      Logger.log("readRows: learning party entity (core relation = %s), %s", coreRelation, entity);
+	  principal.roles = principal.roles || {};
+	  principal.roles[coreRelation] = principal.roles[coreRelation] || [];
+	  principal.roles[coreRelation].push(entity.name);
 
-      parties[partytype].push(singleparty);
-	  parties._allparties.push(singleparty);
-	  partiesByName[singleparty.name] = singleparty;
+	  // this is okay if we're running inside an INCLUDE context.
+	  if (! include_mode && entity.legalese_status == undefined) { SpreadsheetApp.getUi().alert("the sheet we're working on has no legalese status! You probably want to be on a different tab."); throw new Error("never mind, i will try again"); }
+	  if (entity.legalese_status && entity.legalese_status.toLowerCase() == "ignore") { Logger.log("ignoring %s line", coreRelation); continue }
 
-	  // set up the _unmailed attribute
-	  if (singleparty.legalese_status == undefined || singleparty.legalese_status === "") {
-		Logger.log("readRows: party %s hasn't been mailed yet. it will have es_num %s", singleparty.name, es_num);
-		singleparty._to_email = email_to_cc_(singleparty.email)[0]; // and the subsequent addresses are in an array [1]
-		singleparty._unmailed = true;
-		singleparty._es_num = es_num++;
-		// TODO: figure out how to do the es_num in a situation where the xml template may omit a character class.
-		parties._unmailed.push(singleparty);
-	  }
-	  else if (singleparty.legalese_status.toLowerCase().match(/^(done|ignore|skip|mailed|cc)/i)) {
-		Logger.log("readRows: founder %s has status %s, so leaving out from parties._unmailed", singleparty.name, singleparty.legalese_status);
-	  }
-	  else {
-		Logger.log("readRows: founder %s has status %s; not sure what that means, but leaving out from parties._unmailed", singleparty.name, singleparty.legalese_status);
-	  }
+	  // Define Global Parties Entity
+	  entitiesByName[entity.name] = entity;
     }
 	else if (section == "CONFIGURATION") {
 
@@ -641,22 +649,22 @@ function readRows_(sheet) {
 	  // config.columna.values is an array of values -- if columna repeats, then values from last line only
 	  // config.columna.dict is a dictionary of b: [c,d,e] across multiple lines
 	  
-	  Logger.log("row " + i + ": processing row "+row[0]);
+	  Logger.log("CONF: row " + i + ": processing row "+row[0]);
 	  
 	  // populate the previous
 	  var columna = asvar_(row[0]) || previous[0];
 	  previous[0] = columna;
 
-	  Logger.log("columna="+columna);
+	  Logger.log("CONF: columna="+columna);
 	  config[columna] = config[columna] || { asRange:null, values:null, dict:{}, tree:{} };
-	  Logger.log("config[columna]="+config[columna]);
+	  Logger.log("CONF: config[columna]="+config[columna]);
 
 	  config[columna].asRange = sheet.getRange(i+1,1,1,sheet.getMaxColumns());
-	  Logger.log(columna+".asRange=" + config[columna].asRange.getValues()[0].join(","));
+	  Logger.log("CONF: " + columna+".asRange=" + config[columna].asRange.getValues()[0].join(","));
 
 	  var rowvalues = config[columna].asRange.getValues()[0];
 	  while (rowvalues[rowvalues.length-1] === "") { rowvalues.pop() }
-	  Logger.log("rowvalues = %s", rowvalues);
+	  Logger.log("CONF: rowvalues = %s", rowvalues);
 
 	  var descended = [columna];
 
@@ -665,7 +673,7 @@ function readRows_(sheet) {
 		if (leftmost_nonblank == -1
 			&& (! (rowvalues[j] === ""))) { leftmost_nonblank = j }
 	  }
-	  Logger.log("leftmost_nonblank=%s", leftmost_nonblank);
+	  Logger.log("CONF: leftmost_nonblank=%s", leftmost_nonblank);
 
 	  for (var j = 0; j < leftmost_nonblank; j++) {
 		descended[j] = previous[j];
@@ -674,14 +682,14 @@ function readRows_(sheet) {
 		if (j >= 1 && ! (rowvalues[j] === "")) { previous[j] = rowvalues[j] }
 		descended[j] = rowvalues[j];
 	  }
-	  Logger.log("descended = %s", descended);
+	  Logger.log("CONF: descended = %s", descended);
 
 	  // build value -- config.a.value = b
 	  config[columna].value = descended[1];
 
 	  // build values -- config.a.values = [b,c,d]
 	  config[columna].values = descended.slice(1);
-	  Logger.log(columna+".values=%s", config[columna].values.join(","));
+	  Logger.log("CONF: " + columna+".values=%s", config[columna].values.join(","));
 
 	  // build tree -- config.a.tree.b.c.d.e.f=g
 	  treeify_(config[columna].tree, descended.slice(1));
@@ -692,42 +700,36 @@ function readRows_(sheet) {
 	  var columnb = asvar_(descended[1]);
 
 	  config[columna].dict[columnb] = columns_cde;
-	  Logger.log("%s", columna+".dict."+columnb+"=" + config[columna].dict[columnb].join(","));
+	  Logger.log("CONF: %s", columna+".dict."+columnb+"=" + config[columna].dict[columnb].join(","));
 	}
   }
-  // connect up the parties based on the relations learned from the ROLES section.
-  for (var i = 0; i < parties._allparties.length; i++) {
-	var party = parties._allparties[i];
-	var party_relations = relations[party.name];
-	if (party_relations == undefined) { continue }
-	party.roles = party.roles || {};
-	for (var r in party_relations) {
-	  Logger.log("ROLE: %s has a relation %s with %s", party.name, r, party_relations[r]);
-	  party.roles[asvar_(r)] = party_relations[r].map(function(p){return partiesByName[p]}); // XXX TODO: error checking -- what if the party name does not correspond to a party object?
-	}
+  if (principal) {
+	Logger.log("readRows: setting principal = %s", principal.name);
+	toreturn.principal = principal;
   }
-
-  terms._origpartyfields = origpartyfields;
-  terms._partyfields = partyfields;
-  terms.parties = parties;
+  else if (toreturn.principal) {
+	Logger.log("readRows: leaving principal untouched = %s", toreturn.principal.name);
+  }
   Logger.log("readRows: terms.parties = %s", terms.parties);
-  Logger.log("readRows: config = %s\n" + JSON.stringify(config,null,"  "));
-  return [terms, config];
+  Logger.log("readRows: entitiesByName = %s", entitiesByName);
+  Logger.log("readRows: config = %s\n", JSON.stringify(config,null,"  "));
+  return toreturn;
 }
 
 // ---------------------------------------------------------------------------------------------------------------- getPartyCells_
+// TODO: make this go away -- let's just log the mailing output in one place, rather than row by row.
 function getPartyCells_(sheet, readrows, party) {
-  Logger.log("looking to return a dict of partyfieldname to cell, for party %s", party.name);
+  Logger.log("looking to return a dict of entityfieldname to cell, for party %s", party.name);
   Logger.log("party %s comes from spreadsheet row %s", party.name, party._spreadsheet_row);
-  Logger.log("the fieldname map looks like this: %s", readrows._partyfields);
-  Logger.log("so the cell that matters for legalese_status should be row %s, col %s", party._spreadsheet_row, readrows._partyfields.indexOf("legalese_status")+1);
-  Logger.log("calling (getRange %s,%s,%s,%s)", party._spreadsheet_row, 1, 1, readrows._partyfields.length+1);
-  var range = sheet.getRange(party._spreadsheet_row, 1, 1, readrows._partyfields.length+1);
+  Logger.log("the fieldname map looks like this: %s", readrows._entityfields);
+  Logger.log("so the cell that matters for legalese_status should be row %s, col %s", party._spreadsheet_row, readrows._entityfields.indexOf("legalese_status")+1);
+  Logger.log("calling (getRange %s,%s,%s,%s)", party._spreadsheet_row, 1, 1, readrows._entityfields.length+1);
+  var range = sheet.getRange(party._spreadsheet_row, 1, 1, readrows._entityfields.length+1);
   Logger.log("pulled range %s", JSON.stringify(range.getValues()));
   var toreturn = {};
-  for (var f = 0; f < readrows._partyfields.length ; f++) {
-	Logger.log("toreturn[%s] = range.getCell(%s,%s)", readrows._partyfields[f], 0+1,f+1);
-	toreturn[readrows._partyfields[f]] = range.getCell(0+1,f+1);
+  for (var f = 0; f < readrows._entityfields.length ; f++) {
+	Logger.log("toreturn[%s] = range.getCell(%s,%s)", readrows._entityfields[f], 0+1,f+1);
+	toreturn[readrows._entityfields[f]] = range.getCell(0+1,f+1);
   }
   return toreturn;
 }
@@ -772,11 +774,11 @@ function formatify_(format, string, sheet) {
       // toreturn = string.toString().substr(0,15).replace(/ 0/, " ");  // Jan 01 2015 => Jan 1 2015
 
 	  if (string.toString().length == 0) { return "" }
-	  Logger.log("input date: " + string.toString().substr(0,15));
+//	  Logger.log("input date: " + string.toString().substr(0,15));
 	  toreturn = Utilities.formatDate(new Date(string.toString().substr(0,15)),
 									  sheet.getParent().getSpreadsheetTimeZone(),
 									  "EEEE d MMMM YYYY");
-	  Logger.log("output date: " + toreturn);
+//	  Logger.log("output date: " + toreturn);
 
     } else { toreturn = string }
   }
@@ -991,7 +993,9 @@ function availableTemplates_() {
   { name:"preemptive_waiver_xml", url:"http://www.legalese.io/templates/jfdi.asia/preemptive_waiver.xml",       title:"Pre-Emptive Notice for Waiver" },
   { name:"loan_waiver_xml",		  url:"http://www.legalese.io/templates/jfdi.asia/convertible_loan_waiver.xml", title:"Waiver of Convertible Loan" },
   { name:"simplified_note_xml",   url:"http://www.legalese.io/templates/jfdi.asia/simplified_note.xml",         title:"Simplified Convertible Loan Agreement" },
-  { name:"founder_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/founderagreement.xml",        title:"JFDI Accelerate Founder Agreement" },
+  { name:"founder_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/founderagreement.xml",        title:"JFDI Accelerate Founder Agreement",
+	parties:{to:["founder","investor"], cc:["corporate_secretary"]},
+  },
   { name:"dora_xml",			  url:"http://www.legalese.io/templates/jfdi.asia/dora-signatures.xml",         title:"DORA" },
 
   { name:"inc_signature",		  url:"http://www.legalese.io/templates/jfdi.asia/inc_signature.xml",           title:"signature component" },
@@ -1048,6 +1052,51 @@ function obtainTemplate_(url) {
   else return HtmlService.createTemplateFromFile(url);
 }
 
+function templateParties(sheet, readRows, sourceTemplate) {
+  /*
+   * establish the appropriate data.parties.* for a given template.
+   * 
+   * data.parties.founder.*, data.parties.existing_shareholder.*, data.parties.company.*, data.parties.investor.* as arrays
+   *
+   * we also track the mailing status here
+   */
+  Logger.log("templateParties: running for %s", sourceTemplate.name);
+
+  var es_num = 1;
+
+  var parties = { _allparties:[], _unmailed:[], company:[readRows.principal] };
+  // consult the Template DTD to see what roles are involved in the template
+
+  Logger.log("templateParties: hardcoding parties.company = %s", parties.company);
+  Logger.log("templateParties: template parties = %s", sourceTemplate.parties);
+
+  for (var mailtype in sourceTemplate.parties) {
+	Logger.log("templateParties: mailtype %s", mailtype);
+	for (var i in sourceTemplate.parties[mailtype]) {
+	  var partytype = sourceTemplate.parties[mailtype][i];
+	  Logger.log("templateParties: discovered %s: %s", mailtype, partytype);
+	  Logger.log("templateParties:   principal is %s", readRows.principal.name);
+	  parties[partytype] = readRows.principal.roles[partytype].map(function(p){return readRows.entitiesByName[p]});
+	  Logger.log("templateParties:   parties are %s", parties[partytype].map(function(e){return e.name}).join(", "));
+	  
+	  for (var j in parties[partytype]) {
+		var entity = parties[partytype][j];
+		Logger.log("templateParties:     what to do with entity %s?", entity.name);
+		if (mailtype == "to") {
+		  parties._unmailed.push(entity);
+
+		  Logger.log("templateParties:     party %s hasn't been mailed yet. it will have es_num %s", entity.name, es_num);
+		  entity._to_email = email_to_cc_(entity.email)[0]; // and the subsequent addresses are in an array [1]
+		  if (readRows.config.email_override) { entity._to_email = readRows.config.email_override.values[0]; }
+		  entity._unmailed = true;
+		  entity._es_num = es_num++;
+		}
+	  }
+	}
+  }
+  return parties;
+}
+
 // ---------------------------------------------------------------------------------------------------------------- fillTemplates
 function fillTemplates(sheet) {
 
@@ -1058,9 +1107,9 @@ function fillTemplates(sheet) {
 	return;
   }
   sheet = sheet || SpreadsheetApp.getActiveSheet();
-  var data_config = readRows_(sheet);
-  var templatedata   = data_config[0];
-  var config         = data_config[1];
+  var readRows = readRows_(sheet);
+  var templatedata   = readRows.terms;
+  var config         = readRows.config;
   templatedata.clauses = {};
   templatedata._config = config;
 
@@ -1091,15 +1140,10 @@ function fillTemplates(sheet) {
 
   Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
 
-  Logger.log("templatedata.parties = %s", JSON.stringify(templatedata.parties));
-  
   templatedata.xml_declaration = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
   templatedata.whitespace_handling_use_tags = '<?whitespace-handling use-tags?>';
   templatedata.whitespace_handling_use_characters = '<?whitespace-handling use-characters?>';
 
-  templatedata.company = templatedata.parties.company[0];
-  Logger.log("templatedata.company = %s", templatedata.company);
-  templatedata.founders = templatedata.parties.founder;
   templatedata._timezone = sheet.getParent().getSpreadsheetTimeZone();
 
   for (var i in suitables) {
@@ -1115,6 +1159,14 @@ function fillTemplates(sheet) {
 	}
     newTemplate.data = templatedata;
 	var sans_xml = sourceTemplate.name.replace(/_xml|xml_/,"");
+
+	// which parties are relevant to this template?
+	newTemplate.data.parties = templateParties(sheet, readRows, sourceTemplate);
+
+	Logger.log("templatedata.parties = %s", JSON.stringify(templatedata.parties));
+	templatedata.company = templatedata.parties.company[0];
+	Logger.log("templatedata.company = %s", templatedata.company);
+	templatedata.founders = templatedata.parties.founder;
 
 	// TODO: respect the "all in one doc" vs "one per doc" for all categories not just investors
 	// but for each given template we need to know which party category to explode.
@@ -1206,6 +1258,7 @@ function include(name, data, _include) {
 // used inside <? ?> to convert a multiline address to a singleline address for party-section purposes
 function newlinesToCommas(str) {
   Logger.log("converting newlinesToCommas");
+  if (str == undefined) { Logger.log("newlinesToCommas: undefined!"); return undefined }
   return str.replace(/\n/g, ", ");
 }
 
@@ -1539,13 +1592,13 @@ function fauxMegaUpload_() {
 function fauxMegaSign(sheet) {
   var sheetPassedIn = ! (sheet == undefined);
   sheet = sheet || SpreadsheetApp.getActiveSheet();
-  var data_config = readRows_(sheet);
-  var readrows    = data_config[0];
-  var config      = data_config[1];
+  var readRows = readRows_(sheet);
+  var terms    = readRows.terms;
+  var config   = readRows.config;
 
   alertIfActiveSheetChanged_(sheet);
 
-  var parties = readrows.parties;
+  var parties = terms.parties;
   var to_list = [];
   var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"});
   var cc2_list = [];
@@ -1569,7 +1622,7 @@ function fauxMegaSign(sheet) {
 	if (to_cc[0] != undefined && to_cc[0].length > 0) {
 	  party._email_to = to_cc[0];
 	  to_list.push(party);
-	  party._commit_update_to = getPartyCells_(sheet, readrows, party);
+	  party._commit_update_to = getPartyCells_(sheet, terms, party);
 	}
 	if (to_cc[1].length > 0) {
 	  cc2_list = cc2_list.concat(to_cc[1]);
@@ -1585,7 +1638,7 @@ function fauxMegaSign(sheet) {
   // TODO: who shall we cc to? everybody whose legalese status == "cc".
   for (var p in cc_list) {
 	var party = cc_list[p];
-	party._commit_update_cc = getPartyCells_(sheet, readrows, party);
+	party._commit_update_cc = getPartyCells_(sheet, terms, party);
   }
   cc_list = cc_list.map(function(party){return party.email});
   cc_list = cc_list.concat(cc2_list);
@@ -1604,7 +1657,7 @@ function fauxMegaSign(sheet) {
 								config.echosign.tree.message,
 								config.echosign.tree.title,
 								cc_list,
-								readrows,
+								terms,
 								config,
 								null
 							);
@@ -1653,16 +1706,16 @@ function uploadAgreement(sheet) {
   if (response == ui.Button.NO) return;
   
   var ss = sheet.getParent();
-  var data_config = readRows_(sheet);
-  var readrows    = data_config[0];
-  var config      = data_config[1];
+  var readRows = readRows_(sheet);
+  var terms    = readRows.terms;
+  var config   = readRows.config;
 
   alertIfActiveSheetChanged_(sheet);
 
-  var parties = readrows.parties;
+  var parties = terms.parties;
   var transientDocumentIds = uploadPDFsToEchoSign_(sheet);
   var emailInfo = [];
-  var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"});
+  var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"}); // TODO: get rid of allparties. compute cc differently
   var cc2_list = [];
   var commit_updates_to = [];
   var commit_updates_cc = [];
@@ -1689,7 +1742,7 @@ function uploadAgreement(sheet) {
 	var to_cc = email_to_cc_(party.email);
 	if (to_cc[0] != undefined) {
 	  emailInfo.push({email:to_cc[0], role:"SIGNER"});
-	  commit_updates_to.push(getPartyCells_(sheet, readrows, party));
+	  commit_updates_to.push(getPartyCells_(sheet, terms, party));
 	}
 	if (to_cc[1].length > 0) {
 	  cc2_list = cc2_list.concat(to_cc[1]);
@@ -1705,7 +1758,7 @@ function uploadAgreement(sheet) {
   // TODO: who shall we cc to? everybody whose legalese status == "cc".
   for (var p in cc_list) {
 	var party = cc_list[p];
-	commit_updates_cc.push(getPartyCells_(sheet, readrows, party));
+	commit_updates_cc.push(getPartyCells_(sheet, terms, party));
   }
   cc_list = cc_list.map(function(party){return party.email});
   cc_list = cc_list.concat(cc2_list);
@@ -1734,7 +1787,7 @@ function uploadAgreement(sheet) {
 								config.echosign.tree.message,
 								config.echosign.tree.title,
 								cc_list,
-								readrows,
+								terms,
 								config,
 								readmeDoc,
 								null
@@ -1748,7 +1801,7 @@ function uploadAgreement(sheet) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------- postAgreement_
-function postAgreement_(fileInfos, recipients, message, name, cc_list, readrows, config, readmeDoc, agreementCreationInfo) {
+function postAgreement_(fileInfos, recipients, message, name, cc_list, terms, config, readmeDoc, agreementCreationInfo) {
   var api = getEchoSignService_();
 
   if (agreementCreationInfo == undefined) {
@@ -1770,9 +1823,9 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, readrows,
 	// TODO: if the data.expiry_date is defined then add 24 hours to it and stick it in
 	// but also set the configuration option that decides if we should honour it or not.
 	if (config.echosign_expires != undefined && config.echosign_expires.values[0]
-	   && readrows.expiry_date != undefined) {
+	   && terms.expiry_date != undefined) {
 	  
-	  var days_until = ((new Date(readrows._orig_expiry_date)).getTime() - (new Date()).getTime()) / (24 * 60 * 60 * 1000);
+	  var days_until = ((new Date(terms._orig_expiry_date)).getTime() - (new Date()).getTime()) / (24 * 60 * 60 * 1000);
 	  Logger.log("expiry date is %s days in the future. will give an extra day for leeway", days_until);
 	  agreementCreationInfo.daysUntilSigningDeadline = days_until + 1;
 	}
