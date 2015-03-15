@@ -10,8 +10,8 @@
 <? data._total_commitment = formatify_("[$S$]#,##0",data.parties.new_investor.map(function(p){return Number(p.commitment.replace(/\D/g,""))}).reduce(function(a,b){return a+b})); // TODO: pull out the format string from the price per share. ?>
 <Story_Main>
 <resolution_title>Instruction to Corporate Secretary</resolution_title>
-<basic_para addnewline="true"><?= data.company.roles.corporate_secretary[0].name ?></basic_para>
-<basic_para><?= data.company.roles.corporate_secretary[0].address ?></basic_para>
+<basic_para addnewline="true"><?= data.parties.corporate_secretary[0].name ?></basic_para>
+<basic_para><?= data.parties.corporate_secretary[0].address ?></basic_para>
 <basic_para addnewline="true" />
 <basic_para addnewline="true" />
 <chapter_header override="startParagraph=StartParagraph.ANYWHERE">Allotment of <?= data.security_type_long ?></chapter_header>
@@ -42,7 +42,7 @@ and we confirm that all is in order. </numbered_2_para>
 </Table>
 </para_1>
 
-<numbered_1_para>Kindly proceed with the lodgment of the returns on allotment of shares with the <?= data.company.roles.state_regulator[0].name ?>.</numbered_1_para>
+<numbered_1_para>Kindly proceed with the lodgment of the returns on allotment of shares with the <?= data.parties.state_regulator[0].name ?>.</numbered_1_para>
 
 <numbered_1_para>Kindly also issue the share certificates to the <?= plural(data.parties.new_investor, "investor") ?>.</numbered_1_para>
 
