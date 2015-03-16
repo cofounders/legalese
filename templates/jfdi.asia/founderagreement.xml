@@ -89,10 +89,17 @@ if (data.valuation_basis == "table") { ?>
 <Cell aid:ccols="1" aid:ccolwidth="67.93779527550001" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>S$170,000</cell></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="226.33779527550004" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl>Startup has no users, but a prototype developed based on at least 12 customer development interviews.</cell_fl></Cell>
 </Table>Valuation basis to be measured and fixed at the start of the "Accelerate" phase.</table_enclosing_para><? } ?><? }
-else if (data.valuation_basis == "existing") { ?> determined on the basis of the valuation set in the previous round of financing by professional investors.<? }
-else if (data.valuation_basis == "discussion") { ?> determined as agreed by the Parties.<? }
-else if (data.valuation_basis == "fixed") { ?> fixed at <?= data.agreed_percentage ?>.<? } ?>
+else if (data.valuation_basis == "existing") { ?> determined on the basis of the valuation set in the previous round of financing by professional investors.</numbered_1_para>
+<numbered_2_para>The Startup shall disclose to JFDI the details of the previous round of financing, including the identities of the investors, terms of the investment, and evidence of funds transferred.
+<? if (data.previous_post_money_valuation) { ?>
+As an example, if the previous round of financing established a post-money valuation for the Startup at <?= data.previous_post_money_valuation ?>, then JFDI's total investment of <?= data.parties.investor[0].commitment ?> (cash) plus <?= data.intangibles_value ?> (intangible) determines the Conversion Percentage at <?= data.agreed_percentage ?>.
 <? } ?>
+</numbered_2_para><numbered_1_para>
+<?   } else if (data.valuation_basis == "discussion") { ?> determined as agreed by the Parties.
+<?   } else if (data.valuation_basis == "fixed") { ?> fixed at <?= data.agreed_percentage ?>.
+<?   } ?>
+<? } ?>
+
 The Founders shall travel to and from Singapore at their own expense. JFDI.Asia and JFDI.2014 shall not be obligated to reimburse any expenses incurred, or transfer any funds to the Founders or to their Startup, prior to formal acceptance to the Accelerate phase.
 <? if (data.skip_hoops != true) { ?>Formal acceptance to the Accelerate phase will be offered as soon the Founders demonstrate, to JFDI.Asia's satisfaction, that they can:
 </numbered_1_para><bullets>articulate their innovation insight
