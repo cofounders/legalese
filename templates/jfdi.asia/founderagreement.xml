@@ -42,6 +42,9 @@
 </Firstpage_Sidebar>
 <Story_Main>
 <chapter_header>Founder Agreement</chapter_header>
+<? if (data.founder_agreement_supersedes_previous) { ?>
+<para_1>This Agreement supersedes a previous Founder Agreement dated <?= data.founder_agreement_date ?>.</para_1>
+<? } ?>
 <para_1>This Agreement legally binds the following individuals and organizations (the "Parties") with respect to the JFDI.Asia Accelerate Bootcamp <span_ucnum><?= data.jfdi_accelerate_batch ?></span_ucnum> (the "Bootcamp"):</para_1>
 <? for (var i in data.parties.founder) { ?>
 <parties><?!= include("inc_party", data, data.parties.founder[i]) ?><? if (data.parties.founder.length == 1) { ?> (the "Founder")<? } ?></parties>
