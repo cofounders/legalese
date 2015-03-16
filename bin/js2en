@@ -1,0 +1,57 @@
+#!/usr/local/bin/node
+
+# mengwong 20141201
+# inspired by http://szabo.best.vwh.net/contractlanguage.html
+# and by http://commonaccord.org/PDFs/Cmacc-LegallyenabledCrypto-Transacting.pdf
+
+var argv = require('optimist').argv;
+var fs = require("fs");
+var contents = fs.readFileSync(argv._[0], "utf8");
+
+var UglifyJS = require("uglify-js");
+var toplevel = UglifyJS.parse(contents, {filename:argv._[0]});
+
+var stream = UglifyJS.OutputStream({beautify:true,comments:function(){return true}});
+
+// convert:
+//		return this.parties.every(function(party){ return(this.date_signed_by(party) <= this.definitions.completion.val) }, this)
+// to, in English:
+//   All parties should have signed this agreement on or before the completion date.
+// 
+
+var walker = new UglifyJS.TreeWalker(function(node){
+    if (node instanceof UglifyJS.AST_Defun) {
+        console.log(UglifyJS.string_template("// Found function {name} at {line},{col}",
+											 { name: node.name.name, line: node.start.line, col: node.start.col }));
+		if (node.name.name == "LegalEvent") { console.log("// we are defining a function called LegalEvent! Yayz!"); }
+    }
+    if (node instanceof UglifyJS.AST_VarDef) {
+        console.log(UglifyJS.string_template("// Found variable definition {name} at {line},{col}",
+											 { name: node.name.name, line: node.start.line, col: node.start.col }));
+		if (node.name.name == "agreement_event") {
+			console.log("// we are defining a variable called agreement_event! Yayz!");
+			console.log(node);
+			console.log("// we must have originally said something like new " + node.name.name
+						+ " = " + node.value.start.value + " " + node.value.expression.name);
+			console.log("//the args are " + JSON.stringify(node.value.args, null, 4));
+		}
+    }
+    if (node instanceof UglifyJS.AST_Assign
+	   &&
+		node.left.property == "completion_condition"
+	   ) {
+        console.log(UglifyJS.string_template("// Found assignment {name} under {parent} at {line},{col}",
+											 { name: node.left.expression.name, parent:walker.parent(), line: node.start.line, col: node.start.col }));
+//		console.log(node.print_to_string({beautify:true,width:200}));
+		console.log("// the parent is " + walker.parent().print_to_string({beautify:true}));
+		console.log(JSON.stringify(node, null, 4));
+
+    }
+});
+toplevel.walk(walker);
+
+process.exit();
+toplevel.print(stream);
+console.log(stream.toString());
+
+

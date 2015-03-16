@@ -1,0 +1,137 @@
+#!/usr/bin/env node
+
+// mengwong modified from 
+
+var fs   = require('fs'),
+    args = require('optimist').argv,
+    hbs  = require('handlebars'),
+	path = require('path'),
+    _    = require('underscore');
+
+var file = args.file;
+delete args.file;
+
+if (args._.length) {
+    args = JSON.parse(fs.readFileSync(args._[0]).toString());
+}
+else for (var key in args) {
+    args[key] = JSON.parse(args[key]);
+}
+
+function readStream(s, done) {
+    var bufs = [];
+    s.on('data', function(d) {
+        bufs.push(d);
+    });
+    s.on('end', function() {
+        done(null, Buffer.concat(bufs));
+    });
+    s.resume();
+}
+
+readStream(fs.createReadStream(file), function(err, tmpl) {
+    function handle(tmpl, args) {
+        hbs.registerHelper('include', function (file, context, opt) {
+            var context = null == context ? args : context;
+            var f = fs.readFileSync(file);
+            return handle(f, context); 
+        });
+
+// partials
+
+		var partials_dir = path.basename(file,".mustache");
+		_.each(fs.readdirSync(partials_dir),function(partial_name) {
+			if (-1 == partial_name.search(/\.mustache$/)) { return }
+			var partial_name = path.basename(partial_name, ".mustache");
+//			process.stderr.write("registering " + partials_dir + " partial " + partial_name + ".mustache\n");
+			hbs.registerPartial(partial_name, fs.readFileSync(partials_dir+"/" + partial_name + ".mustache", {encoding:'utf8'}));
+		}
+			  );
+
+// helper additions by meng
+        hbs.registerHelper('uc', function (options) {
+            return options.fn(this).toUpperCase();
+        });
+
+		hbs.registerHelper('ucfirst', function(mystring) {
+			return new hbs.SafeString( mystring.charAt(0).toUpperCase() + mystring.slice(1))
+		});
+
+        hbs.registerHelper('choice_among_alternatives', function (myobj, mytext, options) {
+			if ((myobj.choice == "default" && myobj.default == mytext)
+				||
+				myobj.choice == mytext) {
+				if (options.fn != undefined) { return options.fn(this); } // usually we expect to be called as a block helper
+				return true;  // sometimes we are called as an argument to if()
+			}
+			return "";
+		});
+
+        hbs.registerHelper('choice_value', function (myobj, options) {
+			if (myobj.choice == "default") { return myobj.default }
+			else                           { return myobj.choice }
+		});
+
+		hbs.registerHelper('hundred_minus', function(mynum, options) {
+			return 100 - mynum;
+		});
+		
+		hbs.registerHelper('if_eq', function(str1, str2, options) {
+			console.log("str1 = " + str1);
+			console.log("str2 = " + str2);
+			if (str1 == str2) { return options.fn(this); } else { return options.inverse(this) }
+		});
+		
+		hbs.registerHelper('if_eq_insensitive', function(str1, str2, options) {
+			if (str1.toLowerCase() == str2.toLowerCase()) { return options.fn(this); } else { return options.inverse(this) }
+		});
+		
+		hbs.registerHelper('if_ne', function(str1, str2, options) {
+			if (str1 != str2) { return options.fn(this); } else { return options.inverse(this) }
+		});
+		
+		hbs.registerHelper('if_nonzero', function(str1, options) {
+			if (parseFloat(str1) != 0.0) { return options.fn(this); } else { return options.inverse(this) }
+		});
+		
+        hbs.registerHelper('choose_plural', function (myobj, plural_singular, mylist, options) {
+			if (_.isObject(myobj[plural_singular])) {
+				if (myobj[mylist].length == 1) {
+					return myobj[plural_singular].singular;
+				}
+				if (this[mylist].length > 1) {
+					return myobj[plural_singular].plural;
+				}
+			}
+			else {
+				return myobj[plural_singular];
+			}
+		});
+
+        hbs.registerHelper('conjunction_en', function (items, options) {
+			var ret = "";
+			var joinchar = options.hash['joinchar'] || ",";
+			var asarray = _.isArray(items) ? items : _.isObject(items) ? _.values(items) : items;
+			if (asarray.length == 2) {
+				ret = options.fn(asarray[0]) + " and " + options.fn(asarray[1]);
+			} else if (asarray.length == 1) {
+				ret = options.fn(asarray[0]);
+			} else if (asarray.length == 0) {
+				ret = "";
+			} else {
+				for(var i=0, j=asarray.length-1; i<j; i++) {
+					ret = ret + options.fn(asarray[i]) + joinchar + " ";
+				}
+				ret = ret + "and " + options.fn(asarray[asarray.length-1]);
+			}
+
+            return ret;
+        });
+
+        var template = hbs.compile(tmpl.toString());
+        var result = template(args);
+        return result;
+    }
+    process.stdout.write(handle(tmpl, args));
+});
+

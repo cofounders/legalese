@@ -1,0 +1,30 @@
+# {{{title}}}
+
+This agreement is between the parties: {{>parties_short_en_and ~}}.
+
+{{ucfirst (choose_plural parties.members.companies 'alias' 'members')}} intends to raise up to {{securities.currency}} {{securities.amount_on_offer}} from {{choose_plural parties.members.investors 'alias' 'members'}}.
+
+{{>investment_summary_plain_en}}
+{{#securities}}
+
+The details of the {{instrument_shortname}} are as follows:
+
+{{>maturity_date}}
+{{>interest}}
+{{>conversion_upon}}
+{{>conversion_price}}
+{{>automatic_conversion}}
+{{>optional_conversion}}
+{{>upon_sale_before_conversion}}
+{{>definitive_agreement}}
+{{>prepayment}}
+{{>amendment_and_waiver}}
+{{>security_interest}}
+# Investor Rights
+{{>investor_information_rights}}
+{{>investor_voting_rights}}
+{{>investor_board_rights}}
+{{>board_size}}
+{{>fees}}
+{{/securities}}
+

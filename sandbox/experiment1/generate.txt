@@ -1,0 +1,117 @@
+[15-01-05 02:19:08:452 HKT] readRows: starting.
+[15-01-05 02:19:08:456 HKT] readRows: row 0: processing row INSTRUCTIONS
+[15-01-05 02:19:08:456 HKT] readRows: row 1: processing row Duplicate this spreadsheet so you can edit it. Go to File / Make a copy. Rename it to something like "MyStartupName Seed Round". In Tools / Script Editor, Resources / Advanced, enable Drive API and also enable in GDC.
+[15-01-05 02:19:08:457 HKT] readRows: row 2: processing row Fill in the highlighted boxes – as much information as you currently have. You can always make changes later.
+[15-01-05 02:19:08:457 HKT] readRows: row 3: processing row Obtain investor details from each investor. You can ask them directly or send them to a form.
+[15-01-05 02:19:08:457 HKT] readRows: row 4: processing row To create a set of documents for review, click Legalese / Generate Docs.
+[15-01-05 02:19:08:458 HKT] readRows: row 5: processing row We create a folder containing filled-in versions of all the relevant templates. Look for a link here:
+[15-01-05 02:19:08:458 HKT] readRows: row 6: processing row You can edit, export, and print straight off Google Docs. Get 'em to sign, and laugh all the way to the bank!
+[15-01-05 02:19:08:458 HKT] readRows: row 7: processing row Premium Feature: for a small fee, get handsome-looking PDFs and send them out for signature with Adobe Echosign! Coming soon.
+[15-01-05 02:19:08:459 HKT] readRows: row 8: processing row do not edit this line
+[15-01-05 02:19:08:459 HKT] readRows: row 9: processing row PARTYFORM_ORDER
+[15-01-05 02:19:08:460 HKT] readRows: learned that field with order 3 is in row 10.0 column 2.0 
+[15-01-05 02:19:08:460 HKT] readRows: learned that field with order 1 is in row 10.0 column 3.0 
+[15-01-05 02:19:08:461 HKT] readRows: learned that field with order 5 is in row 10.0 column 4.0 
+[15-01-05 02:19:08:461 HKT] readRows: learned that field with order 4 is in row 10.0 column 5.0 
+[15-01-05 02:19:08:461 HKT] readRows: learned that field with order 6 is in row 10.0 column 6.0 
+[15-01-05 02:19:08:462 HKT] readRows: learned that field with order 7 is in row 10.0 column 7.0 
+[15-01-05 02:19:08:462 HKT] readRows: learned that field with order 2 is in row 10.0 column 8.0 
+[15-01-05 02:19:08:463 HKT] readRows: learned that field with order 8 is in row 10.0 column 9.0 
+[15-01-05 02:19:08:463 HKT] readRows: learned that field with order 9 is in row 10.0 column 10.0 
+[15-01-05 02:19:08:464 HKT] readRows: learned that field with order 10 is in row 10.0 column 11.0 
+[15-01-05 02:19:08:464 HKT] readRows: learned that field with order 11 is in row 10.0 column 12.0 
+[15-01-05 02:19:08:465 HKT] readRows: learned that field with order 12 is in row 10.0 column 13.0 
+[15-01-05 02:19:08:465 HKT] readRows: row 10: processing row PARTYFORM_REQUIRED
+[15-01-05 02:19:08:465 HKT] readRows: line 10 col 1: learned that field with order 3 has required=true
+[15-01-05 02:19:08:466 HKT] readRows: line 10 col 2: learned that field with order 1 has required=true
+[15-01-05 02:19:08:466 HKT] readRows: line 10 col 3: learned that field with order 5 has required=true
+[15-01-05 02:19:08:466 HKT] readRows: line 10 col 4: learned that field with order 4 has required=true
+[15-01-05 02:19:08:467 HKT] readRows: line 10 col 5: learned that field with order 6 has required=true
+[15-01-05 02:19:08:467 HKT] readRows: line 10 col 6: learned that field with order 7 has required=true
+[15-01-05 02:19:08:468 HKT] readRows: line 10 col 7: learned that field with order 2 has required=true
+[15-01-05 02:19:08:468 HKT] readRows: line 10 col 8: learned that field with order 8 has required=false
+[15-01-05 02:19:08:468 HKT] readRows: line 10 col 9: learned that field with order 9 has required=false
+[15-01-05 02:19:08:469 HKT] readRows: line 10 col 10: learned that field with order 10 has required=false
+[15-01-05 02:19:08:469 HKT] readRows: line 10 col 11: learned that field with order 11 has required=false
+[15-01-05 02:19:08:469 HKT] readRows: line 10 col 12: learned that field with order 12 has required=false
+[15-01-05 02:19:08:470 HKT] readRows: row 11: processing row PARTYFORM_ITEMTYPE
+[15-01-05 02:19:08:470 HKT] readRows: row 12: processing row PARTYFORM_HELPTEXT
+[15-01-05 02:19:08:471 HKT] readRows: row 13: processing row PARTIES
+[15-01-05 02:19:08:471 HKT] readRows: _parties_last_filled_column = 12.0
+[15-01-05 02:19:08:472 HKT] readRows: recorded partyfield[1]=name
+[15-01-05 02:19:08:472 HKT] readRows: recorded partyfield[2]=email
+[15-01-05 02:19:08:473 HKT] readRows: recorded partyfield[3]=idtype
+[15-01-05 02:19:08:473 HKT] readRows: recorded partyfield[4]=id
+[15-01-05 02:19:08:474 HKT] readRows: recorded partyfield[5]=address
+[15-01-05 02:19:08:474 HKT] readRows: recorded partyfield[6]=state
+[15-01-05 02:19:08:474 HKT] readRows: recorded partyfield[7]=investortype
+[15-01-05 02:19:08:475 HKT] readRows: recorded partyfield[8]=commitment
+[15-01-05 02:19:08:475 HKT] readRows: recorded partyfield[9]=signatoryname
+[15-01-05 02:19:08:476 HKT] readRows: recorded partyfield[10]=investorsignatorytype
+[15-01-05 02:19:08:476 HKT] readRows: recorded partyfield[11]=investorsignatorynum
+[15-01-05 02:19:08:477 HKT] readRows: recorded partyfield[12]=legalesestatus
+[15-01-05 02:19:08:477 HKT] readRows: row 14: processing row Investor
+[15-01-05 02:19:08:481 HKT] readRows: learning entire investor, {investorsignatorynum=S7533422B, idtype=UEN, commitment=S$25,000, state=Singapore, investorsignatorytype=NRIC, legalesestatus=skip, id=201400002Z, email=mengwong+jfdi2014@jfdi.asia, address=71 Ayer Rajah Crescent, #05-16, Singapore 139951, name=JFDI.2014 Pte. Ltd., _spreadsheet_row=15.0, signatoryname=Wong Meng Weng, investortype=company}
+[15-01-05 02:19:08:481 HKT] readRows: row 15: processing row Investor
+[15-01-05 02:19:08:485 HKT] readRows: learning entire investor, {investorsignatorynum=S2704852H, idtype=NRIC, commitment=S$25,000, state=Singapore, investorsignatorytype=NRIC, legalesestatus=ignore, id=S2704852H, email=mengwong+yenlu@jfdi.asia, address=407 Sixth Avenue, Singapore 276578, name=Chow Yen-Lu, _spreadsheet_row=16.0, signatoryname=Chow Yen-Lu, investortype=person}
+[15-01-05 02:19:08:485 HKT] readRows: row 16: processing row Investor
+[15-01-05 02:19:08:489 HKT] readRows: learning entire investor, {investorsignatorynum=S8229056G, idtype=BVI, commitment=S$25,000, state=BVI, investorsignatorytype=NRIC, legalesestatus=skip, id=1730182.0, email=mengwong+8capita@jfdi.asia, address=Portcullis TrustNet (BVI) Limited of Portcullis TrustNet Chambers, P.O. Box 3444, Road Town, Tortola, British Virgin Islands, name=8capita Green INC, _spreadsheet_row=17.0, signatoryname=John Tan Yik Ann, investortype=person}
+[15-01-05 02:19:08:489 HKT] readRows: row 17: processing row Investor
+[15-01-05 02:19:08:493 HKT] readRows: learning entire investor, {investorsignatorynum=S6961095A, idtype=UEN, commitment=S$25,000, state=Singapore, investorsignatorytype=NRIC, legalesestatus=, id=201415161Z, email=mengwong+clickstream@jfdi.asia, address=71 Ayer Rajah Crescent, #05-16, Singapore 139951, name=Clickstream Ventures Pte. Ltd., _spreadsheet_row=18.0, signatoryname=William Klippgen, investortype=company}
+[15-01-05 02:19:08:493 HKT] readRows: row 18: processing row Investor
+[15-01-05 02:19:08:496 HKT] readRows: learning entire investor, {investorsignatorynum=S2685605A, idtype=NRIC, commitment=S$25,000, state=Singapore, investorsignatorytype=NRIC, legalesestatus=, id=S2685605A, email=mengwong+keithbudge@jfdi.asia, address=1 Grange Garden, #07-04 The Grange, Singapore 249631, name=Keith Budge, _spreadsheet_row=19.0, signatoryname=Keith Budge, investortype=person}
+[15-01-05 02:19:08:497 HKT] readRows: row 19: processing row Investor
+[15-01-05 02:19:08:500 HKT] readRows: learning entire investor, {investorsignatorynum=, idtype=Email, commitment=S$20,000, state=California, investorsignatorytype=lting2130@gmail.com, legalesestatus=, id=lting2130@gmail.com, email=mengwong+leeting@jfdi.asia, address=2130 Redington Road, Hillsborough, CA 94010, USA, name=Lee Ting, _spreadsheet_row=20.0, signatoryname=Lee Ting, investortype=person}
+[15-01-05 02:19:08:501 HKT] readRows: row 20: processing row Founder
+[15-01-05 02:19:08:504 HKT] readRows: learning entire founder, {investorsignatorynum=, idtype=NRIC, commitment=S$, state=Singapore, investorsignatorytype=, legalesestatus=, id=S7623862F, email=mengwong+augustine@jfdi.asia, address=, name=Augustine Lim Cheng Ting, _spreadsheet_row=21.0, signatoryname=, investortype=person}
+[15-01-05 02:19:08:504 HKT] readRows: row 21: processing row Company
+[15-01-05 02:19:08:508 HKT] readRows: learning entire company, {investorsignatorynum=, idtype=UEN, commitment=S$, state=Singapore, investorsignatorytype=, legalesestatus=, id=201115887C, email=mengwong+digify@jfdi.asia, address=71 Ayer Rajah Crescent, #07-01, Singapore 139951, name=Digify Pte. Ltd., _spreadsheet_row=22.0, signatoryname=, investortype=company}
+[15-01-05 02:19:08:508 HKT] readRows: row 22: processing row KEY TERMS
+[15-01-05 02:19:08:509 HKT] readRows: row 23: processing row Agreement Date:
+[15-01-05 02:19:08:509 HKT] readRows: row 24: processing row Expiry Date:
+[15-01-05 02:19:08:510 HKT] readRows: row 25: processing row Closing Date:
+[15-01-05 02:19:08:511 HKT] readRows: row 26: processing row Amount Raising:
+[15-01-05 02:19:08:511 HKT] readRows: row 27: processing row Pre-Money Valuation:
+[15-01-05 02:19:08:512 HKT] readRows: row 28: processing row Security Type:
+[15-01-05 02:19:08:513 HKT] readRows: row 29: processing row Interest:
+[15-01-05 02:19:08:513 HKT] readRows: row 30: processing row Term:
+[15-01-05 02:19:08:514 HKT] readRows: row 31: processing row CONVERSION
+[15-01-05 02:19:08:514 HKT] readRows: row 32: processing row Qualified Financing:
+[15-01-05 02:19:08:515 HKT] readRows: row 33: processing row Discount:
+[15-01-05 02:19:08:515 HKT] readRows: row 34: processing row Converts to:
+[15-01-05 02:19:08:516 HKT] readRows: row 35: processing row OTHER TERMS
+[15-01-05 02:19:08:517 HKT] readRows: row 36: processing row Liquidation Preference:
+[15-01-05 02:19:08:517 HKT] readRows: row 37: processing row Liquidation Participation:
+[15-01-05 02:19:08:518 HKT] readRows: row 38: processing row Acquisition Preference:
+[15-01-05 02:19:08:518 HKT] readRows: row 39: processing row Jurisdiction:
+[15-01-05 02:19:08:519 HKT] readRows: row 40: processing row Information Rights:
+[15-01-05 02:19:08:519 HKT] readRows: row 41: processing row Board Rights:
+[15-01-05 02:19:08:520 HKT] readRows: row 42: processing row Preemptive Rights Ratio:
+[15-01-05 02:19:08:520 HKT] readRows: row 43: processing row Accredited Investors:
+[15-01-05 02:19:08:521 HKT] readRows: row 44: processing row Major Investor Minimum:
+[15-01-05 02:19:08:521 HKT] readRows: row 45: processing row Anti-Dilution:
+[15-01-05 02:19:08:522 HKT] readRows: row 46: processing row MFN:
+[15-01-05 02:19:08:522 HKT] readRows: row 47: processing row Maturity Conversion Discount:
+[15-01-05 02:19:08:523 HKT] readRows: row 48: processing row 
+[15-01-05 02:19:08:523 HKT] readRows: row 49: processing row 
+[15-01-05 02:19:08:524 HKT] readRows: founder Augustine Lim Cheng Ting hasn't been mailed yet, so copying from parties.founder to parties.founder_unmailed
+[15-01-05 02:19:08:524 HKT] readRows: investor JFDI.2014 Pte. Ltd. has status skip, so leaving out from parties.investor_unmailed
+[15-01-05 02:19:08:524 HKT] readRows: investor Chow Yen-Lu has status ignore, so leaving out from parties.investor_unmailed
+[15-01-05 02:19:08:525 HKT] readRows: investor 8capita Green INC has status skip, so leaving out from parties.investor_unmailed
+[15-01-05 02:19:08:525 HKT] readRows: investor Clickstream Ventures Pte. Ltd. hasn't been mailed yet, so copying from parties.investor to parties.investor_unmailed
+[15-01-05 02:19:08:526 HKT] readRows: investor Keith Budge hasn't been mailed yet, so copying from parties.investor to parties.investor_unmailed
+[15-01-05 02:19:08:526 HKT] readRows: investor Lee Ting hasn't been mailed yet, so copying from parties.investor to parties.investor_unmailed
+[15-01-05 02:19:08:655 HKT] uploadPDFsToEchoSign: property get legalese.folder.id = 0BxOaYa8pqqSwS25ESzhxeVVNQzg
+[15-01-05 02:19:09:457 HKT] all PDFs under folder = [KISS Amendment.pdf]
+[15-01-05 02:19:09:461 HKT] uploading to EchoSign as a transientDocument: 0BxOaYa8pqqSwMTRhaWItaUphTU0 KISS Amendment.pdf
+[15-01-05 02:19:10:399 HKT] uploaded 0BxOaYa8pqqSwMTRhaWItaUphTU0 (KISS Amendment.pdf) as transientDocumentId=2AAABLblqZhBBpLGSNyxofD3yMzcjZ8Ut8fNni1K2G63u3HofHLzdhLKrNw7qK_WJkgp2qSNoytscstKk1Lg9Jpxn9mUCv2ngRCzuew9418r4KbZ0Tb2JfgvVNzDBqih28wk9jDIvNqCgUFjyECF20wbdvTiCyOMVI-J1TB5yxj5R_Pfoa57q7eagGZckoBdMvO7RuaLY5Pg*
+[15-01-05 02:19:10:401 HKT] fieldnames = [null, Email, Investor Type, Name, ID, IDtype, Address, State, Commitment, Signatory Name, Investor Signatory Type, Investor Signatory Num, Legalese Status]
+[15-01-05 02:19:10:402 HKT] we already have a Legalese Status column -- column 13.0
+[15-01-05 02:19:10:402 HKT] getRange(15.0,13.0,8.0,1.0)
+[15-01-05 02:19:10:404 HKT] got back range Range
+[15-01-05 02:19:10:406 HKT] returning column range {}
+[15-01-05 02:19:10:410 HKT] looking to return a dict of partyfieldname to cell, for party Augustine Lim Cheng Ting
+[15-01-05 02:19:10:410 HKT] party Augustine Lim Cheng Ting comes from spreadsheet row 21.0
+[15-01-05 02:19:10:411 HKT] the fieldname map looks like this: [PARTIES, name, email, idtype, id, address, state, investortype, commitment, signatoryname, investorsignatorytype, investorsignatorynum, legalesestatus]
+[15-01-05 02:19:10:411 HKT] so the cell that matters for legalesestatus should be row 21.0, col 13.0
+[15-01-05 02:19:10:414 HKT] pulled range {}

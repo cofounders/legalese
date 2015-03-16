@@ -1,0 +1,90 @@
+{ "end": { "file": "hello.js", "comments_before": [], "nlb": true, "endpos": 2690, "pos": 2689, "col": 1, "line": 67, "value": "}", "type": "punc"
+    }, "start": { "file": "hello.js", "comments_before": [
+            { "file": "hello.js", "nlb": true, "endpos": 2471, "pos": 2456, "col": 1, "line": 64, "value": " funds tester", "type": "comment1"
+            }
+        ], "nlb": true, "endpos": 2477, "pos": 2473, "col": 1, "line": 65, "value": "this", "type": "name"
+    }, "right": { "end": { "file": "hello.js", "comments_before": [], "nlb": true, "endpos": 2690, "pos": 2689, "col": 1, "line": 67, "value": "}", "type": "punc"
+        }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2509, "pos": 2501, "col": 29, "line": 65, "value": "function", "type": "keyword"
+        }, "body": [            { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2687, "pos": 2686, "col": 172, "line": 66, "value": ";", "type": "punc"
+                }, "start": { "file": "hello.js", "comments_before": [], "nlb": true, "endpos": 2522, "pos": 2516, "col": 2, "line": 66, "value": "return", "type": "keyword"
+                }, "value": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2686, "pos": 2683, "col": 169, "line": 66, "value": "val", "type": "name"
+                    }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2527, "pos": 2523, "col": 9, "line": 66, "value": "this", "type": "name"
+                    }, "right": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2686, "pos": 2683, "col": 169, "line": 66, "value": "val", "type": "name"
+                        }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2601, "pos": 2597, "col": 83, "line": 66, "value": "this", "type": "name"
+                        }, "right": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2686, "pos": 2683, "col": 169, "line": 66, "value": "val", "type": "name"
+                            }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2660, "pos": 2656, "col": 142, "line": 66, "value": "this", "type": "name"
+                            }, "property": "val", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2682, "pos": 2673, "col": 159, "line": 66, "value": "principal", "type": "name"
+                                }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2660, "pos": 2656, "col": 142, "line": 66, "value": "this", "type": "name"
+                                }, "property": "principal", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2672, "pos": 2661, "col": 147, "line": 66, "value": "definitions", "type": "name"
+                                    }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2660, "pos": 2656, "col": 142, "line": 66, "value": "this", "type": "name"
+                                    }, "property": "definitions", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2660, "pos": 2656, "col": 142, "line": 66, "value": "this", "type": "name"
+                                        }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2660, "pos": 2656, "col": 142, "line": 66, "value": "this", "type": "name"
+                                        }, "name": "this"
+                                    }
+                                }
+                            }
+                        }, "operator": ">=", "left": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2652, "pos": 2651, "col": 137, "line": 66, "value": "]", "type": "punc"
+                            }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2601, "pos": 2597, "col": 83, "line": 66, "value": "this", "type": "name"
+                            }, "property": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2651, "pos": 2643, "col": 129, "line": 66, "value": "fullname", "type": "name"
+                                }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2627, "pos": 2623, "col": 109, "line": 66, "value": "this", "type": "name"
+                                }, "property": "fullname", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2642, "pos": 2635, "col": 121, "line": 66, "value": "options", "type": "name"
+                                    }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2627, "pos": 2623, "col": 109, "line": 66, "value": "this", "type": "name"
+                                    }, "property": "options", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2634, "pos": 2628, "col": 114, "line": 66, "value": "lender", "type": "name"
+                                        }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2627, "pos": 2623, "col": 109, "line": 66, "value": "this", "type": "name"
+                                        }, "property": "lender", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2627, "pos": 2623, "col": 109, "line": 66, "value": "this", "type": "name"
+                                            }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2627, "pos": 2623, "col": 109, "line": 66, "value": "this", "type": "name"
+                                            }, "name": "this"
+                                        }
+                                    }
+                                }
+                            }, "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2622, "pos": 2602, "col": 88, "line": 66, "value": "funds_transferred_by", "type": "name"
+                                }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2601, "pos": 2597, "col": 83, "line": 66, "value": "this", "type": "name"
+                                }, "property": "funds_transferred_by", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2601, "pos": 2597, "col": 83, "line": 66, "value": "this", "type": "name"
+                                    }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2601, "pos": 2597, "col": 83, "line": 66, "value": "this", "type": "name"
+                                    }, "name": "this"
+                                }
+                            }
+                        }
+                    }, "operator": "&&", "left": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2593, "pos": 2592, "col": 78, "line": 66, "value": ")", "type": "punc"
+                        }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2527, "pos": 2523, "col": 9, "line": 66, "value": "this", "type": "name"
+                        }, "args": [                            { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2592, "pos": 2584, "col": 70, "line": 66, "value": "fullname", "type": "name"
+                                }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2568, "pos": 2564, "col": 50, "line": 66, "value": "this", "type": "name"
+                                }, "property": "fullname", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2583, "pos": 2576, "col": 62, "line": 66, "value": "options", "type": "name"
+                                    }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2568, "pos": 2564, "col": 50, "line": 66, "value": "this", "type": "name"
+                                    }, "property": "options", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2575, "pos": 2569, "col": 55, "line": 66, "value": "lender", "type": "name"
+                                        }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2568, "pos": 2564, "col": 50, "line": 66, "value": "this", "type": "name"
+                                        }, "property": "lender", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2568, "pos": 2564, "col": 50, "line": 66, "value": "this", "type": "name"
+                                            }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2568, "pos": 2564, "col": 50, "line": 66, "value": "this", "type": "name"
+                                            }, "name": "this"
+                                        }
+                                    }
+                                }
+                            }
+                        ], "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2563, "pos": 2549, "col": 35, "line": 66, "value": "hasOwnProperty", "type": "name"
+                            }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2527, "pos": 2523, "col": 9, "line": 66, "value": "this", "type": "name"
+                            }, "property": "hasOwnProperty", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2548, "pos": 2528, "col": 14, "line": 66, "value": "funds_transferred_by", "type": "name"
+                                }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2527, "pos": 2523, "col": 9, "line": 66, "value": "this", "type": "name"
+                                }, "property": "funds_transferred_by", "expression": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2527, "pos": 2523, "col": 9, "line": 66, "value": "this", "type": "name"
+                                    }, "start": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2527, "pos": 2523, "col": 9, "line": 66, "value": "this", "type": "name"
+                                    }, "name": "this"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ], "argnames": [], "name": null
+    }, "operator": "=", "left": { "end": { "file": "hello.js", "comments_before": [], "nlb": false, "endpos": 2498, "pos": 2478, "col": 6, "line": 65, "value": "completion_condition", "type": "name"
+        }, "start": { "file": "hello.js", "comments_before": [                { "file": "hello.js", "nlb": true, "endpos": 2471, "pos": 2456, "col": 1, "line": 64, "value": " funds tester", "type": "comment1"
+                }
+            ], "nlb": true, "endpos": 2477, "pos": 2473, "col": 1, "line": 65, "value": "this", "type": "name"
+        }, "property": "completion_condition", "expression": { "end": { "file": "hello.js", "comments_before": [                    { "file": "hello.js", "nlb": true, "endpos": 2471, "pos": 2456, "col": 1, "line": 64, "value": " funds tester", "type": "comment1"
+                    }
+                ], "nlb": true, "endpos": 2477, "pos": 2473, "col": 1, "line": 65, "value": "this", "type": "name"
+            }, "start": { "file": "hello.js", "comments_before": [                    { "file": "hello.js", "nlb": true, "endpos": 2471, "pos": 2456, "col": 1, "line": 64, "value": " funds tester", "type": "comment1"
+                    }
+                ], "nlb": true, "endpos": 2477, "pos": 2473, "col": 1, "line": 65, "value": "this", "type": "name"
+            }, "name": "this"
+        }
+    }
+}

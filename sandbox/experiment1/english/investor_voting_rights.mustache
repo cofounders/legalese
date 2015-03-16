@@ -1,0 +1,11 @@
+{{#if investor_voting_rights}}
+
+{{#choice_among_alternatives investor_voting_rights "equivalent to shareholders"}}
+  Investors will have the right to vote on all matters which come before the equity members of the Company. Their votes will be counted as if {{../alias}} were converted at the Valuation Cap. The Founders, being the sole equity shareholders of the Company, undertake to memorialize these rights in a Shareholder's Agreement.
+{{/choice_among_alternatives}}
+
+{{#choice_among_alternatives investor_voting_rights "no rights"}}
+  Investors shall have no voting rights arising from {{../alias}}.
+{{/choice_among_alternatives}}
+
+{{/if}}

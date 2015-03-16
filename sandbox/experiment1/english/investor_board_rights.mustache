@@ -1,0 +1,11 @@
+{{#if investor_board_rights}}
+
+{{#choice_among_alternatives investor_board_rights "equivalent to shareholders"}}
+  The Investor shall have the right to appoint {{investor_board_rights.number}} of the Board of Directors.
+{{/choice_among_alternatives}}
+
+{{#choice_among_alternatives investor_board_rights "no rights"}}
+  Investors shall have no board rights arising from their {{../alias}}.
+{{/choice_among_alternatives}}
+
+{{/if}}

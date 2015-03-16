@@ -1,0 +1,154 @@
+#!/usr/bin/perl
+
+use strict;
+use XML::Twig;
+use Text::ParseWords;
+
+# markdown from InDesign XML to regular HTML for automated import into Google Docs.
+#
+# in future this may not be necessary if we are able to manually style the Google Docs paragraphs ourselves.
+# but the revenue path runs along the InDesignXML -> filltemplate -> PDF -> Echosign track.
+# so we don't really care quite so much for making the Google Docs beautiful.
+
+# mengwong 20141222
+
+my @convert = split(/\n/,<<'EOCONVERT');
+a_left_sidehead					newclause depth=1 asparam=1
+b								b
+b_left_sidehead					newclause depth=2 asparam=1
+bullet_list_1					li
+cell							td
+centered						div align=center
+cover_address_block				div align=center
+cover_company_id				div align=center
+cover_company_name				div align=center
+cover_corporate_logotype		div align=center
+chapter_header					h1
+cover_title						h1
+dd								dd	dl
+definition						newclause depth=2
+definition_list					newclause depth=3
+definition_list_inner_2			newclause depth=4
+definition_list_inner_3			newclause depth=5
+i								i
+incrementer_level_1				p
+noindent						p
+numbered_1_para					newclause depth=1
+numbered_2_firstbold			newclause depth=2
+numbered_2_para					newclause depth=2
+numbered_3_firstbold			newclause depth=3
+numbered_3_para					newclause depth=3
+olwrapper						ol
+ulwrapper						ul
+p								p
+para_1							p
+para_2							p
+parties							li
+recitals						li
+recitals_restart				li
+sidebar							p
+smallcaps						span style="font-variant: small-caps"
+span							
+span_allcaps					span class="allcaps"
+span_invisible					span class="invisible"
+span_plain						span class="plain"
+span_ucnum						span class="ucnum"
+Story							
+Table							table
+table_cell						td	tr	table
+table_enclosing_para			p
+Tag1							p
+EOCONVERT
+
+# BNF:
+# xmltag *SPACE tag *(,tag) [ "." classname ] *( TAB parenttag )
+
+# xmltag: the input tag found in the source XML
+# 
+# tag: the output HTML tag
+# 
+# classname: the tag will be assigned a class=<classname> attribute
+# 
+# parenttag: the tag must be a child of the parenttag; if it is not, then the parenttag will be generated automatically.
+# 
+
+# this wrapping thing isn't working.
+
+sub ancestors_match_required_parents {
+	my ($el, $orig, $parents) = @_;
+	my @ancestors = map { $_->tag} $el->ancestors;
+	my @parents = @$parents;
+	for (@ancestors) { if ($_ eq $parents[0]) { shift @parents } }
+	if (not @parents) { return 1 }
+	warn "### ancestors_match_required_parents: ".$orig." is lacking @parents\n";
+	return 0;
+}
+
+my %convert;
+for my $line (@convert) {
+	my @F = split /\t+/, $line;
+	my $xmltag = shift @F;
+	my $htmltag = shift @F;
+	my @attr = quotewords('\s+', 0, $htmltag);
+#	warn "got back attr = " , join(" // ", @attr), "\n";
+	$htmltag = shift @attr;
+	my @parents = @F;
+	$convert{$xmltag} = sub {
+		my $el = $_;
+		my $origtag = $el->tag;
+		$_->set_tag($htmltag);
+		for my $a (@attr) { $_->set_att(($a =~ /=/) ? (split/=/,$a,2) : ($a)) }
+
+		if (@parents) {
+			if (not ancestors_match_required_parents($el, $origtag, \@parents)) {
+			}
+		}
+#		print (join(" ","element ",$el->tag,
+#					"has parents ",(map{$_->tag}$el->ancestors))."\n");
+		
+	};
+};
+
+my $t = XML::Twig->new(twig_handlers => \%convert,
+					   pretty_print => "indented",
+					   empty_tags => "html",
+					   output_text_filter => "safe",
+	);
+
+my @input;
+while (<>) {
+	s/<(\?.*?\?)>/<!-- PROTECT $1 -->/g; # and print STDERR "$. $_";
+	push @input, $_;
+}
+$t->parse(join "", @input);
+
+for my $el ($t->get_xpath("//newclause")) {
+#	warn "### get_xpath found newclause " . $el->tag . " depth " . $el->att("depth") . "\n";
+	my $depth = $el->att("depth");
+	if ($el->att("asparam")) {
+		my $content = $el->text;
+		$content =~ s/\s+$//;
+		$el->set_tag(qq(?!= newclause($depth, "$content") ?));
+		$el->cut_children;
+	}
+	else {
+		$el->set_tag(qq(?!= newclause($depth) ?));
+	}		
+	$el->del_atts;
+}
+
+my $output = $t->sprint;
+
+$output =~ s/<\/\?!= newclause\(\d\) \?>/<\/p>/g;
+$output =~ s/<\/\?!= newclause\(\d, .*?\?>//g;
+
+$output =~ s/<!-- PROTECT (.*?) -->/<$1>/g;
+
+$output =~ s/MACRO\((.*?)\)/<?!= data.$1 ?>/g;
+
+$output =~ s/<\?xml .*//;
+$output =~ s/<Root .*//;
+$output =~ s/<\/Root.*//;
+
+print $output;
+

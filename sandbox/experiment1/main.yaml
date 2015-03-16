@@ -1,0 +1,117 @@
+---
+title: Legalese Demo 1, YC SAFE
+jurisdiction:
+  alternatives:
+    - US
+    - UK
+    - SG
+  default: SG
+  choice: default
+  exemptions: sections 272b(1), 274, and 275(1) of the Securities and Futures Act
+investor:
+  name: Moritz
+  id: S4444444D
+  idtype: Passport
+  commitment: 1,000,000
+  address: 1 nassim hill
+company:
+  name: Abecedarium Inc.
+  id: 2014123456K
+  idtype: UEN
+  address: 71 Ayer Rajah Crescent
+  state: Delaware
+parties:
+  members:
+    founders:
+      members:
+        - name: Kai
+          id: S1234567A
+          idtype: NRIC
+        - name: Meng
+          id: S2222222B
+          idtype: NRIC
+        - name: Sidhi
+          id: S3333333C
+          idtype: NRIC
+      alias:
+        plural: the Founders
+        singular: the Founder
+    investors:
+      members:
+        - name: Moritz
+          id: S4444444D
+          idtype: Passport
+          commitment: 1,000,000
+          address: 1 nassim hill
+        - name: Nancy
+          id: S444477D
+          idtype: NRIC
+          commitment: 2,000,000
+          address: 2 nassim hill
+      alias:
+        plural: the Investors
+        singular: the Investor
+    companies:
+      members:
+        - name: Abecedarium Inc.
+          id: 2014123456K
+          idtype: UEN
+          address: 71 Ayer Rajah Crescent
+          state: Delaware
+      alias:
+        plural: the Group
+        singular: the Company
+  alias: the Parties
+agreement_date: January 1, 2015
+closing_date: December 31, 2014
+securities:
+  type: investment
+  instrument: Simple Agreement for Future Equity
+  alias: the SAFE
+  instrument_shortname: Safe
+  amount_on_offer: 1,000,000
+  currency: SGD
+  term: 36 months
+  interest: 0
+  acquisition_preference: 1.5
+  liquidation_preference: 1
+  liquidation_participation: TRUE
+  prefix: $
+  qualified_financing:
+    minimum_raise: S$250,000
+    minimum_premoney: S$25,000,000
+  information_rights: quarterly then yearly
+  board_rights: none
+  premoney_valuation: 5,000,000
+  preemptive_rights:
+    ratio: 1
+  conversion_discount:
+    percent: 20
+  antidilution:
+    alternatives:
+      - Broad-Based WA
+      - Narrow-Based WA
+      - Full Ratchet
+      - None
+    default: None
+    choice: default
+  maturity_conversion_discount:
+    percent: 30
+  converts_to:
+    alternatives:
+      - next round security
+      - common
+    default: next round security
+    choice: default
+  flavor:
+    alternatives:
+      - discount, no cap
+      - cap, no discount
+      - cap and discount
+      - MFN
+    default: discount, no cap
+    choice: default
+  accredited_investors: TRUE
+  major_investor:
+    minimum: S$50,000
+  MFN: FALSE

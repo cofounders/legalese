@@ -1,0 +1,7 @@
+# Conversion Price
+
+{{ucfirst alias}} will convert at
+{{#if premoney_valuation}}{{#if conversion_discount}}the lower of:{{/if}}{{/if}}
+  
+{{#if premoney_valuation}}{{#if conversion_discount}}  * {{/if}}{{currency}} {{premoney_valuation}}{{/if}}
+{{#if conversion_discount}}{{#if premoney_valuation}}  * {{/if}}{{conversion_discount.percent}}% less than the price per share paid in the {{conversion_upon}}{{/if}}
