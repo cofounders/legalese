@@ -71,7 +71,7 @@ the Startup shall authorise and issue <? if (data.jfdi_standard_valuation != fal
 <? if (data.jfdi_standard_valuation == false ) { ?></numbered_1_para><? } else { ?>
 The Conversion Percentage shall be<?
 if (data.valuation_basis == "table") { ?>
-<?if (data.jfdi_standard_valuation != false) { ?> calculated on the basis of the <?= data.parties.investor[0].commitment ?> cash investment by JFDI and<? } ?>
+<? if (data.jfdi_standard_valuation != false) { ?> calculated on the basis of the <?= data.parties.investor[0].commitment ?> cash investment by JFDI and<? } ?>
  according to the following valuation table, or as agreed between the Startup and JFDI.2014.
 </numbered_1_para>
 <? if (data.nonstandard_valuation_table) { ?><table_enclosing_para><?!= data.nonstandard_valuation_table ?></table_enclosing_para><? } else { ?>
@@ -92,7 +92,8 @@ if (data.valuation_basis == "table") { ?>
 else if (data.valuation_basis == "existing") { ?> determined on the basis of the valuation set in the previous round of financing by professional investors.<? }
 else if (data.valuation_basis == "discussion") { ?> determined as agreed by the Parties.<? }
 else if (data.valuation_basis == "fixed") { ?> fixed at <?= data.agreed_percentage ?>.<? } ?>
-<? } ?><numbered_1_para>The Founders shall travel to and from Singapore at their own expense. JFDI.Asia and JFDI.2014 shall not be obligated to reimburse any expenses incurred, or transfer any funds to the Founders or to their Startup, prior to formal acceptance to the Accelerate phase.
+<? } ?>
+The Founders shall travel to and from Singapore at their own expense. JFDI.Asia and JFDI.2014 shall not be obligated to reimburse any expenses incurred, or transfer any funds to the Founders or to their Startup, prior to formal acceptance to the Accelerate phase.
 <? if (data.skip_hoops != true) { ?>Formal acceptance to the Accelerate phase will be offered as soon the Founders demonstrate, to JFDI.Asia's satisfaction, that they can:
 </numbered_1_para><bullets>articulate their innovation insight
 articulate their industry dynamics
