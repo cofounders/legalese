@@ -94,8 +94,9 @@ else if (data.valuation_basis == "existing") { ?> determined on the basis of the
 <? if (data.previous_post_money_valuation) { ?>
 As an example, if the previous round of financing established a post-money valuation for the Startup at <?= data.previous_post_money_valuation ?>, then JFDI's total investment of <?= data.parties.investor[0].commitment ?> (cash) plus <?= data.intangibles_value ?> (intangibles) determines the Conversion Percentage at <?= data.agreed_percentage ?>%.
 <? } ?>
-</numbered_2_para_indent><numbered_1_para>
-<? } else if (data.valuation_basis == "discussion") { ?> determined as agreed by the Parties.
+</numbered_2_para_indent>
+<numbered_1_para><? }
+       else if (data.valuation_basis == "discussion") { ?> determined as agreed by the Parties.
 <?   } else if (data.valuation_basis == "fixed") { ?> fixed at <?= data.agreed_percentage ?>.
 <?   } ?>
 <? } ?>
