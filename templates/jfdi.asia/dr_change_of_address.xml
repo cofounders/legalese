@@ -1,0 +1,28 @@
+<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" templateSpec="singlepage.indt">
+<letterhead><?= data.company.name ?></letterhead>
+<Firstpage_Sidebar>
+<?= data.company.name ?>
+
+(the "Company")
+<?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum>
+<?= data.company.address ?>
+</Firstpage_Sidebar>
+<Story_Main>
+<resolution_title>Directors' resolutions in writing&#8232;passed pursuant to Article <?= data.article_for_directors_resolution_in_writing ?> of the Company's Articles of Association</resolution_title>
+
+<chapter_header override="startParagraph=StartParagraph.ANYWHERE">Change of Address</chapter_header>
+<para_1><span_smallcaps>Resolved:---</span_smallcaps></para_1>
+<a_left_sidehead>Registered Office</a_left_sidehead>
+<para_1>That the registered office of the Company be changed to situate at <?= data.parties.corporate_secretary[0].address ?> with immediate effect.</para_1>
+<a_left_sidehead>Authority to Bizfile</a_left_sidehead>
+<para_1>That <?= data.parties.corporate_secretary[0].name ?> and/or its agents be authorised to file electronically with the <?= data.parties.state_regulator[0].name ?> on the Company's change in registered office address.</para_1>
+
+
+<para_1><span_smallcaps>Dated this:</span_smallcaps> <?= data.shutdown_process_begin_date ?></para_1>
+<? data.signature_comment = "Director" ?>
+<? for (var i=0;i<data.parties.director.length;i++) { ?>
+<?!= include("inc_signature", data, data.parties.director[i]) ?>
+<? } ?>
+</Story_Main>
+<Bottom_Box delete_if_empty="true" />
+</Root>
