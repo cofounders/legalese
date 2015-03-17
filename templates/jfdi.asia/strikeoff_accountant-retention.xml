@@ -29,6 +29,6 @@ Yours faithfully,
 <para_1>We hereby confirm our understanding of the arrangements as stated above.</para_1>
 <? data.signature_comment = "Director"; ?>
 <?!= include("inc_signature", data, data.parties.director[0]) ?>
-<para_1><i>Company's Stamp</para_1>
+<para_1><i>Company's Stamp</i></para_1>
 </Bottom_Box>
 </Root>
