@@ -27,7 +27,7 @@
 <? } ?>
 <numbered_1_para><?
  if (data.parties.director.length == 1) { ?>I am the sole local director of <? }
- else { ?>we are the directors of <? } ?>
+ else { ?>We are the directors of <? } ?>
 <?!= include("inc_party", data, data.company) ?> (the "Company").
 The Company has not commenced business since the date of incorporation on <?= data.incorporation_date ?>.
 The company officers have no outstanding summonses or composition fines issued by <?= data.parties.state_regulator[0].name ?> ("<?= data.parties.state_regulator[0].short_name ?>") or Warrant of Arrest issued by the Court.
