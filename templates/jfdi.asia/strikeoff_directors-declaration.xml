@@ -1,0 +1,47 @@
+<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" templateSpec="singlepage.indt">
+<letterhead><?= data.company.name ?></letterhead>
+<Firstpage_Sidebar>
+<?= data.company.name ?>
+
+<?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum>
+<?= data.company.address ?>
+</Firstpage_Sidebar>
+<Story_Main>
+<basic_para>
+
+
+
+</basic_para>
+<resolution_title>Declaration</resolution_title>
+
+<chapter_header override="startParagraph=StartParagraph.ANYWHERE">Striking Off <?= data.company.name ?></chapter_header>
+<para_1><? plural(data.parties.director, "I", "We")</para_1>
+<? for (var i in data.parties.director) { ?>
+<parties><?!= include("inc_party", data, data.parties.director[i]) ?></parties>
+<para_1><?   if (data.parties.investor.length > 1)           { ?>(the "Directors")
+<?   } else                                          { ?>(the "Director")<?  } ?></para_1>
+<para_1><span_smallcaps>do solemnly and sincerely</span_smallcaps> declare as follows:</para_1>
+<numbered_1_para><?
+ if (data.parties.director.length == 1) { ?>I am the sole local director of <? }
+ else { ?>we are the directors of <? } ?>
+<?!= include("inc_party", data, data.company) ?> (the "Company").
+The Company has not commenced business since the date of incorporation on <?= data.incorporation_date ?>.
+The company officers have no outstanding summonses or composition fines issued by <?= data.state_regulator.name ?> ("<?= data.state_regulator.short_name ?>") or Warrant of Arrest issued by the Court.
+The company has no outstanding penalties or offers of composition fine owing to <?= data.state_regulator.short_name ?>.
+The company has no outstanding tax liabilities owing to IRAS and is not indebted to any other government department.
+The company has no outstanding charges in the Register of Charges.
+The company is not involved in or threatened with legal proceedings within or outside Singapore.
+We have sought the written consent of all the shareholders to strike the name of the company off the register, and received no objection from any shareholder.
+The Company has no assets and no liabilities.
+The bank account of the Company has been closed.
+The Company has no contingent assets and liabilities (i.e. assets/liabilities that may arise in the future.)
+We hereby give our consent for the Company to apply to <?= data.state_regulator.short_name ?> to consider striking the name of the Company off the register under Section 344 of the Companies Act (Cap. 50).
+We hereby authorise <?= data.corporate_secretary.name ?> to e-file to <?= data.state_regulator.short_name ?> on the aforesaid application for striking off.
+</numbered_1_para>
+<para_1><span_smallcaps>Declared by:</span_smallcaps></para_1>
+<? for (var i=0;i<data.parties.director.length;i++) { ?>
+<?!= include("inc_signature", data, data.parties.director[i]) ?>
+<? } ?>
+</Story_Main>
+<Bottom_Box delete_if_empty="true" />
+</Root>
