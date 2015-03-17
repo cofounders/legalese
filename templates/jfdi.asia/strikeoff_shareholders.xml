@@ -29,7 +29,7 @@ If we do not hear from you within 30 days from the date of this letter, we will 
 <?!= include("inc_signature", data, data.parties.director[0]) ?>
 </Story_Main>
 <Bottom_Box>
-<para_1>I, <?= data.shareholder.name ?> (<?= data.shareholder.idtype ?> <span_ucnum><?= data.shareholder.id ?></span_ucnum>), being a shareholder of <?= data.company.name ?> hereby give my consent for an application to be made to ACRA for striking off, and declare that there are no outstanding debts due to me.
+<para_1>I, <?= data.shareholder.name ?> (<?= data.shareholder.idtype ?> <span_ucnum><?= data.shareholder.id ?></span_ucnum>), being a shareholde
 </para_1>
 <? data.signature_comment = "Shareholder" ?>
 <?!= include("inc_signature", data, data.shareholder) ?>
