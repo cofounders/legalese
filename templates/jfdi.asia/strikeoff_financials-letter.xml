@@ -45,7 +45,7 @@ Capital stock/shares purchase options or agreements or shares reserved for optio
 Arrangements with financial institutions involving restrictions on cash  balances and lines of credit or similar arrangements.
 Arrangements to repurchase assets previously sold and options to purchase property or equipment of material amounts.
 Amounts due to directors and shareholders will not be due for payment until after other liabilities have been fully settled.</numbered_2_para_indent>
-<numbered_1_para>The company had ceased business from <?= data.shutdown_financial_period_end_date ?>.
+<numbered_1_para>The company has ceased business from <?= data.shutdown_financial_period_end_date ?>.
 Any expenditure included in the accounts was properly made in connection with the carrying-on of the Company's business.</numbered_1_para>
 <para_1>Yours faithfully,</para_1>
 <? for (var i=0;i<data.parties.director.length;i++) { ?>
