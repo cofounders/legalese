@@ -15,7 +15,7 @@
 <resolution_title>Declaration</resolution_title>
 
 <chapter_header override="startParagraph=StartParagraph.ANYWHERE">Striking Off <?= data.company.name ?></chapter_header>
-<para_1><? plural(data.parties.director, "I", "We")</para_1>
+<para_1><?= plural(data.parties.director, "I", "We") ?></para_1>
 <? for (var i in data.parties.director) { ?>
 <parties><?!= include("inc_party", data, data.parties.director[i]) ?></parties>
 <para_1><?   if (data.parties.investor.length > 1)           { ?>(the "Directors")
