@@ -24,7 +24,7 @@ This letter will be effective for future years unless terminated, amended, or su
 
 Yours faithfully,
 <?= data.parties.accountant[0].name ?>
-</Story_Main>
+</para_1></Story_Main>
 <Bottom_Box>
 <para_1>We hereby confirm our understanding of the arrangements as stated above.</para_1>
 <? data.signature_comment = "Director"; ?>
