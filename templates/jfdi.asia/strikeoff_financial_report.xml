@@ -41,7 +41,6 @@
 <para_1>Neither at the end of nor at any time during the financial period was the Company a party to any arrangement whose object was to enable the directors of the Company to acquire benefits by means of the acquisition of shares or debentures of the Company or any other body corporate except for those mentioned in this report.</para_1>
 
 <a_left_sidehead>Directors' interests in shares &amp; debentures</a_left_sidehead>
-<? var directors_and_shareholders = partiesWearingManyHats(data.company, ["director","shareholder"]); ?>
 
 </Story_Main>
 </Root>
