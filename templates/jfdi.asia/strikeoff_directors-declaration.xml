@@ -40,7 +40,7 @@ The Company has no assets and no liabilities.
 The bank account of the Company has been closed.
 The Company has no contingent assets and liabilities (i.e. assets/liabilities that may arise in the future.)
 We hereby give our consent for the Company to apply to <?= data.parties.state_regulator.short_name ?> to consider striking the name of the Company off the register under Section 344 of the Companies Act (Cap. 50).
-We hereby authorise <?= data.corporate_secretary.name ?> to e-file to <?= data.parties.state_regulator.short_name ?> on the aforesaid application for striking off.
+We hereby authorise <?= data.parties.corporate_secretary.name ?> to e-file to <?= data.parties.state_regulator.short_name ?> on the aforesaid application for striking off.
 </numbered_1_para>
 <para_1><span_smallcaps>Declared by:</span_smallcaps></para_1>
 <? for (var i=0;i<data.parties.director.length;i++) { ?>
