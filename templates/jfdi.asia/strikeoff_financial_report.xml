@@ -39,7 +39,7 @@
 <para_1>Neither at the end of nor at any time during the financial period was the Company a party to any arrangement whose object was to enable the directors of the Company to acquire benefits by means of the acquisition of shares or debentures of the Company or any other body corporate except for those mentioned in this report.</para_1>
 
 <a_left_sidehead>Directors' interests in shares &amp; debentures</a_left_sidehead>
-<? var directors_and_shareholders = partiesWearingManyHats(data.company, ["director","shareholder"]); ?>
+<? var directors_and_shareholders = partiesWearingManyHats(data, data.company, ["director","shareholder"]); ?>
 <para_1>The directors holding office at the end of the financial period and their interests in the share capital of the Company and related corporations as recorded in the register of directors' shareholdings kept by the Company under Section 164 of the Companies Act (Cap. 50) were as follows:---</para_1>
 <table_enclosing_para>
 <Table aid:table="table" aid:tcols="3" aid:trows="<?= (directors_and_shareholders.length+1) ?>" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
