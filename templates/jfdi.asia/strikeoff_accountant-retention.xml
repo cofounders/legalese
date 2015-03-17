@@ -7,7 +7,7 @@
 <?= data.parties.accountant[0].address ?>
 </Firstpage_Sidebar>
 <Story_Main>
-<resolution_title>Letter defining Accountant Services</resolution_title>
+<resolution_title>Letter defining Accounting Services</resolution_title>
 <basic_para>
 <?= data.company.name ?>
 
@@ -28,6 +28,6 @@ Yours faithfully,
 <para_1>We hereby confirm our understanding of the arrangements as stated above.</para_1>
 <? data.signature_comment = "Director"; ?>
 <?!= include("inc_signature", data, data.parties.director[0]) ?>
-<para_1>&#8233;<i>Company's Stamp</i></para_1>
+<para_1 override="justification=Justification.RIGHT_ALIGN"><i>Company's Stamp</i></para_1>
 </Bottom_Box>
 </Root>
