@@ -598,8 +598,10 @@ function readRows_(sheet, include_mode, toreturn) {
       if ( row[0].length == 0) { continue }
 
 	  // TODO: do we need to ignore situations where row[0] !~ /:$/ ? subsection headings might be noisy.
-      terms[           asvar_(row[0])] = formatify_(term_formats[i][0], row[1], sheet);
-	  terms["_orig_" + asvar_(row[0])] = row[1];
+	  var asvar = asvar_(row[0]);
+      terms[           asvar] = formatify_(term_formats[i][0], row[1], sheet);
+	  terms["_orig_" + asvar] = row[1];
+	  Logger.log("readRows: TERMS: %s --> %s", row[1], terms[asvar]);
     }
 	else if (section == "ROLES") { // principal relation entity. these are all strings. we attach roles later.
 	  var relation  = asvar_(row[0]);
@@ -988,27 +990,75 @@ function availableTemplates_() {
 // this is unwise, because the XML template runs with the same privileges as this script,
 // and if you randomly execute templates from all over the Internet, sooner or later you will regret it.
 
-  { name:"corpsec_allotment_xml", url:"http://www.legalese.io/templates/jfdi.asia/corpsec-allotment.xml",       title:"Instruction to Corpsec for Allotment",
-	parties:{to:["director"], cc:["corporate_secretary"], also:["new_investor", "state_regulator"]},
+  { name:"strikeoff_directors_xml", title:"Striking Off for Directors",
+	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_directors-declaration.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
   },
-  { name:"dr_allotment_xml", url:"http://www.legalese.io/templates/jfdi.asia/dr-allotment.xml",       title:"Directors' Resolution for Allotment" },
-  { name:"jfdi_2014_rcps_xml", url:"jfdi_2014_rcps_xml.html",       title:"JFDI.2014 Subscription Agreement" },
-  { name:"kissing_xml", url:"http://www.legalese.io/templates/jfdi.asia/kissing.xml",       title:"KISS (Singapore)" },
-  { name:"strikeoff_shareholders_xml", url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_shareholders.xml",       title:"Striking Off for Shareholders" },
-  { name:"test_templatespec_xml", url:"http://www.legalese.io/templates/jfdi.asia/test-templatespec.xml",       title:"Test templateSpec" },
-  { name:"employment_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/employment-agreement.xml",       title:"Employment Agreement" },
-  { name:"termsheet_xml",         url:"http://www.legalese.io/templates/jfdi.asia/termsheet.xml",       title:"Seed Term Sheet" },
-  { name:"preemptive_notice_xml", url:"http://www.legalese.io/templates/jfdi.asia/preemptive_notice.xml",       title:"Pre-Emptive Notice to Shareholders" },
-  { name:"preemptive_waiver_xml", url:"http://www.legalese.io/templates/jfdi.asia/preemptive_waiver.xml",       title:"Pre-Emptive Notice for Waiver" },
-  { name:"loan_waiver_xml",		  url:"http://www.legalese.io/templates/jfdi.asia/convertible_loan_waiver.xml", title:"Waiver of Convertible Loan" },
-  { name:"simplified_note_xml",   url:"http://www.legalese.io/templates/jfdi.asia/simplified_note.xml",         title:"Simplified Convertible Loan Agreement" },
-  { name:"founder_agreement_xml", url:"http://www.legalese.io/templates/jfdi.asia/founderagreement.xml",        title:"JFDI Accelerate Founder Agreement",
+  { name:"corpsec_allotment_xml", title:"Instruction to Corpsec for Allotment",
+	url:"http://www.legalese.io/templates/jfdi.asia/corpsec-allotment.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+  },
+  { name:"dr_allotment_xml", title:"Directors' Resolution for Allotment",
+	url:"http://www.legalese.io/templates/jfdi.asia/dr-allotment.xml",
+	parties:{to:[],cc:[]},
+  },
+  { name:"jfdi_2014_rcps_xml", title:"JFDI.2014 Subscription Agreement",
+	url:"jfdi_2014_rcps_xml.html",
+	parties:{to:[],cc:[]},
+  },
+  { name:"kissing_xml", title:"KISS (Singapore)",
+	url:"http://www.legalese.io/templates/jfdi.asia/kissing.xml",
+	parties:{to:[],cc:[]},
+  },
+  { name:"strikeoff_shareholders_xml", title:"Striking Off for Shareholders",
+	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_shareholders.xml",
+	parties:{to:[],cc:[]},
+	explode:"shareholder",
+  },
+  { name:"test_templatespec_xml", title:"Test templateSpec",
+	url:"http://www.legalese.io/templates/jfdi.asia/test-templatespec.xml",
+	parties:{to:[],cc:[]},
+  },
+  { name:"employment_agreement_xml", title:"Employment Agreement",
+	url:"http://www.legalese.io/templates/jfdi.asia/employment-agreement.xml",
+	parties:{to:[],cc:[]},
+  },
+  { name:"termsheet_xml", title:"Seed Term Sheet",
+	url:"http://www.legalese.io/templates/jfdi.asia/termsheet.xml",
+	parties:{to:[],cc:[]},
+  },
+  { name:"preemptive_notice_xml", title:"Pre-Emptive Notice to Shareholders",
+	url:"http://www.legalese.io/templates/jfdi.asia/preemptive_notice.xml",
+	parties:{to:[],cc:[]},
+  },
+  { name:"preemptive_waiver_xml", title:"Pre-Emptive Notice for Waiver",
+	url:"http://www.legalese.io/templates/jfdi.asia/preemptive_waiver.xml",
+	parties:{to:[],cc:[]},
+  },
+  { name:"loan_waiver_xml", title:"Waiver of Convertible Loan",
+	url:"http://www.legalese.io/templates/jfdi.asia/convertible_loan_waiver.xml",
+	parties:{to:[],cc:[]},
+  },
+  { name:"simplified_note_xml", title:"Simplified Convertible Loan Agreement",
+	url:"http://www.legalese.io/templates/jfdi.asia/simplified_note.xml",
+	parties:{to:[],cc:[]},
+  },
+  { name:"founder_agreement_xml", title:"JFDI Accelerate Founder Agreement",
+	url:"http://www.legalese.io/templates/jfdi.asia/founderagreement.xml",
 	parties:{to:["founder","investor"], cc:["corporate_secretary"]},
   },
-  { name:"dora_xml",			  url:"http://www.legalese.io/templates/jfdi.asia/dora-signatures.xml",         title:"DORA" },
-
-  { name:"inc_signature",		  url:"http://www.legalese.io/templates/jfdi.asia/inc_signature.xml",           title:"signature component" },
-  { name:"inc_party",		 	  url:"http://www.legalese.io/templates/jfdi.asia/inc_party.xml",               title:"party component" },
+  { name:"dora_xml", title:"DORA",
+	url:"http://www.legalese.io/templates/jfdi.asia/dora-signatures.xml",
+	parties:{to:[],cc:[]},
+  },
+  { name:"inc_signature", title:"signature component",
+	url:"http://www.legalese.io/templates/jfdi.asia/inc_signature.xml",
+	parties:{to:[],cc:[]},
+  },
+  { name:"inc_party", title:"party component",
+	url:"http://www.legalese.io/templates/jfdi.asia/inc_party.xml",
+	parties:{to:[],cc:[]},
+  },
 
   ];
 return availables;
@@ -1023,6 +1073,15 @@ function desiredTemplates_(config) {
   }
   Logger.log("desiredTemplates_: returning %s", toreturn);
   return toreturn;
+}
+
+function suitableTemplates_(config) {
+  var availables = availableTemplates_();
+  Logger.log("available templates are %s", availables);
+  var desireds = desiredTemplates_(config);
+  var suitables = intersect_(availables, desireds);
+  // this is slightly buggy. kissing, kissing1, kissing2, didn't work
+  return suitables;
 }
 
 // ---------------------------------------------------------------------------------------------------------------- intersect_
@@ -1114,7 +1173,7 @@ function templateParties(sheet, readRows, sourceTemplate) {
 
 		  Logger.log("templateParties:     party %s hasn't been mailed yet. it will have es_num %s", entity.name, es_num);
 		  entity._to_email = email_to_cc_(entity.email)[0]; // and the subsequent addresses are in an array [1]
-		  if (readRows.config.email_override) { entity._to_email = readRows.config.email_override.values[0]; }
+		  if (readRows.config.email_override) { entity._to_email = plusNum(es_num, readRows.config.email_override.values[0]); }
 		  entity._unmailed = true;
 		  entity._es_num = es_num++;
 		}
@@ -1123,6 +1182,15 @@ function templateParties(sheet, readRows, sourceTemplate) {
   }
   return parties;
 }
+
+function plusNum (num, email) {
+  // turn (0, mengwong@jfdi.asia) to mengwong+0@jfdi.asia
+  var localpart, domain;
+  localpart = email.split("@")[0];
+  domain    = email.split("@")[1];
+  return localpart + "+" + num.toString() + "@" + domain;
+}
+
 
 // ---------------------------------------------------------------------------------------------------------------- fillTemplates
 function fillTemplates(sheet) {
@@ -1159,20 +1227,14 @@ function fillTemplates(sheet) {
   cell.setValue("=HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"+folder.getId()+"\",\""+folder.getName()+"\")");
   Logger.log("I have set the value to =HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"+folder.getId()+"\",\""+folder.getName()+"\")");
 
-  var availables = availableTemplates_();
-  Logger.log("available templates are %s", availables);
-  var desireds = desiredTemplates_(config);
-  var suitables = intersect_(availables, desireds);
-  // this is slightly buggy. kissing, kissing1, kissing2, didn't work
-
-  Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
-
   templatedata.xml_declaration = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
   templatedata.whitespace_handling_use_tags = '<?whitespace-handling use-tags?>';
   templatedata.whitespace_handling_use_characters = '<?whitespace-handling use-characters?>';
 
   templatedata._timezone = sheet.getParent().getSpreadsheetTimeZone();
 
+  var suitables = suitableTemplates_(config);
+  Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
   for (var i in suitables) {
     var sourceTemplate = suitables[i];
 
@@ -1195,7 +1257,7 @@ function fillTemplates(sheet) {
 	Logger.log("templatedata.company = %s", templatedata.company);
 
 	// under Configuration, say: Templates: templatename explode partytype
-	var to_explode;
+	var to_explode = null;
 	try { to_explode = config.templates.tree[sans_xml]["explode"] } catch (e) { Logger.log("ERROR: no explode partytype") }
 	if (to_explode != undefined) {
 	  Logger.log("will explode %s", to_explode);
@@ -1732,7 +1794,18 @@ function uploadAgreement(sheet) {
 
   alertIfActiveSheetChanged_(sheet);
 
-  var parties = terms.parties;
+  // TODO: be more organized about this. in the same way that we generated one or more output PDFs for each input template
+  // we now need to upload exactly that number of PDFs as transientdocuments, then we need to uploadAgreement once for each PDF.
+
+  var suitables = suitableTemplates_(config);
+  Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
+  for (var si in suitables) {
+    var sourceTemplate = suitables[si];
+
+	// THIS IS A HUGE BUG RIGHT NOW because we're deliberately ignoring the collation between transientDocumentIds and the suitabletemplates.
+	// TODO: THINK THIS ALL THROUGH.
+
+  var parties = templateParties(sheet, readRows, sourceTemplate);
   var transientDocumentIds = uploadPDFsToEchoSign_(sheet);
   var emailInfo = [];
   var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"}); // TODO: get rid of allparties. compute cc differently
@@ -1761,13 +1834,18 @@ function uploadAgreement(sheet) {
 	// if multi-address, then first address is To: and subsequent addresses are CC
 	var to_cc = email_to_cc_(party.email);
 	if (to_cc[0] != undefined) {
-	  emailInfo.push({email:to_cc[0], role:"SIGNER"});
+	  var _to_email = to_cc[0];
+	  if (readRows.config.email_override) { entity._to_email = plusNum(p, readRows.config.email_override.values[0]); }
+
+	  emailInfo.push({email:_to_email, role:"SIGNER"});
 	  commit_updates_to.push(getPartyCells_(sheet, terms, party));
 	}
 	if (to_cc[1].length > 0) {
 	  cc2_list = cc2_list.concat(to_cc[1]);
 	}
   }
+  if (readRows.config.email_override) { cc2_list = [readRows.config.email_override.values[0]]; }
+
   Logger.log("we shall be emailing to %s", emailInfo);
 
   if (emailInfo.length == 0) {
@@ -1815,7 +1893,7 @@ function uploadAgreement(sheet) {
 	}
 	Logger.log("uploadAgreement: well, that seems to have worked!");
   }
-
+}
   Logger.log("uploadAgreement: that's all, folks!");
   return "sent";
 }
@@ -2032,5 +2110,3 @@ function setDataValidation(sheet, dest, source) {
  }
  destinationRange.setDataValidations(rules);
 }
-
-
