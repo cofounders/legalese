@@ -7,13 +7,13 @@
 <?= data.parties.accountant[0].address ?>
 </Firstpage_Sidebar>
 <Story_Main>
-<resolution_title>Letter to Accountant</resolution_title>
+<resolution_title>Letter defining Accountant Services</resolution_title>
 <basic_para>
 <?= data.company.name ?>
 
 <?= data.company.address ?>
-</basic_para>
 
+</basic_para>
 <para_1>Dear Sirs,</para_1>
 <para_1>This letter is to confirm our understanding of the terms of our engagement and the nature and limitations of the services we will provide.
 On the basis of information you provide, we will use accounting expertise to collect, classify, and summarise the financial information which the Company provides, into a financial report.
