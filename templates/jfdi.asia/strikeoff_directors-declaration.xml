@@ -31,11 +31,11 @@
 <?!= include("inc_party", data, data.company) ?> (the "Company").
 The Company has not commenced business since the date of incorporation on <?= data.incorporation_date ?>.
 The company officers have no outstanding summonses or composition fines issued by <?= data.parties.state_regulator[0].name ?> ("<?= data.parties.state_regulator[0].short_name ?>") or Warrant of Arrest issued by the Court.
-The company has no outstanding penalties or offers of composition fine owing to <?= data.parties.state_regulator[0].short_name ?>.
-The company has no outstanding tax liabilities owing to IRAS and is not indebted to any other government department.
-The company has no outstanding charges in the Register of Charges.
-The company is not involved in or threatened with legal proceedings within or outside Singapore.
-We have sought the written consent of all the shareholders to strike the name of the company off the register, and received no objection from any shareholder.
+The Company has no outstanding penalties or offers of composition fine owing to <?= data.parties.state_regulator[0].short_name ?>.
+The Company has no outstanding tax liabilities owing to IRAS and is not indebted to any other government department.
+The Company has no outstanding charges in the Register of Charges.
+The Company is not involved in or threatened with legal proceedings within or outside Singapore.
+We have sought the written consent of all the shareholders to strike the name of the Company off the register, and received no objection from any shareholder.
 The Company has no assets and no liabilities.
 The bank account of the Company has been closed.
 The Company has no contingent assets and liabilities (i.e. assets/liabilities that may arise in the future.)
