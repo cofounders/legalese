@@ -48,11 +48,11 @@
 <Cell aid:ccols="1" aid:ccolwidth="110" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell_c>at beginning of period</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_c>at end of period</cell_c></Cell>
-<? for (var dsi = 0; dsi < directors_and_shareholders.length; dsi++) { with (directors_and_shareholders[dsi] ) { ?>
-<Cell aid:ccols="1" aid:ccolwidth="110" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c><?= name ?></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell_c><?= shares_at_start ?></cell_c></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_c><?= shares_at_end ?></cell_c></Cell>
-<? } } ? >
+<? for (var dsi = 0; dsi < directors_and_shareholders.length; dsi++) { ?>
+<Cell aid:ccols="1" aid:ccolwidth="110" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c><?= directors_and_shareholders[dsi].name ?></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell_c><?= directors_and_shareholders[dsi].shares_at_start ?></cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_c><?= directors_and_shareholders[dsi].shares_at_end ?></cell_c></Cell>
+<? } ? >
 </Table></table_enclosing_para>
 </Story_Main>
 </Root>
