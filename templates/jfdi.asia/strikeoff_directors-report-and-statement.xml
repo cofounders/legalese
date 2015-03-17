@@ -18,7 +18,7 @@
 <chapter_header override="startParagraph=StartParagraph.ANYWHERE">Directors' Report and Statement by Directors -- <?= data.shutdown_financial_period_end_date ?></chapter_header>
 <para_1><span_smallcaps>Resolved:---</span_smallcaps></para_1>
 <numbered_1_para>That the Directors' Report and Statement by Directors in respect of the financial statements for the financial period ended <?= data.shutdown_financial_period_end_date ?> be and are approved and that authority be and is hereby given for the issuance of the said financial statements of the Company.
-That <?= plural(data.parties.director, " ", "Messrs ") ?><?= commaAnd(data.parties.director, "name") ?> be and are hereby authorised to sign the aforesaid Directors' Report and Statement by Directors on behalf of the Board.</numbered_1_para>
+That <?= plural(data.parties.director, " ", "Messrs ") ?><?= commaAnd(data.parties.director, "name") ?> be and <?= plural_verb(data.parties.director, "is") ?> hereby authorised to sign the aforesaid Directors' Report and Statement by Directors on behalf of the Board.</numbered_1_para>
 <para_1><span_smallcaps>Dated this:</span_smallcaps> <?= data.shutdown_process_begin_date ?></para_1>
 <? data.signature_comment = "Director" ?>
 <? for (var i=0;i<data.parties.director.length;i++) { ?>
