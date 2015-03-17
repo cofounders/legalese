@@ -15,12 +15,14 @@
 <resolution_title>Declaration</resolution_title>
 
 <chapter_header override="startParagraph=StartParagraph.ANYWHERE">Striking Off <?= data.company.name ?></chapter_header>
-<para_1><?= plural(data.parties.director, "I", "We") ?></para_1>
+<? if (data.parties.director.length == 1) { ?>
+<para_1>I, <?!= include("inc_party", data, data.parties.director[0]) ?> (the "Director") do solemnly and sincerely declare as follows:</para_1>
+<? } else { ?>
+<para_1>We,</para_1>
 <? for (var i in data.parties.director) { ?>
 <parties><?!= include("inc_party", data, data.parties.director[i]) ?></parties>
 <? } ?>
-<para_1><?   if (data.parties.investor.length > 1)           { ?>(the "Directors")
-<?   } else                                          { ?>(the "Director")<?  } ?></para_1>
+<para_1>(the "Directors")</para_1>
 <para_1><span_smallcaps>do solemnly and sincerely</span_smallcaps> declare as follows:</para_1>
 <numbered_1_para><?
  if (data.parties.director.length == 1) { ?>I am the sole local director of <? }
