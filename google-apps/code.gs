@@ -990,7 +990,31 @@ function availableTemplates_() {
 // this is unwise, because the XML template runs with the same privileges as this script,
 // and if you randomly execute templates from all over the Internet, sooner or later you will regret it.
 
-  { name:"strikeoff_directors_xml", title:"Striking Off for Directors",
+  { name:"strikeoff_accountant_retention_xml", title:"Retainer of Accountant for Financial Statements",
+	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_accountant-retention.xml",
+	parties:{to:["director"], cc:["accountant"]},
+  },
+  { name:"strikeoff_financials_letter_xml", title:"Letter to Accountant regarding Financial Statements",
+	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_financials-letter.xml",
+	parties:{to:["director"], cc:["accountant"]},
+  },
+  { name:"strikeoff_financials_letter_xml", title:"Letter to Accountant regarding Financial Statements",
+	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_financials-letter.xml",
+	parties:{to:["director"], cc:["accountant"]},
+  },
+  { name:"strikeoff_indemnity_xml", title:"Directors' Indemnity regarding Accounts",
+	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_indemnity.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+  },
+  { name:"strikeoff_report_xml", title:"DR for Report and Statement",
+	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_directors-report-and-statement.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+  },
+  { name:"strikeoff_application_xml", title:"Instruction to Corporate Secretary",
+	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_application.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+  },
+  { name:"strikeoff_acra_declaration_xml", title:"Directors' Declaration to ACRA",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_directors-declaration.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
   },
@@ -1991,11 +2015,12 @@ function plural_verb(num, singular, plural, locale) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------- commaAnd
-function commaAnd(mylist) {
-  if      (mylist.length == 0) { return "" }
-  else if (mylist.length == 1) { return mylist[0] }
-  else if (mylist.length == 2) { return mylist.join(" and ") }
-  else                         { return [mylist.splice(0,mylist.length-1).join(", "), mylist[mylist.length-1]].join(", and ") }
+function commaAnd(mylist, propertyName) {
+  var actualList = mylist.map(function(e){return (propertyName ? e[propertyName] : e)});
+  if      (actualList.length == 0) { return "" }
+  else if (actualList.length == 1) { return actualList[0] }
+  else if (actualList.length == 2) { return actualList.join(" and ") }
+  else                             { return [actualList.splice(0,actualList.length-1).join(", "), actualList[actualList.length-1]].join(", and ") }
 }
 
 // ---------------------------------------------------------------------------------------------------------------- mylogger
