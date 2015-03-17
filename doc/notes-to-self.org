@@ -197,4 +197,36 @@ In an INCLUDEd sheet, all relations are relative to the Principal Party defined 
 ** Entities are mapped to Parties for the purpose of a specific agreement by a Template DTD.
 ** Docsets are collections of Templates
 ** the readRows object contains all the known Entities and Relations.
+** Conventions In Practice
+*** JFDI Legalese Master Index                                                       :spreadsheet:
+**** Startups                                                                             :sheet:
+***** batch                                                                                :col:
+***** jfdi portfolio                                                                       :col:
+- jfdi.2012
+- jfdi.2013
+- jfdi.2014
+***** name                                                                                 :col:
+hyperlink to the company spreadsheet for each startup
+***** status                                                                               :col:
+***** financials                                                                           :col:
+**** JFDI Companies                                                                       :sheet:
+***** name                                                                                 :col:
+=HYPERLINK to the company spreadsheet for each startup
+- jfdi.2012
+- jfdi.2013
+- jfdi.2014
+*** Company                                                                  :company:spreadsheet:
+**** Entities                                                                             :sheet:
+**** Events                                                                               :sheet:
+**** Constitutional                                                                :docset:sheet:
+***** memorandum of association                                                   :template:row:
+***** articles of association                                                     :template:row:
+***** shareholder agreement                                                       :template:row:
+***** class f agreement                                                           :template:row:
 
+**** Financing Round - JFDI                                                        :docset:sheet:
+***** founder agreement                                                           :template:row:
+***** convertible loan agreement                                                  :template:row:
+***** DORA                                                                        :template:row:
+***** directors' resolutions                                                      :template:row:
+***** instructions to corporate secretary                                         :template:row:
