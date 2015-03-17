@@ -19,10 +19,11 @@
 <para_1>I, <?!= include("inc_party", data, data.parties.director[0]) ?> (the "Director") do solemnly and sincerely declare as follows:</para_1>
 <? } else { ?>
 <para_1>We,</para_1>
-<? for (var i in data.parties.director) { ?>
+<?    for (var i in data.parties.director) { ?>
 <parties><?!= include("inc_party", data, data.parties.director[i]) ?></parties>
-<? } ?>
+<?    } ?>
 <para_1>(the "Directors")</para_1>
+<?    } ?>
 <para_1><span_smallcaps>do solemnly and sincerely</span_smallcaps> declare as follows:</para_1>
 <numbered_1_para><?
  if (data.parties.director.length == 1) { ?>I am the sole local director of <? }
