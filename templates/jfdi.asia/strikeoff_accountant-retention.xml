@@ -4,7 +4,6 @@
 <?= data.parties.accountant[0].name ?>
 
 <?= data.parties.accountant[0].idtype ?> <span_ucnum><?= data.parties.accountant[0].id ?></span_ucnum>
-
 <?= data.parties.accountant[0].address ?>
 </Firstpage_Sidebar>
 <Story_Main>
