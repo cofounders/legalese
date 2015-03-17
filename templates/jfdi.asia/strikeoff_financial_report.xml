@@ -35,10 +35,10 @@
 <? for (var i in data.parties.director) { ?>
 <bullets><?!= include("inc_party", data, data.parties.director[i]) ?></bullets>
 <? } ?>
-<a_left_sidehead>Arrangements to enable directors to acquire shares &amp; debentures</a_left_sidehead>
+<a_left_sidehead>Arrangements to Enable Directors to Acquire Shares &amp; Debentures</a_left_sidehead>
 <para_1>Neither at the end of nor at any time during the financial period was the Company a party to any arrangement whose object was to enable the directors of the Company to acquire benefits by means of the acquisition of shares or debentures of the Company or any other body corporate except for those mentioned in this report.</para_1>
 
-<a_left_sidehead>Directors' interests in shares &amp; debentures</a_left_sidehead>
+<a_left_sidehead>Directors' Interests in Shares &amp; Debentures</a_left_sidehead>
 <? var directors_and_shareholders = partiesWearingManyHats(data, data.company, ["director","shareholder"]); ?>
 <para_1>The directors holding office at the end of the financial period and their interests in the share capital of the Company and related corporations as recorded in the register of directors' shareholdings kept by the Company under Section 164 of the Companies Act (Cap. 50) were as follows:---</para_1>
 <table_enclosing_para>
@@ -54,5 +54,21 @@
 <Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_c><?= shares_at_end ?></cell_c></Cell>
 <? } } ?>
 </Table></table_enclosing_para>
+
+<a_left_sidehead>Directors' Contractual Benefits</a_left_sidehead>
+<para_1>Except as disclosed in the financial statements, since the date of incorporation, no director of the Company has received or become entitled to receive a benefit by reason of a contract made by the Company or a related corporation with the director, or with a firm of which the director is a member, or with a company in which the director has a substantial financial interest.</para_1>
+
+<a_left_sidehead>Share Options</a_left_sidehead>
+<para_1>During the financial period, no option to take up unissued shares of the Company was granted.
+At the end of the financial period, there were no shares of the Company issued by virtue of the exercise of any option to take up unissued shares.
+There are no unissued shares under option.
+
+</para_1>
+
+<? var signature_comment = "Director"; ?>
+<? for (var i = 0; i < data.parties.director.length; i++) { ?>
+<?!= include("inc_signature", data, data.parties.director[i]) ?>
+<? } ?>
+
 </Story_Main>
 </Root>
