@@ -2,6 +2,7 @@
 <letterhead><?= data.company.name ?></letterhead>
 <Firstpage_Sidebar>
 <?= data.company.name ?>
+
 (the "Company")
 <?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum>
 <?= data.company.address ?>
