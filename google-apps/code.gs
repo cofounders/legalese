@@ -718,6 +718,16 @@ function readRows_(sheet, include_mode, toreturn) {
   toreturn.principal.roles = toreturn.principal.roles || {};
   for (var k in roles) {
 	toreturn.principal.roles[k] = roles[k];
+	for (var pi in roles[k]) {
+	  var entity = entitiesByName[roles[k][pi]];
+	  entity._role = entity._role || {};
+	  entity._role[toreturn.principal.name] = entity._role[toreturn.principal.name] || [];
+	  entity._role[toreturn.principal.name].push(k);
+	  Logger.log("readRows: VASSAL: entity %s knows that it is a %s to %s",
+				 entity.name,
+				 k,
+				 toreturn.principal.name);
+	}
   }
   Logger.log("readRows: entitiesByName = %s", entitiesByName);
   Logger.log("readRows: config = %s\n", JSON.stringify(config,null,"  "));
@@ -2148,3 +2158,25 @@ function setDataValidation(sheet, dest, source) {
  }
  destinationRange.setDataValidations(rules);
 }
+
+
+function partiesWearingManyHats(data, principal, hats) {
+  var candidates = {};
+  for (var hi in hats) {
+	var role = hats[hi];
+	for (var ei in principal.roles[role]) {
+	  var entity = principal.roles[role][ei];
+	  Logger.log("partiesWearingManyHats: entity %s wears the %s hat",
+				 entity, role);
+	  candidates[entity] = candidates[entity] || 0;
+	  candidates[entity]++;
+	}
+  }
+  var toreturn = [];
+  for (var ci in candidates) {
+	if (candidates[ci] == hats.length) { toreturn.push(data._entitiesByName[ci]) }
+  }
+  Logger.log("returning %s", toreturn);
+  return toreturn;
+}
+
