@@ -1279,7 +1279,7 @@ function fillTemplates(sheet) {
 	readme.getBody().appendParagraph(sourceTemplate.name).setHeading(DocumentApp.ParagraphHeading.HEADING2);
 
     var url = sourceTemplate.url;
-    var newTemplate = obtainTemplate_(url);
+    var newTemplate = obtainTemplate_(url, sourceTemplate.nocache);
 	Logger.log("here is where we decide to dump template.");
 	if (config.dump_template && config.dump_template.values[0] == true) {
 	  Logger.log("TEMPLATE: " + newTemplate.getCode());
