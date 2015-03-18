@@ -12,7 +12,18 @@
 <chapter_header override="startParagraph=StartParagraph.ANYWHERE">Allotment of <?= data.security_type_long ?></chapter_header>
 <para_1><span_smallcaps>Resolved:&#8212;</span_smallcaps></para_1>
 <numbered_1_para>That pursuant to the authority given to the Directors at the Extraordinary General Meeting of <?= data.company.name ?> (the "Company") held on <?= data.egm_date ?></numbered_1_para>
-<para_2>and pursuant to the Subscription Agreement signed among the Company, <?=
+<? data._subscription_agreement_dates = data.parties.new_investor.map(function(p){Logger.log("trying to convert date of subscription agreement " + p.date_of_subscription_agreement);
+  return Utilities.formatDate(new Date(p.date_of_subscription_agreement),
+                              data._timezone,
+                             "d MMMM YYYY")});
+   if (data._subscription_agreement_dates.filter(function(d){return d===data._subscription_agreement_dates[0]}).length
+                                                                          == data._subscription_agreement_dates.length) { // all the same
+      data._subscription_agreement_dates = data._subscription_agreement_dates.splice(0,1);
+   }
+   data._subscription_agreement_dates_array = data._subscription_agreement_dates;
+   data._subscription_agreement_dates = commaAnd(data._subscription_agreement_dates);
+ ?>
+<para_2>and pursuant to the Subscription <?= plural(data._subscription_agreement_dates_array, "Agreement") ?> dated <?= data._subscription_agreement_dates ?> signed among the Company, <?=
 commaAnd([data.parties.promoter[0].name].concat(
           data.parties.new_investor.map(function(p){return p.name}))) ?>,</para_2>
 <para_2>the Company do hereby approve the allotment of <?= data._total_new_shares ?> <?= data.security_type_long ?> (<?= data.security_type_short ?>) in the share capital of the Company at <?= data.price_per_share ?> each for cash consideration as follows:</para_2>
