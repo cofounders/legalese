@@ -31,7 +31,8 @@
 <?!= include("inc_party", data, data.company) ?> (the "Company").
 The Company has not commenced business since the date of incorporation on <?= data.incorporation_date ?>.
 The bank account of the Company has been closed.
-<? if (data.last_agm_date == undefined || ! data.last_agm_date.length) { ?>The Company has not held an AGM, or the first AGM to be held within 18 months from the date of incorporation is not due.<? } ?>
+<? if (data.last_agm_date == undefined || ! data.last_agm_date.length) { ?>The Company has not held an AGM, or the first AGM to be held within 18 months from the date of incorporation is not due.
+<? } ?>
 The company officers have no outstanding summonses or composition fines issued by <?= data.parties.state_regulator[0].name ?> ("<?= data.parties.state_regulator[0].short_name ?>") or Warrant of Arrest issued by the Court.
 The Company has no outstanding penalties or offers of composition fine owing to <?= data.parties.state_regulator[0].short_name ?>.
 The Company has no outstanding tax liabilities owing to IRAS and is not indebted to any other government department.
