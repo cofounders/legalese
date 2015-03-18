@@ -471,7 +471,6 @@ function onFormSubmit(e) {
  *
  * the ENTITIES go into entitiesByName
  * the TERMS go into data.* directly.
- * if a availabletemplate is marked as binary then we iterate through the investors and set data.investor.* each time
  */
 function readRows_(sheet, include_mode, toreturn) {
   Logger.log("readRows_: will use sheet " + sheet.getName());
