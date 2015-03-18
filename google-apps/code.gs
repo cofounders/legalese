@@ -1302,6 +1302,7 @@ function fillTemplates(sheet) {
 	Logger.log("templatedata.parties = %s", JSON.stringify(templatedata.parties));
 	templatedata.company = templatedata.parties.company[0];
 	Logger.log("templatedata.company = %s", templatedata.company);
+	templatedata._entitiesByName = readRows.entitiesByName;
 
 	// under Configuration, say: Templates: templatename explode partytype
 	var to_explode = null;

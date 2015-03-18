@@ -196,7 +196,78 @@ In an INCLUDEd sheet, all relations are relative to the Principal Party defined 
 ** Parties are only meaningful in the context of a specific agreement.
 ** Entities are mapped to Parties for the purpose of a specific agreement by a Template DTD.
 ** Docsets are collections of Templates
-** the readRows object contains all the known Entities and Relations.
+** readRows object contains the parsed representation of the spreadsheet
+
+*** readRows.templatedata
+
+*** readRows.config
+
+*** readRows.entitiesByName
+
+** How INCLUDE works, in detail
+
+*** Suppose we have the following givens:
+
+**** a sheet named *Twitshit's Founder Docset*
+**** /Twitshit's Founder Docset/ INCLUDEs a sheet in the same spreadsheet named *Twitshit Entities*
+**** /Twitshit Entities/ INCLUDEs a sheet from another spreadsheet named *JFDI.2014 Entities*
+**** /JFDI.2014 Entities/ INCLUDEs a sheet from another spreadsheet named *JFDI.Asia Entities*
+**** /JFDI.Asia Entities/'s ENTITIES section defines Corporate Secretary: / Prima Management Services
+**** /JFDI.Asia Entities/'s ROLES section defines Accountant / Prima Management Services
+
+*** What is possible?
+
+**** /Twitshit's Founder Docset/ can freely refer to Prima Management Services
+because it is defined somewhere in the include path.
+
+*** What are the relationships?
+**** /Twitshit's Founder Docset/'s readRows_() returns a readRows object
+The readRows object is useful for two purposes:
+***** for constructing a docset with one or more template PDFs
+***** for describing a bunch of entities that some other docset needs to know about
+**** a readRows object has the following properties:
+***** terms
+***** config
+***** entitiesByName: a dictionary of entityNames to Entities
+***** principal: usually a Company Entity, that relates to other entities in the readRows object
+
+**** an entityName is a string drawn from the "name" field of the Entity table.
+they must be unique across the entire include path
+**** an Entity object has the following properties:
+***** roles: a dictionary of roleNames to a list of entityNames
+for example, someCompany.roles.shareholder = ["Alice", "Bob"]
+
+you can think of this as:
+- someCompany has-a shareholder Alice
+- someCompany has-a shareholder Bob
+
+***** _role: the inverse relationship
+for example, alice._role.shareholder = ["someCompany"]
+
+you can think of this as:
+- alice is-a shareholder in someCompany
+
+**** how does one INCLUDEd entity relate to another INCLUDEd entity?
+from the example above, the desired data structure is:
+***** /Twitshit's Founder Docset/ returns a readRows object
+***** readRows.principal = Twitshit
+***** Twitshit.roles.investor = ["JFDI.2014"]
+***** readRows.entitiesByName = {"JFDI.2014": jfdi2014, ...}
+***** jfdi2014 is a Company Entity whose sheet INCLUDEs JFDI.Asia Entities
+***** jfdi2014.roles.investor = ["JFDI.Asia", ...]
+***** jfdiAsia is a Company Entity
+***** jfdiAsia.roles.investor = ["Hugh Mason", "Meng Weng Wong"]
+***** readRows.terms.parties = { investor: [ jfdi2014, ... ], ... }
+**** observations
+***** note that while an INCLUDE returns a readRows object, the terms and config of that readRows object are discarded
+***** the entitiesByName is not discarded
+in fact there is only one entitiesByName dictionary which is shared throughout the include chain
+***** the principal is discarded
+because it is in entitiesByName, it becomes available to the includer when the includer starts defining Roles.
+
+
+
+
 ** Conventions In Practice
 *** JFDI Legalese Master Index                                                       :spreadsheet:
 **** Startups                                                                             :sheet:
@@ -230,3 +301,38 @@ hyperlink to the company spreadsheet for each startup
 ***** DORA                                                                        :template:row:
 ***** directors' resolutions                                                      :template:row:
 ***** instructions to corporate secretary                                         :template:row:
+*** Sequence of Includes
+
+- a Startup's Entities Sheet describes the startup itself and INCLUDEs its investing entity JFDI.201X
+- JFDI.201X's Entities Sheet describes the fund itself and INCLUDEs its ordinary shareholder JFDI.Asia
+- JFDI.Asia's Entities Sheet describes JFDI.Asia itself and also defines corpsec, acra, etc.
+
+if a Startup has multiple subsidiaries then we extend the chain in the opposite direction so that the subsidiary INCLUDEs the startup.
+*** mapping email address to a PDF
+**** problem 1: how many emails should a signer receive?
+a given docset may contain multiple templates. when we "send to echosign" we wish to submit all the templates in that docset to EchoSign for signature, at once.
+***** alternatives
+****** echosign's preference: concatenate the PDFs into one
+all the PDFs get joined into a single document. a recipient receives one email containing the concatenate.
+****** the naive approach: keep each PDF separate.
+send multiple emails -- one for each output PDF.
+***** decision
+for now, we adopt the naive approach, at the risk of sending too many things out via echosign.
+
+we may want to change this decision later if the human factors department reports that end-users get confused by the deluge and end up failing to sign all the agreements.
+
+**** problem 2: how do we keep track of the esnums?
+echosign analyzes the name of the signaturebox to map email address to box.
+
+the legalese system generates the PDFs in one step, and submits the PDFs in a separate step.
+
+those two steps need to be synchronized so the recipients don't end up putting their signature in the wrong box.
+
+***** complication 1: our architecture SHOULD work for both [[*alternatives][alternatives]] described in problem 1 above.
+
+each agreement we upload to echosign contains one or more individual PDFs.
+
+***** complication 2: handling explosions.
+
+there are two cases. some templates are all-in-one, and some are one-per-partype.
+
