@@ -217,7 +217,8 @@ function setupForm_(sheet) {
   var sheet = sheet || SpreadsheetApp.getActiveSheet();
 
   var ss = sheet.getParent();
-  var readRows = readRows_(sheet);
+  var entitiesByName = {};
+  var readRows = readRows_(sheet, entitiesByName);
   var data   = readRows.terms;
   var config = readRows.config;
 
@@ -414,7 +415,8 @@ function onFormSubmit(e) {
   }
 
   var sheet = getSheetById_(SpreadsheetApp.getActiveSpreadsheet(), sheetId);
-  var readRows = readRows_(sheet);
+  var entitiesByName = {}
+  var readRows = readRows_(sheet, entitiesByName);
   var data   = readRows.terms;
   var config = readRows.config;
 
@@ -472,26 +474,24 @@ function onFormSubmit(e) {
  * the ENTITIES go into entitiesByName
  * the TERMS go into data.* directly.
  */
-function readRows_(sheet, include_mode, toreturn) {
+function readRows_(sheet, entitiesByName) {
   Logger.log("readRows_: will use sheet " + sheet.getName());
   var rows = sheet.getDataRange();
   var numRows  = rows.getNumRows();
   var values   = rows.getValues();
   var formulas = rows.getFormulas();
 
-  if (toreturn == undefined) {
-	toreturn =   { terms            : {},
-				   config           : {},
-				   entitiesByName   : {},
-				   _origentityfields: [],
-				   _entityfields    : [],
-				   _last_entity_row : null,
-				 };
-  }
+  var toreturn =   { terms            : {},
+					 config           : {},
+					 entitiesByName   : entitiesByName,
+					 _origentityfields: [],
+					 _entityfields    : [],
+					 _last_entity_row : null,
+					 // principal gets filled in later.
+				   };
 
   var terms = toreturn.terms;
   var config = toreturn.config;
-  var entitiesByName = toreturn.entitiesByName;
   var origentityfields = toreturn._origentityfields; // used by the form
   var entityfields = toreturn._entityfields;
   var principal, roles = {};
@@ -519,12 +519,12 @@ function readRows_(sheet, include_mode, toreturn) {
 			 row[0] == "TERMS") { section="TERMS"; continue; }
     else if (row[0] == "IGNORE") { section = row[0]; continue; }
     else if (row[0] == "INCLUDE") {
-	  // the typical startup spreadsheet should import JFDI's base ENTITIES table which knows about JFDI.2014, JFDI.Asia, etc.
+	  // the typical startup agreement sheet INCLUDEs its Entities sheet which INCLUDEs JFDI.2014's Entities which INCLUDEs JFDI.Asia's Entities
 	  var include_sheet;
 	  var formula = formulas[i][1];
 	  if (formula) {
 		// =HYPERLINK("https://docs.google.com/a/jfdi.asia/spreadsheets/d/1Ix5OYS7EpmEIqA93S4_JWxV1OO82tRM0MLNj9C8IwHU/edit#gid=1249418813","Entities JFDI.2014")
-		var res = formula.match(/=HYPERLINK\(".*\/([^/]+)\/edit#gid=(\d+)/);
+		var res = formula.match(/=HYPERLINK\(".*\/([^\/]+)\/edit#gid=(\d+)/); // JS doesn't need us to backslash the / in [] but it helps emacs js-mode
 		if (res) {
 		  include_sheet = getSheetById_(SpreadsheetApp.openById(res[1]), res[2]);
 		}
@@ -532,11 +532,16 @@ function readRows_(sheet, include_mode, toreturn) {
 	  else {
 		include_sheet = sheet.getParent().getSheetByName(row[1]);
 	  }
+	  
+	  Logger.log("readRows(%s): encountered INCLUDE %s", sheet.getSheetName(), row[1]);
+	  var includedReadRows = readRows_(include_sheet, entitiesByName);
+	  Logger.log("readRows(%s): back from INCLUDE %s; toreturn.principal = %s",
+				 sheet.getSheetName(), row[1], toreturn.principal ? toreturn.principal.name : undefined);
+	  // hopefully we've learned about a bunch of new Entities directly into the entitiesByName shared dict.
+	  // we throw away the returned object because we don't really care about the included sheet's terms or config.
 
-	  Logger.log("readRows: encountered INCLUDE %s", row[1]);
-	  readRows_(include_sheet, true, toreturn);
-	  Logger.log("readRows: back from INCLUDE %s; toreturn.principal = %s", row[1], toreturn.principal ? toreturn.principal.name : undefined);
-	  // reads into toreturn directly
+	  if (principal == undefined) { principal = includedReadRows.principal }
+
 	  continue;
 	}
     else if (row[0] == "PARTYFORM_ORDER") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||!row[ki]){continue}
@@ -584,7 +589,7 @@ function readRows_(sheet, include_mode, toreturn) {
           origentityfields[entityfieldorder[ki]].fieldname = row[ki];
 		  // Logger.log("readRows: learned origentityfields["+entityfieldorder[ki]+"].fieldname="+row[ki]);
           entityfields[ki] = asvar_(entityfields[ki]);
-		  Logger.log("readRows: recorded entityfield[%s]=%s", ki, entityfields[ki]);
+		  Logger.log("readRows(%s): recorded entityfield[%s]=%s", sheet.getSheetName(), ki, entityfields[ki]);
 		}
 	  }
 	  continue;
@@ -600,7 +605,7 @@ function readRows_(sheet, include_mode, toreturn) {
 	  var asvar = asvar_(row[0]);
       terms[           asvar] = formatify_(term_formats[i][0], row[1], sheet);
 	  terms["_orig_" + asvar] = row[1];
-	  Logger.log("readRows: TERMS: %s --> %s", row[1], terms[asvar]);
+	  Logger.log("readRows(%s): TERMS: %s --> %s", sheet.getSheetName(), row[1], terms[asvar]);
     }
 	else if (section == "ROLES") { // principal relation entity. these are all strings. we attach roles later.
 	  var relation  = asvar_(row[0]);
@@ -608,7 +613,7 @@ function readRows_(sheet, include_mode, toreturn) {
 
 	  roles[relation] = roles[relation] || [];
 	  roles[relation].push(entityname);
-      Logger.log("readRows:         ROLES: learning party role %s = %s", relation, entityname);
+      Logger.log("readRows(%s):         ROLES: learning party role %s = %s", sheet.getSheetName(), relation, entityname);
 	}
     else if (section == "ENTITIES") {
       var entity = { _origin_spreadsheet_id:sheet.getParent().getId(),
@@ -627,22 +632,23 @@ function readRows_(sheet, include_mode, toreturn) {
       var coreRelation = asvar_(row[0]);
 	  if (coreRelation == undefined || ! coreRelation.length) { continue }
 
-	  // all coreRelation relations in the ENTITIES section are defined relative to the principal, which is hardcoded as the Company
+	  // all coreRelation relations in the ENTITIES section are defined relative to the principal, which is hardcoded as the first Company to appear
 	  if (coreRelation == "company" && principal == undefined) { principal = entity }
+	  if (coreRelation.toLowerCase() == "ignore") { Logger.log("ignoring %s line %s", coreRelation, entity.name); continue }
 
   // connect up the parties based on the relations learned from the ROLES section.
   // this establishes PRINCIPAL.roles.RELATION_NAME = [ party1, party2, ..., partyN ]
   // for instance, companyParty.roles.shareholder = [ alice, bob ]
-      Logger.log("readRows: learning party entity (core relation = %s), %s", coreRelation, entity);
+      Logger.log("readRows: learning entity (core relation = %s), %s", coreRelation, entity);
 	  roles[coreRelation] = roles[coreRelation] || [];
 	  roles[coreRelation].push(entity.name);
 
-	  // this is okay if we're running inside an INCLUDE context.
-	  if (! include_mode && entity.legalese_status == undefined) { SpreadsheetApp.getUi().alert("the sheet we're working on has no legalese status! You probably want to be on a different tab."); throw new Error("never mind, i will try again"); }
-	  if (entity.legalese_status && entity.legalese_status.toLowerCase() == "ignore") { Logger.log("ignoring %s line", coreRelation); continue }
-
-	  // Define Global Parties Entity
-	  entitiesByName[entity.name] = entity;
+	  if (entitiesByName[entity.name] != undefined) {
+		Logger.log("WARNING: entity %s was previously defined somewhere in the include chain ... not clobbering.");
+	  } else {
+		// Define Global Parties Entity
+		entitiesByName[entity.name] = entity;
+	  }
     }
 	else if (section == "CONFIGURATION") {
 
@@ -705,17 +711,13 @@ function readRows_(sheet, include_mode, toreturn) {
 	}
   }
 
-  if (toreturn.principal) {
-	Logger.log("readRows: leaving principal untouched as %s (would otherwise have set it to %s)", toreturn.principal.name, principal ? principal.name : undefined);
-  } else if (principal) {
-	Logger.log("readRows: setting principal = %s", principal.name);
-	toreturn.principal = principal;
-  }
-
-
-// TODO: sort out the clobbering implicit in passing the toreturn{} by reference into multiple INCLUDEs.
+  toreturn.principal = principal;
+  Logger.log("readRows(%s): setting toreturn.principal = %s", sheet.getSheetName(), principal.name);
 
   toreturn.principal.roles = toreturn.principal.roles || {};
+
+  // set up the principal's .roles property.
+  // also configure the vassals' _role property, though nothing uses this at the moment.
   for (var k in roles) {
 	toreturn.principal.roles[k] = roles[k];
 	for (var pi in roles[k]) {
@@ -723,14 +725,15 @@ function readRows_(sheet, include_mode, toreturn) {
 	  entity._role = entity._role || {};
 	  entity._role[toreturn.principal.name] = entity._role[toreturn.principal.name] || [];
 	  entity._role[toreturn.principal.name].push(k);
-	  Logger.log("readRows: VASSAL: entity %s knows that it is a %s to %s",
+	  Logger.log("readRows(%s): VASSAL: entity %s knows that it is a %s to %s",
+				 sheet.getSheetName(),
 				 entity.name,
 				 k,
 				 toreturn.principal.name);
 	}
   }
-  Logger.log("readRows: entitiesByName = %s", entitiesByName);
-  Logger.log("readRows: config = %s\n", JSON.stringify(config,null,"  "));
+  Logger.log("readRows(%s): have contributed to entitiesByName = %s", sheet.getSheetName(), entitiesByName);
+//  Logger.log("readRows: config = %s\n", JSON.stringify(config,null,"  "));
   return toreturn;
 }
 
@@ -1249,13 +1252,19 @@ function fillTemplates(sheet) {
 	return;
   }
   sheet = sheet || SpreadsheetApp.getActiveSheet();
-  var readRows = readRows_(sheet);
+  var entitiesByName = {};
+  var readRows = readRows_(sheet, entitiesByName);
   var templatedata   = readRows.terms;
   var config         = readRows.config;
   templatedata.clauses = {};
   templatedata._config = config;
 
   if (! sheetPassedIn) { alertIfActiveSheetChanged_(sheet); }
+
+  // this is okay if we're running inside an INCLUDE context.
+  // we're going to deprecate the legalese_status method of email management.
+  // if (! include_mode && entity.legalese_status == undefined) { SpreadsheetApp.getUi().alert("the sheet we're working on has no legalese status! You probably want to be on a different tab."); throw new Error("never mind, i will try again"); }
+
 
   var uniq = uniqueKey_(sheet);
 
@@ -1352,6 +1361,7 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   // reset "globals"
   clauseroot = [];
   clausetext2num = {};
+  newTemplate.signature_comment = null;
   var filledHTML = newTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
   var xmlfile;
 
@@ -1722,7 +1732,8 @@ function fauxMegaUpload_() {
 function fauxMegaSign(sheet) {
   var sheetPassedIn = ! (sheet == undefined);
   sheet = sheet || SpreadsheetApp.getActiveSheet();
-  var readRows = readRows_(sheet);
+  var entitiesByName = {};
+  var readRows = readRows_(sheet, entitiesByName);
   var terms    = readRows.terms;
   var config   = readRows.config;
 
@@ -1836,7 +1847,8 @@ function uploadAgreement(sheet) {
   if (response == ui.Button.NO) return;
   
   var ss = sheet.getParent();
-  var readRows = readRows_(sheet);
+  var entitiesByName = {};
+  var readRows = readRows_(sheet, entitiesByName);
   var terms    = readRows.terms;
   var config   = readRows.config;
 
