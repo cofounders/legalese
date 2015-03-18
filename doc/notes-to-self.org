@@ -220,6 +220,12 @@ In an INCLUDEd sheet, all relations are relative to the Principal Party defined 
 **** /Twitshit's Founder Docset/ can freely refer to Prima Management Services
 because it is defined somewhere in the include path.
 
+**** /Twitshit's Founder Docset/ has .parties automatically populated
+
+the roles show in /Twitshit Entities/ are provided under .parties
+
+the full details for those parties are available, extracted from the include chain
+
 *** What are the relationships?
 **** /Twitshit's Founder Docset/'s readRows_() returns a readRows object
 The readRows object is useful for two purposes:
@@ -228,12 +234,11 @@ The readRows object is useful for two purposes:
 **** a readRows object has the following properties:
 ***** terms
 ***** config
-***** entitiesByName: a dictionary of entityNames to Entities
 ***** principal: usually a Company Entity, that relates to other entities in the readRows object
-
 **** an entityName is a string drawn from the "name" field of the Entity table.
 they must be unique across the entire include path
-**** an Entity object has the following properties:
+**** there is a "global" shared variable, entitiesByName: a dictionary of entityNames to Entities
+*** an Entity object has the following properties:
 ***** roles: a dictionary of roleNames to a list of entityNames
 for example, someCompany.roles.shareholder = ["Alice", "Bob"]
 
@@ -263,10 +268,11 @@ from the example above, the desired data structure is:
 ***** the entitiesByName is not discarded
 in fact there is only one entitiesByName dictionary which is shared throughout the include chain
 ***** the principal is discarded
-because it is in entitiesByName, it becomes available to the includer when the includer starts defining Roles.
-
-
-
+because it is in entitiesByName
+***** everything flattens thanks to entitiesByName, really.
+***** TODO in the future it would be nice to have an extended syntax
+for instance, i need all the investors to sign something
+if the investor is a company then i need all the directors to sign it
 
 ** Conventions In Practice
 *** JFDI Legalese Master Index                                                       :spreadsheet:
@@ -336,3 +342,63 @@ each agreement we upload to echosign contains one or more individual PDFs.
 
 there are two cases. some templates are all-in-one, and some are one-per-partype.
 
+any exploded messages will exclude themselves from the concatenation.
+
+**** draft design
+
+***** ERM
+a docset contains one or more templates.
+
+a template contains one or more PDFs.
+
+a PDF contains one or more signers. (To:)
+
+a PDF contains one or more CCs.
+
+***** the mailinfo object
+
+the mailinfo object is 1:1 with an uploaded agreement.
+
+it contains a list of To and CC addresses.
+
+Each To address is mapped to a consecutive esnum starting at 1.
+
+***** esnum serialization
+
+if we are in concatenate mode, we upload a docset to echosign, so the mailinfo object spans multiple PDFs.
+
+if we are in non-concatenate mode, we upload an individual PDF to echosign, so we create one mailinfo per PDF.
+
+***** the proposed sequence
+
+****** first, deal with all the exploding templates
+
+for each exploding template in the docset, we expand the parties specified in the SourceTemplate object
+
+there has to be a 1:1 correspondence with the parties in the signature block
+
+******* TODO maybe in future we just create a <?!= signatureblock() ?> from code.gs
+
+the controller knows exactly which parties are going to be signing, so why shouldn't it just take charge?
+
+maybe because there are different display style -- sometimes you want to give each partytype its own b_left_sidehead_nonum
+
+****** then, deal with the non-exploding templates
+
+******* if we are in concatenate mode, we will upload all the non-exploding templates together
+
+******** establish the full set of To and CC recipients for the entire PDF group
+
+dedup
+
+******** and esnum accordingly.
+
+******* if we are not in concatenate mode, we upload each PDF separately
+
+******** for each PDF, establish the set of To and CC recipients
+
+******** and esnum accordingly
+
+***** explode mode
+
+****** TODO there seems to a bug where multiple of the same party get appended to a .parties[x] array.

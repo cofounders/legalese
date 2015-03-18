@@ -1086,7 +1086,7 @@ function availableTemplates_() {
   },
   { name:"loan_waiver_xml", title:"Waiver of Convertible Loan",
 	url:"http://www.legalese.io/templates/jfdi.asia/convertible_loan_waiver.xml",
-	parties:{to:[],cc:[]},
+	parties:{to:["corporate_representative"],cc:["corporate_secretary"]},
   },
   { name:"simplified_note_xml", title:"Simplified Convertible Loan Agreement",
 	url:"http://www.legalese.io/templates/jfdi.asia/simplified_note.xml",
