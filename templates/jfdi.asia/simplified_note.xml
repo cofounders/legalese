@@ -130,9 +130,7 @@ The Investor shall have no information rights over the financials of the company
 <? for (var i = 0; i < data.parties.investor.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.investor[i]) ?>
 <? } ?>
-<b_left_sidehead_nonum>For the Company <?= data.parties.company[0].name ?></b_left_sidehead_nonum>
-<? for (var i = 0; i < data.parties.company.length; i++) { ?>
-<?!= include("inc_signature", data, data.parties.company[i]) ?>
-<? } ?>
+<b_left_sidehead_nonum>For the Company <?= data.company.name ?></b_left_sidehead_nonum>
+<?!= include("inc_signature", data, data.company) ?>
 </Story_Main>
 </Root>

@@ -75,9 +75,8 @@ We<?
 
 </para_1>
 
-<? data.signature_comment = "Director"; ?>
-<? for (var j = 0; j < data.parties.corporate_representative.length; j++) { ?>
-<?!= include("inc_signature", data, data.parties.corporate_representative[j]) ?>
+<? for (var j = 0; j < data.parties.jfdi_corporate_representative.length; j++) { ?>
+<?!= include("inc_signature", data, data.parties.jfdi_corporate_representative[j]) ?>
 <? } ?>
 
 </Story_Main>

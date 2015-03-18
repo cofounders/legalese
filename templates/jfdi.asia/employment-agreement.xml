@@ -154,10 +154,8 @@ The Cliff Period shall include the Probation Period.</numbered_2_para><? } ?>
 <? for (var i = 0; i < data.parties.employee.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.employee[i]) ?>
 <? } ?>
-<b_left_sidehead_nonum>For the Company <?= data.parties.company[0].name ?></b_left_sidehead_nonum>
-<? for (var i = 0; i < data.parties.company.length; i++) { ?>
-<?!= include("inc_signature", data, data.parties.company[i]) ?>
-<? } ?>
+<b_left_sidehead_nonum>For the Company <?= data.company.name ?></b_left_sidehead_nonum>
+<?!= include("inc_signature", data, data.company) ?>
 
 <chapter_header>Exhibit A: Disclosure of Prior Inventions</chapter_header>
 <centered><i>A list of Works which the Employee previously created and owns, and are related to some aspect of the Company Business, but which are not assigned to the Company</i></centered>

@@ -3,5 +3,6 @@
 <Story_Main>
 <chapter_header>Simple Test Document</chapter_header>
 <para_1>This Agreement is a test document.</para_1>
+<?!= include("inc_signature", data, data.company[0]) ?>
 </Story_Main>
 </Root>
