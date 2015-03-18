@@ -1118,28 +1118,29 @@ function intersect_(array1, array2) {
 // obtainTemplate
 // we can pull a generic HTML template from somewhere else,
 // or it can be one of the project's HTML files.
-function obtainTemplate_(url) {
+function obtainTemplate_(url, nocache) {
   Logger.log("obtainTemplate_(%s) called", url);
 
   // we're actually running within a single script invocation so maybe we should find a more intelligent way to cache within a single session.
   // otherwise this risks not picking up changes
 
   if (url.match(/^http/)) {
-	var cache = CacheService.getDocumentCache();
-	var cached = cache.get(url);
-	if (cached != null) {
-	  return HtmlService.createTemplate(cached);
-	}
-	else {
-	  var result = UrlFetchApp.fetch(url);
-	  var contents = result.getContentText();
-	  // the cache service can only store keys of up to 250 characters and content of up to 100k, so over that, we don't cache.
-	  if (contents.length < 100000 && url.length < 250) {
-		cache.put(url, contents, 60);
+	if (nocache != true) {
+	  var cache = CacheService.getDocumentCache();
+	  var cached = cache.get(url);
+	  if (cached != null) {
+		return HtmlService.createTemplate(cached);
 	  }
-	  Logger.log("obtained template %s, length %s bytes", url, contents.length);
-	  return HtmlService.createTemplate(contents);
 	}
+
+	var result = UrlFetchApp.fetch(url);
+	var contents = result.getContentText();
+	// the cache service can only store keys of up to 250 characters and content of up to 100k, so over that, we don't cache.
+	if (nocache != true && contents.length < 100000 && url.length < 250) {
+	  cache.put(url, contents, 60);
+	}
+	Logger.log("obtained template %s, length %s bytes", url, contents.length);
+	return HtmlService.createTemplate(contents);
   }
   else return HtmlService.createTemplateFromFile(url);
 }
