@@ -1049,28 +1049,30 @@ function availableTemplates_() {
   },
   { name:"dr_allotment_xml", title:"Directors' Resolution for Allotment",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr-allotment.xml",
-	parties:{to:[],cc:[]},
+	parties:{to:["director"],cc:["corporate_secretary"]},
   },
   { name:"jfdi_2014_rcps_xml", title:"JFDI.2014 Subscription Agreement",
 	url:"jfdi_2014_rcps_xml.html",
-	parties:{to:[],cc:[]},
+	parties:{to:["promoter", "company"],cc:["corporate_secretary"]},
+	explode:"new_investor",
   },
   { name:"kissing_xml", title:"KISS (Singapore)",
 	url:"http://www.legalese.io/templates/jfdi.asia/kissing.xml",
-	parties:{to:[],cc:[]},
+	parties:{to:["founder", "company"],cc:["corporate_secretary"]},
+	explode:"investor",
   },
   { name:"strikeoff_shareholders_xml", title:"Striking Off for Shareholders",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_shareholders.xml",
-	parties:{to:[],cc:[]},
+	parties:{to:["director[0]",],cc:[]},
 	explode:"shareholder",
   },
   { name:"test_templatespec_xml", title:"Test templateSpec",
 	url:"http://www.legalese.io/templates/jfdi.asia/test-templatespec.xml",
-	parties:{to:[],cc:[]},
+	parties:{to:["company[0]"],cc:["founder"]},
   },
   { name:"employment_agreement_xml", title:"Employment Agreement",
 	url:"http://www.legalese.io/templates/jfdi.asia/employment-agreement.xml",
-	parties:{to:[],cc:[]},
+	parties:{to:["employee","company"],cc:[]},
   },
   { name:"termsheet_xml", title:"Seed Term Sheet",
 	url:"http://www.legalese.io/templates/jfdi.asia/termsheet.xml",
@@ -1078,19 +1080,20 @@ function availableTemplates_() {
   },
   { name:"preemptive_notice_xml", title:"Pre-Emptive Notice to Shareholders",
 	url:"http://www.legalese.io/templates/jfdi.asia/preemptive_notice.xml",
-	parties:{to:[],cc:[]},
+	parties:{to:["shareholder"],cc:["company"]},
   },
   { name:"preemptive_waiver_xml", title:"Pre-Emptive Notice for Waiver",
 	url:"http://www.legalese.io/templates/jfdi.asia/preemptive_waiver.xml",
-	parties:{to:[],cc:[]},
+	parties:{to:[],cc:["corporate_secretary","company"]},
+	explode: "shareholder",
   },
   { name:"loan_waiver_xml", title:"Waiver of Convertible Loan",
 	url:"http://www.legalese.io/templates/jfdi.asia/convertible_loan_waiver.xml",
-	parties:{to:["corporate_representative"],cc:["corporate_secretary"]},
+	parties:{to:["jfdi_corporate_representative"],cc:["corporate_secretary","accountant"]},
   },
   { name:"simplified_note_xml", title:"Simplified Convertible Loan Agreement",
 	url:"http://www.legalese.io/templates/jfdi.asia/simplified_note.xml",
-	parties:{to:[],cc:[]},
+	parties:{to:["investor","company"],cc:["corporate_secretary","accountant"]},
   },
   { name:"founder_agreement_xml", title:"JFDI Accelerate Founder Agreement",
 	url:"http://www.legalese.io/templates/jfdi.asia/founderagreement.xml",
@@ -1098,15 +1101,13 @@ function availableTemplates_() {
   },
   { name:"dora_xml", title:"DORA",
 	url:"http://www.legalese.io/templates/jfdi.asia/dora-signatures.xml",
-	parties:{to:[],cc:[]},
+	parties:{to:["new_investor","shareholder"],cc:["corporate_secretary","company"]},
   },
   { name:"inc_signature", title:"signature component",
-	url:"http://www.legalese.io/templates/jfdi.asia/inc_signature.xml",
-	parties:{to:[],cc:[]},
+	url:"http://www.legalese.io/templates/jfdi.asia/inc_signature.xml"
   },
   { name:"inc_party", title:"party component",
-	url:"http://www.legalese.io/templates/jfdi.asia/inc_party.xml",
-	parties:{to:[],cc:[]},
+	url:"http://www.legalese.io/templates/jfdi.asia/inc_party.xml"
   },
 
   ];
@@ -1170,6 +1171,7 @@ function obtainTemplate_(url, nocache) {
   else return HtmlService.createTemplateFromFile(url);
 }
 
+
 function templateParties(sheet, readRows, sourceTemplate) {
   /*
    * establish the appropriate data.parties.* for a given template.
@@ -1179,53 +1181,11 @@ function templateParties(sheet, readRows, sourceTemplate) {
    * we also track the mailing status here
    */
   Logger.log("templateParties: running for %s", sourceTemplate.name);
-  var es_num = 1;
-  var parties = { _allparties:[], _unmailed:[], company:[readRows.principal] };
   // consult the Template DTD to see what roles are involved in the template
 
   Logger.log("templateParties: hardcoding parties.company = %s", parties.company);
   Logger.log("templateParties: template parties = %s", sourceTemplate.parties);
 
-  // each role shows a list of names. populate the parties array with a list of expanded entity objects.
-  for (var role in readRows.principal.roles) {
-	for (var i in readRows.principal.roles[role]) {
-	  var partyName = readRows.principal.roles[role][i];
-	  if (readRows.entitiesByName[partyName]) {
-		parties[role] = parties[role] || [];
-		parties[role].push(readRows.entitiesByName[partyName]);
-	  }
-	  else {
-		Logger.log("WARNING: the Roles section defines a party %s which is not defined in an Entities section, so omitting from the data.parties list.", partyName);
-	  }
-	}
-  }
-
-  for (var mailtype in sourceTemplate.parties) {
-	Logger.log("templateParties: mailtype %s", mailtype);
-	for (var i in sourceTemplate.parties[mailtype]) {
-	  var partytype = sourceTemplate.parties[mailtype][i];
-	  Logger.log("templateParties: discovered %s: %s", mailtype, partytype);
-	  Logger.log("templateParties:   principal is %s", readRows.principal.name);
-	  if (readRows.principal.roles[partytype] == undefined) {
-		Logger.log("templateParties:   principal does not possess a defined %s role!");
-		continue;
-	  }
-	  // not needed now, because it is present above.
-	  // parties[partytype] = readRows.principal.roles[partytype].map(function(p){return readRows.entitiesByName[p]});
-	  // or maybe we can just flesh out all the roles.
-	  Logger.log("templateParties:   parties are %s", parties[partytype].map(function(e){return e.name}).join(", "));
-	  
-	  for (var j in parties[partytype]) {
-		var entity = parties[partytype][j];
-		Logger.log("templateParties:     what to do with entity %s?", entity.name);
-		if (mailtype == "to") {
-		  parties._unmailed.push(entity);
-
-		  Logger.log("templateParties:     party %s hasn't been mailed yet. it will have es_num %s", entity.name, es_num);
-		  entity._to_email = email_to_cc_(entity.email)[0]; // and the subsequent addresses are in an array [1]
-		  if (readRows.config.email_override) { entity._to_email = plusNum(es_num, readRows.config.email_override.values[0]); }
-		  entity._unmailed = true;
-		  entity._es_num = es_num++;
 		}
 	  }
 	}
@@ -1239,6 +1199,121 @@ function plusNum (num, email) {
   localpart = email.split("@")[0];
   domain    = email.split("@")[1];
   return localpart + "+" + num.toString() + "@" + domain;
+}
+
+function uniq_( arr ) {
+  return arr.reverse().filter(function (e, i, arr) {
+    return arr.indexOf(e, i+1) === -1;
+  }).reverse();
+}
+
+// see documentation in notes-to-self.org
+function docsetEmails(sheet, readRows, concatenateMode, parties, suitables) {
+  this.sheet = sheet;
+  this.readRows = readRows;
+  this.concatenateMode = concatenateMode;
+  this.parties = parties;
+  this.suitables = suitables;
+
+  this.esNumForTemplate = { };
+
+  Logger.log("docsetEmails(%s): now I will figure out who gets which PDFs.",
+			 sheet.getSheetName());
+
+  // populate rcpts
+  this._rcpts = { exploders: { },
+				 normals: { } };
+
+  for (var i in suitables) {
+    var sourceTemplate = suitables[i];
+	var to_list = [], cc_list = [];
+	for (var mailtype in sourceTemplate.parties) {
+	  Logger.log("docsetEmails: sourceTemplate %s: expanding mailtype %s",
+				 sourceTemplate.name, mailtype);
+	  for (var i in sourceTemplate.parties[mailtype]) {
+		var partytype = sourceTemplate.parties[mailtype][i];
+		Logger.log("docsetEmails: discovered %s: %s", mailtype, partytype);
+		if (readRows.principal.roles[partytype] == undefined) {
+		  Logger.log("docsetEmails:   principal does not possess a defined %s role!");
+		  continue;
+		}
+		for (var j in parties[partytype]) {
+		  var entity = parties[partytype][j];
+		  Logger.log("templateParties:     what to do with entity %s?", entity.name);
+		  var email_to_cc = email_to_cc_(entity.email);
+		  if (mailtype == "to") {
+			to_list = uniq_(to_list.concat(email_to_cc[0]));
+			cc_list = uniq_(cc_list.concat(email_to_cc[1])); // quietly send 2ndliners to cc
+		  } else { // mailtype == "cc"
+			cc_list = uniq_(cc_list.concat(email_to_cc[0]); // all go to cc
+			                       .concat(email_to_cc[1]));
+		  }
+		}
+	  }
+	}
+	if (sourceTemplate.explode == undefined) {
+	  this._rcpts.normals[sourceTemplate.name]={to:to_list, cc:cc_list};
+	  Logger.log("docsetEmails: defining this._rcpts.normals[%s]={to:%s}",sourceTemplate.name, to_list);
+	  Logger.log("docsetEmails: defining this._rcpts.normals[%s]={cc:%s}",sourceTemplate.name, cc_list);
+	} else { // explode first and then set this._rcpts.exploders
+	  Logger.log("docsetEmails(): will explode %s", sourceTemplate.explode);
+	  readme.getBody().appendParagraph("docsetEmails(): will explode template with one per doc for " + sourceTemplate.explode);
+
+      for (var j in this.parties[sourceTemplate.explode]) {
+		var entity = parties[sourceTemplate.explode][j];
+		// we step through the desired {investor,company}.* arrays.
+		// we set the singular as we step through.
+		var mytitle = sourceTemplate.name + " for " + entity.name;
+		Logger.log("docsetEmails(): preparing exploded %s for %s %s", mytitle, to_explode, entity.name);
+		var email_to_cc = email_to_cc_(entity.email);
+		this._rcpts.exploders[mytitle] = {
+		  to:uniq_(to_list.concat(email_to_cc[0])),
+		  cc:uniq_(cc_list.concat(email_to_cc[1])),
+		};
+		Logger.log("docsetEmails: defining this._rcpts.exploders[%s]={to:%s}",mytitle,to_list);
+		Logger.log("docsetEmails: defining this._rcpts.exploders[%s]={cc:%s}",mytitle,cc_list);
+	  }
+	}
+  }
+
+  this.Rcpts = function(sourceTemplates, explodeEntity) {
+	var es_num = 1;
+	// clear es_nums
+	for (var e in entitiesByName) { entitiesByName[e]._es_num = null; entitiesByName[e]._to_email = null; }
+
+	Logger.log("docsetEmails.partiesFor: %s, %s", sourceTemplates.map(function(st){return st.name}), explodeEntity);
+	// pull up all the entities relevant to this particular set of sourceTemplates
+	// this should be easy, we've already done the hard work above.
+	var all_to = [], all_cc = [];
+	for (var st in sourceTemplates) {
+	  var sourceTemplate = sourceTemplates[st];
+	  if (explodeEntity) {
+		var mytitle = sourceTemplate.name + " for " + explodeEntity.name;
+		all_to = all_to.concat(this._rcpts.exploders[mytitle].to);
+		all_cc = all_cc.concat(this._rcpts.exploders[mytitle].cc);
+		// set up the es_nums for each entity.
+		entity._es_num = es_num++;
+		entity._to_email = this.config.email_override ? plusNum(es_num, this.config.email_override.values[0]) : entity.email;
+	  } else {
+		all_to = all_to.concat(this._rcpts.normals[sourceTemplate.name].to);
+		all_cc = all_cc.concat(this._rcpts.normals[sourceTemplate.name].cc);
+	  }
+	}
+
+	entity._unmailed = true;
+	entity._es_num = es_num++;
+
+
+	  // new style: data.party.x
+	  // old style: data.x, deprecated
+	  newTemplate.data.party = newTemplate.data.party || {};
+		newTemplate.data      [to_explode] = entity; // technically this doesn't belong here.
+		newTemplate.data.party[to_explode] = entity;
+
+
+  };
+  this.getTo = function(sourceTemplate) { };
+  this.getCC = function(sourceTemplate) { };
 }
 
 
@@ -1261,13 +1336,7 @@ function fillTemplates(sheet) {
 
   if (! sheetPassedIn) { alertIfActiveSheetChanged_(sheet); }
 
-  // this is okay if we're running inside an INCLUDE context.
-  // we're going to deprecate the legalese_status method of email management.
-  // if (! include_mode && entity.legalese_status == undefined) { SpreadsheetApp.getUi().alert("the sheet we're working on has no legalese status! You probably want to be on a different tab."); throw new Error("never mind, i will try again"); }
-
-
   var uniq = uniqueKey_(sheet);
-
   // in the future we will probably need several subfolders, one for each template family.
   // and when that time comes we won't want to just send all the PDFs -- we'll need a more structured way to let the user decide which PDFs to send to echosign.
   var folder = createFolder_(sheet); var readme = createReadme_(folder, config, sheet);
@@ -1283,14 +1352,36 @@ function fillTemplates(sheet) {
   cell.setValue("=HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"+folder.getId()+"\",\""+folder.getName()+"\")");
   Logger.log("I have set the value to =HYPERLINK(\"https://drive.google.com/drive/u/0/#folders/"+folder.getId()+"\",\""+folder.getName()+"\")");
 
+  // hardcode some useful expressions
   templatedata.xml_declaration = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
   templatedata.whitespace_handling_use_tags = '<?whitespace-handling use-tags?>';
   templatedata.whitespace_handling_use_characters = '<?whitespace-handling use-characters?>';
-
   templatedata._timezone = sheet.getParent().getSpreadsheetTimeZone();
 
   var suitables = suitableTemplates_(config);
   Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
+
+  // the parties{} for a given docset are always the same -- all the defined roles are available
+  var parties = { };
+  templatedata.company = templatedata.parties.company[0];
+  // each role shows a list of names. populate the parties array with a list of expanded entity objects.
+  for (var role in readRows.principal.roles) {
+	for (var i in readRows.principal.roles[role]) {
+	  var partyName = readRows.principal.roles[role][i];
+	  if (readRows.entitiesByName[partyName]) {
+		parties[role] = parties[role] || [];
+		parties[role].push(readRows.entitiesByName[partyName]);
+	  }
+	  else {
+		Logger.log("WARNING: the Roles section defines a party %s which is not defined in an Entities section, so omitting from the data.parties list.", partyName);
+	  }
+	}
+  }
+  if (parties["company"] == undefined) { company:[readRows.principal]; }
+  templatedata._entitiesByName = readRows.entitiesByName;
+
+  var docsetEmails = new docsetEmails(sheet, readRows, false, parties, suitables);
+
   for (var i in suitables) {
     var sourceTemplate = suitables[i];
 
@@ -1305,27 +1396,10 @@ function fillTemplates(sheet) {
     newTemplate.data = templatedata;
 	var sans_xml = sourceTemplate.name.replace(/_xml|xml_/,"");
 
-	// which parties are relevant to this template?
-	newTemplate.data.parties = templateParties(sheet, readRows, sourceTemplate);
+	// populate the es_nums within the party entities
+	newTemplate.data.parties = docsetEmails.partiesFor(sourceTemplate);
+//	Logger.log("templatedata.parties = %s", JSON.stringify(templatedata.parties));
 
-	Logger.log("templatedata.parties = %s", JSON.stringify(templatedata.parties));
-	templatedata.company = templatedata.parties.company[0];
-	Logger.log("templatedata.company = %s", templatedata.company);
-	templatedata._entitiesByName = readRows.entitiesByName;
-
-	// under Configuration, say: Templates: templatename explode partytype
-	var to_explode = null;
-	try { to_explode = config.templates.tree[sans_xml]["explode"] } catch (e) { Logger.log("ERROR: no explode partytype") }
-	if (to_explode != undefined) {
-	  Logger.log("will explode %s", to_explode);
-	  readme.getBody().appendParagraph("will explode template with one per doc for " + to_explode);
-
-      for (var j in newTemplate.data.parties[to_explode]) {
-		// we step through the multiple data.parties.{founder,investor,company}.* arrays.
-		// we set the singular as we step through.
-		newTemplate.data[to_explode] = newTemplate.data.parties[to_explode][j];
-		var mytitle = sourceTemplate.title + " for " + newTemplate.data[to_explode].name;
-		Logger.log("producing exploded %s for %s %s", mytitle, to_explode, newTemplate.data[to_explode].name);
 		fillTemplate_(newTemplate, sourceTemplate, mytitle, folder);
 		readme.getBody().appendParagraph("created " + mytitle
 										 + " for " + to_explode
@@ -1741,7 +1815,7 @@ function fauxMegaSign(sheet) {
 
   var parties = terms.parties;
   var to_list = [];
-  var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"});
+  var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"}); // TODO: get this a different way
   var cc2_list = [];
   var commit_updates_to = [];
   var commit_updates_cc = [];

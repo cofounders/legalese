@@ -329,76 +329,105 @@ we may want to change this decision later if the human factors department report
 
 **** problem 2: how do we keep track of the esnums?
 echosign analyzes the name of the signaturebox to map email address to box.
-
 the legalese system generates the PDFs in one step, and submits the PDFs in a separate step.
-
 those two steps need to be synchronized so the recipients don't end up putting their signature in the wrong box.
-
 ***** complication 1: our architecture SHOULD work for both [[*alternatives][alternatives]] described in problem 1 above.
-
 each agreement we upload to echosign contains one or more individual PDFs.
-
 ***** complication 2: handling explosions.
-
 there are two cases. some templates are all-in-one, and some are one-per-partype.
-
 any exploded messages will exclude themselves from the concatenation.
-
 **** draft design
-
 ***** ERM
 a docset contains one or more templates.
-
-a template contains one or more PDFs.
-
+a template contains one or more PDFs (one normally, more if "explode" is set).
 a PDF contains one or more signers. (To:)
-
 a PDF contains one or more CCs.
-
-***** the mailinfo object
-
-the mailinfo object is 1:1 with an uploaded agreement.
-
+***** the Rcpts object
+the Rcpts object is 1:1 with an uploaded agreement.
 it contains a list of To and CC addresses.
-
 Each To address is mapped to a consecutive esnum starting at 1.
-
 ***** esnum serialization
-
-if we are in concatenate mode, we upload a docset to echosign, so the mailinfo object spans multiple PDFs.
-
-if we are in non-concatenate mode, we upload an individual PDF to echosign, so we create one mailinfo per PDF.
-
+if we are in concatenate mode, we upload a docset to echosign, so the Rcpts object spans multiple PDFs.
+if we are in non-concatenate mode, we upload an individual PDF to echosign, so we create one Rcpts per PDF.
 ***** the proposed sequence
-
 ****** first, deal with all the exploding templates
-
 for each exploding template in the docset, we expand the parties specified in the SourceTemplate object
-
 there has to be a 1:1 correspondence with the parties in the signature block
-
 ******* TODO maybe in future we just create a <?!= signatureblock() ?> from code.gs
-
 the controller knows exactly which parties are going to be signing, so why shouldn't it just take charge?
-
 maybe because there are different display style -- sometimes you want to give each partytype its own b_left_sidehead_nonum
-
 ****** then, deal with the non-exploding templates
-
 ******* if we are in concatenate mode, we will upload all the non-exploding templates together
-
 ******** establish the full set of To and CC recipients for the entire PDF group
-
 dedup
-
 ******** and esnum accordingly.
-
 ******* if we are not in concatenate mode, we upload each PDF separately
-
 ******** for each PDF, establish the set of To and CC recipients
-
 ******** and esnum accordingly
 
 ***** explode mode
-
 ****** TODO there seems to a bug where multiple of the same party get appended to a .parties[x] array.
+****** the exploder
+
+the sourceTemplate object defines explode=x, where x is a single name of the partytype to be exploded.
+
+as long as the parties don't get reordered in the source spreadsheets, the ordering should be preserved across repeated runs.
+
+
+
+***** Rcpts([template, ...], explodeEntity)
+called in both steps, returns the same each time:
+{ to: [ an   ordered unique list of email addresses ],
+  cc: [ an unordered unique list of email addresses ] }
+
+these lists are computed over the set of one or more templates passed in the input.
+
+it follows that      esnum = to.indexOf("address") + 1
+
+and the list of email addresses must be submitted to echosign in that order
+
+****** the sourceTemplate object declares the "to" and "cc" entities.
+
+****** in exploded templates, Rcpts must be called with only one template in the list, and explodeEntity set.
+
+****** in non-exploded templates, in concatenate mode, Rcpts is called with multiple templates in the list
+
+****** in non-exploded templates, in non-concatenate mode, Rcpts is called with one template in the list.
+
+****** whatever code does exploding needs to explode outside of Rcpts, so it can iterate explodeEntity.
+***** function docsetEmails(readRows, concatenateMode=true|false)
+returns
+{ exploders : { "templateTitle for X" : { to:[], cc:[] },
+                "templateTitle for Y" : { to:[], cc:[] },
+                ... },
+  normals   : { templateName          : { to:[], cc:[] } },
+              { templateName          : { to:[], cc:[] } },
+              ... }
+
+***** syntax of the sourceTemplate .parties and .explode properties
+explode: roleName
+parties:{ to:["roleName",    // e.g. shareholder
+              "roleName[i]", // e.g. shareholder[0]
+             ],
+          cc: [ ... ] // as above
+        }
+
+if an "explode: roleName" property is present, then the expanded roleName will be automatically appended to the "to" list, and will be available in the template not as data.parties.roleName but as data.roleName, just as data.company is available.
+***** how the Generate PDFs workflow uses this
+when generating the PDFs, code.gs first establishes the full docsetEmails data structure
+
+as each template is filled, the .templatedata (aka data.) is configured with es_nums: each entity gets an es_num property.
+
+thus are the signatureboxes in the PDFs correctly labeled.
+
+***** how the Send To Echosign workflow uses this
+when sending to echosign, we again run the docsetEmails function to obtain the same data structure as was used to generate the PDFs.
+
+the uploadAgreements function can operate in concatenate mode or not.
+
+if concatenateMode == true, then 1 agreement will be uploaded that combines all the normals, and 1 agreement for each exploding PDF.
+
+if concatenateMode == false then, then N normal agreements plsu M exploding agreements.
+
+the uploader knows how to key into the data structure to pull out the correct to/cc set.
+
