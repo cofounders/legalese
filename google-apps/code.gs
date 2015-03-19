@@ -1168,7 +1168,7 @@ function obtainTemplate_(url, nocache) {
 	if (nocache != true && contents.length < 100000 && url.length < 250) {
 	  cache.put(url, contents, 60);
 	}
-	Logger.log("obtained template %s, length %s bytes", url, contents.length);
+	// Logger.log("obtained template %s, length %s bytes", url, contents.length);
 	return HtmlService.createTemplate(contents);
   }
   else return HtmlService.createTemplateFromFile(url);
@@ -1256,6 +1256,7 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	}
   }
 
+  // return to_cc for a given set of sourceTemplates
   this.Rcpts = function(sourceTemplates, explodeEntity) { // explodeEntity may be null -- that's OK, just means we're not exploding.
 	// clear es_nums in entities
 	for (var e in this.readRows.entitiesByName) { this.readRows.entitiesByName[e]._es_num = null; this.readRows.entitiesByName[e]._to_email = null; }
@@ -1286,8 +1287,6 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 
 	var to_emails = [], cc_emails = [];
 
-	Logger.log("docsetEmails.Rcpts(%s): readRows.entitiesByName=%s", sourceTemplateNames, readRows.entitiesByName);
-
 	var es_num = 1;
 	for (var ti in all_to) {
 	  var entityName = all_to[ti]; var entity = this.readRows.entitiesByName[entityName];
@@ -1308,10 +1307,46 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	}
 	return [to_emails, cc_emails];
   };
+
+  // callback framework for doing things to do with exploded sourceTemplates
+  this.explode = function(callback) {
+	var exploders = this.suitables.filter(function(t){return   t.explode});
+	Logger.log("docsetEmails.explode(): templates=%s",
+			   exploders.map(function(t){return t.name}));
+	for (var i in exploders) {
+	  var sourceTemplate = exploders[i];
+	  for (var j in exploders[i].explode) {
+		var partytype = exploders[i].explode[j];
+		for (var k in parties[partytype]) {
+		  var entity = entitiesByName[parties[partytype][k]];
+		  var rcpts = this.Rcpts(sourceTemplate, entity);
+		  callback(sourceTemplate, entity);
+		}
+	  }
+	}
+  };
+
+  // callback framework for doing things to do with normal sourceTemplates, for both concatenate_pdfs modes
+  this.normal = function(callback) {
+	var normals   = suitables.filter(function(t){return ! t.explode});
+	Logger.log("docsetEmails.normal(): concatenateMode %s, templates=%s",
+			   this.readRows.config.concatenate_pdfs == true,
+			   normals.map(function(t){return t.name}));
+	if (this.readRows.config.concatenate_pdfs == true) {
+	  Logger.log("docsetEmails.normal(): true path");
+	  // recipients are defined outside the loop, so the same for each normal template
+	  var rcpts = this.Rcpts(normals); for (var i in normals) { callback(normals[i]); }
+	} else {
+	  Logger.log("docsetEmails.normal(): false path");
+	  // recipients are defined inside the loop, so different for each normal template
+	  for (var i in normals) { var rcpts = this.Rcpts([normals[i]]); callback(normals[i]); }
+	}
+  };	
+
 };
 
-
-function roles2parties(readRows) {
+// map 
+function roles2parties_(readRows) {
   var parties = {};
   // each role shows a list of names. populate the parties array with a list of expanded entity objects.
   for (var role in readRows.principal.roles) {
@@ -1385,80 +1420,34 @@ function fillTemplates(sheet) {
   Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
 
   // the parties{} for a given docset are always the same -- all the defined roles are available
-  var parties = roles2parties(readRows);
+  var parties = roles2parties_(readRows);
   templatedata.parties = parties;
   templatedata.company = parties.company[0];
   templatedata._entitiesByName = readRows.entitiesByName;
 
   var docsetEmails = new docsetEmails_(sheet, readRows, parties, suitables);
 
-  var exploders = suitables.filter(function(t){return   t.explode});
-  Logger.log("fillTemplates: concatenateMode %s, exploders=%s",
-			 config.concatenate_pdfs == true,
-			 exploders  .map(function(t){return t.name}));
+  var buildTemplate = function(sourceTemplate, entity) { // this is a callback run within the docsetEmails object.
+	var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache);
+	newTemplate.data = templatedata;
+	fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder);
+	// todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
+	readme.getBody().appendParagraph("created " + sourceTemplate.title);
+	if (entity) { readme.getBody().appendParagraph("doing template for " + entity.name); }
+  };
 
-  for (var i in exploders) {
-	var sourceTemplate = exploders[i];
-	for (var j in exploders[i].explode) {
-	  var partytype = exploders[i].explode[j];
-	  for (var k in parties[partytype]) {
-		var entity = entitiesByName[parties[partytype][k]];
-		var rcpts = docsetEmails.Rcpts(sourceTemplate, entity);
+  Logger.log("FillTemplates(): first we do the exploded templates");
+  docsetEmails.explode(buildTemplate);
 
-		newTemplate.data = templatedata;
-		var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache);
-
-		fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder); // todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
-
-		readme.getBody().appendParagraph("created " + sourceTemplate.title);
-		readme.getBody().appendParagraph("doing exploded template for " + entity.name);
-	  }
-	}
-  }
-
-  Logger.log("and now we do the non-exploded templates");
-  var normals   = suitables.filter(function(t){return ! t.explode});
-  if (config.concatenate_pdfs) {
-	Logger.log("fillTemplates: concatenateMode ON, normals=%s",
-			   normals  .map(function(t){return t.name}));
-
-	var rcpts = docsetEmails.Rcpts(normals);
-	Logger.log("fillTemplates: concatenateMode ON, rcpts to=%s, cc=%s", rcpts[0], rcpts[1]);
-
-	Logger.log("fillTemplates: filling normal templates %s", normals.map(function(t){return t.name}));
-	for (var i in normals) {
-      var sourceTemplate = normals[i];
-	  Logger.log("fillTemplates:     filling normal template ... " + sourceTemplate.title);
-      var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache);
-	  newTemplate.data = templatedata;
-
-	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder); // todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
-	  readme.getBody().appendParagraph("created concatenation template " + sourceTemplate.title);
-	}
-  }
-  else {
-	Logger.log("fillTemplates: concatenateMode OFF, normals=%s",
-			   normals  .map(function(t){return t.name}));
-
-	for (var i in normals) {
-      var sourceTemplate = normals[i];
-	  var rcpts = docsetEmails.Rcpts([sourceTemplate]);
-
-	  Logger.log("fillTemplates: concatenateMode OFF, template=%s, rcpts to=%s, cc=%s", sourceTemplate.name, rcpts[0], rcpts[1]);
-
-      var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache);
-	  newTemplate.data = templatedata;
-	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder); // todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
-	  readme.getBody().appendParagraph("created standalone template " + sourceTemplate.title);
-	}
-  }
+  Logger.log("FillTemplates(): then we do the non-exploded normal templates");
+  docsetEmails.normal(buildTemplate);
 
   var ROBOT = 'robot@legalese.io';
   Logger.log("sharing %s with %s", folder.getName(), ROBOT);
   folder.addEditor(ROBOT);
 
   Logger.log("that's all folks!");
-};
+}
 
 // ---------------------------------------------------------------------------------------------------------------- fillTemplate_
 // fill a single template -- inner-loop function for fillTemplates() above.
@@ -1492,7 +1481,7 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
 // ---------------------------------------------------------------------------------------------------------------- include
 // used inside <? ?>
 function include(name, data, _include) {
-  Logger.log("running include for %s", name);
+//  Logger.log("running include for %s", name);
   var filtered = availableTemplates_().filter(function(t){return t.name == name});
   if (filtered.length == 1) {
 	var template = filtered[0];
@@ -1502,14 +1491,14 @@ function include(name, data, _include) {
 	var filledHTML = childTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
 	return filledHTML;
   }
-  Logger.log("unable to find template named %s", name);
+  Logger.log("include(): unable to find template named %s", name);
   return;
 }
 
 // ---------------------------------------------------------------------------------------------------------------- newlinesToCommas
 // used inside <? ?> to convert a multiline address to a singleline address for party-section purposes
 function newlinesToCommas(str) {
-  Logger.log("converting newlinesToCommas");
+//  Logger.log("converting newlinesToCommas");
   if (str == undefined) { Logger.log("newlinesToCommas: undefined!"); return undefined }
   return str.replace(/\n/g, ", ");
 }
@@ -1968,14 +1957,21 @@ function uploadAgreement(sheet) {
   // TODO: be more organized about this. in the same way that we generated one or more output PDFs for each input template
   // we now need to upload exactly that number of PDFs as transientdocuments, then we need to uploadAgreement once for each PDF.
 
-  var parties = roles2parties(readRows);
+  var parties = roles2parties_(readRows);
 
   var suitables = suitableTemplates_(config);
   Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
 
   var docsetEmails = new docsetEmails_(sheet, readRows, parties, suitables);
 
-//   for (var si in suitables) {
+  // deal with exploders
+  var templates;
+
+  // deal with the normals
+
+
+
+  //   for (var si in suitables) {
 //     var sourceTemplate = suitables[si];
 // 
 // 	// THIS IS A HUGE BUG RIGHT NOW because we're deliberately ignoring the collation between transientDocumentIds and the suitabletemplates.
