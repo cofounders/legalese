@@ -209,7 +209,7 @@ function alertIfActiveSheetChanged_(sheet) {
 function setupForm_(sheet) {
 
   var sheetPassedIn = ! (sheet == undefined);
-  if (! sheetPassedIn && SpreadsheetApp.getActiveSheet().getName() == "controller") {
+  if (! sheetPassedIn && SpreadsheetApp.getActiveSpreadsheet().getName().toLowerCase() == "legalese controller") {
 	Logger.log("in controller mode, switching to setupOtherForms_()");
 	setupOtherForms_();
 	return;
@@ -1017,14 +1017,11 @@ function availableTemplates_() {
   { name:"strikeoff_bank_closure_xml", title:"Resolutions to Close Bank Accounts",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_directors-bank-closure.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
+	explode:"bank",
   },
   { name:"strikeoff_accountant_retention_xml", title:"Retainer of Accountant for Financial Statements",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_accountant-retention.xml",
 	parties:{to:["accountant", "director"]},
-  },
-  { name:"strikeoff_financials_letter_xml", title:"Letter to Accountant regarding Financial Statements",
-	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_financials-letter.xml",
-	parties:{to:["director"], cc:["accountant"]},
   },
   { name:"strikeoff_financials_letter_xml", title:"Letter to Accountant regarding Financial Statements",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_financials-letter.xml",
@@ -1143,12 +1140,19 @@ function intersect_(array1, array2) {
   return array1.filter(function(n) { return array2.indexOf(n.name) != -1 || array2.indexOf(n.name.replace(/_xml/,"")) != -1 });
 }
 
+// ---------------------------------------------------------------------------------------------------------------- filenameFor_
+// create a canonical filename for a given sourceTemplate,entity pair
+function filenameFor_ (sourceTemplate, entity) {
+  if (entity) return sourceTemplate.title + " for " + entity.name
+  else        return sourceTemplate.title;
+};
+
 // ---------------------------------------------------------------------------------------------------------------- obtainTemplate_
 // obtainTemplate
 // we can pull a generic HTML template from somewhere else,
 // or it can be one of the project's HTML files.
 function obtainTemplate_(url, nocache) {
-  Logger.log("obtainTemplate_(%s) called", url);
+  // Logger.log("obtainTemplate_(%s) called", url);
 
   // we're actually running within a single script invocation so maybe we should find a more intelligent way to cache within a single session.
   // otherwise this risks not picking up changes
@@ -1195,6 +1199,8 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
   this.parties = parties;
   this.suitables = suitables;
 
+  var readmeDoc = getReadme_(sheet);
+
   this.esNumForTemplate = { };
 
   Logger.log("docsetEmails(%s): now I will figure out who gets which PDFs.",
@@ -1238,18 +1244,16 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	  Logger.log("docsetEmails: defining this._rcpts.normals[%s].cc=%s",sourceTemplate.title, cc_list);
 	} else { // explode first and then set this._rcpts.exploders
 	  Logger.log("docsetEmails(): will explode %s", sourceTemplate.explode);
-	  readme.getBody().appendParagraph("docsetEmails(): will explode template with one per doc for " + sourceTemplate.explode);
+	  readmeDoc.getBody().appendParagraph("docsetEmails(): will explode template with one per doc for " + sourceTemplate.explode);
 
       for (var j in this.parties[sourceTemplate.explode]) {
 		var entity = parties[sourceTemplate.explode][j];
 		// we step through the desired {investor,company}.* arrays.
 		// we set the singular as we step through.
-		var mytitle = sourceTemplate.title + " for " + entity.name;
-		Logger.log("docsetEmails(): preparing exploded %s for %s %s", mytitle, to_explode, entity.name);
-		this._rcpts.exploders[mytitle] = {
-		  to:to_list.concat([entity.name]),
-		  cc:cc_list
-		};
+		var mytitle = filenameFor_(sourceTemplate, entity);
+		Logger.log("docsetEmails(): preparing %s exploded %s", sourceTemplate.explode, mytitle);
+		to_list = to_list.concat([entity.name]);
+		this._rcpts.exploders[mytitle] = {to:to_list,cc:cc_list};
 		Logger.log("docsetEmails: defining this._rcpts.exploders[%s].to=%s",mytitle,to_list);
 		Logger.log("docsetEmails: defining this._rcpts.exploders[%s].cc=%s",mytitle,cc_list);
 	  }
@@ -1270,7 +1274,7 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	for (var st in sourceTemplates) {
 	  var sourceTemplate = sourceTemplates[st];
 	  if (explodeEntity) {
-		var mytitle = sourceTemplate.title + " for " + explodeEntity.name;
+		var mytitle = filenameFor_(sourceTemplate, explodeEntity);
 		all_to = all_to.concat(this._rcpts.exploders[mytitle].to);
 		all_cc = all_cc.concat(this._rcpts.exploders[mytitle].cc);
 	  } else {
@@ -1290,20 +1294,26 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	var es_num = 1;
 	for (var ti in all_to) {
 	  var entityName = all_to[ti]; var entity = this.readRows.entitiesByName[entityName];
-	  var email_to_cc = email_to_cc_(entity.email);
-	  to_emails = to_emails.concat(email_to_cc[0]);
-	  cc_emails = cc_emails.concat(email_to_cc[1]);
 
-	  // set up the es_nums for each entity.
+	  if (this.readRows.config.email_override && this.readRows.config.email_override.values[0]) {
+		entity._to_email = plusNum(es_num, this.readRows.config.email_override.values[0]);
+	  }
+	  else {
+		var email_to_cc = email_to_cc_(entity.email);
+		entity._to_email = email_to_cc[0][0];
+		cc_emails = cc_emails.concat(email_to_cc[1]);
+	  }
+	  to_emails.push(entity._to_email);
 	  entity._es_num = es_num++;
-	  entity._to_email = this.readRows.config.email_override ? plusNum(es_num, this.readRows.config.email_override.values[0]) : email_to_cc[0][0];
 	  entity._unmailed = true;
 	}
 	for (var ti in all_cc) {
 	  var entityName = all_cc[ti]; var entity = this.readRows.entitiesByName[entityName];
 	  var email_to_cc = email_to_cc_(entity.email);
-	  cc_emails = cc_emails.concat(email_to_cc[0])
-                           .concat(email_to_cc[1]);
+	  cc_emails = cc_emails.concat(email_to_cc[0]).concat(email_to_cc[1]); // both top and subsequent will go to CC
+	}
+	if (this.readRows.config.email_override && this.readRows.config.email_override.values[0]) {
+		cc_emails = [this.readRows.config.email_override.values[0]];
 	}
 	return [to_emails, cc_emails];
   };
@@ -1315,31 +1325,30 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 			   exploders.map(function(t){return t.name}));
 	for (var i in exploders) {
 	  var sourceTemplate = exploders[i];
-	  for (var j in exploders[i].explode) {
-		var partytype = exploders[i].explode[j];
-		for (var k in parties[partytype]) {
-		  var entity = entitiesByName[parties[partytype][k]];
-		  var rcpts = this.Rcpts(sourceTemplate, entity);
-		  callback(sourceTemplate, entity);
-		}
+	  var partytype = sourceTemplate.explode;
+	  Logger.log("template %s will explode = %s", sourceTemplate.name, partytype);
+	  Logger.log("parties[partytype] = %s", parties[partytype]);
+	  for (var k in parties[partytype]) {
+		var entity = this.readRows.entitiesByName[parties[partytype][k].name];
+		Logger.log("docsetEmails.explode(): working with %s %s", partytype, entity.name);
+		var rcpts = this.Rcpts([sourceTemplate], entity);
+		callback([sourceTemplate], entity, rcpts);
 	  }
 	}
   };
 
   // callback framework for doing things to do with normal sourceTemplates, for both concatenate_pdfs modes
-  this.normal = function(callback) {
+  this.normal = function(individual_callback, group_callback) {
 	var normals   = suitables.filter(function(t){return ! t.explode});
 	Logger.log("docsetEmails.normal(): concatenateMode %s, templates=%s",
-			   this.readRows.config.concatenate_pdfs == true,
+			   this.readRows.config.concatenate_pdfs && this.readRows.config.concatenate_pdfs.values[0] == true,
 			   normals.map(function(t){return t.name}));
-	if (this.readRows.config.concatenate_pdfs == true) {
-	  Logger.log("docsetEmails.normal(): true path");
-	  // recipients are defined outside the loop, so the same for each normal template
-	  var rcpts = this.Rcpts(normals); for (var i in normals) { callback(normals[i]); }
+	if (this.readRows.config.concatenate_pdfs && this.readRows.config.concatenate_pdfs.values[0] == true) {
+	                           var rcpts = this.Rcpts(normals);
+	  for (var i in normals) {                                       individual_callback([normals[i]], null, rcpts); }
+      if (group_callback) {            group_callback(normals, null, rcpts); }
 	} else {
-	  Logger.log("docsetEmails.normal(): false path");
-	  // recipients are defined inside the loop, so different for each normal template
-	  for (var i in normals) { var rcpts = this.Rcpts([normals[i]]); callback(normals[i]); }
+	  for (var i in normals) { var rcpts = this.Rcpts([normals[i]]); individual_callback([normals[i]], null, rcpts); }
 	}
   };	
 
@@ -1369,7 +1378,7 @@ function roles2parties_(readRows) {
 function fillTemplates(sheet) {
 
   var sheetPassedIn = ! (sheet == undefined);
-  if (! sheetPassedIn && SpreadsheetApp.getActiveSheet().getName() == "controller") {
+  if (! sheetPassedIn && SpreadsheetApp.getActiveSpreadsheet().getName().toLowerCase() == "legalese controller") {
 	Logger.log("in controller mode, switching to fillOtherTemplates()");
 	fillOtherTemplates_();
 	return;
@@ -1397,7 +1406,7 @@ function fillTemplates(sheet) {
   var uniq = uniqueKey_(sheet);
   // in the future we will probably need several subfolders, one for each template family.
   // and when that time comes we won't want to just send all the PDFs -- we'll need a more structured way to let the user decide which PDFs to send to echosign.
-  var folder = createFolder_(sheet); var readme = createReadme_(folder, config, sheet);
+  var folder = createFolder_(sheet); var readmeDoc = createReadme_(folder, config, sheet);
   PropertiesService.getDocumentProperties().setProperty("legalese."+uniq+".folder.id", JSON.stringify(folder.getId()));
   PropertiesService.getDocumentProperties().setProperty("legalese."+uniq+".folder.name", JSON.stringify(folder.getName()));
   PropertiesService.getDocumentProperties().setProperty("legalese.templateActiveSheetId", sheet.getSheetId());
@@ -1427,13 +1436,18 @@ function fillTemplates(sheet) {
 
   var docsetEmails = new docsetEmails_(sheet, readRows, parties, suitables);
 
-  var buildTemplate = function(sourceTemplate, entity) { // this is a callback run within the docsetEmails object.
+  // you will see the same pattern in uploadAgreement.
+  var buildTemplate = function(sourceTemplates, entity, rcpts) { // this is a callback run within the docsetEmails object.
+	var sourceTemplate = sourceTemplates[0];
 	var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache);
 	newTemplate.data = templatedata;
-	fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder);
+	if (entity) { newTemplate.data.party = newTemplate.data.party || {};
+				  newTemplate.data.party[sourceTemplate.explode] = entity;
+				  newTemplate.data      [sourceTemplate.explode] = entity; }
+	fillTemplate_(newTemplate, sourceTemplate, filenameFor_(sourceTemplate, entity), folder);
 	// todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
-	readme.getBody().appendParagraph("created " + sourceTemplate.title);
-	if (entity) { readme.getBody().appendParagraph("doing template for " + entity.name); }
+	readmeDoc.getBody().appendParagraph("created " + sourceTemplate.title);
+	if (entity) { readmeDoc.getBody().appendParagraph("doing template for " + entity.name); }
   };
 
   Logger.log("FillTemplates(): first we do the exploded templates");
@@ -1757,55 +1771,6 @@ function allPDFs_(folder) {
   return pdfs;
 }
 
-// ---------------------------------------------------------------------------------------------------------------- uploadPDFsToEchoSign_
-// upload all the PDFs in the Folder
-// returns an array of the transientDocumentIds of all the PDFs uploaded to Echosign.
-function uploadPDFsToEchoSign_(sheet) {
-  var api = getEchoSignService_();
-  var o = { headers: { "Access-Token": api.getAccessToken() } };
-  o.method = "post";
-
-  var uniq = uniqueKey_(sheet);
-
-  var folderId   = JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese."+uniq+".folder.id"));
-  var folderName = JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese."+uniq+".folder.name"));
-  Logger.log("uploadPDFsToEchoSign: for spreadsheet %s, folder.id = %s", uniq, folderId);
-  if (folderId == undefined) {
-	SpreadsheetApp.getUi().alert("Not sure which folder contains PDFs.\nPlease regenerate documents by clicking Legalese / Generate Docs");
-	return;
-  }
-  var folder = DriveApp.getFolderById(folderId);
-  var pdfs = allPDFs_(folder);
-  var toreturn = [];
-
-  if (pdfs.length == 0) {
-	SpreadsheetApp.getUi().alert("Couldn't find a PDF to upload. You may need to poke InDesign.");
-	return toreturn;
-  }	
-
-  for (var i in pdfs) {
-	var pdfdoc = pdfs[i];
-
-	o.payload = {
-	  "File-Name": pdfdoc.getName(),
-	  "File":      pdfdoc.getBlob(),
-	  "Mime-Type": pdfdoc.getMimeType(), // we assume that's application/pdf
-	};
-
-	Logger.log("uploading to EchoSign as a transientDocument: %s %s", pdfdoc.getId(), pdfdoc.getName());
-	if (o.payload['Mime-Type'] != "application/pdf") {
-	  Logger.log("WARNING: mime-type of document %s (%s) is not application/pdf ... weird, eh.", pdfdoc.getId(), pdfdoc.getName());
-	}
-
-	var response = UrlFetchApp.fetch(api.APIbaseUrl + '/transientDocuments', o);
-	var r = JSON.parse(response.getContentText());
-	Logger.log("uploaded %s (%s) as transientDocumentId=%s", pdfdoc.getId(), pdfdoc.getName(), r.transientDocumentId);
-
-	toreturn.push(r.transientDocumentId);
-  }
-
-  return toreturn;
-}
 
 // ---------------------------------------------------------------------------------------------------------------- showDocumentProperties_
 function showDocumentProperties_() {
@@ -1931,7 +1896,7 @@ function uploadAgreement(sheet) {
 
   var sheetPassedIn = ! (sheet == undefined);
 
-  if (! sheetPassedIn && SpreadsheetApp.getActiveSheet().getName() == "controller") {
+  if (! sheetPassedIn && SpreadsheetApp.getActiveSpreadsheet().getName().toLowerCase() == "legalese controller") {
 	Logger.log("in controller mode, switching to uploadOtherAgreements()");
 	uploadOtherAgreements_();
 	return;
@@ -1952,6 +1917,7 @@ function uploadAgreement(sheet) {
   var terms    = readRows.terms;
   var config   = readRows.config;
 
+  var readmeDoc = getReadme_(sheet);
   alertIfActiveSheetChanged_(sheet);
 
   // TODO: be more organized about this. in the same way that we generated one or more output PDFs for each input template
@@ -1964,110 +1930,122 @@ function uploadAgreement(sheet) {
 
   var docsetEmails = new docsetEmails_(sheet, readRows, parties, suitables);
 
-  // deal with exploders
-  var templates;
+  // we need to establish:
+  // an AGREEMENT contains one or more transientDocuments
+  // an AGREEMENT has one list of To and CCs
+  // 
+  // an Agreement is keyed on one or more sourcetemplate filenames
+  // corresponding exactly to the docsetEmails Rcpts function
+  // 
 
-  // deal with the normals
+  var transientDocumentIds = {}; // pdf filename : transientDocumentId
 
+  var uploadTransientDocument = function(sourceTemplates, entity, rcpts) {
+	var sourceTemplate = sourceTemplates[0];
+	var filename = filenameFor_(sourceTemplate, entity) + ".pdf";
 
+	var api = getEchoSignService_();
+	var o = { headers: { "Access-Token": api.getAccessToken() } };
+	o.method = "post";
+	var uniq = uniqueKey_(sheet);
+	var folderId   = JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese."+uniq+".folder.id"));
+	var folderName = JSON.parse(PropertiesService.getDocumentProperties().getProperty("legalese."+uniq+".folder.name"));
+	Logger.log("uploadTransientDocument: for spreadsheet %s, folder.id = %s", uniq, folderId);
+	if (folderId == undefined) {
+	  throw("can't find folder for PDFs. try Generate PDFs.");
+	}
+	var folder = DriveApp.getFolderById(folderId);
+	var pdf = folder.getFilesByName(filename);
+	var pdfs = [];
+	while (pdf.hasNext()) { pdfs.push(pdf.next()) }
 
-  //   for (var si in suitables) {
-//     var sourceTemplate = suitables[si];
-// 
-// 	// THIS IS A HUGE BUG RIGHT NOW because we're deliberately ignoring the collation between transientDocumentIds and the suitabletemplates.
-// 	// TODO: THINK THIS ALL THROUGH. i think it's better now. i hope.
-// 	// do the same three-way breakdown between concatenate_pdfs, normals, and exploders as in the fillTemplates workflow.
-// 
-//   var transientDocumentIds = uploadPDFsToEchoSign_(sheet);
-//   var emailInfo = [];
-//   var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"}); // TODO: get rid of allparties. compute cc differently
-//   var cc2_list = [];
-//   var commit_updates_to = [];
-//   var commit_updates_cc = [];
-//   var readmeDoc = getReadme_(sheet);
-// 
-//   if (transientDocumentIds == undefined || transientDocumentIds.length == 0) {
-// 	Logger.log("nothing uploaded to EchoSign. not uploading agreement.");
-// 	if (readmeDoc != undefined) readmeDoc.getBody().appendParagraph("nothing uploaded to EchoSign. not uploading agreement.");
-// 	return "no docs found!";
-//   }
-// 
-//   // does the spreadsheet have a "Legalese Status" field?
-//   // if not, create a column in the spreadsheet, to the right of the rightmost filled column.
-// 
-//   var now = Utilities.formatDate(new Date(), ss.getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
-// 
-//   // TODO: handle explosion scenarios where each party gets a separate agreement.
-//   
-//   // update the party's Legalese Status cell to indicate we've sent the mail.
-//   
-//   for (var p in parties._unmailed) {
-// 	var party = parties._unmailed[p];
-// 	// if multi-address, then first address is To: and subsequent addresses are CC
-// 	var to_cc = email_to_cc_(party.email);
-// 	if (to_cc[0] != undefined) {
-// 	  var _to_email = to_cc[0];
-// 	  if (readRows.config.email_override) { entity._to_email = plusNum(p, readRows.config.email_override.values[0]); }
-// 
-// 	  emailInfo.push({email:_to_email, role:"SIGNER"});
-// 	  commit_updates_to.push(getPartyCells_(sheet, terms, party));
-// 	}
-// 	if (to_cc[1].length > 0) {
-// 	  cc2_list = cc2_list.concat(to_cc[1]);
-// 	}
-//   }
-//   if (readRows.config.email_override) { cc2_list = [readRows.config.email_override.values[0]]; }
-// 
-//   Logger.log("we shall be emailing to %s", emailInfo);
-// 
-//   if (emailInfo.length == 0) {
-// 	SpreadsheetApp.getUi().alert("There doesn't seem to be anybody for us to mail this to! Check the Legalese Status column.");
-// 	return "no recipients!";
-//   }
-// 
-//   // TODO: who shall we cc to? everybody whose legalese status == "cc".
-//   for (var p in cc_list) {
-// 	var party = cc_list[p];
-// 	commit_updates_cc.push(getPartyCells_(sheet, terms, party));
-//   }
-//   cc_list = cc_list.map(function(party){return party.email});
-//   cc_list = cc_list.concat(cc2_list);
-// 
-//   Logger.log("To: %s", emailInfo.map(function(party){return party.email}));
-//   Logger.log("CC: %s", cc_list);
-// 
-//   readmeDoc.appendHorizontalRule();
-//   readmeDoc.appendParagraph("To: " + emailInfo.map(function(party){return party.email}).join(", "));
-//   readmeDoc.appendParagraph("CC: " + cc_list.join(", "));
-// 
-//   for (var i in transientDocumentIds) {
-// 	var transientDocumentId = transientDocumentIds[i];
-// 	Logger.log("turning transientDocument %s into an agreement", transientDocumentId);
-// 
-// 	for (var cu in commit_updates_to) { commit_updates_to[cu].legalese_status.setValue("mailed echosign " + now) }
-// 	for (var cu in commit_updates_cc) { commit_updates_cc[cu].legalese_status.setValue("CC'ed echosign " + now) }
-// 
-// 	if (config.skip_echosign && config.skip_echosign.values[0] == true) {
-// 	  Logger.log("skipping the sending to echosign");
-// 	}
-// 	else {
-// 	  Logger.log("actually posting to echosign");
-// 	  var acr = postAgreement_(	{ "transientDocumentId": transientDocumentId },
-// 								emailInfo,
-// 								config.echosign.tree.message,
-// 								config.echosign.tree.title,
-// 								cc_list,
-// 								terms,
-// 								config,
-// 								readmeDoc,
-// 								null
-// 							);
-// 	}
-// 	Logger.log("uploadAgreement: well, that seems to have worked!");
-//   }
-// }
-//   Logger.log("uploadAgreement: that's all, folks!");
-//   return "sent";
+	if (pdfs.length == 0) { throw("can't find PDF named " + filename) }
+	if (pdfs.length  > 1) { throw("multiple PDFs are named " + filename) }
+
+	var pdfdoc = pdfs[0];
+	o.payload = {
+	  "File-Name": pdfdoc.getName(),
+	  "File":      pdfdoc.getBlob(),
+	  "Mime-Type": pdfdoc.getMimeType(), // hope that's application/pdf
+	};
+
+	Logger.log("uploadTransientDocument: uploading to EchoSign: %s %s", pdfdoc.getId(), pdfdoc.getName());
+	if (o.payload['Mime-Type'] != "application/pdf") {
+	  Logger.log("WARNING: mime-type of document %s (%s) is not application/pdf ... weird, eh.", pdfdoc.getId(), pdfdoc.getName());
+	}
+
+	var response = UrlFetchApp.fetch(api.APIbaseUrl + '/transientDocuments', o);
+	var r = JSON.parse(response.getContentText());
+	Logger.log("uploadTransientDocument: %s has transientDocumentId=%s", pdfdoc.getName(), r.transientDocumentId);
+
+	transientDocumentIds[filename] = r.transientDocumentId;
+
+	Logger.log("uploadTransientDocument: recipients for %s = %s", pdfdoc.getName(), rcpts);
+  };
+
+  var multiTitles = function(templates, entity) { var ts = templates.constructor.name == "Array" ? templates : [templates];
+												  return ts.map(function(t){return filenameFor_(t, entity)+".pdf"}).join(",") };
+
+  var createAgreement = function(templates, entity, rcpts) {
+	Logger.log("at this point we would call postAgreement for %s to %s",
+			   multiTitles(templates, entity),
+			   rcpts);
+
+	var tDocIds = templates.map(function(t){return transientDocumentIds[filenameFor_(t,entity)+".pdf"]});
+
+	if (tDocIds == undefined || tDocIds.length == 0) {
+ 	  Logger.log("transient documents were not uploaded to EchoSign. not uploading agreement.");
+ 	  readmeDoc.getBody().appendParagraph("nothing uploaded to EchoSign. not uploading agreement.");
+ 	  return "no docs found!";
+	}
+
+	var emailInfo = rcpts[0].map(function(e) { return {email:e, role:"SIGNER"}});
+	var cc_list   = rcpts[1];
+
+	if (emailInfo.length == 0) {
+ 	  SpreadsheetApp.getUi().alert("There doesn't seem to be anybody for us to mail this to! Check the Legalese Status column.");
+ 	  return "no recipients!";
+	}
+	
+
+	Logger.log("To: %s", emailInfo.map(function(party){return party.email}));
+	Logger.log("CC: %s", cc_list);
+ 
+	readmeDoc.appendHorizontalRule();
+	readmeDoc.appendParagraph("To: " + emailInfo.map(function(party){return party.email}).join(", "));
+	readmeDoc.appendParagraph("CC: " + cc_list.join(", "));
+
+ 	var acr = postAgreement_( tDocIds.map(function(t){return { "transientDocumentId": t } }),
+ 								emailInfo,
+ 								config.echosign.tree.message,
+ 								config.echosign.tree.title,
+ 								cc_list,
+ 								terms,
+ 								config,
+ 								readmeDoc,
+ 								null
+ 							);
+
+ 	Logger.log("createAgreement: well, that seems to have worked!");
+  };
+  
+  Logger.log("uploadAgreements(): first we upload the exploded templates as a transientDocument");
+  docsetEmails.explode(uploadTransientDocument);
+
+  Logger.log("uploadAgreements(): then we upload the non-exploded normal templates as transientDocuments");
+  docsetEmails.normal(uploadTransientDocument);
+
+  Logger.log("uploadAgreements(): next we post the exploded transientDocuments as Agreements");
+  docsetEmails.explode(createAgreement);
+
+  Logger.log("uploadAgreements(): then we post the non-exploded normal transientDocuments as Agreements");
+  if (config.concatenate_pdfs && config.concatenate_pdfs.values[0] == true) {
+	docsetEmails.normal(function(){Logger.log("individual callback doing nothing")}, createAgreement );
+  } else {
+	docsetEmails.normal(createAgreement, function(){Logger.log("group callback doing nothing")});
+  }
+
+  return "sent";
 }
 
 // ---------------------------------------------------------------------------------------------------------------- postAgreement_
@@ -2121,17 +2099,19 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, terms, co
 
   Logger.log("about to dump %s", JSON.stringify(o));
 
-  var response = UrlFetchApp.fetch(api.APIbaseUrl + '/agreements', o);
-
-  if (response.getResponseCode() >= 400) {
-	Logger.log("got response %s", response.getContentText());
-	Logger.log("dying");
-	return;
+  if (config.skip_echosign && config.skip_echosign.values[0] == true) {
+ 	Logger.log("skipping the sending to echosign");
+  } else {
+ 	Logger.log("actually posting to echosign");
+	var response = UrlFetchApp.fetch(api.APIbaseUrl + '/agreements', o);
+	if (response.getResponseCode() >= 400) {
+	  Logger.log("got response %s", response.getContentText());
+	  Logger.log("dying");
+	  return;
+	}
+	Logger.log("got back %s", response.getContentText());
+	return JSON.parse(response.getContentText());
   }
-
-  Logger.log("got back %s", response.getContentText());
-
-  return JSON.parse(response.getContentText());
 }
 
   
