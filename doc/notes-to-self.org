@@ -400,9 +400,11 @@ returns
 { exploders : { "templateTitle for X" : { to:[], cc:[] },
                 "templateTitle for Y" : { to:[], cc:[] },
                 ... },
-  normals   : { templateName          : { to:[], cc:[] } },
-              { templateName          : { to:[], cc:[] } },
+  normals   : { templateTitle         : { to:[], cc:[] } },
+              { templateTitle         : { to:[], cc:[] } },
               ... }
+
+note that the keys in templateTitle MUST correspond exactly to the filenames of the PDFs in Google Drive.
 
 ***** syntax of the sourceTemplate .parties and .explode properties
 explode: roleName

@@ -732,7 +732,10 @@ function readRows_(sheet, entitiesByName) {
 				 toreturn.principal.name);
 	}
   }
-  Logger.log("readRows(%s): have contributed to entitiesByName = %s", sheet.getSheetName(), entitiesByName);
+  var entityNames = []; for (var eN in entitiesByName) { entityNames.push(eN) }
+  Logger.log("readRows(%s): have contributed to entitiesByName = %s", sheet.getSheetName(), entityNames);
+  var entityNames = []; for (var eN in toreturn.entitiesByName) { entityNames.push(eN) }
+  Logger.log("readRows(%s): toreturn's entitiesByName = %s", sheet.getSheetName(), entityNames);
 //  Logger.log("readRows: config = %s\n", JSON.stringify(config,null,"  "));
   return toreturn;
 }
@@ -1171,28 +1174,6 @@ function obtainTemplate_(url, nocache) {
   else return HtmlService.createTemplateFromFile(url);
 }
 
-
-function templateParties(sheet, readRows, sourceTemplate) {
-  /*
-   * establish the appropriate data.parties.* for a given template.
-   * 
-   * data.parties.founder.*, data.parties.existing_shareholder.*, data.parties.company.*, data.parties.investor.* as arrays
-   *
-   * we also track the mailing status here
-   */
-  Logger.log("templateParties: running for %s", sourceTemplate.name);
-  // consult the Template DTD to see what roles are involved in the template
-
-  Logger.log("templateParties: hardcoding parties.company = %s", parties.company);
-  Logger.log("templateParties: template parties = %s", sourceTemplate.parties);
-
-		}
-	  }
-	}
-  }
-  return parties;
-}
-
 function plusNum (num, email) {
   // turn (0, mengwong@jfdi.asia) to mengwong+0@jfdi.asia
   var localpart, domain;
@@ -1208,10 +1189,9 @@ function uniq_( arr ) {
 }
 
 // see documentation in notes-to-self.org
-function docsetEmails(sheet, readRows, concatenateMode, parties, suitables) {
+var docsetEmails_ = function (sheet, readRows, parties, suitables) {
   this.sheet = sheet;
   this.readRows = readRows;
-  this.concatenateMode = concatenateMode;
   this.parties = parties;
   this.suitables = suitables;
 
@@ -1220,15 +1200,19 @@ function docsetEmails(sheet, readRows, concatenateMode, parties, suitables) {
   Logger.log("docsetEmails(%s): now I will figure out who gets which PDFs.",
 			 sheet.getSheetName());
 
+  Logger.log("docsetEmails(%s): incoming readRows has entitiesByName = %s",
+			 sheet.getSheetName(),
+			 readRows.entitiesByName
+			);
+
   // populate rcpts
-  this._rcpts = { exploders: { },
-				 normals: { } };
+  this._rcpts = { exploders: { }, normals: { } };
 
   for (var i in suitables) {
     var sourceTemplate = suitables[i];
 	var to_list = [], cc_list = [];
 	for (var mailtype in sourceTemplate.parties) {
-	  Logger.log("docsetEmails: sourceTemplate %s: expanding mailtype %s",
+	  Logger.log("docsetEmails: sourceTemplate %s: expanding mailtype \"%s\"",
 				 sourceTemplate.name, mailtype);
 	  for (var i in sourceTemplate.parties[mailtype]) {
 		var partytype = sourceTemplate.parties[mailtype][i];
@@ -1239,22 +1223,19 @@ function docsetEmails(sheet, readRows, concatenateMode, parties, suitables) {
 		}
 		for (var j in parties[partytype]) {
 		  var entity = parties[partytype][j];
-		  Logger.log("templateParties:     what to do with entity %s?", entity.name);
-		  var email_to_cc = email_to_cc_(entity.email);
+		  Logger.log("docsetEmails:     what to do with entity %s?", entity.name);
 		  if (mailtype == "to") {
-			to_list = uniq_(to_list.concat(email_to_cc[0]));
-			cc_list = uniq_(cc_list.concat(email_to_cc[1])); // quietly send 2ndliners to cc
+			to_list.push(entity.name);
 		  } else { // mailtype == "cc"
-			cc_list = uniq_(cc_list.concat(email_to_cc[0]); // all go to cc
-			                       .concat(email_to_cc[1]));
+			cc_list.push(entity.name);
 		  }
 		}
 	  }
 	}
 	if (sourceTemplate.explode == undefined) {
-	  this._rcpts.normals[sourceTemplate.name]={to:to_list, cc:cc_list};
-	  Logger.log("docsetEmails: defining this._rcpts.normals[%s]={to:%s}",sourceTemplate.name, to_list);
-	  Logger.log("docsetEmails: defining this._rcpts.normals[%s]={cc:%s}",sourceTemplate.name, cc_list);
+	  this._rcpts.normals[sourceTemplate.title]={to:to_list, cc:cc_list};
+	  Logger.log("docsetEmails: defining this._rcpts.normals[%s].to=%s",sourceTemplate.title, to_list);
+	  Logger.log("docsetEmails: defining this._rcpts.normals[%s].cc=%s",sourceTemplate.title, cc_list);
 	} else { // explode first and then set this._rcpts.exploders
 	  Logger.log("docsetEmails(): will explode %s", sourceTemplate.explode);
 	  readme.getBody().appendParagraph("docsetEmails(): will explode template with one per doc for " + sourceTemplate.explode);
@@ -1263,59 +1244,91 @@ function docsetEmails(sheet, readRows, concatenateMode, parties, suitables) {
 		var entity = parties[sourceTemplate.explode][j];
 		// we step through the desired {investor,company}.* arrays.
 		// we set the singular as we step through.
-		var mytitle = sourceTemplate.name + " for " + entity.name;
+		var mytitle = sourceTemplate.title + " for " + entity.name;
 		Logger.log("docsetEmails(): preparing exploded %s for %s %s", mytitle, to_explode, entity.name);
-		var email_to_cc = email_to_cc_(entity.email);
 		this._rcpts.exploders[mytitle] = {
-		  to:uniq_(to_list.concat(email_to_cc[0])),
-		  cc:uniq_(cc_list.concat(email_to_cc[1])),
+		  to:to_list.concat([entity.name]),
+		  cc:cc_list
 		};
-		Logger.log("docsetEmails: defining this._rcpts.exploders[%s]={to:%s}",mytitle,to_list);
-		Logger.log("docsetEmails: defining this._rcpts.exploders[%s]={cc:%s}",mytitle,cc_list);
+		Logger.log("docsetEmails: defining this._rcpts.exploders[%s].to=%s",mytitle,to_list);
+		Logger.log("docsetEmails: defining this._rcpts.exploders[%s].cc=%s",mytitle,cc_list);
 	  }
 	}
   }
 
-  this.Rcpts = function(sourceTemplates, explodeEntity) {
-	var es_num = 1;
-	// clear es_nums
-	for (var e in entitiesByName) { entitiesByName[e]._es_num = null; entitiesByName[e]._to_email = null; }
+  this.Rcpts = function(sourceTemplates, explodeEntity) { // explodeEntity may be null -- that's OK, just means we're not exploding.
+	// clear es_nums in entities
+	for (var e in this.readRows.entitiesByName) { this.readRows.entitiesByName[e]._es_num = null; this.readRows.entitiesByName[e]._to_email = null; }
 
-	Logger.log("docsetEmails.partiesFor: %s, %s", sourceTemplates.map(function(st){return st.name}), explodeEntity);
+	var sourceTemplateNames = sourceTemplates.map(function(st){return st.name});
+
+	Logger.log("docsetEmails.Rcpts(%s), %s", sourceTemplateNames, explodeEntity);
 	// pull up all the entities relevant to this particular set of sourceTemplates
 	// this should be easy, we've already done the hard work above.
 	var all_to = [], all_cc = [];
 	for (var st in sourceTemplates) {
 	  var sourceTemplate = sourceTemplates[st];
 	  if (explodeEntity) {
-		var mytitle = sourceTemplate.name + " for " + explodeEntity.name;
+		var mytitle = sourceTemplate.title + " for " + explodeEntity.name;
 		all_to = all_to.concat(this._rcpts.exploders[mytitle].to);
 		all_cc = all_cc.concat(this._rcpts.exploders[mytitle].cc);
-		// set up the es_nums for each entity.
-		entity._es_num = es_num++;
-		entity._to_email = this.config.email_override ? plusNum(es_num, this.config.email_override.values[0]) : entity.email;
 	  } else {
-		all_to = all_to.concat(this._rcpts.normals[sourceTemplate.name].to);
-		all_cc = all_cc.concat(this._rcpts.normals[sourceTemplate.name].cc);
+		all_to = all_to.concat(this._rcpts.normals[sourceTemplate.title].to);
+		all_cc = all_cc.concat(this._rcpts.normals[sourceTemplate.title].cc);
 	  }
 	}
 
-	entity._unmailed = true;
-	entity._es_num = es_num++;
+	all_to = uniq_(all_to);
+	all_cc = uniq_(all_cc);
 
+	Logger.log("docsetEmails.Rcpts(%s): all_to=%s", sourceTemplateNames, all_to);
+	Logger.log("docsetEmails.Rcpts(%s): all_cc=%s", sourceTemplateNames, all_cc);
 
-	  // new style: data.party.x
-	  // old style: data.x, deprecated
-	  newTemplate.data.party = newTemplate.data.party || {};
-		newTemplate.data      [to_explode] = entity; // technically this doesn't belong here.
-		newTemplate.data.party[to_explode] = entity;
+	var to_emails = [], cc_emails = [];
 
+	Logger.log("docsetEmails.Rcpts(%s): readRows.entitiesByName=%s", sourceTemplateNames, readRows.entitiesByName);
 
+	var es_num = 1;
+	for (var ti in all_to) {
+	  var entityName = all_to[ti]; var entity = this.readRows.entitiesByName[entityName];
+	  var email_to_cc = email_to_cc_(entity.email);
+	  to_emails = to_emails.concat(email_to_cc[0]);
+	  cc_emails = cc_emails.concat(email_to_cc[1]);
+
+	  // set up the es_nums for each entity.
+	  entity._es_num = es_num++;
+	  entity._to_email = this.readRows.config.email_override ? plusNum(es_num, this.readRows.config.email_override.values[0]) : email_to_cc[0][0];
+	  entity._unmailed = true;
+	}
+	for (var ti in all_cc) {
+	  var entityName = all_cc[ti]; var entity = this.readRows.entitiesByName[entityName];
+	  var email_to_cc = email_to_cc_(entity.email);
+	  cc_emails = cc_emails.concat(email_to_cc[0])
+                           .concat(email_to_cc[1]);
+	}
+	return [to_emails, cc_emails];
   };
-  this.getTo = function(sourceTemplate) { };
-  this.getCC = function(sourceTemplate) { };
-}
+};
 
+
+function roles2parties(readRows) {
+  var parties = {};
+  // each role shows a list of names. populate the parties array with a list of expanded entity objects.
+  for (var role in readRows.principal.roles) {
+	for (var i in readRows.principal.roles[role]) {
+	  var partyName = readRows.principal.roles[role][i];
+	  if (readRows.entitiesByName[partyName]) {
+		parties[role] = parties[role] || [];
+		parties[role].push(readRows.entitiesByName[partyName]);
+	  }
+	  else {
+		Logger.log("WARNING: the Roles section defines a party %s which is not defined in an Entities section, so omitting from the data.parties list.", partyName);
+	  }
+	}
+  }
+  if (parties["company"] == undefined) { parties["company"] = [readRows.principal]; }
+  return parties;
+}
 
 // ---------------------------------------------------------------------------------------------------------------- fillTemplates
 function fillTemplates(sheet) {
@@ -1334,7 +1347,17 @@ function fillTemplates(sheet) {
   templatedata.clauses = {};
   templatedata._config = config;
 
+  var entityNames = []; for (var eN in readRows.entityByName) { entityNames.push(eN) }
+  Logger.log("fillTemplates(%s): got back readRows.entitiesByName=%s",
+			 sheet.getSheetName(),
+			 entityNames);
+
   if (! sheetPassedIn) { alertIfActiveSheetChanged_(sheet); }
+
+  if (config.templates == undefined) {
+	throw("not on an Agreement sheet");
+	return;
+  }
 
   var uniq = uniqueKey_(sheet);
   // in the future we will probably need several subfolders, one for each template family.
@@ -1362,57 +1385,72 @@ function fillTemplates(sheet) {
   Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
 
   // the parties{} for a given docset are always the same -- all the defined roles are available
-  var parties = { };
-  templatedata.company = templatedata.parties.company[0];
-  // each role shows a list of names. populate the parties array with a list of expanded entity objects.
-  for (var role in readRows.principal.roles) {
-	for (var i in readRows.principal.roles[role]) {
-	  var partyName = readRows.principal.roles[role][i];
-	  if (readRows.entitiesByName[partyName]) {
-		parties[role] = parties[role] || [];
-		parties[role].push(readRows.entitiesByName[partyName]);
-	  }
-	  else {
-		Logger.log("WARNING: the Roles section defines a party %s which is not defined in an Entities section, so omitting from the data.parties list.", partyName);
+  var parties = roles2parties(readRows);
+  templatedata.parties = parties;
+  templatedata.company = parties.company[0];
+  templatedata._entitiesByName = readRows.entitiesByName;
+
+  var docsetEmails = new docsetEmails_(sheet, readRows, parties, suitables);
+
+  var exploders = suitables.filter(function(t){return   t.explode});
+  Logger.log("fillTemplates: concatenateMode %s, exploders=%s",
+			 config.concatenate_pdfs == true,
+			 exploders  .map(function(t){return t.name}));
+
+  for (var i in exploders) {
+	var sourceTemplate = exploders[i];
+	for (var j in exploders[i].explode) {
+	  var partytype = exploders[i].explode[j];
+	  for (var k in parties[partytype]) {
+		var entity = entitiesByName[parties[partytype][k]];
+		var rcpts = docsetEmails.Rcpts(sourceTemplate, entity);
+
+		newTemplate.data = templatedata;
+		var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache);
+
+		fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder); // todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
+
+		readme.getBody().appendParagraph("created " + sourceTemplate.title);
+		readme.getBody().appendParagraph("doing exploded template for " + entity.name);
 	  }
 	}
   }
-  if (parties["company"] == undefined) { company:[readRows.principal]; }
-  templatedata._entitiesByName = readRows.entitiesByName;
 
-  var docsetEmails = new docsetEmails(sheet, readRows, false, parties, suitables);
+  Logger.log("and now we do the non-exploded templates");
+  var normals   = suitables.filter(function(t){return ! t.explode});
+  if (config.concatenate_pdfs) {
+	Logger.log("fillTemplates: concatenateMode ON, normals=%s",
+			   normals  .map(function(t){return t.name}));
 
-  for (var i in suitables) {
-    var sourceTemplate = suitables[i];
+	var rcpts = docsetEmails.Rcpts(normals);
+	Logger.log("fillTemplates: concatenateMode ON, rcpts to=%s, cc=%s", rcpts[0], rcpts[1]);
 
-	readme.getBody().appendParagraph(sourceTemplate.name).setHeading(DocumentApp.ParagraphHeading.HEADING2);
+	Logger.log("fillTemplates: filling normal templates %s", normals.map(function(t){return t.name}));
+	for (var i in normals) {
+      var sourceTemplate = normals[i];
+	  Logger.log("fillTemplates:     filling normal template ... " + sourceTemplate.title);
+      var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache);
+	  newTemplate.data = templatedata;
 
-    var url = sourceTemplate.url;
-    var newTemplate = obtainTemplate_(url, sourceTemplate.nocache);
-	Logger.log("here is where we decide to dump template.");
-	if (config.dump_template && config.dump_template.values[0] == true) {
-	  Logger.log("TEMPLATE: " + newTemplate.getCode());
-	}
-    newTemplate.data = templatedata;
-	var sans_xml = sourceTemplate.name.replace(/_xml|xml_/,"");
-
-	// populate the es_nums within the party entities
-	newTemplate.data.parties = docsetEmails.partiesFor(sourceTemplate);
-//	Logger.log("templatedata.parties = %s", JSON.stringify(templatedata.parties));
-
-		fillTemplate_(newTemplate, sourceTemplate, mytitle, folder);
-		readme.getBody().appendParagraph("created " + mytitle
-										 + " for " + to_explode
-										 + " " + newTemplate.data[to_explode].name);
-	  }
-
-	} else {
-	  Logger.log("no explosion; doing all parties in one doc ... " + sourceTemplate.url);
 	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder); // todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
-	  readme.getBody().appendParagraph("created " + sourceTemplate.title);
-	  readme.getBody().appendParagraph("doing all parties in one doc. to do one doc for each party, set explode=investor or whatever partytype in the configuration section of the spreadsheet.");
+	  readme.getBody().appendParagraph("created concatenation template " + sourceTemplate.title);
 	}
-	Logger.log("finished suitable %s", url);
+  }
+  else {
+	Logger.log("fillTemplates: concatenateMode OFF, normals=%s",
+			   normals  .map(function(t){return t.name}));
+
+	for (var i in normals) {
+      var sourceTemplate = normals[i];
+	  var rcpts = docsetEmails.Rcpts([sourceTemplate]);
+
+	  Logger.log("fillTemplates: concatenateMode OFF, template=%s, rcpts to=%s, cc=%s", sourceTemplate.name, rcpts[0], rcpts[1]);
+
+      var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache);
+	  newTemplate.data = templatedata;
+	  fillTemplate_(newTemplate, sourceTemplate, sourceTemplate.title, folder); // todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
+	  readme.getBody().appendParagraph("created standalone template " + sourceTemplate.title);
+	}
   }
 
   var ROBOT = 'robot@legalese.io';
@@ -1435,7 +1473,7 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   // reset "globals"
   clauseroot = [];
   clausetext2num = {};
-  newTemplate.signature_comment = null;
+  newTemplate.data.signature_comment = null;
   var filledHTML = newTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
   var xmlfile;
 
@@ -1902,7 +1940,6 @@ function uploadAgreement(sheet) {
 	Logger.log("uploadAgreement: we have echosignService hasAccess = true");
   }
 
-
   var sheetPassedIn = ! (sheet == undefined);
 
   if (! sheetPassedIn && SpreadsheetApp.getActiveSheet().getName() == "controller") {
@@ -1915,7 +1952,7 @@ function uploadAgreement(sheet) {
 
   var ui = SpreadsheetApp.getUi();
   var response = ui.alert("Send to EchoSign?",
-						  "Are you sure you want to send to EchoSign?\nThis feature is not working very well for exploded (one per investor) type documents.",
+						  "Are you sure you want to send to EchoSign?\nMaybe you clicked a menu option by mistake.",
 						  ui.ButtonSet.YES_NO);
   
   if (response == ui.Button.NO) return;
@@ -1931,105 +1968,110 @@ function uploadAgreement(sheet) {
   // TODO: be more organized about this. in the same way that we generated one or more output PDFs for each input template
   // we now need to upload exactly that number of PDFs as transientdocuments, then we need to uploadAgreement once for each PDF.
 
+  var parties = roles2parties(readRows);
+
   var suitables = suitableTemplates_(config);
   Logger.log("resolved suitables = %s", suitables.map(function(e){return e.url}).join(", "));
-  for (var si in suitables) {
-    var sourceTemplate = suitables[si];
 
-	// THIS IS A HUGE BUG RIGHT NOW because we're deliberately ignoring the collation between transientDocumentIds and the suitabletemplates.
-	// TODO: THINK THIS ALL THROUGH.
+  var docsetEmails = new docsetEmails_(sheet, readRows, parties, suitables);
 
-  var parties = templateParties(sheet, readRows, sourceTemplate);
-  var transientDocumentIds = uploadPDFsToEchoSign_(sheet);
-  var emailInfo = [];
-  var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"}); // TODO: get rid of allparties. compute cc differently
-  var cc2_list = [];
-  var commit_updates_to = [];
-  var commit_updates_cc = [];
-  var readmeDoc = getReadme_(sheet);
-
-  if (transientDocumentIds == undefined || transientDocumentIds.length == 0) {
-	Logger.log("nothing uploaded to EchoSign. not uploading agreement.");
-	if (readmeDoc != undefined) readmeDoc.getBody().appendParagraph("nothing uploaded to EchoSign. not uploading agreement.");
-	return "no docs found!";
-  }
-
-  // does the spreadsheet have a "Legalese Status" field?
-  // if not, create a column in the spreadsheet, to the right of the rightmost filled column.
-
-  var now = Utilities.formatDate(new Date(), ss.getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
-
-  // TODO: handle explosion scenarios where each party gets a separate agreement.
-  
-  // update the party's Legalese Status cell to indicate we've sent the mail.
-  
-  for (var p in parties._unmailed) {
-	var party = parties._unmailed[p];
-	// if multi-address, then first address is To: and subsequent addresses are CC
-	var to_cc = email_to_cc_(party.email);
-	if (to_cc[0] != undefined) {
-	  var _to_email = to_cc[0];
-	  if (readRows.config.email_override) { entity._to_email = plusNum(p, readRows.config.email_override.values[0]); }
-
-	  emailInfo.push({email:_to_email, role:"SIGNER"});
-	  commit_updates_to.push(getPartyCells_(sheet, terms, party));
-	}
-	if (to_cc[1].length > 0) {
-	  cc2_list = cc2_list.concat(to_cc[1]);
-	}
-  }
-  if (readRows.config.email_override) { cc2_list = [readRows.config.email_override.values[0]]; }
-
-  Logger.log("we shall be emailing to %s", emailInfo);
-
-  if (emailInfo.length == 0) {
-	SpreadsheetApp.getUi().alert("There doesn't seem to be anybody for us to mail this to! Check the Legalese Status column.");
-	return "no recipients!";
-  }
-
-  // TODO: who shall we cc to? everybody whose legalese status == "cc".
-  for (var p in cc_list) {
-	var party = cc_list[p];
-	commit_updates_cc.push(getPartyCells_(sheet, terms, party));
-  }
-  cc_list = cc_list.map(function(party){return party.email});
-  cc_list = cc_list.concat(cc2_list);
-
-  Logger.log("To: %s", emailInfo.map(function(party){return party.email}));
-  Logger.log("CC: %s", cc_list);
-
-  readmeDoc.appendHorizontalRule();
-  readmeDoc.appendParagraph("To: " + emailInfo.map(function(party){return party.email}).join(", "));
-  readmeDoc.appendParagraph("CC: " + cc_list.join(", "));
-
-  for (var i in transientDocumentIds) {
-	var transientDocumentId = transientDocumentIds[i];
-	Logger.log("turning transientDocument %s into an agreement", transientDocumentId);
-
-	for (var cu in commit_updates_to) { commit_updates_to[cu].legalese_status.setValue("mailed echosign " + now) }
-	for (var cu in commit_updates_cc) { commit_updates_cc[cu].legalese_status.setValue("CC'ed echosign " + now) }
-
-	if (config.skip_echosign && config.skip_echosign.values[0] == true) {
-	  Logger.log("skipping the sending to echosign");
-	}
-	else {
-	  Logger.log("actually posting to echosign");
-	  var acr = postAgreement_(	{ "transientDocumentId": transientDocumentId },
-								emailInfo,
-								config.echosign.tree.message,
-								config.echosign.tree.title,
-								cc_list,
-								terms,
-								config,
-								readmeDoc,
-								null
-							);
-	}
-	Logger.log("uploadAgreement: well, that seems to have worked!");
-  }
-}
-  Logger.log("uploadAgreement: that's all, folks!");
-  return "sent";
+//   for (var si in suitables) {
+//     var sourceTemplate = suitables[si];
+// 
+// 	// THIS IS A HUGE BUG RIGHT NOW because we're deliberately ignoring the collation between transientDocumentIds and the suitabletemplates.
+// 	// TODO: THINK THIS ALL THROUGH. i think it's better now. i hope.
+// 	// do the same three-way breakdown between concatenate_pdfs, normals, and exploders as in the fillTemplates workflow.
+// 
+//   var transientDocumentIds = uploadPDFsToEchoSign_(sheet);
+//   var emailInfo = [];
+//   var cc_list = parties._allparties.filter(function(party){return party.legalese_status.toLowerCase()=="cc"}); // TODO: get rid of allparties. compute cc differently
+//   var cc2_list = [];
+//   var commit_updates_to = [];
+//   var commit_updates_cc = [];
+//   var readmeDoc = getReadme_(sheet);
+// 
+//   if (transientDocumentIds == undefined || transientDocumentIds.length == 0) {
+// 	Logger.log("nothing uploaded to EchoSign. not uploading agreement.");
+// 	if (readmeDoc != undefined) readmeDoc.getBody().appendParagraph("nothing uploaded to EchoSign. not uploading agreement.");
+// 	return "no docs found!";
+//   }
+// 
+//   // does the spreadsheet have a "Legalese Status" field?
+//   // if not, create a column in the spreadsheet, to the right of the rightmost filled column.
+// 
+//   var now = Utilities.formatDate(new Date(), ss.getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
+// 
+//   // TODO: handle explosion scenarios where each party gets a separate agreement.
+//   
+//   // update the party's Legalese Status cell to indicate we've sent the mail.
+//   
+//   for (var p in parties._unmailed) {
+// 	var party = parties._unmailed[p];
+// 	// if multi-address, then first address is To: and subsequent addresses are CC
+// 	var to_cc = email_to_cc_(party.email);
+// 	if (to_cc[0] != undefined) {
+// 	  var _to_email = to_cc[0];
+// 	  if (readRows.config.email_override) { entity._to_email = plusNum(p, readRows.config.email_override.values[0]); }
+// 
+// 	  emailInfo.push({email:_to_email, role:"SIGNER"});
+// 	  commit_updates_to.push(getPartyCells_(sheet, terms, party));
+// 	}
+// 	if (to_cc[1].length > 0) {
+// 	  cc2_list = cc2_list.concat(to_cc[1]);
+// 	}
+//   }
+//   if (readRows.config.email_override) { cc2_list = [readRows.config.email_override.values[0]]; }
+// 
+//   Logger.log("we shall be emailing to %s", emailInfo);
+// 
+//   if (emailInfo.length == 0) {
+// 	SpreadsheetApp.getUi().alert("There doesn't seem to be anybody for us to mail this to! Check the Legalese Status column.");
+// 	return "no recipients!";
+//   }
+// 
+//   // TODO: who shall we cc to? everybody whose legalese status == "cc".
+//   for (var p in cc_list) {
+// 	var party = cc_list[p];
+// 	commit_updates_cc.push(getPartyCells_(sheet, terms, party));
+//   }
+//   cc_list = cc_list.map(function(party){return party.email});
+//   cc_list = cc_list.concat(cc2_list);
+// 
+//   Logger.log("To: %s", emailInfo.map(function(party){return party.email}));
+//   Logger.log("CC: %s", cc_list);
+// 
+//   readmeDoc.appendHorizontalRule();
+//   readmeDoc.appendParagraph("To: " + emailInfo.map(function(party){return party.email}).join(", "));
+//   readmeDoc.appendParagraph("CC: " + cc_list.join(", "));
+// 
+//   for (var i in transientDocumentIds) {
+// 	var transientDocumentId = transientDocumentIds[i];
+// 	Logger.log("turning transientDocument %s into an agreement", transientDocumentId);
+// 
+// 	for (var cu in commit_updates_to) { commit_updates_to[cu].legalese_status.setValue("mailed echosign " + now) }
+// 	for (var cu in commit_updates_cc) { commit_updates_cc[cu].legalese_status.setValue("CC'ed echosign " + now) }
+// 
+// 	if (config.skip_echosign && config.skip_echosign.values[0] == true) {
+// 	  Logger.log("skipping the sending to echosign");
+// 	}
+// 	else {
+// 	  Logger.log("actually posting to echosign");
+// 	  var acr = postAgreement_(	{ "transientDocumentId": transientDocumentId },
+// 								emailInfo,
+// 								config.echosign.tree.message,
+// 								config.echosign.tree.title,
+// 								cc_list,
+// 								terms,
+// 								config,
+// 								readmeDoc,
+// 								null
+// 							);
+// 	}
+// 	Logger.log("uploadAgreement: well, that seems to have worked!");
+//   }
+// }
+//   Logger.log("uploadAgreement: that's all, folks!");
+//   return "sent";
 }
 
 // ---------------------------------------------------------------------------------------------------------------- postAgreement_
