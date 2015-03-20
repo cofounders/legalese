@@ -1,0 +1,10 @@
+<para_1>
+
+<span_smallcaps>Dated this:</span_smallcaps> <?= data.shutdown_process_begin_date ?></para_1>
+<? data.signature_comment = "Director" ?>
+<? for (var i=0;i<data.parties.director.length;i++) { ?>
+<?!= include("inc_signature", data, data.parties.director[i]) ?>
+<? } ?>
+</Story_Main>
+<Bottom_Box delete_if_empty="true" />
+</Root>
