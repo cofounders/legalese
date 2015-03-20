@@ -16,6 +16,6 @@
 
 <a_left_sidehead>Authority to Issue Shares</a_left_sidehead>
 
-<?!= include("mr-authority_to_issue_shares", data) ?>
+<?!= include("mr_authority_to_issue_shares", data) ?>
 
 <?!= include("inc_dr_end", data, { director_or_member:"Member", }) ?>

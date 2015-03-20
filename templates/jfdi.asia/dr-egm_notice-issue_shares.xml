@@ -6,7 +6,7 @@
 
 <b_left_sidehead>Authority to Issue Shares</b_left_sidehead>
 
-<?!= include("mr-authority_to_issue_shares", data) ?>
+<?!= include("mr_authority_to_issue_shares", data) ?>
 
 <? if (data.egm_or_written_means == "EGM") { ?>
 <a_left_sidehead>Notice of EGM</a_left_sidehead>
