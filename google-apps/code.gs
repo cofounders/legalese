@@ -1012,6 +1012,16 @@ function availableTemplates_() {
 // this is unwise, because the XML template runs with the same privileges as this script,
 // and if you randomly execute templates from all over the Internet, sooner or later you will regret it.
 
+  { name:"mr_issue_shares_xml", title:"Members Approve Ordinary Resolution to Issue Shares",
+	url:"http://www.legalese.io/templates/jfdi.asia/mr-issue_shares.xml",
+	parties:{to:["shareholder"], cc:["corporate_secretary"]},
+	nocache:true,
+  },
+  { name:"dr_egm_notice_issue_shares_xml", title:"Directors Issue Notice of New Share Issue",
+	url:"http://www.legalese.io/templates/jfdi.asia/dr-egm_notice-issue_shares.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+	nocache:true,
+  },
   { name:"strikeoff_financial_report_xml", title:"Financial Report",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_financial_report.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
@@ -1115,6 +1125,15 @@ function availableTemplates_() {
   },
   { name:"inc_party", title:"party component",
 	url:"http://www.legalese.io/templates/jfdi.asia/inc_party.xml"
+  },
+  { name:"inc_dr_start", title:"directors resolutions start",
+	url:"http://www.legalese.io/templates/jfdi.asia/inc_dr_start.xml"
+  },
+  { name:"inc_dr_end", title:"directors resolution end",
+	url:"http://www.legalese.io/templates/jfdi.asia/inc_dr_end.xml"
+  },
+  { name:"mr_authority_to_issue_shares", title:"members resolution to issue shares",
+	url:"http://www.legalese.io/templates/jfdi.asia/mr-authority_to_issue_shares.xml"
   },
 
   ];
@@ -1399,6 +1418,7 @@ function fillTemplates(sheet) {
   var config         = readRows.config;
   templatedata.clauses = {};
   templatedata._config = config;
+  templatedata._todays_date = Utilities.formatDate(new Date(), sheet.getParent().getSpreadsheetTimeZone(), "d MMMM YYYY");
 
   var entityNames = []; for (var eN in readRows.entityByName) { entityNames.push(eN) }
   Logger.log("fillTemplates(%s): got back readRows.entitiesByName=%s",
