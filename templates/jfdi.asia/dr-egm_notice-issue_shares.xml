@@ -13,7 +13,7 @@
 
 <para_1>That an Extraordinary General Meeting of the Company be held on <?= data.gm_date ?> for the purpose of considering and if thought fit, passing the above resolution.</para_1>
 
-<? else if (data.egm_or_written_means == "AGM") { ?>
+<? } else if (data.egm_or_written_means == "AGM") { ?>
 <a_left_sidehead>Notice of AGM</a_left_sidehead>
 
 <para_1>That the Annual General Meeting of the Company be held on <?= data.gm_date ?> for the purpose of considering and if thought fit, passing the above resolution.</para_1>
