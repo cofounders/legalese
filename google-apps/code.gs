@@ -480,6 +480,7 @@ function readRows_(sheet, entitiesByName) {
   var numRows  = rows.getNumRows();
   var values   = rows.getValues();
   var formulas = rows.getFormulas();
+  var formats  = rows.getNumberFormats();
 
   var toreturn =   { terms            : {},
 					 config           : {},
@@ -607,13 +608,19 @@ function readRows_(sheet, entitiesByName) {
 	  terms["_orig_" + asvar] = row[1];
 	  Logger.log("readRows(%s): TERMS: %s --> %s", sheet.getSheetName(), row[1], terms[asvar]);
     }
-	else if (section == "ROLES") { // principal relation entity. these are all strings. we attach roles later.
+	else if (section == "ROLES") { // principal relation entity. these are all strings. we attach other details
 	  var relation  = asvar_(row[0]);
 	  var entityname    = row[1];
 
 	  roles[relation] = roles[relation] || [];
 	  roles[relation].push(entityname);
       Logger.log("readRows(%s):         ROLES: learning party role %s = %s", sheet.getSheetName(), relation, entityname);
+
+	  if (row[2] && row[3]) {
+		var entity = entitiesByName[entityname];
+		// Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[2]), formatify_(formats[i][3], row[3]));
+		entity[asvar_(row[2])] = formatify_(formats[i][3], row[3]);
+	  }
 	}
     else if (section == "ENTITIES") {
       var entity = { _origin_spreadsheet_id:sheet.getParent().getId(),
