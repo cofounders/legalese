@@ -10,6 +10,6 @@
 <centered>(Incorporated in the Republic of Singapore)</centered>
 <centered>(the "Company")</centered>
 <centered></centered>
-<resolution_title>Directors' resolution<?= (data._include.r_num && data._include.r_num==1) ? "" : "s" ?> s in writing&#8232;passed pursuant to Article <?= data.article_for_directors_resolution_in_writing ?> of the Company's Articles of Association</resolution_title>
+<resolution_title>Directors' resolution<?= (data._include.r_num && data._include.r_num==1) ? "" : "s" ?> in writing&#8232;passed pursuant to Article <?= data.article_for_directors_resolution_in_writing ?> of the Company's Articles of Association</resolution_title>
 <? if (data._include.chapter_header) { ?><chapter_header override="startParagraph=StartParagraph.ANYWHERE"><?= data._include.chapter_header ?></chapter_header><? } ?>
 <para_1><span_smallcaps>Resolved:---</span_smallcaps></para_1>
