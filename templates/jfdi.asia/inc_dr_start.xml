@@ -1,10 +1,13 @@
 <?!= data.xml_declaration ?>
 <Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" templateSpec="singlepage.indt">
-<letterhead><?= data.company.name ?></letterhead>
 <Firstpage_Sidebar>
 <sidebar><?= data.company.name ?></sidebar>
-<sidebar><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></sidebar>
 <sidebar><?= data.company.address ?></sidebar>
 </Firstpage_Sidebar>
 <Story_Main>
-<resolution_title>Directors' resolution in writing&#8232;passed pursuant to Article <?= data.article_for_directors_resolution_in_writing ?> of the Company's Articles of Association</resolution_title>
+<centered><?= data.company.name ?></centered>
+<centered><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></centered>
+<centered>(Incorporated in the Republic of Singapore)</centered>
+<centered>(the "Company")</centered>
+<centered></centered>
+<resolution_title>Directors' resolutions in writing&#8232;passed pursuant to Article <?= data.article_for_directors_resolution_in_writing ?> of the Company's Articles of Association</resolution_title>
