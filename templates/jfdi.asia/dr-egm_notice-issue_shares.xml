@@ -25,6 +25,6 @@ or the expiration of the period within which the next Annual General Meeting of 
 
 <a_left_sidehead>Authority to Bizfile</a_left_sidehead>
 
-<para_1>That the Corporate Secretary of the Company (being at the time of writing <?= data.parties.corporate_secretary[0].name ?> and/or its designated agents be authorized to file electronically with the <?= data.parties.state_regulator[0].name ?> on the Notice of Resolution.</para_1>
+<para_1>That the Corporate Secretary of the Company (being at the time of writing <?= data.parties.corporate_secretary[0].name ?>) and/or its designated agents be authorized to file electronically with the <?= data.parties.state_regulator[0].name ?> on the Notice of Resolution.</para_1>
 
 <?!= include("inc_dr_end", data) ?>
