@@ -1295,12 +1295,14 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	for (var ti in all_to) {
 	  var entityName = all_to[ti]; var entity = this.readRows.entitiesByName[entityName];
 
-	  if (this.readRows.config.email_override && this.readRows.config.email_override.values[0]) {
+	  if (this.readRows.config.email_override && this.readRows.config.email_override.values[0]
+		 &&
+		 email_to_cc_(entity.email)[0] && email_to_cc_(entity.email)[0]) {
 		entity._to_email = plusNum(es_num, this.readRows.config.email_override.values[0]);
 	  }
 	  else {
 		var email_to_cc = email_to_cc_(entity.email);
-		entity._to_email = email_to_cc[0][0];
+		entity._to_email = email_to_cc[0];
 		cc_emails = cc_emails.concat(email_to_cc[1]);
 	  }
 	  to_emails.push(entity._to_email);
