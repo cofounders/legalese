@@ -1,0 +1,24 @@
+<?!= include("inc_dr_start", data, r_num: 2 }) ?>
+
+<a_left_sidehead>Notice of EGM Resolution</a_left_sidehead>
+
+<para_1>That an Extraordinary General Meeting of the Company be held on <?= data.egm_date ?> for the purpose of considering and if thought fit, passing the following ordinary resolution:</para_1>
+
+<b_left_sidehead>Authority to Issue Shares</b_left_sidehead>
+
+<para_1>That pursuant to Section 161 of the Companies Act (Cap. 50),</para_1>
+<basic_para>the <?= plural(data.parties.director), "Director" ?> of the Company be and <? plural_verb(data.parties.director, "is") ?> hereby authorised
+to allot and to issue shares in the capital of the Company
+to such persons
+on such terms and conditions and with such rights and restrictions
+as they may think fit to impose
+and that such authority shall continue in force until</basic_para>
+<bullets>the conclusion of the Annual General meeting commencing next after this date
+or the expiration of the period within which the next Annual General Meeting of the Company is required by law to be held,</bullets>
+<basic_para>whichever is earlier.</basic_para>
+
+<a_left_sidehead>Authority to Bizfile</a_left_sidehead>
+
+<para_1>That the Corporate Secretary of the Company and/or its designated agents be authorized to file electronically with the <?= data.parties.state_regulator[0].name ?> on the Notice of Resolution.</para_1>
+
+<?!= include("inc_dr_end", data) ?>
