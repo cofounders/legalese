@@ -10,7 +10,7 @@
 <basic_para>
 
 </basic_para>
-<chapter_header>Consent to Share Allotment and Waiver of Pre-Emptive Rights</chapter_header>
+<chapter_header>Issuance Offer Notice</chapter_header>
 <basic_para>
 
 </basic_para>
@@ -19,16 +19,25 @@
 
 </basic_para>
 <?!= data.whitespace_handling_use_tags ?>
-<para_1><b>Regarding the allotment of shares in <?= data.company.name ?> (the "Company")</b></para_1>
-<para_1>Notice is hereby given to all members of the Company that the Directors intend to issue and allot <?= data.number_of_shares ?> <?= data.security_type ?> to <?= data.parties.new_investor[0].name ?></para_1>
+<para_1><b>Issuance of New Shares in <?= data.company.name ?> (the "Company")</b></para_1>
+<para_1>Notice is hereby given to all members of the Company that the Directors intend to issue and allot <?= data.number_of_shares ?> <?= data.security_type ?>, at a price of <?= data.price_per_share ?> per share.</para_1>
 <? if (data.explanation) { ?><para_1><?= data.explanation ?></para_1><? } ?>
-<para_1>As a member of the Company, you possess the right under Articles 44 of the Company's Articles of Association to participate in any issue of shares. We seek your waiver in writing of your right to participate. Kindly indicate your consent by signing below.</para_1>
-<para_1>If we do not hear from you within 7 days from the date of this letter, we will deem that you have no objection to the issue of new shares, and do not wish to participate.</para_1>
+<para_1>As a member of the Company, you possess the right under Articles <?= data.article_for_preemptive_rights ?> of the Company's Articles of Association to participate in this issue of shares.
+Given that the Company is issuing <?= data.total_new_shares_on_offer ?> new <?= data.security_type_short ?>, and you presently hold <?= data.shareholder.num_shares ?> out of an existing <?= data.total_existing_securities_in_class ?>, you have the right to subscribe for <?= data.shareholder.pro_rata ?>% of this new issue: <?= (data.shareholder.pro_rata / 100 * asNum_(data.number_of_shares)).toFixed(2) ?>
+ shares for <?= asCurrency_(currencyFor_(data.price_per_share), (data.shareholder.pro_rata / 100 * asNum_(data.price_per_share)).toFixed(2) ?>
+ per share.
+You may also have excess rights to subscribe beyond that amount -- if other shareholders do not take up their pro rata allotments, you may partcipate beyond yours, up to the total amount of <?= data.total_round_size ?>.
+If you wish to participate in this issue, please indicate, in the attached Issuance Offer Acceptance Notice, the level of your interest.
+If you do not participate, <?= commaAnd(data.parties.new_investor, "name") ?>
+ <?= plural_verb(data.parties.new_investor, "has") ?>
+ indicated the intent to subscribe for new shares not taken up by existing shareholders, up to the total amount on offer.
+If we do not hear from you within <?= data.preemptive_rights_notice_period ?> days from the date of this letter, we will understand that you do not wish to participate.</para_1>
 <? data.signature_comment = "Director" ?>
 <?!= include("inc_signature", data, data.company) ?>
 </Story_Main>
 <Bottom_Box delete_if_empty="true">
-<para_1>I, <?= data.shareholder.name ?> (<?= data.shareholder.idtype ?> <span_ucnum><?= data.shareholder.id ?></span_ucnum>), being a shareholder of <?= data.company.name ?> hereby give my consent to the allotment of <?= data.number_of_shares ?> new shares to <?= data.parties.new_investor[0].name ?> and waive my right to subscribe for any shares in this issue.
+<? // TODO: add form fields https://www.echosign.adobe.com/content/dam/echosign/docs/pdfs/Forms%20-%20Text%20Tags%20Acrobat%20Form%20Fields%20Companion.pdf ?>
+<para_1>I, <?= data.shareholder.name ?> (<?= data.shareholder.idtype ?> <span_ucnum><?= data.shareholder.id ?></span_ucnum>), being a shareholder of <?= data.company.name ?> hereby decline to subscribe for new shares in this issue.
 </para_1>
 <? data.signature_comment = "Shareholder" ?>
 <?!= include("inc_signature", data, data.shareholder) ?>
