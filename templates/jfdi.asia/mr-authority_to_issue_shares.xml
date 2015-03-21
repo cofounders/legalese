@@ -2,8 +2,10 @@
 <basic_para>the <?= plural(data.parties.director, "Director") ?> of the Company be and <?= plural_verb(data.parties.director, "is") ?> hereby authorised
 to allot and to issue shares in the capital of the Company
 </basic_para>
-<para_2>to such persons
-on such terms and conditions
+<para_2><?= data.share_issuance_to_persons || "to such persons" ?>
+
+<?= data.share_issuance_terms || "on such terms and conditions" ?>
+
 and with such rights and restrictions as they may think fit to impose
 and that such authority shall continue in force
 </para_2>
