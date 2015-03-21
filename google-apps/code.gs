@@ -4,6 +4,10 @@
  *
  * notice of resolution to be filed with ACRA
  *
+ * directors and members resolutions to amend the articles of association to define a new class of preferred shares
+ *
+ * dr-egm_notice-issue_shares should say more about how it's in the best interests of the company, etc etc.
+ *
  * create a new company should instantiate a new spreadsheet and prefill it with all known workflows
  * the workflows should prefill terms from a schema or a template derived from the codebase itself
  * it would be nice to have a linter
@@ -626,9 +630,9 @@ function readRows_(sheet, entitiesByName) {
 	  roles[relation].push(entityname);
       Logger.log("readRows(%s):         ROLES: learning party role %s = %s", sheet.getSheetName(), relation, entityname);
 
-	  for (var role_x = 2; role_x < row.length; row+=2) {
+	  for (var role_x = 2; role_x < row.length; role_x+=2) {
 		if (row[role_x] && row[role_x+1]) {
-		// Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[2]), formatify_(formats[i][3], row[3]));
+		Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[role_x]), formatify_(formats[i][role_x+1], row[role_x+1]));
 		entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x]);
 		}
 	  }
