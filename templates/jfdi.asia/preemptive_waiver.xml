@@ -24,7 +24,7 @@
 <? if (data.explanation) { ?><para_1><?= data.explanation ?></para_1><? } ?>
 <para_1>As a member of the Company, you possess the right under Articles <?= data.article_for_preemptive_rights ?> of the Company's Articles of Association to participate in this issue of shares.
 Given that the Company is issuing <?= data.total_new_shares_on_offer ?> new <?= data.security_type_short ?>, and you presently hold <?= data.shareholder.num_shares ?> out of an existing <?= data.total_existing_securities_in_class ?>, you have the right to subscribe for <?= data.shareholder.pro_rata ?>% of this new issue: <?= (data.shareholder.pro_rata / 100 * asNum_(data.total_new_securities_on_offer)).toFixed(2) ?>
- shares for <?= asCurrency_(currencyFor_(data.price_per_share), (data.shareholder.pro_rata / 100 * asNum_(data.price_per_share)).toFixed(2)) ?>.
+ shares for <?= asCurrency_(currencyFor_(data.price_per_share), (data.shareholder.pro_rata / 100 * asNum_(data.total_round_size)).toFixed(2)) ?>.
 You may also have excess rights to subscribe beyond that amount -- if other shareholders do not take up their pro rata allotments, you may partcipate beyond yours, up to the total amount of <?= data.total_round_size ?>.
 If you wish to participate in this issue, please indicate, in the attached Issuance Offer Acceptance Notice, the level of your interest.
 If you do not participate, <?= commaAnd(data.parties.new_investor, "name") ?>
