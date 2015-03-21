@@ -1,15 +1,13 @@
 <para_1>That pursuant to Section 161 of the Companies Act (Cap. 50),</para_1>
-<basic_para>the <?= plural(data.parties.director, "Director") ?> of the Company be and <?= plural_verb(data.parties.director, "is") ?> hereby authorised
+<para_2_hanging>the <?= plural(data.parties.director, "Director") ?> of the Company be and <?= plural_verb(data.parties.director, "is") ?> hereby authorised
 to allot and to issue shares in the capital of the Company
-</basic_para>
-<para_2><?= data.share_issuance_to_persons || "to such persons" ?>
+<?= data.share_issuance_to_persons || "to such persons" ?>
 
 <?= data.share_issuance_terms || "on such terms and conditions" ?>
 
 and with such rights and restrictions as they may think fit to impose
 and that such authority shall continue in force
-</para_2>
-<basic_para>until the conclusion of the Annual General meeting commencing next after this date
+until the conclusion of the Annual General meeting commencing next after this date
 or the expiration of the period within which the next Annual General Meeting of the Company is required by law to be held,
 whichever is earlier.
-</basic_para>
+</para_2_hanging>
