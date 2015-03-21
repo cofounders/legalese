@@ -633,7 +633,7 @@ function readRows_(sheet, entitiesByName) {
 	  for (var role_x = 2; role_x < row.length; role_x+=2) {
 		if (row[role_x] && row[role_x+1]) {
 		Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[role_x]), formatify_(formats[i][role_x+1], row[role_x+1]));
-		entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x]);
+		entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x+1]);
 		}
 	  }
 	}
