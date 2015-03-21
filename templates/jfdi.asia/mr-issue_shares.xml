@@ -11,17 +11,21 @@
 <? } else if (data.egm_or_written_means == "AGM") { ?>
 <para_1>At the Annual General Meeting held on <?= data.gm_date ?> the following resolutions were passed:</para_1>
 <? } else { ?>
-<para_1>The Members of the Company hereby record, by written means in lieu of a General Meeting pursuant to Section 184A of the Companies Act (Cap. 50) and to Article <?= data.article_allowing_shareholders_resolution_in_writing ?> of the Company's Articles of Association, our approval for the following resolution:</para_1>
+<para_1>The Members of the Company hereby record, by written means in lieu of a General Meeting pursuant to Section 184A of the Companies Act (Cap. 50) and to Article <?= data.article_allowing_shareholders_resolution_in_writing ?> of the Company's Articles of Association, our approval for the following resolution<?= data.additional_resolution_i == undefined ? "" : "s" ?>:</para_1>
 <? } ?>
 
 <a_left_sidehead>Authority to Issue Shares</a_left_sidehead>
-
 <?!= include("mr_authority_to_issue_shares", data) ?>
 
+<? for (var ar_i = 1; ar_i < 100; ar++) {
+<? if (data["additional_resolution_" + ar_i]) { ?>
+<a_left_sidehead><?= data["additional_resolution_"+ar_i+"_title ?></a_left_sidehead>
+<para_1><?= data["additional_resolution_"+ar_i] ?></para_1>
+<? } ?>
+
 <? if (data.explanatory_statement) { ?>
-<chapter_header override="startParagraph=StartParagraph.ANYWHERE">Explanatory Statement</chapter_header>
-<para_1><?= data.explanatory_statement ?>
-</para_1>
+<chapter_header>Explanatory Statement</chapter_header>
+<para_1><?= data.explanatory_statement ?></para_1>
 <? } ?>
 
 <?!= include("inc_dr_end", data, { director_or_member:"Member", }) ?>

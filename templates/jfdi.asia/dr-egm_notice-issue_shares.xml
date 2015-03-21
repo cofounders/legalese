@@ -2,11 +2,18 @@
 
 <a_left_sidehead>Authority of Members Sought for Issuance of Shares</a_left_sidehead>
 
-<para_1>That the approval of the Members of the Company be sought for passing the following ordinary resolution:</para_1>
+<para_1>That the approval of the Members of the Company be sought for passing the following ordinary resolution<?= data.additional_resolution_i == undefined ? "" : "s" ?>:</para_1>
 
 <b_left_sidehead>Authority to Issue Shares</b_left_sidehead>
 
 <?!= include("mr_authority_to_issue_shares", data) ?>
+
+<? for (var ar_i = 1; ar_i < 100; ar++) {
+<? if (data["additional_resolution_" + ar_i]) { ?>
+<b_left_sidehead><?= data["additional_resolution_"+ar_i+"_title ?></b_left_sidehead>
+<para_1><?= data["additional_resolution_"+ar_i] ?></para_1>
+<? } ?>
+
 
 <? if (data.egm_or_written_means == "EGM") { ?>
 <a_left_sidehead>Notice of EGM</a_left_sidehead>
