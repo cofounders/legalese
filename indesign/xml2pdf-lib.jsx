@@ -40,13 +40,14 @@ function xmls2pdf(xmlFiles, showingWindow) {
 	  exportToPDF(doc, xmlFile);
 	  logToFile("xmls2pdf: about to saveAsIndd, for the second time");
 	  saveAsIndd(doc, xmlFile);
-	  if (! showingWindow) doc.close()
+	  if (! showingWindow) doc.close(SaveOptions.NO)
 	  else doc.pages.item(-1).textFrames.item(0).select();
 	  logToFile("xmls2pdf: finished " + xmlFile.fullName);
 	}
 	catch (error) {
 	  saveFail(xmlFile, error);
 	  errors.push(xmlFile.fullName + ": " + error);
+	  if (! showingWindow) doc.close(SaveOptions.NO);
 	}
   }
   if (showingWindow && errors.length > 0) { alert (errors) }
