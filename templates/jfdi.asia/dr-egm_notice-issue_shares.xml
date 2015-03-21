@@ -15,24 +15,8 @@
 <?   }
    } ?>
 
-<? if (data.egm_or_written_means == "EGM") { ?>
-<a_left_sidehead>Notice of EGM</a_left_sidehead>
+<?!= include("inc_member_notices", data) ?>
 
-<para_1>That an Extraordinary General Meeting of the Company be held on <?= data.gm_date ?> for the purpose of considering and if thought fit, passing the above resolution<?= data.additional_resolution_1 == undefined ? "" : "s" ?>.</para_1>
-
-<? } else if (data.egm_or_written_means == "AGM") { ?>
-<a_left_sidehead>Notice of AGM</a_left_sidehead>
-
-<para_1>That the Annual General Meeting of the Company be held on <?= data.gm_date ?> for the purpose of considering and if thought fit, passing the above resolution<?= data.additional_resolution_1 == undefined ? "" : "s" ?>.</para_1>
-
-<? } else { ?>
-<a_left_sidehead>Resolution by Written Means</a_left_sidehead>
-
-<para_1>That the above resolution<?= data.additional_resolution_1 == undefined ? "" : "s" ?> be circulated for passage by written means, under Section 184A of the Companies Act (Cap. 50), in lieu of a General Meeting.</para_1>
-<? } ?>
-
-<a_left_sidehead>Authority to Bizfile</a_left_sidehead>
-
-<para_1>That the Corporate Secretary of the Company (being at the time of writing <?= data.parties.corporate_secretary[0].name ?>) and/or its designated agents be authorized to file the Notice of Resolution<?= data.additional_resolution_1 == undefined ? "" : "s" ?> electronically with the <?= data.parties.state_regulator[0].name ?>.</para_1>
+<?!= include("inc_authority_to_bizfile", data) ?>
 
 <?!= include("inc_dr_end", data, { member_or_director: "Director" } ) ?>
