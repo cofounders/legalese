@@ -40,7 +40,7 @@ function xmls2pdf(xmlFiles, showingWindow) {
 	  exportToPDF(doc, xmlFile);
 	  logToFile("xmls2pdf: about to saveAsIndd, for the second time");
 	  saveAsIndd(doc, xmlFile);
-	  if (! showingWindow && doc.isValid) doc.close(SaveOptions.NO)
+	  if (! showingWindow) { if (doc.isValid) { doc.close(SaveOptions.NO); } }
 	  else doc.pages.item(-1).textFrames.item(0).select();
 	  logToFile("xmls2pdf: finished " + xmlFile.fullName);
 	}
