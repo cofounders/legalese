@@ -1,8 +1,8 @@
 <? for (var ar_i = 1; ar_i < 100; ar_i++) { 
      if (data["additional_resolution_" + ar_i]) { ?>
 <?!= "<" + data._include.header ?>><?= data["additional_resolution_"+ar_i+"_title"] ?></<?= data._include.header ?>>
-<?!= "<" + data._include.bodypara || "para_2_hanging" ?>><?= data["additional_resolution_"+ar_i] ?>
+<?!= "<" + (data._include.bodypara || "para_2_hanging") ?>><?= data["additional_resolution_"+ar_i] ?>
 
-<?!= "</" + data._include.bodypara || "para_2_hanging" ?>>
+<?!= "</" + (data._include.bodypara || "para_2_hanging") ?>>
 <?   }
    } ?>
