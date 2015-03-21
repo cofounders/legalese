@@ -1,21 +1,14 @@
-<?!= data.xml_declaration ?>
-<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" templateSpec="singlepage.indt">
-<letterhead><?= data.company.name ?></letterhead>
-<Firstpage_Sidebar>
-<sidebar><?= data.company.name ?></sidebar>
-<sidebar><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></sidebar>
-<sidebar><?= data.company.address ?></sidebar>
-</Firstpage_Sidebar>
 <? data._total_new_shares = data.parties.new_investor.map(function(p){return p.num_shares}).reduce(function(a,b){return a+b}, 0); ?>
-<Story_Main>
-<resolution_title>Directors' resolution in writing&#8232;passed pursuant to Article <?= data.article_for_directors_resolution_in_writing ?> of the Company's Articles of Association</resolution_title>
-<chapter_header override="startParagraph=StartParagraph.ANYWHERE">Allotment of <?= data.security_type_long ?></chapter_header>
-<para_1><span_smallcaps>Resolved:&#8212;</span_smallcaps></para_1>
-<numbered_1_para>That pursuant to the authority given to the Directors <?
+<?!= include("inc_dr_start", data, {
+  director_or_member:"Director",
+  article_pursuant:data.article_for_directors_resolution_in_writing,
+  chapter_header:"Allotment of " + data.security_type_long,
+  r_num: 3 }) ?>
+<a_left_sidehead>Shares to be Issued</a_left_sidehead>
+<para_1>That pursuant to the authority given to the Directors <?
   if (data.egm_or_written_means == "EGM") { ?>at the Extraordinary General Meeting of <?= data.company.name ?> (the "Company") held on <?= data.gm_date ?>
   if (data.egm_or_written_means == "AGM") { ?>at the Annual General Meeting of <?= data.company.name ?> (the "Company") held on <?= data.gm_date ?>
-<? } else { ?>by the Members of the Company in an ordinary resolution passed by written means<? } ?>,
-under Section 161 of the Companies Act (Cap. 50)</numbered_1_para>
+<? } else { ?>by the Members of the Company in an ordinary resolution passed by written means<? } ?>, under Section 161 of the Companies Act (Cap. 50)</para_1>
 <? data._subscription_agreement_dates = data.parties.new_investor.map(function(p){Logger.log("trying to convert date of subscription agreement " + p.date_of_subscription_agreement);
   return Utilities.formatDate(new Date(p.date_of_subscription_agreement),
                               data._timezone,
@@ -43,13 +36,10 @@ commaAnd([data.parties.promoter[0].name].concat(
 <? } } ?>
 </Table>
 </para_1>
-<numbered_1_para>That the Common Seal of the Company be affixed in accordance with the Company's Articles of Association to the share certificate to be issued to the aforesaid <?= plural(data.parties.new_investor, "investor") ?>.</numbered_1_para>
-<numbered_1_para>That <?= data.parties.corporate_secretary[0].name ?> and/or its designated agents be authorized to file electronically to the <?= data.parties.state_regulator[0].name ?> (<?= data.parties.state_regulator[0].short_name ?>) on the aforesaid allotment of <?= data.security_type_short ?>.</numbered_1_para>
-<para_1>Dated this <?= data.agreement_date ?></para_1>
-<? data.signature_comment = "Director" ?>
-<? for (var i=0;i<data.parties.director.length;i++) { ?>
-<?!= include("inc_signature", data, data.parties.director[i]) ?>
-<? } ?>
-</Story_Main>
-<Bottom_Box delete_if_empty="true" />
-</Root>
+<a_left_sidehead>Share Certificates to be Issued</a_left_sidehead>
+<para_1>That the Common Seal of the Company be affixed in accordance with the Company's Articles of Association to the share certificate to be issued to the aforesaid <?= plural(data.parties.new_investor, "investor") ?>.</para_1>
+
+<?!= include("inc_authority_to_bizfile", data, "aforesaid allotment") ?>
+
+<?!= include("inc_dr_end", data, { date: data.agreement_date } ) ?>
+
