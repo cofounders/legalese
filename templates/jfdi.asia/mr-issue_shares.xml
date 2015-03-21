@@ -26,4 +26,5 @@
 <? } ?>
 
 <chapter_header>Signatures</chapter_header>
+<para_1>Resolving by written means to pass the resolution<?= data.additional_resolution_1 == undefined ? "" : "s" ?> above:</para_1>
 <?!= include("inc_dr_end", data, { director_or_member:"Member", }) ?>
