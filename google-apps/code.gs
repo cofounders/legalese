@@ -1,6 +1,11 @@
 /* TODO
  *
- * todo -- do the right thing with emailing exploded people. set esnum to contiguous 1,2,3 in each exploded file.
+ * create a new company should instantiate a new spreadsheet and prefill it with all known workflows
+ * the workflows should prefill terms from a schema or a template derived from the codebase itself
+ * it would be nice to have a linter
+ * 
+ * think about and structure up the Events tab
+ *
  * todo -- write to the Readme the list of To: and CC: for when the user is submitting to EchoSign manually.
  *
  * we need a high level way to say "generate workflow W containing agreements X1, X2, X3 for company Y".
@@ -787,14 +792,7 @@ function formatify_(format, string, sheet) {
     var matches;
     if (matches = format.match(/\[\$(.*)\]/)) { // currency
       var currency = matches[0].substring(2,matches[0].length-1).replace(/ /g," "); // nbsp
-
-      // it would be nice to fill in the format string exactly the way Spreadsheets do it, but that doesn't seem to be an option.
-      // failing that, it would be nice to get support for the ' option in sprintf, but it looks like formatString doesn't do that one either.
-      // failing that, SheetConverter has a convertCell function that should do the job. https://sites.google.com/site/scriptsexamples/custom-methods/sheetconverter
-      // but that doesn't work either. so we do it by hand.
-      var parts = string.toString().split(".");
-      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      toreturn = currency + parts.join(".");
+	  toreturn = asCurrency_(currency, string);
     }
     else if (format.match(/%$/)) {
       toreturn = (string * 100).toFixed(2);
@@ -1099,7 +1097,7 @@ function availableTemplates_() {
 	url:"http://www.legalese.io/templates/jfdi.asia/preemptive_notice.xml",
 	parties:{to:["shareholder"],cc:["company"]},
   },
-  { name:"preemptive_waiver_xml", title:"Pre-Emptive Notice for Waiver",
+  { name:"preemptive_waiver_xml", title:"Issuance Offer Notice",
 	url:"http://www.legalese.io/templates/jfdi.asia/preemptive_waiver.xml",
 	parties:{to:[],cc:["corporate_secretary","company"]},
 	explode: "shareholder",
@@ -1169,7 +1167,7 @@ function intersect_(array1, array2) {
 // ---------------------------------------------------------------------------------------------------------------- filenameFor_
 // create a canonical filename for a given sourceTemplate,entity pair
 function filenameFor_ (sourceTemplate, entity) {
-  if (entity) return sourceTemplate.title + " for " + entity.name
+  if (entity) return sourceTemplate.title + " for " + firstline_(entity.name)
   else        return sourceTemplate.title;
 };
 
@@ -1541,9 +1539,15 @@ function include(name, data, _include) {
 // ---------------------------------------------------------------------------------------------------------------- newlinesToCommas
 // used inside <? ?> to convert a multiline address to a singleline address for party-section purposes
 function newlinesToCommas(str) {
-//  Logger.log("converting newlinesToCommas");
   if (str == undefined) { Logger.log("newlinesToCommas: undefined!"); return undefined }
   return str.replace(/\n/g, ", ");
+}
+
+// ---------------------------------------------------------------------------------------------------------------- newlinesToCommas
+// used inside <? ?> to convert a multiline name to the first line for party-section purposes
+function firstline_(str) {
+  if (str == undefined) { Logger.log("firstline: undefined!"); return undefined }
+  return str.split(/\n/)[0];
 }
 
 
@@ -2150,20 +2154,46 @@ function plural(num, singular, plural, locale) {
   if (locale == undefined) { locale = "en-US" }
   if (num.constructor.name == "Array") { num = num.length }
   if (locale == "en-US") {
-	if (plural == undefined) { plural = singular + "s" }
+	if (plural == undefined) {
+	  if (singular == "its") { plural = "their" }
+	  else                   { plural = singular + "s" }
+	}
 	if (num  > 1) { return plural }
 	if (num == 1) { return singular }
 	if (num == 0) { return plural }
   }
 }
 
+function asNum_(str) {
+  return str.replace(/[^.\d]/g,"");
+}
+
+function asCurrency_(currency, amount) {
+  // it would be nice to fill in the format string exactly the way Spreadsheets do it, but that doesn't seem to be an option.
+  // failing that, it would be nice to get support for the ' option in sprintf, but it looks like formatString doesn't do that one either.
+  // failing that, SheetConverter has a convertCell function that should do the job. https://sites.google.com/site/scriptsexamples/custom-methods/sheetconverter
+  // but that doesn't work either. so we do it by hand.
+  var parts = amount.toString().split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (parts[1] == 0 && parts.length == 2) { parts = parts.slice(0,1); }
+  return currency + parts.join(".");
+}
+
+function currencyFor_(string) {
+  // extract the currency prefix
+  var mymatch = string.match(/(.*?)\d/);
+  if (mymatch && mymatch[1]) { return mymatch[1] }
+}
+
+
 function plural_verb(num, singular, plural, locale) {
   if (locale == undefined) { locale = "en-US" }
   if (num.constructor.name == "Array") { num = num.length }
   if (locale == "en-US") {
 	if (plural == undefined) {
-	  if (singular == "is") { plural = "are"; }
-	  else                  { plural = singular.replace(/s$/,""); }
+	  if      (singular == "is")  { plural = "are"; }
+	  else if (singular == "has") { plural = "have"; }
+	  else                        { plural = singular.replace(/s$/,""); }
 	}
 	if (num  > 1) { return plural }
 	if (num == 1) { return singular }
