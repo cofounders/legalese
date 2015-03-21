@@ -620,15 +620,17 @@ function readRows_(sheet, entitiesByName) {
 	else if (section == "ROLES") { // principal relation entity. these are all strings. we attach other details
 	  var relation  = asvar_(row[0]);
 	  var entityname    = row[1];
+	  var entity = entitiesByName[entityname];
 
 	  roles[relation] = roles[relation] || [];
 	  roles[relation].push(entityname);
       Logger.log("readRows(%s):         ROLES: learning party role %s = %s", sheet.getSheetName(), relation, entityname);
 
-	  if (row[2] && row[3]) {
-		var entity = entitiesByName[entityname];
+	  for (var role_x = 2; role_x < row.length; row+=2) {
+		if (row[role_x] && row[role_x+1]) {
 		// Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[2]), formatify_(formats[i][3], row[3]));
-		entity[asvar_(row[2])] = formatify_(formats[i][3], row[3]);
+		entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x]);
+		}
 	  }
 	}
     else if (section == "ENTITIES") {
