@@ -17,16 +17,12 @@
 <a_left_sidehead>Authority to Issue Shares</a_left_sidehead>
 <?!= include("mr_authority_to_issue_shares", data) ?>
 
-<? for (var ar_i = 1; ar_i < 100; ar_i++) { 
-     if (data["additional_resolution_" + ar_i]) { ?>
-<a_left_sidehead><?= data["additional_resolution_"+ar_i+"_title"] ?></a_left_sidehead>
-<para_2_hanging><?= data["additional_resolution_"+ar_i] ?></para_2_hanging>
-<?   }
-   } ?>
+<?!= include("inc_additional_resolutions", data, { header:"a_left_sidehead" } ) ?>
 
 <? if (data.explanatory_statement) { ?>
 <chapter_header>Explanatory Statement</chapter_header>
-<para_1><?= data.explanatory_statement ?></para_1>
+<para_1><?= data.explanatory_statement ?>
+</para_1>
 <? } ?>
 
 <?!= include("inc_dr_end", data, { director_or_member:"Member", }) ?>
