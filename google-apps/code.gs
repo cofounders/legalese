@@ -1143,6 +1143,9 @@ function availableTemplates_() {
   { name:"inc_member_notices", title:"notice of resolutions at egm agm or written means",
 	url:"http://www.legalese.io/templates/jfdi.asia/inc_member_notices.xml"
   },
+  { name:"inc_additional_resolutions", title:"resolutions 2 and above",
+	url:"http://www.legalese.io/templates/jfdi.asia/inc_additional_resolutions.xml"
+  },
 
   ];
 return availables;
