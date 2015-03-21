@@ -10,7 +10,7 @@
 
 <? for (var ar_i = 1; ar_i < 100; ar++) { 
      if (data["additional_resolution_" + ar_i]) { ?>
-<b_left_sidehead><?= data["additional_resolution_"+ar_i+"_title" ?></b_left_sidehead>
+<b_left_sidehead><?= data["additional_resolution_"+ar_i+"_title"] ?></b_left_sidehead>
 <para_1><?= data["additional_resolution_"+ar_i] ?></para_1>
 <?   }
    } ?>
