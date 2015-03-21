@@ -1,5 +1,9 @@
 /* TODO
  *
+ * directors resolution to appoint corporate representative
+ *
+ * notice of resolution to be filed with ACRA
+ *
  * create a new company should instantiate a new spreadsheet and prefill it with all known workflows
  * the workflows should prefill terms from a schema or a template derived from the codebase itself
  * it would be nice to have a linter
@@ -1132,6 +1136,12 @@ function availableTemplates_() {
   },
   { name:"mr_authority_to_issue_shares", title:"members resolution to issue shares",
 	url:"http://www.legalese.io/templates/jfdi.asia/mr-authority_to_issue_shares.xml"
+  },
+  { name:"inc_authority_to_bizfile", title:"authority for corp sec to bizfile notice of resolutions",
+	url:"http://www.legalese.io/templates/jfdi.asia/inc_authority_to_bizfile.xml"
+  },
+  { name:"inc_member_notices", title:"notice of resolutions at egm agm or written means",
+	url:"http://www.legalese.io/templates/jfdi.asia/inc_member_notices.xml"
   },
 
   ];
