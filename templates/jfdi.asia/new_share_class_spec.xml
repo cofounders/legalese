@@ -1,0 +1,43 @@
+<chapter_header>Amendments to Articles of Association of the Company</chapter_header>
+<a_left_sidehead restart="true">Definitions</a_left_sidehead>
+<definition><?= data.new_security_type_short_plural ?>	means the <?= data.security_type ?> in the share capital of the Company, having the rights and being subject to the restrictions specified in these Articles described under "<?= data.new_security_type ?>";</definition>
+<? if (data.shadows_an_underlying_security) { ?>
+<definition><?= data.underlying_security_short_plural ?>	means the <?= data.underlying_security_name ?> in the capital of <?!= include("inc_parties", data, data.parties.startup[0] ?> (the "Incubatee"), described in the Articles of Association of the Incubatee;</definition>
+<? } ?>
+<a_left_sidehead><?= data.new_security_type ?></a_left_sidehead>
+<para_1>The Company may issue preference shares in the capital of the Company ("<?= data.new_security_type ?>") which shall carry the following rights, benefits, and privileges, and be subject to the following restrictions:--</para_1>
+<? if (data.shadows_an_underlying_security) { ?>
+<b_left_sidehead>As Regards the Relationship with the Underlying Security</b_left_sidehead>
+<numbered_para_3_fl><?= data.new_security_short_plural ?> represent <?= data.underlying_security_name ?> of <?= data.parties.underlying_company[0].name ?> (the <b>"Underlying Security"</b> or "<?= data.underlying_security_short_plural ?>").
+Proceeds from the issuance of <?= data.new_security_short_plural ?> shall be used solely to purchase <?= data.underlying_security_name ?> in <?= data.parties.underlying_company[0].name ?>.
+<?= data.underlying_security_short_plural ?> purchased in this way shall be held in trust by the Company for the beneficial owners: the holders of <?= data.new_security_short_plural ?>.
+Proceeds arising from the Company's interests in the Underlying Security, including dividends and capital gains, shall accrue wholly to the holders of <?= data.new_security_short_plural ?>.
+<?= data.new_security_short_plural ?> shall be convertible, at the election of the holder, to the Underlying Security at any time, subject to the limitations imposed by the Company's agreements with the Incubatee.
+Such limitations may prohibit transfer or assignment of <?= data.underlying_security_short_plural ?>.
+It is probable that proceeds will not be realised until the Incubatee achieves a liquidity event.
+</numbered_para_3_fl>
+<b_left_sidehead>As Regards Other Classes of Shares in <?= data.company.name ?></b_left_sidehead>
+<numbered_para_3_fl>The class of <?= data.new_security_short_plural ?> shall be effectively independent of the rest of the Company.
+Holders of <?= data.new_security_short_plural ?> shall enjoy no special rights in respect of their Membership in the Company beyond those arising from their holdings of other classes of shares.
+<b_left_sidehead>Regarding Voting</b_left_sidehead>
+<numbered_para_3_fl>Holders of <?= data.new_security_short_plural ?> shall enjoy no voting rights at any general meeting of the Members of the Company beyond those arising from their holdings of other classes of shares.
+</numbered_para_3_fl>
+<b_left_sidehead>Regarding Dividends</b_left_sidehead>
+<numbered_para_3_fl>Holders of <?= data.new_security_short_plural ?> shall not be entitled to participate in the profits of the Company available for distribution by way of dividend or otherwise.
+Any dividends issued to the Company by virtue of its ownership of Underlying Securities shall be paid through to the holders of <?= data.new_security_short_plural ?>, less any withholdings required by law, and less any reasonable incidental expenses incurred by the Company in relation to the receipt and payment of these dividends, including professional fees paid to legal or accounting specialists, and management fees due the Company, calculated to cover the cost of the Company's attention to the <?= data.new_security_short_plural ?>.
+</numbered_para_3_fl>
+<b_left_sidehead>Regarding Repayment of Capital</b_left_sidehead>
+<numbered_para_3_fl>On a liquidation, dissolution, or winding-up of the Company, or on a return of capital by the Company, holders of <?= data.new_security_short_plural ?> shall receive, so far as is practicable, title to the Underlying Security, or to any security to which the Underlying Security is convertible.
+On a liquidation, dissolution, or winding-up of the Incubatee, on a return of capital by the Incubatee, holders of <?= data.new_security_short_plural ?> shall receive the cash or other liquid assets delivered by the Incubatee or its agents or receivers, less any reasonable incidental expenses incurred by the Company in relation to the receipt and payment of these dividends, including professional fees paid to legal or accounting specialists, and management fees due the Company, calculated to cover the cost of the Company's attention to the <?= data.new_security_short_plural ?>.
+</numbered_para_3_fl>
+<b_left_sidehead>Regarding Participation in Surplus Assets and Profits</b_left_sidehead>
+<numbered_para_3_fl>Holders of <?= data.new_security_short_plural ?> will not be entitled to participate in the surplus profits or assets of the Company beyond transfer of title of the Underlying Security, or any security to which the Underlying Security is convertible.
+</numbered_para_3_fl>
+<b_left_sidehead>Regarding Priority of Payment of Capital and Dividends in Relation to Other Classes of Shares</b_left_sidehead>
+<numbered_para_3_fl>Payments of capital and dividends to holders of <?= data.new_security_short_plural ?> shall be calculated and made separately from other classes of shares.
+Only those gains arising from the Underlying Security shall benefit holders of <?= data.new_security_short_plural ?>.
+Gains arising from the Underlying Security shall not benefit holders of other classes of shares.
+</numbered_para_3_fl>
+<b_left_sidehead>No Annual Meeting</b_left_sidehead>
+<numbered_para_3_fl>Pursuant to Section 175A of the Companies Act (Cap. 50), holders of <?= data.new_security_short_plural ?> shall agree to dispense with the holding of annual general meetings within their class of shares.
+</numbered_para_3_fl>

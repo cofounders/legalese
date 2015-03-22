@@ -8,10 +8,10 @@
 
 <?!= include("inc_resolved_mr", data) ?>
 
-<a_left_sidehead>Ordinary Resolution -- Authority to Issue Shares</a_left_sidehead>
-<?!= include("mr_authority_to_issue_shares", data) ?>
-
-<?!= include("inc_additional_resolutions", data, { header:"a_left_sidehead", prefix:"members_resolution" } ) ?>
+<?!= include("inc_additional_resolutions", data, {
+  header: "a_left_sidehead",
+  prefix:"members_resolution",
+  bodystyle:"para_1" } ) ?>
 
 <? if (data.explanatory_statement) { ?>
 <chapter_header>Explanatory Statement</chapter_header>
