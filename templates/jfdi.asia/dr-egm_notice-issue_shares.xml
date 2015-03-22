@@ -2,13 +2,16 @@
 
 <a_left_sidehead>Authority of Members Sought for Issuance of Shares</a_left_sidehead>
 
-<para_1>That the approval of the Members of the Company be sought for passing the following ordinary resolution<?= data.additional_resolution_1 == undefined ? "" : "s" ?>:</para_1>
+<para_1>That the approval of the Members of the Company be sought for passing the following ordinary resolution<?= data.members_resolution_1 == undefined ? "" : "s" ?>:</para_1>
 
 <b_left_sidehead>Authority to Issue Shares</b_left_sidehead>
 
 <?!= include("mr_authority_to_issue_shares", data) ?>
 
-<?!= include("inc_additional_resolutions", data, { header:"b_left_sidehead" } ) ?>
+<?!= include("inc_additional_resolutions", data, {
+  header:data.members_resolution_headerstyle || "b_left_sidehead",
+  prefix:"members_resolution",
+  bodystyle:data.members_resolution_bodystyle } ) ?>
 
 <?!= include("inc_member_notices", data) ?>
 

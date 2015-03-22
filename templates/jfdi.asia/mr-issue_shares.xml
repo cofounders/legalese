@@ -11,7 +11,7 @@
 <? } else if (data.egm_or_written_means == "AGM") { ?>
 <para_1>At the Annual General Meeting held on <?= data.gm_date ?> the following resolutions were passed:</para_1>
 <? } else { ?>
-<para_1>The Members of the Company hereby record, by written means in lieu of a General Meeting pursuant to Section 184A of the Companies Act (Cap. 50) and to Article <?= data.article_allowing_shareholders_resolution_in_writing ?> of the Company's Articles of Association, our approval for the following resolution<?= data.additional_resolution_1 == undefined ? "" : "s" ?>:</para_1>
+<para_1>The Members of the Company hereby record, by written means in lieu of a General Meeting pursuant to Section 184A of the Companies Act (Cap. 50) and to Article <?= data.article_allowing_shareholders_resolution_in_writing ?> of the Company's Articles of Association, our approval for the following resolution<?= data.members_resolution_1 == undefined ? "" : "s" ?>:</para_1>
 <? } ?>
 
 <a_left_sidehead>Authority to Issue Shares</a_left_sidehead>
@@ -26,5 +26,5 @@
 <? } ?>
 
 <chapter_header>Signatures</chapter_header>
-<para_1>Resolving by written means to pass the resolution<?= data.additional_resolution_1 == undefined ? "" : "s" ?> above:</para_1>
+<para_1>We, the undersigned, being the Shareholders of the Company, do hereby pass the following Resolution<?= data._include.r_num == 1 ? "" : "s" ?> by written means under Section 184A of the Companies Act (Cap. 50) and the Articles of Assocation of the Company:---</para_1>
 <?!= include("inc_dr_end", data, { director_or_member:"Member", }) ?>
