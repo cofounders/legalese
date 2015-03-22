@@ -14,7 +14,7 @@
 <para_1>The Members of the Company hereby record, by written means in lieu of a General Meeting pursuant to Section 184A of the Companies Act (Cap. 50) and to Article <?= data.article_allowing_shareholders_resolution_in_writing ?> of the Company's Articles of Association, our approval for the following resolution<?= data.members_resolution_1 == undefined ? "" : "s" ?>:</para_1>
 <? } ?>
 
-<a_left_sidehead>Authority to Issue Shares</a_left_sidehead>
+<a_left_sidehead>Ordinary Resolution -- Authority to Issue Shares</a_left_sidehead>
 <?!= include("mr_authority_to_issue_shares", data) ?>
 
 <?!= include("inc_additional_resolutions", data, { header:"a_left_sidehead", prefix:"members_resolution" } ) ?>
