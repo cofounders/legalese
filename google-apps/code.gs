@@ -632,8 +632,9 @@ function readRows_(sheet, entitiesByName) {
 
 	  for (var role_x = 2; role_x < row.length; role_x+=2) {
 		if (row[role_x] && row[role_x+1]) {
-		Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[role_x]), formatify_(formats[i][role_x+1], row[role_x+1]));
-		entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x+1]);
+		  Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[role_x]), formatify_(formats[i][role_x+1], row[role_x+1]));
+		  entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x+1]);
+		  entity["_format_" + asvar_(row[role_x])] = formats[i][role_x+1];
 		}
 	  }
 	}
@@ -801,8 +802,7 @@ function formatify_(format, string, sheet) {
   if (format != undefined) {
     var matches;
     if (matches = format.match(/\[\$(.*)\]/)) { // currency
-      var currency = matches[0].substring(2,matches[0].length-1).replace(/ /g," "); // nbsp
-	  toreturn = asCurrency_(currency, string);
+	  toreturn = asCurrency_(format, string);
     }
     else if (format.match(/%$/)) {
       toreturn = (string * 100).toFixed(2);
@@ -1020,6 +1020,25 @@ function availableTemplates_() {
 // this is unwise, because the XML template runs with the same privileges as this script,
 // and if you randomly execute templates from all over the Internet, sooner or later you will regret it.
 
+//  { name:"", title:"",
+//	url:"http://www.legalese.io/templates/jfdi.asia/.xml",
+//	parties:{to:["director"], cc:["corporate_secretary"]},
+//	nocache:true,
+//  },
+ { name:"new_share_class_mr", title:"Members' Resolutions to Create a New Class of Shares",
+	url:"http://www.legalese.io/templates/jfdi.asia/new_share_class_mr.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+	nocache:true,
+ },
+ { name:"new_share_class_dr", title:"Directors' Resolutions to Create a New Class of Shares",
+	url:"http://www.legalese.io/templates/jfdi.asia/new_share_class_dr.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+	nocache:true,
+ },
+  { name:"new_share_class_spec", title:"Details of New Share Class",
+	url:"http://www.legalese.io/templates/jfdi.asia/new_share_class_spec.xml",
+	nocache:true,
+  },
   { name:"mr_issue_shares_xml", title:"Members Approve Ordinary Resolution to Issue Shares",
 	url:"http://www.legalese.io/templates/jfdi.asia/mr-issue_shares.xml",
 	parties:{to:["shareholder"], cc:["corporate_secretary"]},
@@ -1151,6 +1170,9 @@ function availableTemplates_() {
   },
   { name:"inc_additional_resolutions", title:"resolutions 2 and above",
 	url:"http://www.legalese.io/templates/jfdi.asia/inc_additional_resolutions.xml"
+  },
+  { name:"inc_resolved_mr", title:"members resolution preface",
+	url:"http://www.legalese.io/templates/jfdi.asia/inc_resolved_mr.xml"
   },
 
   ];
@@ -2192,10 +2214,19 @@ function asCurrency_(currency, amount) {
   // failing that, it would be nice to get support for the ' option in sprintf, but it looks like formatString doesn't do that one either.
   // failing that, SheetConverter has a convertCell function that should do the job. https://sites.google.com/site/scriptsexamples/custom-methods/sheetconverter
   // but that doesn't work either. so we do it by hand.
+
+  // currency can be either just "S$" or the full numberFormat specification string.
+  
+  var mycurrency = currency;
+  var matches;
+  if (matches = currency.match(/\[\$(.*)\]/)) { // currency
+    mycurrency = matches[0].substring(2,matches[0].length-1).replace(/ /g," "); // nbsp
+  }
+  
   var parts = amount.toString().split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   if (parts[1] == 0 && parts.length == 2) { parts = parts.slice(0,1); }
-  return currency + parts.join(".");
+  return mycurrency + parts.join(".");
 }
 
 function currencyFor_(string) {

@@ -56,3 +56,64 @@ figure out building this as a proper google add-on.
 
 
 
+* for jfdi.2014
+** TODO add to explanatory statement
+*** this is a formality and we do not expect anyone to object
+*** what happens if you don't sign the agreement
+*** what if you want to put more money in
+
+* TODO figure out how to do PDF form elements so that EchoSigners can check various boxes and enter text amounts.
+* [2015-03-22 Sun 14:53] for tradegecko
+** TODO draft amendment to articles of association describing the new share class
+*** as regards the relationship with the underlying security
+**** jfdi.2012 holds shares of TradeGecko in trust for the TGA shareholders
+**** proceeds from the issuance of TGA shares shall be used solely to purchase additional shares in TradeGecko 
+*** as regards other classes of shares in JFDI.2012 -- ordinary and Preferred 'A'
+**** the TGA class shall be firewalled from the rest of JFDI.2014 and enjoy no voting, notification, or preemption rights vis-a-vis the regular RCPS and Ordinary Shares, though of course any rights that TGA holders hold by virtue of their membership in the company via other classes of shares shall not be affected. 
+**** similarly the RCPS and other shareholders shall be firewalled from the TGA series except as required by law
+*** as regards voting
+**** as a minority shareholder we do not expect our vote to be decisive
+**** shareholders of the TGA series will grant the JFDI.2012 directors discretion to
+***** vote
+***** offer other consents
+***** act as a shareholder
+**** certain votes at the director's discretion will be referred to the TGA shareholders who will vote within their share class
+** TODO draft members resolutions for issue of new share class
+** TODO draft initial directors resolutions under 184A -- alteration of AA
+*** to represent the interests of our shareholders with respect to TradeGecko we resolve to issue a new class of shares, "TGA", with the properties described in the attached Schedule of proposed amendments to the articles of association
+*** to seek Member approval for
+**** the creation of the new class
+**** the issue of up to $$$ of new shares
+*** give the corp sec authority to bizfile
+** TODO draft subscription and shareholders agreement to new class of TGA shares
+*** subscription agreement
+**** pursuant to the JFDI.2012 subscription agreement which states that preemptive rights may be transferred to RCPS shareholders on commercial terms,
+**** payment instructions to JFDI.2012
+*** shareholder agreement
+**** transfer limited to TGA, then JFDI.2012, then JFDI group shareholders, then TradeGecko shareholders
+** TODO draft subsequent directors resolutions under 184A -- issue and allotment
+this is basically done -- we have this docset ready.
+*** to issue new shares to everybody who has subscribed
+*** if the members give approval, to give corporate secretary authority to bizfile
+* for 2015a
+** TODO issue founder agreement to neuroware at 5%
+** TODO import memorandum of association
+see JFDI.BOOTCAMP.pdf from JFDI.2012 -- this text should go inside the Memo
+** TODO import articles of association
+** TODO import convertible note agreement
+** TODO import shareholder agreement
+** TODO import volunteer agreement
+** TODO import employment agreement
+** TODO create directors and members resolution docset to waive AGM for first two years until such time as the company ceases to be an exempt private limited. 
+* for [2015-03-26 Thu] at thehub
+** TODO import KISSsing
+** TODO import SAFE US
+** TODO import SAFE Singapore
+** TODO import Darius's Note
+** TODO import TechStars model docs
+** TODO import Series Seed
+*** IN
+*** EU -- FI
+*** US
+** TODO import YC Series AA
+** TODO import
