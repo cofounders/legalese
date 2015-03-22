@@ -17,7 +17,7 @@
 <a_left_sidehead>Authority to Issue Shares</a_left_sidehead>
 <?!= include("mr_authority_to_issue_shares", data) ?>
 
-<?!= include("inc_additional_resolutions", data, { header:"a_left_sidehead" } ) ?>
+<?!= include("inc_additional_resolutions", data, { header:"a_left_sidehead", prefix:"members_resolution" } ) ?>
 
 <? if (data.explanatory_statement) { ?>
 <chapter_header>Explanatory Statement</chapter_header>
