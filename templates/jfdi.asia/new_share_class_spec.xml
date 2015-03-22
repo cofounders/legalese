@@ -1,6 +1,6 @@
 <chapter_header>Amendments to Articles of Association of the Company</chapter_header>
 <a_left_sidehead restart="true">Definitions</a_left_sidehead>
-<definition><?= data.new_security_type_short_plural ?>	means the <?= data.security_type ?> in the share capital of the Company, having the rights and being subject to the restrictions specified in these Articles described under "<?= data.new_security_type ?>";</definition>
+<definition><?= data.new_security_short_plural ?>	means the <?= data.security_type ?> in the share capital of the Company, having the rights and being subject to the restrictions specified in these Articles described under "<?= data.new_security_type ?>";</definition>
 <? if (data.shadows_an_underlying_security) { ?>
 <definition><?= data.underlying_security_short_plural ?>	means the <?= data.underlying_security_name ?> in the capital of <?!= include("inc_parties", data, data.parties.startup[0]) ?> (the "Incubatee"), described in the Articles of Association of the Incubatee;</definition>
 <? } ?>
