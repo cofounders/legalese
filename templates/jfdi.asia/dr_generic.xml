@@ -3,5 +3,5 @@
   header:data.directors_resolution_headerstyle || "a_left_sidehead",
   prefix:"directors_resolution",
   bodystyle:data.directors_resolution_bodystyle } ) ?>
-<?!= include("inc_authority_to_bizfile", data, "Change of Address") ?>
-<?!= include("inc_dr_end", data, { date: data.shutdown_process_begin_date }) ?>
+<?!= include("inc_authority_to_bizfile", data) ?>
+<?!= include("inc_dr_end", data) ?>
