@@ -2,7 +2,7 @@
 <a_left_sidehead restart="true">Definitions</a_left_sidehead>
 <definition><?= data.new_security_short_plural ?>	means the <?= data.security_type ?> in the share capital of the Company, having the rights and being subject to the restrictions specified in these Articles described under "<?= data.new_security_type ?>";</definition>
 <? if (data.shadows_an_underlying_security) { ?>
-<definition><?= data.underlying_security_short_plural ?>	means the <?= data.underlying_security_name ?> in the capital of <?!= include("inc_parties", data, data.parties.startup[0]) ?> (the "Incubatee"), described in the Articles of Association of the Incubatee;</definition>
+<definition><?= data.underlying_security_short_plural ?>	means the <?= data.underlying_security_name ?> in the capital of <?!= include("inc_party", data, data.parties.startup[0]) ?> (the "Incubatee"), described in the Articles of Association of the Incubatee;</definition>
 <? } ?>
 <a_left_sidehead><?= data.new_security_type ?></a_left_sidehead>
 <para_1>The Company may issue preference shares in the capital of the Company ("<?= data.new_security_type ?>") which shall carry the following rights, benefits, and privileges, and be subject to the following restrictions:--</para_1>
