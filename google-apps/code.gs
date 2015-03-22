@@ -1563,7 +1563,8 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
 // ---------------------------------------------------------------------------------------------------------------- include
 // used inside <? ?>
 function include(name, data, _include) {
-//  Logger.log("running include for %s", name);
+  Logger.log("running include for %s, with _include=%s", name, _include);
+  var origInclude = data._include;
   var filtered = availableTemplates_().filter(function(t){return t.name == name});
   if (filtered.length == 1) {
 	var template = filtered[0];
@@ -1571,6 +1572,7 @@ function include(name, data, _include) {
 	childTemplate.data = data;
 	childTemplate.data._include = _include;
 	var filledHTML = childTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+	data._include = origInclude;
 	return filledHTML;
   }
   Logger.log("include(): unable to find template named %s", name);
