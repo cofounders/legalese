@@ -1,4 +1,4 @@
-<para_1>That pursuant to Section 161 of the Companies Act (Cap. 50),</para_1>
+That pursuant to Section 161 of the Companies Act (Cap. 50),
 <para_2_hanging>the <?= plural(data.parties.director, "Director") ?> of the Company be and <?= plural_verb(data.parties.director, "is") ?> hereby authorised
 to allot and to issue <?= data.share_issuance_type ?>
 <? data.share_issuance_type ? " " : "" ?>
@@ -12,4 +12,4 @@ and that such authority shall continue in force
 until the conclusion of the Annual General meeting commencing next after this date
 or the expiration of the period within which the next Annual General Meeting of the Company is required by law to be held,
 whichever is earlier.
-</para_2_hanging>
+
