@@ -10,8 +10,7 @@
 
 <?!= include("inc_additional_resolutions", data, {
   header: "a_left_sidehead",
-  prefix:"members_resolution",
-  bodystyle:"para_1" } ) ?>
+  prefix:"members_resolution" } ) ?>
 
 <? if (data.explanatory_statement) { ?>
 <chapter_header>Explanatory Statement</chapter_header>
