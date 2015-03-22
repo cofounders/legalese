@@ -41,3 +41,4 @@ Gains arising from the Underlying Security shall not benefit holders of other cl
 <b_left_sidehead>No Annual Meeting</b_left_sidehead>
 <numbered_para_3_fl>Pursuant to Section 175A of the Companies Act (Cap. 50), holders of <?= data.new_security_short_plural ?> shall agree to dispense with the holding of annual general meetings within their class of shares.
 </numbered_para_3_fl>
+<? } ?>
