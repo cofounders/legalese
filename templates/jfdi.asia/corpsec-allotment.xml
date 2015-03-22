@@ -6,7 +6,7 @@
 <sidebar><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></sidebar>
 <sidebar><?= data.company.address ?></sidebar>
 </Firstpage_Sidebar>
-<? data._total_new_shares = data.parties.new_investor.map(function(p){return p.num_shares}).reduce(function(a,b){return a+b}, 0); ?>
+<? data._total_new_shares = data.parties.new_investor.map(function(p){return p.num_new_shares}).reduce(function(a,b){return a+b}, 0); ?>
 <? data._total_commitment = formatify_("[$S$]#,##0",data.parties.new_investor.map(function(p){return Number(p.commitment.replace(/\D/g,""))}).reduce(function(a,b){return a+b})); // TODO: pull out the format string from the price per share. ?>
 <Story_Main>
 <resolution_title>Instruction to Corporate Secretary</resolution_title>
