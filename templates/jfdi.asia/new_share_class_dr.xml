@@ -14,3 +14,5 @@
 <?!= include("inc_authority_to_bizfile", data) ?>
 
 <?!= include("inc_dr_end", data, { member_or_director: "Director" } ) ?>
+
+<?!= include("new_share_class_spec", data) ?>
