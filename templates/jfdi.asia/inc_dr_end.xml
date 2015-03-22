@@ -7,6 +7,8 @@
 <? } else { ?>
 <? for (var i=0;i<data.parties.director.length;i++) { ?><?!= include("inc_signature", data, data.parties.director[i]) ?><? } ?>
 <? } ?>
+<? if (! (data._include && data._include.butWaitTheresMore)) { ?>
 </Story_Main>
 <Bottom_Box delete_if_empty="true" />
 </Root>
+<? } ?>
