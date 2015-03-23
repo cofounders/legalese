@@ -15,7 +15,7 @@
 
 <? if (data.explanatory_statement) { ?>
 <chapter_header>Explanatory Statement</chapter_header>
-<para_1><?= data.explanatory_statement ?>
+<para_1><?!= data.explanatory_statement ?>
 </para_1>
 <? } ?>
 
