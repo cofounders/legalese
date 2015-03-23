@@ -15,12 +15,34 @@
 Proceeds from the issuance of <?= data.new_security_short_plural ?> shall be used solely to purchase <?= data.underlying_security_name ?> in <?= data.parties.underlying_company[0].name ?>.
 <?= data.underlying_security_short_plural ?> purchased in this way shall be held in trust by the Company for the beneficial owners: the holders of <?= data.new_security_short_plural ?>.
 Proceeds arising from the Company's interests in the Underlying Security, including dividends and capital gains, shall accrue wholly to the holders of <?= data.new_security_short_plural ?>.
-<?= data.new_security_short_plural ?> shall be convertible, at the election of the holder, to the Underlying Security at any time, subject to the limitations imposed by the Company's agreements with the Incubatee. As such limitations may prohibit transfer or assignment of <?= data.underlying_security_short_plural ?>, proceeds will not be realised until the Incubatee achieves a liquidity event.
+<?= data.new_security_short_plural ?> shall be convertible, at the election of the holder, to the Underlying Security at any time, subject to the limitations imposed by the Company's agreements with the Incubatee. As such limitations may prohibit transfer or assignment of <?= data.underlying_security_short_plural ?>, proceeds may not be realised until the Incubatee achieves a liquidity event.
 </numbered_3_para_fl>
+
 <c_left_sidehead>As Regards Other Classes of Shares in <?= data.company.name ?></c_left_sidehead>
-<numbered_3_para_fl>The class of <?= data.new_security_short_plural ?> shall be effectively independent of the rest of the Company.
+
+<numbered_3_para_fl>The class of <?= data.new_security_short_plural ?> shall be, as far as economic and control rights are concerned, effectively independent of other classes of shares in the Company, with the exception of pre-emptive rights and rights of first refusal.
 Holders of <?= data.new_security_short_plural ?> shall enjoy no special rights in respect of their Membership in the Company beyond those arising from their holdings of other classes of shares.
 </numbered_3_para_fl>
+
+<c_left_sidehead>Regarding Transfer of Shares</c_left_sidehead>
+
+<numbered_3_para_fl>Before the Shares may be transferred to any person who is neither a member of the Company nor a member of TradeGecko Pte. Ltd., rights of first refusal must be offered to the following categories in order, pro rata with customary excess rights:</numbered_3_para_fl>
+<numbered_4_para_fltab>Holders of TGAS
+Holders of RCPS shares in JFDI.2012
+Ordinary Shareholders in JFDI.2012
+Holders of RCPS shares in Other JFDI Companies (JFDI.2013, JFDI.2014, etc.)
+Members of TradeGecko Pte. Ltd.</numbered_4_para_fltab>
+
+<c_left_sidehead>Regarding Issue of Shares</c_left_sidehead>
+
+<numbered_3_para_fl>New issues of TGAS shall not be made to any person who is not already a member of the Company.</numbered_3_para_fl>
+
+<numbered_3_para_fl>New issues of TGAS shall first be offered, pro rata with customary excess rights, to existing Holders of TGAS, then to RCPS Members of JFDI.2012, then to Ordinary Shareholders of JFDI.2012.</numbered_3_para_fl>
+
+<c_left_sidehead>Shares</c_left_sidehead>
+
+<numbered_3_para_fl>New issues of TGAS shall first be offered, pro rata with customary excess rights, to existing Holders of TGAS, and then to Members of JFDI.2012.</numbered_3_para_fl>
+
 <c_left_sidehead>Regarding Voting</c_left_sidehead>
 <numbered_3_para_fl>Holders of <?= data.new_security_short_plural ?> shall enjoy no voting rights at any general meeting of the Members of the Company beyond those arising from their holdings of other classes of shares.
 </numbered_3_para_fl>
