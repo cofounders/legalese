@@ -1,0 +1,336 @@
+<?!= data.xml_declaration ?>
+<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
+<CoverTop><cover_title>JFDI.2012 TradeGecko--A Subscription Agreement</cover_title>
+<noindent_centered addnewline="true"></noindent_centered>
+<noindent_centered addnewline="true"></noindent_centered>
+<noindent_centered addnewline="true"></noindent_centered>
+<cover_company_name><?= data.company.name ?></cover_company_name>
+<cover_company_id><?= data.company.idtype ?> <?= data.company.id ?></cover_company_id>
+<noindent_centered addnewline="true"></noindent_centered>
+<cover_company_name><?= data.new_investor.name ?></cover_company_name>
+<cover_company_id><?= data.new_investor.idtype ?> <?= data.new_investor.id ?></cover_company_id>
+</CoverTop>
+<CoverMid>
+</CoverMid>
+
+<CoverBottom_Logotype>
+<cover_corporate_logotype>Joyful Frog Digital Incubator</cover_corporate_logotype>
+</CoverBottom_Logotype>
+
+<CoverBottom_Address>
+<cover_address_block>Blk 71 Ayer Rajah Crescent
+#05-16   Singapore 139951</cover_address_block>
+</CoverBottom_Address>
+
+<CoverBottom_series>
+<centered><textvar name="Output Date" />&#8195;<span_smallcaps><textvar name="output time" /></span_smallcaps>
+</centered>
+<centered>version 1.0.0</centered>
+</CoverBottom_series>
+
+<Firstpage_Sidebar delete_if_empty="true"></Firstpage_Sidebar>
+<Story_Main>
+<chapter_header>TGA Subscription Agreement</chapter_header>
+<para_1><span_smallcaps>This agreement is made</span_smallcaps> on <?= data.agreement_date ?></para_1>
+<para_1><span_smallcaps>among</span_smallcaps>:</para_1>
+<parties><?!= include("inc_party", data, data.new_investor) ?> (the "New Investor");</parties>
+<parties><?!= include("inc_party", data, data.company) ?> (the <b>"Company"</b> or "JFDI").</parties>
+<para_1><span_smallcaps>Whereas</span_smallcaps>:</para_1>
+<recitals>TradeGecko Pte. Ltd., an Incubatee of the Company ("TradeGecko") is issuing Convertible Preference Shares ("CPS") in their Series A Round;</recitals>
+<recitals>JFDI intends to offer its shareholders the benefit of participation in this round, by way of the pre-emptive rights held by JFDI.</recitals>
+<recitals>In other circumstances JFDI would transfer or assign its pre-emptive rights to any shareholders desirous of participating in TradeGecko's raise.</recitals>
+<recitals>In the current circumstances, it is preferable for JFDI to hold TradeGecko's CPS in trust, using a special-purpose class of TradeGecko--A preferences shares in JFDI ("TGA Shares") created for the purpose of representing TradeGecko's CPS. So the holders of TGA Shares will be beneficial owners of TradeGecko's CPS.</recitals>
+<recitals>Towards that end, the New Investor has agreed to subscribe for, and the Company has agreed to issue, TGA Shres on the terms and subject to the conditions contained in this Agreement.</recitals>
+<para_1><span_smallcaps>It is agreed</span_smallcaps> as follows:</para_1>
+<a_left_sidehead>Interpretation</a_left_sidehead>
+
+
+<b_left_sidehead>Definitions</b_left_sidehead>
+<para_1>In this Agreement and the Schedules, unless the context otherwise requires:</para_1>
+<definition_nonum>Accelerated Company 	has the meaning specified in the Shareholders' Agreement;</definition_nonum>
+<definition_nonum>Accelerated Company Securities 	has the meaning specified in the Shareholders' Agreement;</definition_nonum>
+<definition_nonum>ACRA 	means the Accounting and Corporate Regulatory Authority of Singapore;</definition_nonum>
+<definition_nonum>Affiliates 	means, with respect to any person, another person that, directly or indirectly through one or more intermediaries, controls, is controlled by or is under common control with such person;</definition_nonum>
+<definition_nonum>Anchor Investor 	means Infocomm Investments Pte Ltd;</definition_nonum>
+<definition_nonum>Applicable Laws 	means all statutes, enactments, acts of legislature or parliament, ordinances, rules, bye-laws, regulations, notifications, guidelines, policies, directions, directives and orders of any Government Authority, tribunal, board, court or recognised stock exchange;</definition_nonum>
+<definition_nonum>Board 	means the board of Directors, as constituted from time to time;</definition_nonum>
+<definition_nonum>Business 	has the meaning specified in the Shareholders' Agreement;</definition_nonum>
+<definition_nonum>Business Day 	means a day (other than a Saturday or Sunday) on which commercial banks are open for business in Singapore;</definition_nonum>
+<definition_nonum>Company 	has the meaning specified in the Preamble, further details of which are specified in Part A of Schedule 3;</definition_nonum>
+<definition_nonum>Companies Act 	means the Companies Act (Chapter 50 of Singapore);</definition_nonum>
+<definition_nonum>Connected 	means, with respect to a person: (a) a spouse of such person; (b) a relative of such person; (c) the spouse of a relative of such person; (d) a relative of such person's spouse; or (e) the spouse of a relative of such person's spouse; and for the purposes of this definition, "relative" means any sibling, ancestor or lineal descendant;</definition_nonum>
+<definition_nonum>Constituent Documents 	means, with respect to the Company, the memorandum and articles of association of the Company, as may be amended, modified or supplemented from time to time, the current version as of the date of this Agreement of which is set out in Schedule 1;</definition_nonum>
+<definition_nonum>control 	(including its correlative meanings, "controlled by", "controlling" and "under common control with") means, with respect to an entity, the right to exercise, directly or indirectly, more than 50% of the voting rights or participation interests of such entity, or the power to direct or cause the direction of the management or policies of such entity;</definition_nonum>
+<definition_nonum>Conversion Shares 	means the new Ordinary Shares to be issued upon conversion of the TGAS;</definition_nonum>
+<definition_nonum>Director 	means a director of the Company, as appointed from time to time;</definition_nonum>
+<definition_nonum>Encumbrance 	means any form of legal, equitable, or security interest, including but not limited to any mortgage, assignment, debenture, lien, charge, pledge, title retention, right to acquire, hypothecation, option, right of first refusal, pre-emption right (other than those which appear in a company's articles of association or constitutive document), any preference arrangement (including title transfers and retention arrangements or otherwise) or any other encumbrance or condition whatsoever or any other arrangements having similar effect;</definition_nonum>
+<definition_nonum>Excess Proceeds 	has the meaning specified in paragraph 4.2 of Schedule 2;</definition_nonum>
+<definition_nonum>Governmental Authority 	means any nation or government or any province or state or any other political subdivision thereof; any entity, authority or body exercising executive, legislative, judicial, regulatory or administrative functions of or pertaining to government, having jurisdiction over the applicable person or any of such person's properties;</definition_nonum>
+<definition_nonum>IPO Event 	has the meaning specified in paragraph 5.3 of Schedule 2;</definition_nonum>
+<definition_nonum>Liquidation Event 	has the meaning specified in paragraph 3.3 of Schedule 2;</definition_nonum>
+<definition_nonum>Management Agreement 	means the management agreement between the Promoter and the Company substantially in the form as set out in Schedule 4;</definition_nonum>
+<definition_nonum>Ordinary Shares 	means the ordinary shares in the share capital of the Company;</definition_nonum>
+<definition_nonum>Ordinary Shareholder 	means a Shareholder of Ordinary Shares;</definition_nonum>
+<definition_nonum>Party 	means the Warrantors on the one hand, and the New Investor on the other hand; and "Parties" means all of them;</definition_nonum>
+<definition_nonum>Program 	has the meaning specified in the Shareholders' Agreement;</definition_nonum>
+<definition_nonum>Promoter 	has the meaning specified in the Preamble, further details of which are specified in Part B of Schedule 3;</definition_nonum>
+<definition_nonum>TGAS 	means the TradeGecko--A Preference Shares in the share capital of the Company having the rights and being subject to the restrictions specified in the Constituent Documents;</definition_nonum>
+<definition_nonum>TGAS Dividend 	has the meaning specified in paragraph 2.2 of Schedule 2;</definition_nonum>
+<definition_nonum>TGAS Investment Amount 	means, with respect to each TGAS on any date, an amount equal to: (a) the Subscription Price for such TGAS; plus (b) all TGAS Regular Dividends with respect to such TGAS accrued in the period starting on the date of issuance of such TGAS and ending on such date;</definition_nonum>
+<definition_nonum>TGAS Regular Dividend 	has the meaning specified in paragraph 2.3 of Schedule 2</definition_nonum>
+<definition_nonum>TGAS Shareholder 	means a Shareholder of TGAS;</definition_nonum>
+<definition_nonum>TGAS Special Dividend 	has the meaning specified in paragraph 2.4 of Schedule 2</definition_nonum>
+<definition_nonum>Related Party 	means: (a) the Promoter; (b) any Affiliate of the Promoter (other than the Company); (c) any director, officer, employee or shareholder of the Company, the Promoter or any Affiliate of the Promoter; or (d) any person Connected to the Promoter or any person specified in sub-paragraph (c);</definition_nonum>
+<definition_nonum>Related Party Transaction 	means any agreement, contract or arrangement (whether or not reduced in writing) between the Company and any Related Party;</definition_nonum>
+<definition_nonum>Shareholder 	means any person who is the registered holder of any Share from time to time;</definition_nonum>
+<definition_nonum>Shareholders' Agreement 	means the shareholders' agreement among the Parties, the Anchor Investor and the certain other investors substantially in the form as set out in Schedule 7;</definition_nonum>
+<definition_nonum>Shareholding Proportion 	means the respective proportion in which the Shares are held from time to time by each of the Shareholders, save that if the expression Shareholding Proportion is used in the context of some (but not all) of the Shareholders, it shall mean the respective proportion in which Shares are held by each of those particular Shareholders;</definition_nonum>
+<definition_nonum>Shares 	means: (a) the Ordinary Shares, the TGAS and any other share, stock, debenture or security of the Company (whether equity or debt, voting or non-voting); (b) any right, option, warrant or instrument to subscribe for any security specified in sub-paragraph (a); and (c) any share, stock, debenture or security (whether equity or debt, voting or non-voting) exchangeable for or convertible into any security specified in sub-paragraph (a);</definition_nonum>
+<definition_nonum>SIAC 	has the meaning specified in Clause 8.15.2;</definition_nonum>
+<definition_nonum>Singapore Dollar(s) 	and the symbol "S$" mean the lawful currency of Singapore;</definition_nonum>
+<definition_nonum>Subscription 	means subscription of the Subscription Shares which are to be subscribed by the New Investor on the terms and subject to the conditions contained in this Agreement;</definition_nonum>
+<definition_nonum>Subscription Completion 	means the completion of the Subscription in accordance with Clause 4.2;</definition_nonum>
+<definition_nonum>Subscription Completion Date 	means <?= data.subscription_completion_date ?> or such other date as the Promoter and the New Investor may agree in writing;</definition_nonum>
+<definition_nonum>Subscription Conditions 	means the Subscription New Investor Conditions and the Subscription Promoter Conditions;</definition_nonum>
+<definition_nonum>Subscription Consideration 	means the aggregate amount payable by the New Investor for the Subscription Shares specified in Clause 3.1.2;</definition_nonum>
+<definition_nonum>Subscription New Investor Conditions 	means the conditions precedent to the Subscription Completion specified in Part B of Schedule 5;</definition_nonum>
+<definition_nonum>Subscription Long Stop Date 	means <?= data.subscription_long_stop_date ?> or such other date as the Promoter and the New Investor may agree in writing;</definition_nonum>
+<definition_nonum>Subscription Promoter Conditions 	means the conditions precedent to the Subscription Completion specified in Part A of Schedule 5;</definition_nonum>
+<definition_nonum>Subscription Shares 	means the TradeGecko--A shares described in Clause 3B of the Company's Articles of Association, a copy of which are annexed in the Schedules;</definition_nonum>
+<definition_nonum>Subscription Price 	means, with respect to each TGAS, <?= data.price_per_share ?>, the price to be paid by the New Investor for the subscription of such TGAS;</definition_nonum>
+<definition_nonum>Surviving Provisions 	means Clauses 1, 7 and 8;</definition_nonum>
+<definition_nonum>Transaction Documents 	means this Agreement, the Shareholders' Agreement and the Management Agreement;</definition_nonum>
+<definition_nonum>Warranties 	means the representations and warranties on the part of the Promoter and the Company specified in Schedule 6; and</definition_nonum>
+<definition_nonum>Warrantors	 means the Company and the Promoter.</definition_nonum>
+<b_left_sidehead>Modification of Statutes</b_left_sidehead>
+<para_1>Any references, express or implied, to statutes or statutory provisions shall be construed as references to those statutes or provisions as respectively amended or re-enacted or as their application is modified from time to time by other provisions (whether before or after the date hereof) and shall include any statutes or provisions of which they are re-enactments (whether with or without modification) and any orders, regulations, instruments or other subordinate legislation under the relevant statute or statutory provision. References to sections of consolidating legislation shall wherever necessary or appropriate in the context be construed as including references to the sections of the previous legislation from which the consolidating legislation has been prepared.</para_1>
+<b_left_sidehead>Accounts</b_left_sidehead>
+<para_1>Any reference in this Agreement or the Schedules to "accounts" or "financial statements" shall include the director's and auditors' reports, relevant balance sheets, profit and loss accounts and statements of cash flow and related notes together with all documents which are or would be required by law to be annexed to the accounts of the company concerned to be laid before the company in general meeting for the accounting period in question.</para_1>
+<b_left_sidehead>Miscellaneous</b_left_sidehead>
+<numbered_3_para_fl>The headings in this Agreement are inserted for convenience only and shall be ignored in construing this Agreement.</numbered_3_para_fl>
+<numbered_3_para_fl>Unless the context otherwise requires, words (including words defined in this Agreement) denoting the singular number only shall include the plural and vice versa.</numbered_3_para_fl>
+<numbered_3_para_fl>The words "written" and "in writing" include any means of visible reproduction.</numbered_3_para_fl>
+<numbered_3_para_fl>References to any agreement or document shall include such agreement or document as modified, amended, varied, novated, supplemented or replaced from time to time.</numbered_3_para_fl>
+<numbered_3_para_fl>References to the "Clauses", "Recitals", "Preamble" and "Schedules" are to the relevant clauses of, recitals of, preamble to and the schedules to this Agreement.</numbered_3_para_fl>
+<numbered_3_para_fl>References to "person" shall include any individual, partnership, joint venture, corporation, limited liability company, trust, firm, association, government, governmental agency or department or any other entity.</numbered_3_para_fl>
+<numbered_3_para_fl>References to the word "include" or "including" (or any similar term) are not to be construed as implying any limitation.</numbered_3_para_fl>
+<numbered_3_para_fl>Words importing one gender shall be treated as importing any gender, words importing individuals shall be treated as importing corporations and vice versa, words importing the singular shall be treated as importing the plural and vice versa, and words importing the whole shall be treated as including a reference to any part thereof.</numbered_3_para_fl>
+<numbered_3_para_fl>The Schedules form an integral part of this Agreement.</numbered_3_para_fl>
+
+
+<a_left_sidehead>Conditions for Subscription</a_left_sidehead>
+
+<numbered_2_para>The issuance and subscription of the Subscription Shares is conditional upon the following Subscription Conditions:</numbered_2_para>
+<numbered_3_para>The Subscriber provides evidence of transfer of funds to either JFDI's bank account or TradeGecko's designated bank account.</numbered_3_para>
+<numbered_3_para>TradeGecko confirms that JFDI's CPS have been allotted and issued.</numbered_3_para>
+
+
+
+<b_left_sidehead>Effect of Non-Fulfilment of Conditions</b_left_sidehead>
+<para_1>If any Subscription Condition is not fulfilled, this Agreement shall ipso facto cease and determine and none of the Parties shall have any claim against the other for costs, damages, compensation or otherwise, save in respect of claims arising out of any antecedent breach of this Agreement.</para_1>
+
+
+
+<a_left_sidehead>Subscription</a_left_sidehead>
+<numbered_3_para_fl>Subject to the terms and conditions of this Agreement, on the Subscription Completion Date, the New Investor shall subscribe and pay for, and the Company shall effect the issuance and allotment of, the Subscription Shares, free from all Encumbrances and together with all rights and advantages now and hereafter attaching thereto.</numbered_3_para_fl>
+<numbered_3_para_fl>The number of Subscription Shares shall be <?= data.new_investor.num_shares ?>. The Subscription Price of the Subscription Shares shall be <?= data.price_per_share ?> per TGAS, or the equivalent in Singapore Dollars as agreed separately in writing by the Parties, making an aggregate Subscription Consideration of <?= data.new_investor.commitment ?>.</numbered_3_para_fl>
+
+
+
+<b_left_sidehead>Terms of TGAS</b_left_sidehead>
+<para_1>The principal terms of the TGAS are set out in Schedule 2. The TGAS shall have the rights and liabilities specified in Schedule 2 and the Constituent Documents.</para_1>
+
+
+
+<b_left_sidehead>Use of Proceeds</b_left_sidehead>
+<para_1>The Company shall use the proceeds from the Subscription Consideration to purchase Convertible Preference Shares in TradeGecko Pte. Ltd.</para_1>
+
+
+<b_left_sidehead>Subscription Consideration</b_left_sidehead>
+<para_1>Unless otherwise specified, all payments of Subscription Consideration to be made by the New Investor under the terms of this Agreement shall be made in Singapore Dollars in immediately available funds by telegraphic transfer of the amount payable to the following account of the Company:---</para_1>
+<indented_3_para addnewline="true"></indented_3_para>
+<indented_3_para>Payment details:</indented_3_para>
+<indented_3_para>Bank:			DBS Bank Ltd, Singapore</indented_3_para>
+<indented_3_para>Account Name:		<span_ucnum>JFDI.2014</span_ucnum> Pte. Ltd.</indented_3_para>
+<indented_3_para>Account Number:		107-901-960-9</indented_3_para>
+<indented_3_para>SWIFT Code:		DBSSSGSG</indented_3_para>
+<para_1>--- or to the following account of TradeGecko Pte. Ltd.:</para_1>
+
+
+<a_left_sidehead>Conditions and Completion</a_left_sidehead>
+<b_left_sidehead>Date and Place</b_left_sidehead>
+<para_1>Subject as hereinafter provided, the Subscription Completion shall take place online and by mail.</para_1>
+<b_left_sidehead>Subscription Completion</b_left_sidehead>
+<numbered_3_para_fl>On the Subscription Completion Date, the Company and the Promoter shall deliver to the New Investor:</numbered_3_para_fl>
+<numbered_4_para_fltab>(by registered mail or in person) the relevant original share certificates for the Subscription Shares;</numbered_4_para_fltab>
+<numbered_4_para_fltab>(by email) a copy of the Constituent Documents;</numbered_4_para_fltab>
+<numbered_4_para_fltab>(by email) an extract of the register of members of the Company showing the New Investor to be the registered holder of the Subscription Shares;</numbered_4_para_fltab>
+
+
+
+<a_left_sidehead>Confidentiality</a_left_sidehead>
+<b_left_sidehead>Confidential Information to Be Kept Confidential</b_left_sidehead>
+<numbered_3_para_fl>Each Party shall treat as confidential and not disclose or use any confidential or proprietary information which relates to:</numbered_3_para_fl>
+<numbered_4_para_fltab>the existence of this Agreement and the provisions of this Agreement and any agreement entered into pursuant to this Agreement;</numbered_4_para_fltab>
+<numbered_4_para_fltab>the negotiations relating to this Agreement (and such other agreements); or</numbered_4_para_fltab>
+<numbered_4_para_fltab>the business, financial or other affairs of any other Party.</numbered_4_para_fltab>
+<numbered_3_para_fl>This Confidentiality Clause shall not prohibit disclosure or use of any information if and to the extent:</numbered_3_para_fl>
+<numbered_4_para_fltab>the disclosure is required by law applicable to the disclosing Party, any Governmental Authority having jurisdiction over the disclosing Party or the rules and regulations of any recognized stock exchange on which the securities of the disclosing Party or any of its Affiliates are listed;</numbered_4_para_fltab>
+<numbered_4_para_fltab>the disclosure is required to vest the full benefit of this Agreement in the disclosing Party;</numbered_4_para_fltab>
+<numbered_4_para_fltab>the information was known by the disclosing Party before it was disclosed by the other Party;</numbered_4_para_fltab>
+<numbered_4_para_fltab>the information was obtained by the disclosing Party from a third party other than by a breach of this Clause 7.1;</numbered_4_para_fltab>
+<numbered_4_para_fltab>the disclosure or use is required for the purpose of any judicial proceedings arising out of this Agreement or any other agreement entered into under or pursuant to this Agreement or the disclosure is reasonably required to be made to a taxation authority in connection with the taxation affairs of the disclosing Party;</numbered_4_para_fltab>
+<numbered_4_para_fltab>the disclosure is made to professional advisers of the disclosing Party on terms that such professional advisers accept such information under a duty of confidentiality;</numbered_4_para_fltab>
+<numbered_4_para_fltab>the information becomes publicly available (other than by a breach of this Clause 7.1); or</numbered_4_para_fltab>
+<numbered_4_para_fltab>the information is independently developed by the disclosing Party the date of this Agreement.</numbered_4_para_fltab>
+
+
+<a_left_sidehead>Miscellaneous</a_left_sidehead>
+
+<b_left_sidehead>Entire Agreement</b_left_sidehead>
+<para_1>This Agreement (together with any documents referred to herein) embodies all the terms and conditions agreed upon between the Parties as to the subject matter of this Agreement and supersedes and cancels in all respects all previous agreements and undertakings, if any, between the Parties with respect to the subject matter hereof, whether such be written or oral.</para_1>
+
+
+<b_left_sidehead>Release</b_left_sidehead>
+<para_1>Any liability to any Party under this Agreement may in whole or in part be released, compounded or compromised, or time or indulgence given, by it in its absolute discretion as regards the relevant other Party under such liability without in any way prejudicing or affecting its rights against such other Party.</para_1>
+
+
+<b_left_sidehead>No Implied Waivers</b_left_sidehead>
+<para_1>No failure to exercise, nor any delay in exercising, on the part of any Party, any right or remedy under this Agreement shall operate as a waiver thereof, nor shall any single or partial exercise of any right or remedy prevent any further or other exercise thereof or the exercise of any other right or remedy.</para_1>
+
+
+<b_left_sidehead>Continuing Effect of Agreement</b_left_sidehead>
+<numbered_3_para_fl>All provisions of this Agreement shall not, so far as they have not been performed at any Completion, be in any respect extinguished or affected by such Completion or by any other event or matter whatsoever and shall continue in full force and effect so far as they are capable of being performed or observed.</numbered_3_para_fl>
+<numbered_3_para_fl>All Surviving Provisions shall remain binding on the Parties after all Completions and after termination of this Agreement.</numbered_3_para_fl>
+
+
+<b_left_sidehead>Contracts (Rights of Third Parties) Act</b_left_sidehead>
+<para_1>A person who is not a party to this Agreement has no right under the Contracts (Rights of Third Parties) Act (Chapter 53B of Singapore) to enforce any term of this Agreement.</para_1>
+
+
+<b_left_sidehead>Successors and Assigns</b_left_sidehead>
+<para_1>This Agreement shall be binding on and shall enure for the benefit of each of the Parties' successors and assigns. Any reference in this Agreement to any of the Parties shall be construed accordingly.</para_1>
+
+
+<b_left_sidehead>Time of Essence</b_left_sidehead>
+<para_1>Any time, date or period mentioned in any provision of this Agreement may be extended by mutual agreement among the Parties in accordance with this Agreement or by agreement in writing but as regards any time, date or period originally fixed or any time, date or period so extended as aforesaid time shall be of the essence.</para_1>
+
+
+<b_left_sidehead>Further Assurance</b_left_sidehead>
+<para_1>At any time after the date of this Agreement, each Party shall, and shall use its best endeavours to procure that any necessary third party shall, execute such documents and do such acts and things as the other Parties may reasonably require for the purpose of giving to such other Parties the full benefit of all the provisions of this Agreement.</para_1>
+
+
+<b_left_sidehead>Remedies</b_left_sidehead>
+<para_1>No remedy conferred by any of the provisions of this Agreement is intended to be exclusive of any other remedy which is otherwise available at law, in equity, by statute or otherwise, and each and every other remedy shall be cumulative and shall be in addition to every other remedy given hereunder or now or hereafter existing at law, in equity, by statute or otherwise. The election of any one or more of such remedies by any Party shall not constitute a waiver by such Party of the right to pursue any other available remedies.</para_1>
+
+
+<b_left_sidehead>Costs and Expenses</b_left_sidehead>
+<para_1>Each Party shall bear its own legal, professional and other costs and expenses incurred by it in connection with the negotiation, preparation or completion of this Agreement, and the issuance, allotment and subscription of the Subscription Shares.</para_1>
+
+
+<b_left_sidehead>Severability of Provisions</b_left_sidehead>
+<para_1>If any provision of this Agreement is held to be illegal, invalid or unenforceable in whole or in part in any jurisdiction, this Agreement shall, as to such jurisdiction, continue to be valid as to its other provisions and the remainder of the affected provision; and the legality, validity and enforceability of such provision in any other jurisdiction shall be unaffected.</para_1>
+
+
+<b_left_sidehead>Communications</b_left_sidehead>
+<para_1>All notices, demands or other communications required or permitted to be given or made hereunder shall be in writing and delivered by hand, by courier or prepaid registered post with recorded delivery, or by electronic mail (e-mail) marked for the attention of such person (if any), designated by it to the other Party for the purposes of this Agreement or to such other address or e-mail address, and marked for the attention of such person, as a Party may from time to time duly notify the other in writing.  The initial address, E-mail address and person (if any) so designated by the Parties are set out below:</para_1>
+<p>
+<Table aid:table="table" aid:tcols="2" aid:trows="8" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Company Address</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="274" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.address ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Email</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="274" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.email ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Attention</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="274" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.signatory_name || data.company.name ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="274" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>New Investor Address</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="274" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.new_investor.address ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Email</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="274" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.new_investor.email ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Attention</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="274" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.new_investor.signatory_name || data.new_investor.name ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="274" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"></Cell>
+</Table>
+</p>
+<para_1>Any notice, demand or communication so served by hand, courier with recorded delivery, E-mail or post shall be deemed to have been duly given:</para_1>
+<numbered_3_para>in the case of delivery by hand or by courier, when delivered;</numbered_3_para>
+<numbered_3_para>in the case of e-mail, at the time of transmission;</numbered_3_para>
+<numbered_3_para>in the case of post, on the second Business Day after the date of posting (if sent by local mail) and on the seventh Business Day after the date of posting (if sent by air mail),</numbered_3_para>
+<para_1>provided that in each case where delivery by hand, by courier or by E-mail occurs on a day which is not a Business Day or after 6pm on a Business Day, service shall be deemed to occur at 9am on the next following Business Day.</para_1>
+<para_1>References to time in this Clause are to local time in the country of the addressee.</para_1>
+
+
+<b_left_sidehead>Liability of the Warrantors</b_left_sidehead>
+<para_1>The liability of the Promoter and the Company shall be joint and several.</para_1>
+
+
+<b_left_sidehead>Counterparts</b_left_sidehead>
+<para_1>This Agreement may be signed in any number of counterparts, all of which taken together shall constitute one and the same instrument. Any Party may enter into this Agreement by signing any such counterpart (which may include counterparts delivered by facsimile and/or electronic transmission) and each counterpart shall be as valid and effectual as if executed as an original.</para_1>
+
+
+<b_left_sidehead>Governing Law and Jurisdiction</b_left_sidehead>
+<numbered_3_para_fl>The construction, validity and performance of this Agreement shall be governed by the laws of Singapore.</numbered_3_para_fl>
+<numbered_3_para_fl>Any dispute arising out of or in connection with this Agreement, including any question regarding its existence, validity or termination, shall be referred to and finally resolved by arbitration in Singapore in accordance with the Arbitration Rules of the Singapore International Arbitration Centre ("SIAC") for the time being in force, which rules are deemed to be incorporated by reference in this Clause 8.15. The language of the arbitration shall be English. The arbitral tribunal shall consist of three (3) arbitrators, one to be appointed by the New Investor, one to be appointed by the Warrantors and the third to be appointed by the Chairman of the SIAC.</numbered_3_para_fl>
+
+<chapter_header>Signatures</chapter_header>
+<para_1>IN WITNESS WHEREOF this Agreement has been entered into on the date stated at the beginning.</para_1>
+
+<b_left_sidehead_nonum>For the New Investor <?= data.new_investor.name ?></b_left_sidehead_nonum>
+<?!= include("inc_signature", data, data.new_investor) ?>
+<b_left_sidehead_nonum>For the Company <?= data.company.name ?></b_left_sidehead_nonum>
+<?!= include("inc_signature", data, data.company) ?>
+
+
+<schedule_header>Constituent Documents</schedule_header>
+
+<?!= include("new_share_class_spec", data) ?>
+
+<schedule_header>Principal Terms of TGAS</schedule_header>
+
+<a_left_sidehead>Conversion</a_left_sidehead>
+<numbered_2_para>One TGAS may be converted to one Convertible Preference Share in TradeGecko Pte. Ltd, adjusted as necessary to track any stock split, recapitalization, reclassification, subdivision, combination, conversion, or exchange of shares in TradeGecko's CPS.</numbered_2_para>
+
+
+<a_left_sidehead restart="true">Size and Price</a_left_sidehead>
+<numbered_2_para>Each TGAS shall be shall be issued by the Company at a Subscription Price of <?= data.price_per_share ?> per TGAS -- the same price per share as for the underlying TradeGecko CPS.</numbered_2_para>
+
+
+<a_left_sidehead>Conversion</a_left_sidehead>
+<numbered_2_para>Each TGAS may be converted at any time, at the option of the TGAS Shareholder, but subject to limits set by TradeGecko Pte. Ltd. on transfer and novation, into one Convertible Preference Share in TradeGecko Pte. Ltd., at the conversion ratio of 1:1 (as adjusted to track any share splits, combinations, conversion, restructuring and like events.)</numbered_2_para>
+
+
+<schedule_header>Company and Promoters</schedule_header>
+<schedule_parts>Details of the Company</schedule_parts>
+<p><Table aid:table="table" aid:tcols="2" aid:trows="8" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell><?= data.parties.promoter[0].idtype ?>:</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><span_ucnum><?= data.company.id ?></span_ucnum></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Registered Office:</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.address ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Date and Place of Incorporation:</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.incorporation_date ?> in <?= data.company.state ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Issued and Fully Paid-Up Share Capital:</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.total_capitalization ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Directors:</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.parties.director.map(function(p){return p.name}).join("\n") ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Secretary:</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.parties.corporate_secretary.map(function(p){return p.name}).join("\n") ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Auditors:</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.parties.auditor ? data.parties.auditor.map(function(p){return p.name}).join("\n") : "Exempt from statutory auditing requirements" ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Accounting Reference Date:</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.accounting_reference_date ?></cell_fl></Cell>
+</Table></p>
+
+<b_left_sidehead_nonum>Shareholders</b_left_sidehead_nonum>
+<bullets><?= newlinesToCommas(data.parties.promoter[0].name) ?> holds <?= data.parties.promoter[0].num_shares ?> Ordinary Shares at <?= data.parties.promoter[0].commitment ?> in total.</bullets>
+<? for (var i = 0; i < data.parties.shareholder.length; i++) { var myShareholder = data.parties.shareholder[i]; ?>
+<bullets><?= newlinesToCommas(myShareholder.name) ?> holds <?= myShareholder.num_shares ?> RCPS at <?= myShareholder.commitment ?> in total.</bullets>
+<? } ?>
+
+<schedule_header>Details of the TradeGecko CPS Financing</schedule_header>
+
+
+
+</Story_Main>
+</Root>
