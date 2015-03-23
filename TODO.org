@@ -70,7 +70,7 @@ figure out building this as a proper google add-on.
 **** proceeds from the issuance of TGA shares shall be used solely to purchase additional shares in TradeGecko 
 *** as regards other classes of shares in JFDI.2012 -- ordinary and Preferred 'A'
 **** the TGA class shall be firewalled from the rest of JFDI.2014 and enjoy no voting, notification, or preemption rights vis-a-vis the regular RCPS and Ordinary Shares, though of course any rights that TGA holders hold by virtue of their membership in the company via other classes of shares shall not be affected. 
-**** similarly the RCPS and other shareholders shall be firewalled from the TGA series except as required by law
+**** TODO similarly the RCPS and other shareholders shall be firewalled from the TGA series except as required by law
 *** as regards voting
 **** as a minority shareholder we do not expect our vote to be decisive
 **** shareholders of the TGA series will grant the JFDI.2012 directors discretion to
@@ -78,8 +78,8 @@ figure out building this as a proper google add-on.
 ***** offer other consents
 ***** act as a shareholder
 **** certain votes at the director's discretion will be referred to the TGA shareholders who will vote within their share class
-** TODO draft members resolutions for issue of new share class
-** TODO draft initial directors resolutions under 184A -- alteration of AA
+** DONE draft members resolutions for issue of new share class
+** DONE draft initial directors resolutions under 184A -- alteration of AA
 *** to represent the interests of our shareholders with respect to TradeGecko we resolve to issue a new class of shares, "TGA", with the properties described in the attached Schedule of proposed amendments to the articles of association
 *** to seek Member approval for
 **** the creation of the new class

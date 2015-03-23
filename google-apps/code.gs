@@ -642,6 +642,7 @@ function readRows_(sheet, entitiesByName) {
       var entity = { _origin_spreadsheet_id:sheet.getParent().getId(),
 					 _origin_sheet_id:sheet.getSheetId(),
 					 _spreadsheet_row:i+1,
+					 roleEntities: function(roleName) { return this.roles[roleName].map(function(n){return entitiesByName[n]}) }
 				   };
       var entity_formats = sheet.getRange(i+1,1,1,row.length).getNumberFormats();
 	  toreturn._last_entity_row = i;
@@ -743,6 +744,7 @@ function readRows_(sheet, entitiesByName) {
   // also configure the vassals' _role property, though nothing uses this at the moment.
   for (var k in roles) {
 	toreturn.principal.roles[k] = roles[k];
+	Logger.log("readRows(%s): principal %s now has %s %s roles", sheet.getSheetName(), toreturn.principal.name, roles[k].length, k);
 	for (var pi in roles[k]) {
 	  var entity = entitiesByName[roles[k][pi]];
 	  entity._role = entity._role || {};
@@ -890,7 +892,7 @@ function otherSheets_() {
 	var ss;
 	try { ss = SpreadsheetApp.openById(myRow.getValues()[0][0]) } catch (e) {
 	  Logger.log("couldn't open indicated spreadsheet ... probably on wrong row. %s", e);
-	  SpreadsheetApp.getUi().alert("unable to open a separate spreadsheet -- is your selection on the correct row?");
+	  throw("is your selection on the correct row?");
 	  return;
 	}
 	var sheet = getSheetById_(ss, myRow.getValues()[0][1])
@@ -1039,111 +1041,111 @@ function availableTemplates_() {
 	url:"http://www.legalese.io/templates/jfdi.asia/new_share_class_spec.xml",
 	nocache:true,
   },
-  { name:"mr_issue_shares_xml", title:"Members Approve Ordinary Resolution to Issue Shares",
+  { name:"mr_issue_shares", title:"Members Approve Ordinary Resolution to Issue Shares",
 	url:"http://www.legalese.io/templates/jfdi.asia/mr-issue_shares.xml",
 	parties:{to:["shareholder"], cc:["corporate_secretary"]},
 	nocache:true,
   },
-  { name:"dr_egm_notice_issue_shares_xml", title:"Directors Issue Notice of New Share Issue",
+  { name:"dr_egm_notice_issue_shares", title:"Directors Issue Notice of New Share Issue",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr-egm_notice-issue_shares.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
 	nocache:true,
   },
-  { name:"strikeoff_financial_report_xml", title:"Financial Report",
+  { name:"strikeoff_financial_report", title:"Financial Report",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_financial_report.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
 	nocache:true,
   },
-  { name:"change_of_address_xml", title:"Resolutions to Change Registered Address",
+  { name:"change_of_address", title:"Resolutions to Change Registered Address",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr_change_of_address.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
   },
-  { name:"strikeoff_bank_closure_xml", title:"Resolutions to Close Bank Accounts",
+  { name:"strikeoff_bank_closure", title:"Resolutions to Close Bank Accounts",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_directors-bank-closure.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
 	explode:"bank",
   },
-  { name:"strikeoff_accountant_retention_xml", title:"Retainer of Accountant for Financial Statements",
+  { name:"strikeoff_accountant_retention", title:"Retainer of Accountant for Financial Statements",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_accountant-retention.xml",
 	parties:{to:["accountant", "director"]},
   },
-  { name:"strikeoff_financials_letter_xml", title:"Letter to Accountant regarding Financial Statements",
+  { name:"strikeoff_financials_letter", title:"Letter to Accountant regarding Financial Statements",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_financials-letter.xml",
 	parties:{to:["director"], cc:["accountant"]},
   },
-  { name:"strikeoff_indemnity_xml", title:"Directors' Indemnity regarding Accounts",
+  { name:"strikeoff_indemnity", title:"Directors' Indemnity regarding Accounts",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_indemnity.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
   },
-  { name:"strikeoff_report_xml", title:"DR for Report and Statement",
+  { name:"strikeoff_report", title:"DR for Report and Statement",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_directors-report-and-statement.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
   },
-  { name:"strikeoff_application_xml", title:"Instruction to Corporate Secretary",
+  { name:"strikeoff_application", title:"Instruction to Corporate Secretary",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_application.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
   },
-  { name:"strikeoff_acra_declaration_xml", title:"Directors' Declaration to ACRA",
+  { name:"strikeoff_acra_declaration", title:"Directors' Declaration to ACRA",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_directors-declaration.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
   },
-  { name:"corpsec_allotment_xml", title:"Instruction to Corpsec for Allotment",
+  { name:"corpsec_allotment", title:"Instruction to Corpsec for Allotment",
 	url:"http://www.legalese.io/templates/jfdi.asia/corpsec-allotment.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
   },
-  { name:"dr_allotment_xml", title:"Directors' Resolution for Allotment",
+  { name:"dr_allotment", title:"Directors' Resolution for Allotment",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr-allotment.xml",
 	parties:{to:["director"],cc:["corporate_secretary"]},
   },
-  { name:"jfdi_2014_rcps_xml", title:"JFDI.2014 Subscription Agreement",
+  { name:"jfdi_2014_rcps", title:"JFDI.2014 Subscription Agreement",
 	url:"jfdi_2014_rcps_xml.html",
 	parties:{to:["promoter", "company"],cc:["corporate_secretary"]},
 	explode:"new_investor",
   },
-  { name:"kissing_xml", title:"KISS (Singapore)",
+  { name:"kissing", title:"KISS (Singapore)",
 	url:"http://www.legalese.io/templates/jfdi.asia/kissing.xml",
 	parties:{to:["founder", "company"],cc:["corporate_secretary"]},
 	explode:"investor",
   },
-  { name:"strikeoff_shareholders_xml", title:"Striking Off for Shareholders",
+  { name:"strikeoff_shareholders", title:"Striking Off for Shareholders",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_shareholders.xml",
 	parties:{to:["director[0]",],cc:[]},
 	explode:"shareholder",
   },
-  { name:"test_templatespec_xml", title:"Test templateSpec",
+  { name:"test_templatespec", title:"Test templateSpec",
 	url:"http://www.legalese.io/templates/jfdi.asia/test-templatespec.xml",
 	parties:{to:["company[0]"],cc:["founder"]},
   },
-  { name:"employment_agreement_xml", title:"Employment Agreement",
+  { name:"employment_agreement", title:"Employment Agreement",
 	url:"http://www.legalese.io/templates/jfdi.asia/employment-agreement.xml",
 	parties:{to:["employee","company"],cc:[]},
   },
-  { name:"termsheet_xml", title:"Seed Term Sheet",
+  { name:"termsheet", title:"Seed Term Sheet",
 	url:"http://www.legalese.io/templates/jfdi.asia/termsheet.xml",
 	parties:{to:[],cc:[]},
   },
-  { name:"preemptive_notice_xml", title:"Pre-Emptive Notice to Shareholders",
+  { name:"preemptive_notice", title:"Pre-Emptive Notice to Shareholders",
 	url:"http://www.legalese.io/templates/jfdi.asia/preemptive_notice.xml",
 	parties:{to:["shareholder"],cc:["company"]},
   },
-  { name:"preemptive_waiver_xml", title:"Issuance Offer Notice",
+  { name:"preemptive_waiver", title:"Issuance Offer Notice",
 	url:"http://www.legalese.io/templates/jfdi.asia/preemptive_waiver.xml",
 	parties:{to:[],cc:["corporate_secretary","company"]},
 	explode: "shareholder",
   },
-  { name:"loan_waiver_xml", title:"Waiver of Convertible Loan",
+  { name:"loan_waiver", title:"Waiver of Convertible Loan",
 	url:"http://www.legalese.io/templates/jfdi.asia/convertible_loan_waiver.xml",
 	parties:{to:["jfdi_corporate_representative"],cc:["corporate_secretary","accountant"]},
   },
-  { name:"simplified_note_xml", title:"Simplified Convertible Loan Agreement",
+  { name:"simplified_note", title:"Simplified Convertible Loan Agreement",
 	url:"http://www.legalese.io/templates/jfdi.asia/simplified_note.xml",
 	parties:{to:["investor","company"],cc:["corporate_secretary","accountant"]},
   },
-  { name:"founder_agreement_xml", title:"JFDI Accelerate Founder Agreement",
+  { name:"founder_agreement", title:"JFDI Accelerate Founder Agreement",
 	url:"http://www.legalese.io/templates/jfdi.asia/founderagreement.xml",
 	parties:{to:["founder","investor"], cc:["corporate_secretary"]},
   },
-  { name:"dora_xml", title:"DORA",
+  { name:"dora", title:"DORA",
 	url:"http://www.legalese.io/templates/jfdi.asia/dora-signatures.xml",
 	parties:{to:["new_investor","shareholder"],cc:["corporate_secretary","company"]},
   },
@@ -1192,9 +1194,9 @@ function desiredTemplates_(config) {
 
 function suitableTemplates_(config) {
   var availables = availableTemplates_();
-  Logger.log("available templates are %s", availables);
+  Logger.log("suitableTemplates: available templates are %s", availables);
   var desireds = desiredTemplates_(config);
-  var suitables = intersect_(availables, desireds);
+  var suitables = intersect_(desireds, availables); // the order of these two arguments matters -- we want to preserve the sequence in the spreadsheet of the templates.
   // this is slightly buggy. kissing, kissing1, kissing2, didn't work
   return suitables;
 }
@@ -1202,14 +1204,22 @@ function suitableTemplates_(config) {
 // ---------------------------------------------------------------------------------------------------------------- intersect_
 // yes, this is O(nm) but for small n,m it should be OK
 function intersect_(array1, array2) {
-  return array1.filter(function(n) { return array2.indexOf(n.name) != -1 || array2.indexOf(n.name.replace(/_xml/,"")) != -1 });
+  var array2_names = array2.map(function(st){ return st.name });
+  var toreturn = [];
+  var found = array1.filter(function(n) { return array2_names.indexOf(n) != -1 });
+  for (var i in found) {
+	toreturn.push(array2[array2_names.indexOf(found[i])]);
+  }
+  return toreturn;
 }
 
 // ---------------------------------------------------------------------------------------------------------------- filenameFor_
 // create a canonical filename for a given sourceTemplate,entity pair
 function filenameFor_ (sourceTemplate, entity) {
-  if (entity) return sourceTemplate.title + " for " + firstline_(entity.name)
-  else        return sourceTemplate.title;
+  var sequence = sourceTemplate.sequence;
+  if (sequence == undefined) { sequence = "" } else { sequence = (sequence < 100 ? "0" : "") + sequence + " - " }
+  if (entity) return sequence + sourceTemplate.title + " for " + firstline_(entity.name)
+  else        return sequence + sourceTemplate.title;
 };
 
 // ---------------------------------------------------------------------------------------------------------------- obtainTemplate_
@@ -1266,6 +1276,9 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 
   var readmeDoc = getReadme_(sheet);
 
+  this.sequence;
+  if (this.suitables.length > 1) { this.sequence = 1; } // each sourcetemplate gets a sequence ID. exploded templates all share the same sequence id.
+  
   this.esNumForTemplate = { };
 
   Logger.log("docsetEmails(%s): now I will figure out who gets which PDFs.",
@@ -1281,6 +1294,7 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 
   for (var i in suitables) {
     var sourceTemplate = suitables[i];
+	if (this.sequence) { sourceTemplate.sequence = this.sequence++ }
 	var to_list = [], cc_list = [];
 	for (var mailtype in sourceTemplate.parties) {
 	  Logger.log("docsetEmails: sourceTemplate %s: expanding mailtype \"%s\"",
@@ -1431,6 +1445,7 @@ function roles2parties_(readRows) {
 	  if (readRows.entitiesByName[partyName]) {
 		parties[role] = parties[role] || [];
 		parties[role].push(readRows.entitiesByName[partyName]);
+		Logger.log("populated parties[%s] = %s", partyName, readRows.entitiesByName[partyName]);
 	  }
 	  else {
 		Logger.log("WARNING: the Roles section defines a party %s which is not defined in an Entities section, so omitting from the data.parties list.", partyName);
@@ -1570,7 +1585,7 @@ function include(name, data, _include) {
 	var template = filtered[0];
 	var childTemplate = obtainTemplate_(template.url);
 	childTemplate.data = data;
-	childTemplate.data._include = _include;
+	childTemplate.data._include = _include || {};
 	var filledHTML = childTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
 	data._include = origInclude;
 	return filledHTML;
@@ -1822,7 +1837,7 @@ function authCallback(request) {
   var echosignService = getEchoSignService_();
   var isAuthorized = echosignService.handleCallback(request);
   if (isAuthorized) {
-    return HtmlService.createHtmlOutput('Success! You can close this tab.\nBTW the token property is ' +  PropertiesService.getDocumentProperties().getProperty("oauth2.echosign"));
+    return HtmlService.createHtmlOutput('<p>Success! You can close this tab.</p><p>BTW the token property is ' +  PropertiesService.getDocumentProperties().getProperty("oauth2.echosign")+'</p>');
   } else {
     return HtmlService.createHtmlOutput('Denied. You can close this tab.');
   }
