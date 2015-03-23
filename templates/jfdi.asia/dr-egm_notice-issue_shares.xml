@@ -6,7 +6,7 @@
 
 <b_left_sidehead>Ordinary Resolution -- Authority to Issue Shares</b_left_sidehead>
 
-<?!= include("mr_authority_to_issue_shares", data) ?>
+<para_1><?!= include("mr_authority_to_issue_shares", data) ?></para_1>
 
 <?!= include("inc_additional_resolutions", data, {
   header:data.members_resolution_headerstyle || "b_left_sidehead",
