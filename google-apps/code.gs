@@ -1015,6 +1015,16 @@ function availableTemplates_() {
 	  explode:"new_investor",
 	  nocache:true,
 	},
+ { name:"dr_corp_rep", title:"Appointment of Corporate Representative",
+	url:"http://www.legalese.io/templates/jfdi.asia/dr_corp_rep.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+	nocache:true,
+ },
+ { name:"dr_generic", title:"Directors' Resolutions",
+	url:"http://www.legalese.io/templates/jfdi.asia/dr_generic.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+	nocache:true,
+ },
  { name:"new_share_class_mr", title:"Members' Resolutions to Create a New Class of Shares",
 	url:"http://www.legalese.io/templates/jfdi.asia/new_share_class_mr.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
@@ -1584,14 +1594,14 @@ function include(name, data, _include) {
 // used inside <? ?> to convert a multiline address to a singleline address for party-section purposes
 function newlinesToCommas(str) {
   if (str == undefined) { Logger.log("newlinesToCommas: undefined!"); return undefined }
-  return str.replace(/\n/g, ", ");
+  return str.replace(/,?\s*\n\s*/g, ", ");
 }
 
 // ---------------------------------------------------------------------------------------------------------------- newlinesToCommas
 // used inside <? ?> to convert a multiline name to the first line for party-section purposes
 function firstline_(str) {
   if (str == undefined) { Logger.log("firstline: undefined!"); return undefined }
-  return str.split(/\n/)[0];
+  return str.split(/,?\s*\n\s*/)[0];
 }
 
 
@@ -2248,7 +2258,10 @@ function plural_verb(num, singular, plural, locale) {
 
 // ---------------------------------------------------------------------------------------------------------------- commaAnd
 function commaAnd(mylist, propertyName) {
-  var actualList = mylist.map(function(e){return (propertyName ? e[propertyName] : e)});
+  var actualList = mylist.map(function(e){return (propertyName
+												  ? (propertyName.constructor.name == "String"   ? e[propertyName] :
+													 propertyName.constructor.name == "Function" ? propertyName(e) : e)
+												  : e)});
   if      (actualList.length == 0) { return "" }
   else if (actualList.length == 1) { return actualList[0] }
   else if (actualList.length == 2) { return actualList.join(" and ") }
