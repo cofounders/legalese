@@ -14,6 +14,8 @@
 
 <?!= include("inc_dr_end", data, { member_or_director: "Director", butWaitTheresMore:true } ) ?>
 
+<chapter_header>Amendments to Articles of Association of the Company</chapter_header>
+
 <?!= include("new_share_class_spec", data) ?>
 
 </Story_Main>

@@ -1,6 +1,4 @@
-<chapter_header>Amendments to Articles of Association of the Company</chapter_header>
-
-<a_left_sidehead override="numberingStartAt=3">Clause 3B: TradeGecko--A Preference Shares</a_left_sidehead>
+<a_left_sidehead override="numberingContinue=false numberingStartAt=3 numberingExpression=^#B^t">TradeGecko--A Preference Shares</a_left_sidehead>
 
 <b_left_sidehead>Definitions</b_left_sidehead>
 <definition><?= data.new_security_short_plural ?>	means the <?= data.security_type ?> in the share capital of the Company, having the rights and being subject to the restrictions specified in these Articles described under "<?= data.new_security_type ?>";</definition>

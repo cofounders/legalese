@@ -2,7 +2,7 @@
   director_or_member:"Member",
   article_pursuant:data.article_allowing_shareholders_resolution_in_writing,
   r_num: 1,
-  chapter_header:"Authority to Issue Shares",
+  chapter_header:"Authority to Create and Issue TGA Shares",
   skip_resolved:true,
 }) ?>
 
@@ -21,6 +21,8 @@
 <chapter_header>Signatures</chapter_header>
 <para_1>We, the undersigned, being the Shareholders of the Company, do hereby pass the following Resolution<?= data.members_resolutions_2 ? "s" : "" ?> by written means under Section 184A of the Companies Act (Cap. 50) and the Articles of Assocation of the Company:---</para_1>
 <?!= include("inc_dr_end", data, { director_or_member:"Member", butWaitTheresMore:true}) ?>
+
+<chapter_header>Amendments to Articles of Association of the Company</chapter_header>
 
 <?!= include("new_share_class_spec", data) ?>
 
