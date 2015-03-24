@@ -11,12 +11,14 @@ That the Company, being a member of <?= data.parties.startup[0].name ?> (the "Ot
 <?!= include("inc_dr_end", data, { butWaitTheresMore: true }) ?>
 <chapter_header>Certificate of Appointment of Corporate Representative</chapter_header>
 
-<para_1>KNOW ALL MEN BY THESE PRESENTS</para_1>
-<para_2_hanging>That pursuant to Section 179(3) of the Singapore Companies Act (Cap. 50),
+<para_1><span_smallcaps>Know all men by these presents</span_smallcaps>
+
+</para_1>
+<para_2_hanging>That pursuant to Section 179(3) of the Companies Act (Cap. 50),
 we, the Directors of <b><?= data.company.name ?></b> (the "Company"),
 have resolved to appoint
-<?= commaAnd(data.parties.corporate_representative) ?>
-as our authorised Corporate <?= plural(data.parties.corporate_representative, "Representative") ?>
+<?= commaAnd(data.parties.corporate_representative, "name") ?>
+ as our authorised Corporate <?= plural(data.parties.corporate_representative, "Representative") ?>
 <? if (data.parties.corporate_representative.length > 1) { ?>each <?}?>
 to attend, act, and vote on the Company's behalf
 at all General Meetings of <?= data.parties.startup[0].name ?> (the "Other Company")
