@@ -17,6 +17,7 @@ we, the Directors of <b><?= data.company.name ?></b> (the "Company"),
 have resolved to appoint
 <?= commaAnd(data.parties.corporate_representative) ?>
 as our authorised Corporate <?= plural(data.parties.corporate_representative, "Representative") ?>
+<? if (data.parties.corporate_representative.length > 1) { ?>each <?}?>
 to attend, act, and vote on the Company's behalf
 at all General Meetings of <?= data.parties.startup[0].name ?> (the "Other Company")
 and at any adjournment thereof
