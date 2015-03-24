@@ -41,11 +41,7 @@ Members of TradeGecko Pte. Ltd.</ab_numbered_4_para_fltab>
 
 <ab_numbered_3_para_fl>New issues of TGAS shall not be made to any person who is not already a member of the Company.</ab_numbered_3_para_fl>
 
-<ab_numbered_3_para_fl>New issues of TGAS shall first be offered, pro rata with customary excess rights, to existing Holders of TGAS, then to RCPS Members of JFDI.2012, then to Ordinary Shareholders of JFDI.2012.</ab_numbered_3_para_fl>
-
-<ab_b_left_sidehead>Shares</ab_b_left_sidehead>
-
-<ab_numbered_3_para_fl>New issues of TGAS shall first be offered, pro rata with customary excess rights, to existing Holders of TGAS, and then to Members of JFDI.2012.</ab_numbered_3_para_fl>
+<ab_numbered_3_para_fl>New issues of TGAS shall first be offered, pro rata with customary excess rights, to existing Holders of TGAS, then to RCPS Shareholders of JFDI.2012, then to Ordinary Shareholders of JFDI.2012.</ab_numbered_3_para_fl>
 
 <ab_b_left_sidehead>Regarding Voting</ab_b_left_sidehead>
 <ab_numbered_3_para_fl>Holders of <?= data.new_security_short_plural ?> shall enjoy no voting rights at any general meeting of the Members of the Company beyond those arising from their holdings of other classes of shares.
@@ -56,7 +52,7 @@ Any dividends issued to the Company by virtue of its ownership of Underlying Sec
 </ab_numbered_3_para_fl>
 <ab_b_left_sidehead>Regarding Repayment of Capital</ab_b_left_sidehead>
 <ab_numbered_3_para_fl>On a liquidation, dissolution, or winding-up of the Company, or on a return of capital by the Company, holders of <?= data.new_security_short_plural ?> shall receive, so far as is practicable, title to the Underlying Security, or to any security to which the Underlying Security is convertible.
-On a liquidation, dissolution, or winding-up of the Incubatee, on a return of capital by the Incubatee, holders of <?= data.new_security_short_plural ?> shall receive the cash or other liquid assets delivered by the Incubatee or its agents or receivers, less any reasonable incidental expenses incurred by the Company in relation to the receipt and payment of these dividends, including professional fees paid to legal or accounting specialists, and management fees due the Company, calculated to cover the cost of the Company's attention to the <?= data.new_security_short_plural ?>.
+On a liquidation, dissolution, or winding-up of the Incubatee, or a return of capital by the Incubatee, holders of <?= data.new_security_short_plural ?> shall receive the cash or other liquid assets delivered by the Incubatee or its agents or receivers, less any reasonable incidental expenses incurred by the Company in relation to the receipt and payment of these dividends, including professional fees paid to legal or accounting specialists, and management fees due the Company, calculated to cover the cost of the Company's attention to the <?= data.new_security_short_plural ?>.
 </ab_numbered_3_para_fl>
 <ab_b_left_sidehead>Regarding Participation in Surplus Assets and Profits</ab_b_left_sidehead>
 <ab_numbered_3_para_fl>Holders of <?= data.new_security_short_plural ?> will not be entitled to participate in the surplus profits or assets of the Company beyond transfer of title of the Underlying Security, or any security to which the Underlying Security is convertible.
