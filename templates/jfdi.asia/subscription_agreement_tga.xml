@@ -6,7 +6,6 @@
 <noindent_centered addnewline="true"></noindent_centered>
 <noindent_centered addnewline="true"></noindent_centered>
 <noindent_centered addnewline="true"></noindent_centered>
-<noindent_centered addnewline="true"></noindent_centered>
 <cover_company_name><?= data.company.name ?></cover_company_name>
 <cover_company_id><?= data.company.idtype ?> <?= data.company.id ?></cover_company_id>
 <noindent_centered addnewline="true"></noindent_centered>
@@ -44,7 +43,7 @@
 <recitals>JFDI intends to offer its shareholders the benefit of participation in this round, by way of the pre-emptive rights held by JFDI.</recitals>
 <recitals>In other circumstances JFDI would transfer or assign its pre-emptive rights to any shareholders desirous of participating in TradeGecko's raise. In the current circumstances, however, JFDI proposes to hold TradeGecko's CPS in trust, using a special-purpose class of TradeGecko-A preferences shares in JFDI ("TGA Shares") created for the purpose of representing TradeGecko's CPS. So the holders of TGA Shares will be beneficial owners of TradeGecko's CPS.</recitals>
 <recitals>Toward that end, the New Investor has agreed to subscribe for, and the Company has agreed to issue, TGA Shares on the terms and subject to the conditions described in this Agreement.</recitals>
-<recitals><?= data.new_investor.name ?> will purchase approximately <?= data.new_investor.num_new_shares.replace(/\..*/, "") ?> TGA Shares at <?= data.price_per_share ?> per share, for <?= data.new_investor.new_commitment ?> or approximately <?= data.new_investor.sgd_commitment ?>.</recitals>
+<recitals><?= data.new_investor.name ?> will purchase approximately <?= data.new_investor.num_new_shares.toFixed(0) ?> TGA Shares at <?= data.price_per_share ?> per share, for <?= data.new_investor.new_commitment ?> or approximately <?= data.new_investor.sgd_commitment ?>.</recitals>
 <para_1><span_smallcaps>It is agreed</span_smallcaps> as follows:</para_1>
 <a_left_sidehead>Interpretation</a_left_sidehead>
 
