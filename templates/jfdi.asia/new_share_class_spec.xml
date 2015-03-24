@@ -1,4 +1,4 @@
-<a_left_sidehead override="numberingContinue=false numberingStartAt=3 numberingExpression=^#B^t">TradeGecko--A Preference Shares</a_left_sidehead>
+<a_left_sidehead override="numberingContinue=false numberingStartAt=3 numberingExpression=^#B^t">TradeGecko-A Preference Shares</a_left_sidehead>
 
 <b_left_sidehead>Definitions</b_left_sidehead>
 <definition><?= data.new_security_short_plural ?>	means the <?= data.security_type ?> in the share capital of the Company, having the rights and being subject to the restrictions specified in these Articles described under "<?= data.new_security_type ?>";</definition>
@@ -18,7 +18,7 @@ Proceeds arising from the Company's interests in the Underlying Security, includ
 
 <c_left_sidehead>As Regards Other Classes of Shares in <?= data.company.name ?></c_left_sidehead>
 
-<numbered_3_para_fl>The class of <?= data.new_security_short_plural ?> shall be, as far as economic and control rights are concerned, effectively independent of other classes of shares in the Company, with the exception of pre-emptive rights and rights of first refusal.
+<numbered_3_para_fl>The class of <?= data.new_security_short_plural ?> shall be, as far as economic and control rights are concerned, effectively independent of other classes of shares in the Company, except insofar as the RCPS shareholders may enjoy certain pre-emptive rights and rights of first refusal described below.
 Holders of <?= data.new_security_short_plural ?> shall enjoy no special rights in respect of their Membership in the Company beyond those arising from their holdings of other classes of shares.
 </numbered_3_para_fl>
 
