@@ -16,7 +16,7 @@
 <para_2_hanging>That pursuant to Section 179(3) of the Companies Act (Cap. 50),
 we, the Directors of <b><?= data.company.name ?></b> (the "Company"),
 have resolved to appoint
-<?= commaAnd(data.parties.corporate_representative, function(e) { return e.name + " (" + e.idtype + " " + e.id + ")" }) ?>
+<?!= commaAnd(data.parties.corporate_representative, function(e) { return e.name + " (" + e.idtype + " <span_ucnum>" + e.id + "</span_ucnum>)" }) ?>
 
 as our authorised Corporate <?= plural(data.parties.corporate_representative, "Representative") ?>
 <? if (data.parties.corporate_representative.length > 1) { ?>each <?}?>
