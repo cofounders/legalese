@@ -15,7 +15,7 @@
 <para_1>The Company may issue preference shares in the capital of the Company ("<?= data.new_security_type ?>") which shall carry the following rights, benefits, and privileges, and be subject to the following restrictions:--</para_1>
 <? if (data.shadows_an_underlying_security) { ?>
 <ab_b_left_sidehead>As Regards the Relationship with the Underlying Security</ab_b_left_sidehead>
-<ab_numbered_3_para_fl><?= data.new_security_short_plural ?> represent <?= data.underlying_security_name ?> of <?= data.parties.underlying_company[0].name ?> (the <b>"Underlying Security"</b> or "<?= data.underlying_security_short_plural ?>").
+<ab_numbered_3_para_fl><?= data.new_security_short_plural ?> represent <?= data.underlying_security_name ?> of <?= data.parties.underlying_company[0].name ?> (the <b>"Underlying Security"</b> or "<?= data.underlying_security_short_plural ?>"). The term "Underlying Security" shall include both the TG CP Shares and any security to which the TG CP Shares are converted or convertible.
 Proceeds from the issuance of <?= data.new_security_short_plural ?> shall be used solely to purchase <?= data.underlying_security_name ?> in <?= data.parties.underlying_company[0].name ?>.
 <?= data.underlying_security_short_plural ?> purchased in this way shall be held in trust by the Company for the beneficial owners: the holders of <?= data.new_security_short_plural ?>.
 Proceeds arising from the Company's interests in the Underlying Security, including dividends and capital gains, shall accrue wholly to the holders of <?= data.new_security_short_plural ?>.
@@ -46,16 +46,21 @@ Members of TradeGecko Pte. Ltd.</ab_numbered_4_para_fltab>
 <ab_b_left_sidehead>Regarding Voting</ab_b_left_sidehead>
 <ab_numbered_3_para_fl>Holders of <?= data.new_security_short_plural ?> shall enjoy no voting rights at any general meeting of the Members of the Company beyond those arising from their holdings of other classes of shares.
 </ab_numbered_3_para_fl>
+
 <ab_b_left_sidehead>Regarding Dividends</ab_b_left_sidehead>
 <ab_numbered_3_para_fl>Holders of <?= data.new_security_short_plural ?> shall not be entitled to participate in the profits of the Company available for distribution by way of dividend or otherwise.
 Any dividends issued to the Company by virtue of its ownership of Underlying Securities shall be paid through to the holders of <?= data.new_security_short_plural ?>, less any withholdings required by law, and less any reasonable incidental expenses incurred by the Company in relation to the receipt and payment of these dividends, including professional fees paid to legal or accounting specialists, and management fees due the Company, calculated to cover the cost of the Company's attention to the <?= data.new_security_short_plural ?>.
 </ab_numbered_3_para_fl>
+
+<ab_b_left_sidehead>Regarding Redemption</ab_b_left_sidehead>
+<ab_numbered_3_para_fl>TGA Shares may be redeemed at the option of the Company by transferring title of the Underlying Security to the holder.</ab_numbered_3_para_fl>
+
 <ab_b_left_sidehead>Regarding Repayment of Capital</ab_b_left_sidehead>
-<ab_numbered_3_para_fl>On a liquidation, dissolution, or winding-up of the Company, or on a return of capital by the Company, holders of <?= data.new_security_short_plural ?> shall receive, so far as is practicable, title to the Underlying Security, or to any security to which the Underlying Security is convertible.
+<ab_numbered_3_para_fl>On a liquidation, dissolution, or winding-up of the Company, or on a return of capital by the Company, holders of <?= data.new_security_short_plural ?> shall receive, so far as is practicable, title to the Underlying Security.
 On a liquidation, dissolution, or winding-up of the Incubatee, or a return of capital by the Incubatee, holders of <?= data.new_security_short_plural ?> shall receive the cash or other liquid assets delivered by the Incubatee or its agents or receivers, less any reasonable incidental expenses incurred by the Company in relation to the receipt and payment of these dividends, including professional fees paid to legal or accounting specialists, and management fees due the Company, calculated to cover the cost of the Company's attention to the <?= data.new_security_short_plural ?>.
 </ab_numbered_3_para_fl>
 <ab_b_left_sidehead>Regarding Participation in Surplus Assets and Profits</ab_b_left_sidehead>
-<ab_numbered_3_para_fl>Holders of <?= data.new_security_short_plural ?> will not be entitled to participate in the surplus profits or assets of the Company beyond transfer of title of the Underlying Security, or any security to which the Underlying Security is convertible.
+<ab_numbered_3_para_fl>Holders of <?= data.new_security_short_plural ?> will not be entitled to participate in the surplus profits or assets of the Company beyond transfer of title of the Underlying Security.
 </ab_numbered_3_para_fl>
 <ab_b_left_sidehead>Regarding Priority of Payment of Capital and Dividends in Relation to Other Classes of Shares</ab_b_left_sidehead>
 <ab_numbered_3_para_fl>Payments of capital and dividends to holders of <?= data.new_security_short_plural ?> shall be calculated and made separately from other classes of shares.
