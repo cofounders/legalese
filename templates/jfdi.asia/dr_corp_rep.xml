@@ -31,4 +31,4 @@ and that such appointment shall remain in force until revoked by the Board in wr
 
 <para_1>The Common Seal of <?= data.company.name ?> was hereunto affixed in the presence of:</para_1>
 
-<?!= include("inc_dr_end", data, { butWaitTheresMore: true }) ?>
+<?!= include("inc_dr_end", data) ?>
