@@ -39,58 +39,40 @@
 <para_1><span_smallcaps>Whereas</span_smallcaps>:</para_1>
 <recitals>TradeGecko Pte. Ltd., an Incubatee of the Company ("TradeGecko") is issuing Convertible Preference Shares ("CPS") in their Series A Round;</recitals>
 <recitals>JFDI intends to offer its shareholders the benefit of participation in this round, by way of the pre-emptive rights held by JFDI.</recitals>
-<recitals>In other circumstances JFDI would transfer or assign its pre-emptive rights to any shareholders desirous of participating in TradeGecko's raise.</recitals>
-<recitals>In the current circumstances, it is preferable for JFDI to hold TradeGecko's CPS in trust, using a special-purpose class of TradeGecko-A preferences shares in JFDI ("TGA Shares") created for the purpose of representing TradeGecko's CPS. So the holders of TGA Shares will be beneficial owners of TradeGecko's CPS.</recitals>
-<recitals>Towards that end, the New Investor has agreed to subscribe for, and the Company has agreed to issue, TGA Shres on the terms and subject to the conditions contained in this Agreement.</recitals>
+<recitals>In other circumstances JFDI would transfer or assign its pre-emptive rights to any shareholders desirous of participating in TradeGecko's raise. In the current circumstances, however, JFDI proposes to hold TradeGecko's CPS in trust, using a special-purpose class of TradeGecko-A preferences shares in JFDI ("TGA Shares") created for the purpose of representing TradeGecko's CPS. So the holders of TGA Shares will be beneficial owners of TradeGecko's CPS.</recitals>
+<recitals>Toward that end, the New Investor has agreed to subscribe for, and the Company has agreed to issue, TGA Shares on the terms and subject to the conditions described in this Agreement.</recitals>
 <para_1><span_smallcaps>It is agreed</span_smallcaps> as follows:</para_1>
 <a_left_sidehead>Interpretation</a_left_sidehead>
 
 
 <b_left_sidehead>Definitions</b_left_sidehead>
 <para_1>In this Agreement and the Schedules, unless the context otherwise requires:</para_1>
-<definition_nonum>Accelerated Company 	has the meaning specified in the Shareholders' Agreement;</definition_nonum>
-<definition_nonum>Accelerated Company Securities 	has the meaning specified in the Shareholders' Agreement;</definition_nonum>
 <definition_nonum>ACRA 	means the Accounting and Corporate Regulatory Authority of Singapore;</definition_nonum>
 <definition_nonum>Affiliates 	means, with respect to any person, another person that, directly or indirectly through one or more intermediaries, controls, is controlled by or is under common control with such person;</definition_nonum>
-<definition_nonum>Anchor Investor 	means Infocomm Investments Pte Ltd;</definition_nonum>
 <definition_nonum>Applicable Laws 	means all statutes, enactments, acts of legislature or parliament, ordinances, rules, bye-laws, regulations, notifications, guidelines, policies, directions, directives and orders of any Government Authority, tribunal, board, court or recognised stock exchange;</definition_nonum>
-<definition_nonum>Board 	means the board of Directors, as constituted from time to time;</definition_nonum>
-<definition_nonum>Business 	has the meaning specified in the Shareholders' Agreement;</definition_nonum>
 <definition_nonum>Business Day 	means a day (other than a Saturday or Sunday) on which commercial banks are open for business in Singapore;</definition_nonum>
-<definition_nonum>Company 	has the meaning specified in the Preamble, further details of which are specified in Part A of Schedule 3;</definition_nonum>
+<definition_nonum>Company 	refers to <?= include("inc_party",data,data.company) ?>;</definition_nonum>
 <definition_nonum>Companies Act 	means the Companies Act (Chapter 50 of Singapore);</definition_nonum>
-<definition_nonum>Connected 	means, with respect to a person: (a) a spouse of such person; (b) a relative of such person; (c) the spouse of a relative of such person; (d) a relative of such person's spouse; or (e) the spouse of a relative of such person's spouse; and for the purposes of this definition, "relative" means any sibling, ancestor or lineal descendant;</definition_nonum>
 <definition_nonum>Constituent Documents 	means, with respect to the Company, the memorandum and articles of association of the Company, as may be amended, modified or supplemented from time to time, the current version as of the date of this Agreement of which is excerpted in Schedule 1;</definition_nonum>
-<definition_nonum>control 	(including its correlative meanings, "controlled by", "controlling" and "under common control with") means, with respect to an entity, the right to exercise, directly or indirectly, more than 50% of the voting rights or participation interests of such entity, or the power to direct or cause the direction of the management or policies of such entity;</definition_nonum>
-<definition_nonum>Conversion Shares 	means the new Ordinary Shares to be issued upon conversion of the TGAS;</definition_nonum>
+<definition_nonum>Conversion Shares 	means the new TradeGecko CPS or other shares to be issued upon conversion of the TGAS;</definition_nonum>
 <definition_nonum>Director 	means a director of the Company, as appointed from time to time;</definition_nonum>
 <definition_nonum>Encumbrance 	means any form of legal, equitable, or security interest, including but not limited to any mortgage, assignment, debenture, lien, charge, pledge, title retention, right to acquire, hypothecation, option, right of first refusal, pre-emption right (other than those which appear in a company's articles of association or constitutive document), any preference arrangement (including title transfers and retention arrangements or otherwise) or any other encumbrance or condition whatsoever or any other arrangements having similar effect;</definition_nonum>
-<definition_nonum>Excess Proceeds 	has the meaning specified in paragraph 4.2 of Schedule 2;</definition_nonum>
 <definition_nonum>Governmental Authority 	means any nation or government or any province or state or any other political subdivision thereof; any entity, authority or body exercising executive, legislative, judicial, regulatory or administrative functions of or pertaining to government, having jurisdiction over the applicable person or any of such person's properties;</definition_nonum>
-<definition_nonum>IPO Event 	has the meaning specified in paragraph 5.3 of Schedule 2;</definition_nonum>
-<definition_nonum>Liquidation Event 	has the meaning specified in paragraph 3.3 of Schedule 2;</definition_nonum>
-<definition_nonum>Management Agreement 	means the management agreement between the Promoter and the Company substantially in the form as set out in Schedule 4;</definition_nonum>
 <definition_nonum>Ordinary Shares 	means the ordinary shares in the share capital of the Company;</definition_nonum>
-<definition_nonum>Ordinary Shareholder 	means a Shareholder of Ordinary Shares;</definition_nonum>
-<definition_nonum>Program 	has the meaning specified in the Shareholders' Agreement;</definition_nonum>
-<definition_nonum>Promoter 	has the meaning specified in the Preamble, further details of which are specified in Part B of Schedule 3;</definition_nonum>
+<definition_nonum>Ordinary Shareholder 	means a holder of Ordinary Shares;</definition_nonum>
 <definition_nonum>TradeGecko 	means <?!= include("inc_party", data, data.parties.startup[0]) ?>;</definition_nonum>
 <definition_nonum>TGAS 	means the TradeGecko-A Preference Shares in the share capital of the Company having the rights and being subject to the restrictions specified in Schedule 1;</definition_nonum>
 <definition_nonum>CPS 	means the Convertible Preference Shares issued by TradeGecko;</definition_nonum>
 <definition_nonum>TGAS Shareholder 	means a Shareholder of TGAS;</definition_nonum>
 <definition_nonum>RCPS 	means the Redeemable Convertible Preference shares of the Company described in Clause 3A of Schedule 1;</definition_nonum>
-<definition_nonum>Related Party 	means: (a) the Promoter; (b) any Affiliate of the Promoter (other than the Company); (c) any director, officer, employee or shareholder of the Company, the Promoter or any Affiliate of the Promoter; or (d) any person Connected to the Promoter or any person specified in sub-paragraph (c);</definition_nonum>
-<definition_nonum>Related Party Transaction 	means any agreement, contract or arrangement (whether or not reduced in writing) between the Company and any Related Party;</definition_nonum>
 <definition_nonum>Shareholder 	means any person who is the registered holder of any Share from time to time;</definition_nonum>
 <definition_nonum>Shareholding Proportion 	means the respective proportion in which the Shares are held from time to time by each of the Shareholders, save that if the expression Shareholding Proportion is used in the context of some (but not all) of the Shareholders, it shall mean the respective proportion in which Shares are held by each of those particular Shareholders;</definition_nonum>
 <definition_nonum>Shares 	means: (a) the Ordinary Shares, RCPS, the TGAS and any other share, stock, debenture or security of the Company (whether equity or debt, voting or non-voting); (b) any right, option, warrant or instrument to subscribe for any security specified in sub-paragraph (a); and (c) any share, stock, debenture or security (whether equity or debt, voting or non-voting) exchangeable for or convertible into any security specified in sub-paragraph (a);</definition_nonum>
 <definition_nonum>Singapore Dollar(s) 	and the symbol "S$" mean the lawful currency of Singapore;</definition_nonum>
-<definition_nonum>Subscription 	means subscription of the Subscription Shares which are to be subscribed by the New Investor on the terms and subject to the conditions contained in this Agreement;</definition_nonum>
-<definition_nonum>Subscription Completion Date 	means <?= data.subscription_completion_date ?> or such other date as the Promoter and the New Investor may agree in writing;</definition_nonum>
-<definition_nonum>Subscription Conditions 	means the Subscription New Investor Conditions and the Subscription Promoter Conditions;</definition_nonum>
-<definition_nonum>Subscription Shares 	means the TradeGecko-A shares described in Clause 3B of the Company's Articles of Association, a copy of which are annexed in the Schedules;</definition_nonum>
+<definition_nonum>Subscription 	means subscription of the TGAS which are to be subscribed by the New Investor on the terms and subject to the conditions contained in this Agreement;</definition_nonum>
+<definition_nonum>Subscription Completion Date 	means <?= data.subscription_completion_date ?> or such other date as the Parties agree in writing;</definition_nonum>
+<definition_nonum>Subscription Shares 	means the TradeGecko-A shares described in Clause 3B of the Company's Articles of Association, a copy of which are annexed in Schedule 1;</definition_nonum>
 <definition_nonum>Subscription Price 	means, with respect to each TGAS, <?= data.price_per_share ?>, the price to be paid by the New Investor for the subscription of such TGAS;</definition_nonum>
-<definition_nonum>Surviving Provisions 	means Clauses regarding Confidentiality and Successors &amp; Assigns;</definition_nonum>
 <definition_nonum>Transaction Documents 	means this Agreement, the Shareholders' Agreement and the Management Agreement;</definition_nonum>
 <b_left_sidehead>Modification of Statutes</b_left_sidehead>
 <para_1>Any references, express or implied, to statutes or statutory provisions shall be construed as references to those statutes or provisions as respectively amended or re-enacted or as their application is modified from time to time by other provisions (whether before or after the date hereof) and shall include any statutes or provisions of which they are re-enactments (whether with or without modification) and any orders, regulations, instruments or other subordinate legislation under the relevant statute or statutory provision. References to sections of consolidating legislation shall wherever necessary or appropriate in the context be construed as including references to the sections of the previous legislation from which the consolidating legislation has been prepared.</para_1>
@@ -128,7 +110,7 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 
 
 <b_left_sidehead>Use of Proceeds</b_left_sidehead>
-<para_1>The Company shall use the proceeds from the Subscription Consideration to purchase Convertible Preference Shares in TradeGecko</para_1>
+<para_1>The Company shall use the proceeds from the Subscription Consideration to purchase Convertible Preference Shares in TradeGecko, after adjusting for transaction fees charged by financial institutions and for fluctuations in exchange rates.</para_1>
 
 
 <b_left_sidehead>Terms of TGAS</b_left_sidehead>
@@ -141,7 +123,7 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 
 <a_left_sidehead>Conversion</a_left_sidehead>
 <numbered_2_para>Each TGAS may be converted at any time, at the option of the TGAS Shareholder, but subject to limits set by TradeGecko on transfer and assignment, into one Convertible Preference Share in TradeGecko, at the conversion ratio of 1:1 (adjusted as necessary to follow any share splits, combinations, conversion, restructuring and like events).</numbered_2_para>
-<numbered_2_para>If the underlying Convertible Preference Sharess in TradeGecko do convert in some event to something else, then the TGAS shall accordingly be convertible to that something else instead.</numbered_2_para>
+<numbered_2_para>If the underlying Convertible Preference Shares in TradeGecko do convert in some event to something else, then the TGAS shall accordingly be convertible to that something else instead.</numbered_2_para>
 
 
 <para_1>The rights and liabilities of the TGAS are specified in full in Clause 3B of the Articles of Association, annexed in Schedule 1.</para_1>
@@ -159,6 +141,7 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 <indented_3_para>Account Number:		107-900895-0</indented_3_para>
 <indented_3_para>SWIFT Code:		DBSSSGSG</indented_3_para>
 
+<para_1>The conversion between USD and SGD shall be calculated in accordance with the rack rate of The Development Bank of Singapore Limited at 9.30am on the date of transfer, or as advised by the Company.</para_1>
 
 <a_left_sidehead>Conditions and Completion</a_left_sidehead>
 
@@ -210,7 +193,7 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 
 <b_left_sidehead>Continuing Effect of Agreement</b_left_sidehead>
 <numbered_3_para_fl>All provisions of this Agreement shall not, so far as they have not been performed at any Completion, be in any respect extinguished or affected by such Completion or by any other event or matter whatsoever and shall continue in full force and effect so far as they are capable of being performed or observed.</numbered_3_para_fl>
-<numbered_3_para_fl>All Surviving Provisions shall remain binding on the Parties after all Completions and after termination of this Agreement.</numbered_3_para_fl>
+<numbered_3_para_fl>Clauses regarding Confidentiality and Successors &amp; Assigns shall remain binding on the Parties after all Completions and after termination of this Agreement.</numbered_3_para_fl>
 
 
 <b_left_sidehead>Contracts (Rights of Third Parties) Act</b_left_sidehead>
