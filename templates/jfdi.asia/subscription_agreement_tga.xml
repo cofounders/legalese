@@ -41,6 +41,7 @@
 <recitals>JFDI intends to offer its shareholders the benefit of participation in this round, by way of the pre-emptive rights held by JFDI.</recitals>
 <recitals>In other circumstances JFDI would transfer or assign its pre-emptive rights to any shareholders desirous of participating in TradeGecko's raise. In the current circumstances, however, JFDI proposes to hold TradeGecko's CPS in trust, using a special-purpose class of TradeGecko-A preferences shares in JFDI ("TGA Shares") created for the purpose of representing TradeGecko's CPS. So the holders of TGA Shares will be beneficial owners of TradeGecko's CPS.</recitals>
 <recitals>Toward that end, the New Investor has agreed to subscribe for, and the Company has agreed to issue, TGA Shares on the terms and subject to the conditions described in this Agreement.</recitals>
+<recitals><?= data.new_investor.name ?> will purchase approximately <?= data.new_investor.num_new_shares ?> TGA Shares at <?= data.price_per_share ?> per share, for <?= data.new_investor.new_commitment ?> or approximately <?= data.new_investor.sgd_commitment ?>.</recitals>
 <para_1><span_smallcaps>It is agreed</span_smallcaps> as follows:</para_1>
 <a_left_sidehead>Interpretation</a_left_sidehead>
 
@@ -115,6 +116,8 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 
 <b_left_sidehead>Terms of TGAS</b_left_sidehead>
 
+<para_1>The rights and liabilities of the TGAS are specified in full in Clause 3B of the Articles of Association, annexed in Schedule 1.</para_1>
+
 <para_1>The Principal Terms are as follows:</para_1>
 
 <c_left_sidehead>Size and Price</c_left_sidehead>
@@ -124,9 +127,6 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 <a_left_sidehead>Conversion</a_left_sidehead>
 <numbered_2_para>Each TGAS may be converted at any time, at the option of the TGAS Shareholder, but subject to limits set by TradeGecko on transfer and assignment, into one Convertible Preference Share in TradeGecko, at the conversion ratio of 1:1 (adjusted as necessary to follow any share splits, combinations, conversion, restructuring and like events).</numbered_2_para>
 <numbered_2_para>If the underlying Convertible Preference Shares in TradeGecko do convert in some event to something else, then the TGAS shall accordingly be convertible to that something else instead.</numbered_2_para>
-
-
-<para_1>The rights and liabilities of the TGAS are specified in full in Clause 3B of the Articles of Association, annexed in Schedule 1.</para_1>
 
 
 <b_left_sidehead>Subscription Consideration</b_left_sidehead>
