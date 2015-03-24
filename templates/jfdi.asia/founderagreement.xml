@@ -51,7 +51,9 @@
 <? } ?>
 <? if (data.parties.founder.length > 1) { ?><para_1>(the "Founders")</para_1><? } ?>
 <parties><? if (data.company.id != undefined && data.company.id.length > 0) { ?><?!= include("inc_party", data, data.company) ?><? } else { ?>
-<?= data.company.name ?>, a Singapore Private Limited Company promoted by the Founders<? } ?> (the "Startup")
+<?= data.company.name ?>, a <? if (data.previously_incorporated) { ?>
+<?= data.previous_incorporation_locale ?>-incorporated company to be reincorporated as a <? } ?>
+Singapore Private Limited Company promoted by the Founders<? } ?> (the "Startup")
 <?= data.parties.investor[0].name ?>, an investor into the Startup ("JFDI.2014")
 JFDI.Asia Pte. Ltd, the operator of the Bootcamp ("JFDI.Asia"), party by virtue of its management agreement with JFDI.2014</parties>
 <para_1>By this Agreement the Parties express a mutual understanding as follows:</para_1>
