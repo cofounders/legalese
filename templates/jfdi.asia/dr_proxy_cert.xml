@@ -2,7 +2,7 @@
 <chapter_header override="startParagraph=StartParagraph.ANYWHERE">Certificate of Appointment of Proxy</chapter_header>
 <para_1><span_smallcaps>Know all men by these presents</span_smallcaps></para_1>
 <basic_para />
-<para_2_hanging>That pursuant to Section 179(3) of the Companies Act (Cap. 50),
+<para_2_hanging>That pursuant to Section 181 of the Companies Act (Cap. 50),
 we, the Directors of <b><?= data.company.name ?></b> (the "Company"),
 have resolved to appoint
 <?!= commaAnd(data.parties.proxy, function(e) { return e.name + " (" + e.idtype + " <span_ucnum>" + e.id + "</span_ucnum>)" }) ?>
