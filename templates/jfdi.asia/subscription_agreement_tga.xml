@@ -4,6 +4,7 @@
 <noindent_centered addnewline="true"></noindent_centered>
 <noindent_centered addnewline="true"></noindent_centered>
 <noindent_centered addnewline="true"></noindent_centered>
+<noindent_centered addnewline="true"></noindent_centered>
 <cover_company_name><?= data.company.name ?></cover_company_name>
 <cover_company_id><?= data.company.idtype ?> <?= data.company.id ?></cover_company_id>
 <noindent_centered addnewline="true"></noindent_centered>
