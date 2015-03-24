@@ -1,0 +1,31 @@
+<?!= include("inc_dr_start", data, { chapter_header: data.directors_resolutions_title, director_or_member:"Director", article_pursuant:data.article_for_directors_resolution_in_writing, }) ?>
+That the Company, being a member of <?= data.parties.startup[0].name ?> (the "Other Company") do hereby appoint <?= commaAnd(data.parties.corporate_representative) ?>
+<? if (data.parties.corporate_representative.length > 1) { ?> severally<?}?>
+ <?= data.authorisation ?>
+ until revoked in writing to that effect and that the Common Seal of the Company, if required, be affixed to the Certificate of Appointment of Corporate Representative.
+<?!= include("inc_additional_resolutions", data, {
+  header:data.directors_resolution_headerstyle || "a_left_sidehead",
+  prefix:"directors_resolution",
+  bodystyle:data.directors_resolution_bodystyle } ) ?>
+<?!= include("inc_authority_to_bizfile", data) ?>
+<?!= include("inc_dr_end", data, { butWaitTheresMore: true }) ?>
+<chapter_header>Certificate of Appointment of Corporate Representative</chapter_header>
+
+<para_1>KNOW ALL MEN BY THESE PRESENTS</para_1>
+<para_2_hanging>That pursuant to Section 179(3) of the Singapore Companies Act (Cap. 50),
+we, the Directors of <b><?= data.company.name ?></b> (the "Company"),
+have resolved to appoint
+<?= commaAnd(data.parties.corporate_representative) ?>
+as our authorised Corporate <?= plural(data.parties.corporate_representative, "Representative") ?>
+to attend, act, and vote on the Company's behalf
+at all General Meetings of <?= data.parties.startup[0].name ?> (the "Other Company")
+and at any adjournment thereof
+with power, where applicable, to accept short notice or dispense with formal notice of any such meetings or adjourned meetings
+and that such appointment shall remain in force until revoked by the Board in writing.
+
+
+</para_2_hanging>
+
+<para_1>The Common Seal of <?= data.company.name ?> was hereunto affixed in the presence of:</para_1>
+
+<?!= include("inc_dr_end", data, { butWaitTheresMore: true }) ?>
