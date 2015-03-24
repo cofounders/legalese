@@ -18,7 +18,8 @@ That the Company, being a member of <?= data.parties.startup[0].name ?> (the "Ot
 we, the Directors of <b><?= data.company.name ?></b> (the "Company"),
 have resolved to appoint
 <?= commaAnd(data.parties.corporate_representative, function(e) { return e.name + " (" + e.idtype + " " + e.id + ")" }) ?>
- as our authorised Corporate <?= plural(data.parties.corporate_representative, "Representative") ?>
+
+as our authorised Corporate <?= plural(data.parties.corporate_representative, "Representative") ?>
 <? if (data.parties.corporate_representative.length > 1) { ?>each <?}?>
 to attend, act, and vote on the Company's behalf
 at all General Meetings of <?= data.parties.startup[0].name ?> (the "Other Company")
