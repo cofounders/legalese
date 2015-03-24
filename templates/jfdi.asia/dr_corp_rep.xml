@@ -19,6 +19,7 @@ have resolved to appoint
 <?!= commaAnd(data.parties.corporate_representative, function(e) { return e.name + " (" + e.idtype + " <span_ucnum>" + e.id + "</span_ucnum>)" }) ?>
 
 as our authorised Corporate <?= plural(data.parties.corporate_representative, "Representative") ?>
+
 <? if (data.parties.corporate_representative.length > 1) { ?>each <?}?>
 to attend, act, and vote on the Company's behalf
 at all General Meetings of <?= data.parties.startup[0].name ?> (the "Other Company")
