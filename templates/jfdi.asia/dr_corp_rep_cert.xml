@@ -1,0 +1,21 @@
+<?!= include("inc_dr_start", data, { chapter_header: "Certificate of Appointment of Corporate Representative", director_or_member:"Director", article_pursuant:data.article_for_directors_resolution_in_writing, }) ?>
+<para_1><span_smallcaps>Know all men by these presents</span_smallcaps></para_1>
+<para_1 />
+<para_2_hanging>That pursuant to Section 179(3) of the Companies Act (Cap. 50),
+we, the Directors of <b><?= data.company.name ?></b> (the "Company"),
+have resolved to appoint
+<?!= commaAnd(data.parties.corporate_representative, function(e) { return e.name + " (" + e.idtype + " <span_ucnum>" + e.id + "</span_ucnum>)" }) ?>
+
+as our Corporate <?= plural(data.parties.corporate_representative, "Representative") ?>
+
+<? if (data.parties.corporate_representative.length > 1) { ?>each <?}?>
+authorised to attend, act, and vote on the Company's behalf
+at all General Meetings of <?= data.parties.startup[0].name ?> (the "Other Company")
+and at any adjournment thereof
+with power, where applicable, to accept short notice or dispense with formal notice of any such meetings or adjourned meetings
+and that such appointment shall remain in force until revoked by the Board in writing.
+
+
+</para_2_hanging>
+<para_1>The Common Seal of <?= data.company.name ?> was hereunto affixed in the presence of:</para_1>
+<?!= include("inc_dr_end", data) ?>
