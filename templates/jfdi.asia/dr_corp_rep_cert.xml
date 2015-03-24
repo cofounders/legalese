@@ -1,4 +1,5 @@
-<?!= include("inc_dr_start", data, { chapter_header: "Certificate of Appointment of Corporate Representative", director_or_member:"Director", article_pursuant:data.article_for_directors_resolution_in_writing, }) ?>
+<?!= include("inc_plain_letterhead", data) ?>
+<chapter_header>Certificate of Appointment of Corporate Representative</chapter_header>
 <para_1><span_smallcaps>Know all men by these presents</span_smallcaps></para_1>
 <para_1 />
 <para_2_hanging>That pursuant to Section 179(3) of the Companies Act (Cap. 50),
