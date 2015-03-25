@@ -275,7 +275,7 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 
 <schedule_header>Amendments to Articles of Association of the Company</schedule_header>
 
-<para_1>The TGAS are governed by Clause 3B of the Company's Articles of Association.</para_1>
+<para_1>The Company's Articles of Association are being amended to describe the TGAS.</para_1>
 
 <?!= include("new_share_class_spec", data) ?>
 
