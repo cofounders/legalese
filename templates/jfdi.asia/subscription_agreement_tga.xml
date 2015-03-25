@@ -286,7 +286,6 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 <Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><span_ucnum><?= data.company.id ?></span_ucnum></cell_fl></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Registered Office:</cell></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.address ?></cell_fl></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Date and Place of Incorporation:</cell></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.incorporation_date ?> in <?= data.company.state ?></cell_fl></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Issued and Fully Paid-Up Share Capital:</cell></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Directors:</cell></Cell>
