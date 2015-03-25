@@ -31,7 +31,7 @@ commaAnd([data.parties.promoter[0].name].concat(
 <Cell aid:ccols="1" aid:ccolwidth="80" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Consideration</cell_c></Cell>
 <? for (var i = 0; i<data.parties.new_investor.length; i++) { with(data.parties.new_investor[i]) { ?>
 <Cell aid:ccols="1" aid:ccolwidth="150" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= name ?></cell_c></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= num_new_shares ?></cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="56" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= digitCommas_(num_new_shares) ?></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="80" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= sgd_commitment || new_commitment ?></cell_c></Cell>
 <? } } ?>
 </Table>
