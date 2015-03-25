@@ -275,7 +275,7 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 
 <schedule_header>Amendments to Articles of Association of the Company</schedule_header>
 
-<para_1>The following text will be inserted in the Company's Articles of Association as Clause 3B.</para_1>
+<para_1>The TGAS are governed by Clause 3B of the Company's Articles of Association.</para_1>
 
 <?!= include("new_share_class_spec", data) ?>
 
@@ -289,7 +289,6 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 <Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Date and Place of Incorporation:</cell></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.incorporation_date ?> in <?= data.company.state ?></cell_fl></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Issued and Fully Paid-Up Share Capital:</cell></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.total_capitalization ?></cell_fl></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Directors:</cell></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="240" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.parties.director.map(function(p){return p.name}).join("\n") ?></cell_fl></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Secretary:</cell></Cell>
@@ -308,7 +307,7 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 
 <schedule_header>Details of the TradeGecko CPS Financing</schedule_header>
 
-
+<para_1>Annexed here are the confidential details of the underlying security: the TradeGecko Convertible Preference Shares in their Series A round. This is the latest information made available to JFDI.2012 but may not be the final draft.</para_1>
 
 </Story_Main>
 </Root>
