@@ -1,5 +1,7 @@
 /* TODO
  *
+ * does the form submission trigger DTRT if there are multiple forms all callbacking to the same formsubmit?
+ *
  * directors resolution to appoint corporate representative
  *
  * notice of resolution to be filed with ACRA
@@ -398,6 +400,9 @@ function treeify_(root, arr) {
  */
 function onFormSubmit(e) {
   Logger.log("onFormSubmit: beginning");
+
+  // URGENT TODO: this needs to key off e.source instead.
+  
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheetId = PropertiesService.getUserProperties().getProperty("legalese."+ss.getId()+".formActiveSheetId");
 
@@ -616,8 +621,8 @@ function readRows_(sheet, entitiesByName) {
 
 	  for (var role_x = 2; role_x < row.length; role_x+=2) {
 		if (row[role_x] && row[role_x+1]) {
-		  Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[role_x]), formatify_(formats[i][role_x+1], row[role_x+1]));
-		  entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x+1]);
+		  Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[role_x]), formatify_(formats[i][role_x+1], row[role_x+1], sheet));
+		  entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x+1], sheet);
 		  entity["_format_" + asvar_(row[role_x])] = formats[i][role_x+1];
 		}
 	  }
@@ -808,7 +813,7 @@ function formatify_(format, string, sheet) {
     } else { toreturn = string }
   }
   else { toreturn = string }
-//  Logger.log("formatify_("+format+","+string+") = "+toreturn);
+  Logger.log("INFO: formatify_("+format+","+string+") = "+toreturn);
   return toreturn;
 }
 
@@ -1015,6 +1020,21 @@ function availableTemplates_() {
 	  explode:"new_investor",
 	  nocache:true,
 	},
+ { name:"dr_proxy", title:"Appointment of Proxy",
+	url:"http://www.legalese.io/templates/jfdi.asia/dr_proxy.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+	nocache:true,
+ },
+ { name:"dr_proxy_cert", title:"Certficate of Appointment of Proxy",
+	url:"http://www.legalese.io/templates/jfdi.asia/dr_proxy_cert.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+	nocache:true,
+ },
+ { name:"dr_corp_rep_cert", title:"Certificate of Appointment of Corporate Representative",
+	url:"http://www.legalese.io/templates/jfdi.asia/dr_corp_rep_cert.xml",
+	parties:{to:["director"], cc:["corporate_secretary"]},
+	nocache:true,
+ },
  { name:"dr_corp_rep", title:"Appointment of Corporate Representative",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr_corp_rep.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
@@ -1146,6 +1166,9 @@ function availableTemplates_() {
   { name:"dora", title:"DORA",
 	url:"http://www.legalese.io/templates/jfdi.asia/dora-signatures.xml",
 	parties:{to:["new_investor","shareholder"],cc:["corporate_secretary","company"]},
+  },
+  { name:"inc_plain_letterhead", title:"plain letterhead",
+	url:"http://www.legalese.io/templates/jfdi.asia/inc_plain_letterhead.xml"
   },
   { name:"inc_signature", title:"signature component",
 	url:"http://www.legalese.io/templates/jfdi.asia/inc_signature.xml"
@@ -1370,7 +1393,8 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 
 	var es_num = 1;
 	for (var ti in all_to) {
-	  var entityName = all_to[ti]; var entity = this.readRows.entitiesByName[entityName];
+	  var entityName = all_to[ti];
+	  var entity = this.readRows.entitiesByName[entityName];
 
 	  if (this.readRows.config.email_override && this.readRows.config.email_override.values[0]
 		 &&
@@ -1380,6 +1404,7 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	  else {
 		var email_to_cc = email_to_cc_(entity.email);
 		entity._to_email = email_to_cc[0];
+		Logger.log("DEBUG: given entity %s, entity.email is %s and _to_email is %s", entityName, entity.email, entity._to_email);
 		cc_emails = cc_emails.concat(email_to_cc[1]);
 	  }
 	  to_emails.push(entity._to_email);
@@ -1402,13 +1427,13 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	var exploders = this.suitables.filter(function(t){return   t.explode});
 	Logger.log("docsetEmails.explode(): templates=%s",
 			   exploders.map(function(t){return t.name}));
-	for (var i in exploders) {
-	  var sourceTemplate = exploders[i];
+	for (var explode_i in exploders) {
+	  var sourceTemplate = exploders[explode_i];
 	  var partytype = sourceTemplate.explode;
 	  Logger.log("template %s will explode = %s", sourceTemplate.name, partytype);
 	  Logger.log("parties[partytype] = %s", parties[partytype]);
-	  for (var k in parties[partytype]) {
-		var entity = this.readRows.entitiesByName[parties[partytype][k].name];
+	  for (var parties_k in parties[partytype]) {
+		var entity = this.readRows.entitiesByName[parties[partytype][parties_k].name];
 		Logger.log("docsetEmails.explode(): working with %s %s", partytype, entity.name);
 		var rcpts = this.Rcpts([sourceTemplate], entity);
 		callback([sourceTemplate], entity, rcpts);
@@ -2094,10 +2119,12 @@ function uploadAgreement(sheet) {
 	readmeDoc.appendParagraph("To: " + emailInfo.map(function(party){return party.email}).join(", "));
 	readmeDoc.appendParagraph("CC: " + cc_list.join(", "));
 
+	var esTitle = config.echosign.tree.title + " - " + templateTitles_(templates);
+	
  	var acr = postAgreement_( tDocIds.map(function(t){return { "transientDocumentId": t } }),
  								emailInfo,
  								config.echosign.tree.message,
- 								config.echosign.tree.title,
+ 								esTitle,
  								cc_list,
  								terms,
  								config,
@@ -2125,6 +2152,11 @@ function uploadAgreement(sheet) {
   }
 
   return "sent";
+}
+
+function templateTitles_(templates) {
+  if (templates.length == 1) { return templates[0].name }
+  return templates.map(function(t){return t.sequence}).join(", ");
 }
 
 // ---------------------------------------------------------------------------------------------------------------- postAgreement_
@@ -2228,10 +2260,15 @@ function asCurrency_(currency, amount) {
     mycurrency = matches[0].substring(2,matches[0].length-1).replace(/ /g," "); // nbsp
   }
   
-  var parts = amount.toString().split(".");
+  return mycurrency + digitCommas_(amount);
+}
+
+function digitCommas_(numstr) {
+  if (numstr == undefined) { return }
+  var parts = numstr.constructor.name == "String" ? numstr.split(".") : numstr.toString().split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   if (parts[1] == 0 && parts.length == 2) { parts = parts.slice(0,1); }
-  return mycurrency + parts.join(".");
+  return parts.join(".");
 }
 
 function currencyFor_(string) {
