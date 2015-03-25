@@ -639,8 +639,9 @@ function readRows_(sheet, entitiesByName) {
       for (var ki in entityfields) {
         if (ki < 1) { continue }
         var k = entityfields[ki];
-        var v = formatify_(entity_formats[0][ki],row[ki], sheet, k);
+        var v = formatify_(entity_formats[0][ki], row[ki], sheet, k);
         entity[k] = v;
+		entity["_format_" + k] = entity_formats[0][ki];
       }
       var coreRelation = asvar_(row[0]);
 	  if (coreRelation == undefined || ! coreRelation.length) { continue }
@@ -736,7 +737,7 @@ function readRows_(sheet, entitiesByName) {
 	Logger.log("readRows(%s): principal %s now has %s %s roles", sheet.getSheetName(), toreturn.principal.name, roles[k].length, k);
 	for (var pi in roles[k]) {
 	  var entity = entitiesByName[roles[k][pi]];
-	  if (entity == undefined) { throw("role " + roles[k][pi] + " refers to an entity that is not defined!") }
+	  if (entity == undefined) { throw(roles[k] + " role " + roles[k][pi] + " refers to an entity that is not defined!") }
 	  entity._role = entity._role || {};
 	  entity._role[toreturn.principal.name] = entity._role[toreturn.principal.name] || [];
 	  entity._role[toreturn.principal.name].push(k);
@@ -1116,10 +1117,12 @@ function availableTemplates_() {
   { name:"corpsec_allotment", title:"Instruction to Corpsec for Allotment",
 	url:"http://www.legalese.io/templates/jfdi.asia/corpsec-allotment.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
+	nocache:true,
   },
   { name:"dr_allotment", title:"Directors' Resolution for Allotment",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr-allotment.xml",
 	parties:{to:["director"],cc:["corporate_secretary"]},
+	nocache: true,
   },
   { name:"jfdi_2014_rcps", title:"JFDI.2014 Subscription Agreement",
 	url:"jfdi_2014_rcps_xml.html",
