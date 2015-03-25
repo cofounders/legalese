@@ -11,8 +11,8 @@ as our Corporate <?= plural(data.parties.corporate_representative, "Representati
 
 in regard to <?= data.parties.startup[0].name ?> (the "Other Company")
 <? if (data.parties.corporate_representative.length > 1) { ?>each <?}?>
-authorised <?= data.authorisation || "to attend, act, and vote on behalf of the Company at all general meetings of the Other Company" ?>
-and at any adjournment thereof
+authorised <?= data.authorisation || "to attend, act, and vote on behalf of the Company at all general meetings of the Other Company and at any adjournment thereof" ?>
+
 with power, where applicable, to accept short notice or dispense with formal notice of any such meetings or adjourned meetings
 and to appoint proxies to vote on behalf of the Company at such meetings
 and that such appointment shall remain in force until revoked by the Board in writing.
