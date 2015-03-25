@@ -1,5 +1,4 @@
-<basic_para>
-</basic_para><para_1>
+<para_1>
 <span_smallcaps>Dated this:</span_smallcaps> <?= (data._include.date) || data._todays_date ?></para_1>
 <? data.signature_comment = (data._include.director_or_member) || "Director"; ?>
 <? if (data._include.director_or_member == "Member") { ?>
