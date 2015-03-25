@@ -10,7 +10,7 @@
 <? data._total_commitment = formatify_(data.parties.new_investor[0]._format_new_commitment,
   data.parties.new_investor.map(function(p){return Number(p.new_commitment.replace(/^\D+/,""))}).reduce(function(a,b){return a+b})); ?>
 <? Logger.log("sum = %s", data.parties.new_investor.map(function(p){return Number(p.new_commitment.replace(/^\D+/,""))}).reduce(function(a,b){return a+b})); ?>
-<? Logger.log("data._total_commitment = %s", data._total_commitment"); ?>
+<? Logger.log("data._total_commitment = %s", data._total_commitment); ?>
 <Story_Main>
 <resolution_title>Instruction to Corporate Secretary</resolution_title>
 <basic_para addnewline="true"><?= data.parties.corporate_secretary[0].name ?></basic_para>
