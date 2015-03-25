@@ -63,6 +63,8 @@ figure out building this as a proper google add-on.
 *** what if you want to put more money in
 
 * TODO figure out how to do PDF form elements so that EchoSigners can check various boxes and enter text amounts.
+* for Kark
+** sent out the issue & allotment workflow
 * [2015-03-22 Sun 14:53] for tradegecko
 ** TODO draft amendment to articles of association describing the new share class
 *** as regards the relationship with the underlying security

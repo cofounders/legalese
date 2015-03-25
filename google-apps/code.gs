@@ -606,7 +606,7 @@ function readRows_(sheet, entitiesByName) {
 
 	  // TODO: do we need to ignore situations where row[0] !~ /:$/ ? subsection headings might be noisy.
 	  var asvar = asvar_(row[0]);
-      terms[           asvar] = formatify_(term_formats[i][0], row[1], sheet);
+      terms[           asvar] = formatify_(term_formats[i][0], row[1], sheet, asvar);
 	  terms["_orig_" + asvar] = row[1];
 	  Logger.log("readRows(%s): TERMS: %s --> %s", sheet.getSheetName(), row[1], terms[asvar]);
     }
@@ -622,7 +622,7 @@ function readRows_(sheet, entitiesByName) {
 	  for (var role_x = 2; role_x < row.length; role_x+=2) {
 		if (row[role_x] && row[role_x+1]) {
 		  Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[role_x]), formatify_(formats[i][role_x+1], row[role_x+1], sheet));
-		  entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x+1], sheet);
+		  entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x+1], sheet, asvar_(row[role_x]));
 		  entity["_format_" + asvar_(row[role_x])] = formats[i][role_x+1];
 		}
 	  }
@@ -639,7 +639,7 @@ function readRows_(sheet, entitiesByName) {
       for (var ki in entityfields) {
         if (ki < 1) { continue }
         var k = entityfields[ki];
-        var v = formatify_(entity_formats[0][ki],row[ki], sheet);
+        var v = formatify_(entity_formats[0][ki],row[ki], sheet, k);
         entity[k] = v;
       }
       var coreRelation = asvar_(row[0]);
@@ -736,6 +736,7 @@ function readRows_(sheet, entitiesByName) {
 	Logger.log("readRows(%s): principal %s now has %s %s roles", sheet.getSheetName(), toreturn.principal.name, roles[k].length, k);
 	for (var pi in roles[k]) {
 	  var entity = entitiesByName[roles[k][pi]];
+	  if (entity == undefined) { throw("role " + roles[k][pi] + " refers to an entity that is not defined!") }
 	  entity._role = entity._role || {};
 	  entity._role[toreturn.principal.name] = entity._role[toreturn.principal.name] || [];
 	  entity._role[toreturn.principal.name].push(k);
@@ -788,12 +789,17 @@ function asvar_(str) {
 // Wed Dec 17 05:17:57 PST 2014 INFO: term 0.2 has format 0%
 
 // google's raw format expresses 1% as 0.01.
-function formatify_(format, string, sheet) {
+function formatify_(format, string, sheet, fieldname) {
   var toreturn;
   if (format != undefined) {
     var matches;
     if (matches = format.match(/\[\$(.*)\]/)) { // currency
-	  toreturn = asCurrency_(format, string);
+	  // TODO: move this to a configuration, not a hardcoding
+	  if (fieldname && fieldname.match(/price_per_share/)) {
+		toreturn = asCurrency_(format, string, false);
+	  } else {
+		toreturn = asCurrency_(format, string);
+	  }		
     }
     else if (format.match(/%$/)) {
       toreturn = (string * 100).toFixed(2);
@@ -2250,7 +2256,7 @@ function asNum_(str) {
   return str.replace(/[^.\d]/g,"");
 }
 
-function asCurrency_(currency, amount) {
+function asCurrency_(currency, amount, chop) {
   // it would be nice to fill in the format string exactly the way Spreadsheets do it, but that doesn't seem to be an option.
   // failing that, it would be nice to get support for the ' option in sprintf, but it looks like formatString doesn't do that one either.
   // failing that, SheetConverter has a convertCell function that should do the job. https://sites.google.com/site/scriptsexamples/custom-methods/sheetconverter
@@ -2264,16 +2270,16 @@ function asCurrency_(currency, amount) {
     mycurrency = matches[0].substring(2,matches[0].length-1).replace(/ /g," "); // nbsp
   }
   
-  return mycurrency + digitCommas_(amount);
+  return mycurrency + digitCommas_(amount, chop);
 }
 
-function digitCommas_(numstr) {
+function digitCommas_(numstr, chop) {
   if (numstr == undefined) { return }
   var parts = numstr.constructor.name == "String" ? numstr.split(".") : numstr.toString().split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   if (parts[1] == 0 && parts.length == 2) { parts = parts.slice(0,1); }
   if (parts[1] && parts[1].length == 1) { parts[1] = parts[1] + "0" }
-  if (parts[1] && parts[1].length >  2) { parts[1] = parts[1].substr(0,2); }
+  if (chop != false && parts[1] && parts[1].length >  2) { parts[1] = parts[1].substr(0,2); }
   return parts.join(".");
 }
 
