@@ -2,7 +2,11 @@
 <para_2_hanging>That the Company, being a member of <?= data.parties.startup[0].name ?> (the "Other Company") does hereby appoint <?= commaAnd(data.parties.corporate_representative, "name") ?>
 <? if (data.parties.corporate_representative.length > 1) { ?> each<?}?>
  <?= data.authorisation || "to attend, act, and vote on behalf of the Company at all general meetings of the Other Company" ?>
+<<<<<<< HEAD
  until revoked in writing to that effect and that the Common Seal of the Company, if required, be affixed to the Certificate of Appointment of Corporate Representative.</para_2_hanging>
+=======
+ until revoked in writing to that effect and that the Common Seal of the Company, if required, be affixed to the Certificate of Appointment of Corporate Representative.</para_1>
+>>>>>>> 3a2db4869563ccdf6bd16660f1ddeea6a8aac2d2
 <?!= include("inc_additional_resolutions", data, {
   header:data.directors_resolution_headerstyle || "a_left_sidehead",
   prefix:"directors_resolution",
