@@ -813,7 +813,7 @@ function formatify_(format, string, sheet) {
     } else { toreturn = string }
   }
   else { toreturn = string }
-  Logger.log("INFO: formatify_("+format+","+string+") = "+toreturn);
+//  Logger.log("INFO: formatify_("+format+","+string+") = "+toreturn);
   return toreturn;
 }
 
@@ -1016,7 +1016,7 @@ function availableTemplates_() {
 //  },
 	{ name:"tgas_subscription", title:"TradeGecko-A Share Subscription Agreement",
 	   url:"http://www.legalese.io/templates/jfdi.asia/subscription_agreement_tga.xml",
-	  parties:{to:["new_investor","director"], cc:["corporate_secretary"]},
+	  parties:{to:["company"], cc:["corporate_secretary"]},
 	  explode:"new_investor",
 	  nocache:true,
 	},
@@ -1047,7 +1047,7 @@ function availableTemplates_() {
  },
  { name:"new_share_class_mr", title:"Members' Resolutions to Create a New Class of Shares",
 	url:"http://www.legalese.io/templates/jfdi.asia/new_share_class_mr.xml",
-	parties:{to:["director"], cc:["corporate_secretary"]},
+	parties:{to:["shareholder"], cc:["corporate_secretary"]},
 	nocache:true,
  },
  { name:"new_share_class_dr", title:"Directors' Resolutions to Create a New Class of Shares",
@@ -1305,10 +1305,10 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
   Logger.log("docsetEmails(%s): now I will figure out who gets which PDFs.",
 			 sheet.getSheetName());
 
-  Logger.log("docsetEmails(%s): incoming readRows has entitiesByName = %s",
-			 sheet.getSheetName(),
-			 readRows.entitiesByName
-			);
+//  Logger.log("docsetEmails(%s): incoming readRows has entitiesByName = %s",
+//			 sheet.getSheetName(),
+//			 readRows.entitiesByName
+//			);
 
   // populate rcpts
   this._rcpts = { exploders: { }, normals: { } };
@@ -1346,15 +1346,19 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	  Logger.log("docsetEmails(): will explode %s", sourceTemplate.explode);
 	  readmeDoc.getBody().appendParagraph("docsetEmails(): will explode template with one per doc for " + sourceTemplate.explode);
 
+	  var primary_to_list = to_list;
+	  
       for (var j in this.parties[sourceTemplate.explode]) {
 		var entity = parties[sourceTemplate.explode][j];
 		// we step through the desired {investor,company}.* arrays.
 		// we set the singular as we step through.
 		var mytitle = filenameFor_(sourceTemplate, entity);
 		Logger.log("docsetEmails(): preparing %s exploded %s", sourceTemplate.explode, mytitle);
-		to_list = to_list.concat([entity.name]);
-		this._rcpts.exploders[mytitle] = {to:to_list,cc:cc_list};
-		Logger.log("docsetEmails: defining this._rcpts.exploders[%s].to=%s",mytitle,to_list);
+		var exploder_to_list = primary_to_list.concat([entity.name]);
+		// TODO: if the exploder's email is multiline there needs to be a way for it to append to the cc_list.
+		
+		this._rcpts.exploders[mytitle] = {to:exploder_to_list,cc:cc_list};
+		Logger.log("docsetEmails: defining this._rcpts.exploders[%s].to=%s",mytitle,exploder_to_list);
 		Logger.log("docsetEmails: defining this._rcpts.exploders[%s].cc=%s",mytitle,cc_list);
 	  }
 	}
@@ -1431,7 +1435,7 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	  var sourceTemplate = exploders[explode_i];
 	  var partytype = sourceTemplate.explode;
 	  Logger.log("template %s will explode = %s", sourceTemplate.name, partytype);
-	  Logger.log("parties[partytype] = %s", parties[partytype]);
+//	  Logger.log("parties[partytype] = %s", parties[partytype]);
 	  for (var parties_k in parties[partytype]) {
 		var entity = this.readRows.entitiesByName[parties[partytype][parties_k].name];
 		Logger.log("docsetEmails.explode(): working with %s %s", partytype, entity.name);
@@ -1468,7 +1472,7 @@ function roles2parties_(readRows) {
 	  if (readRows.entitiesByName[partyName]) {
 		parties[role] = parties[role] || [];
 		parties[role].push(readRows.entitiesByName[partyName]);
-		Logger.log("populated parties[%s] = %s", partyName, readRows.entitiesByName[partyName]);
+//		Logger.log("populated parties[%s] = %s", partyName, readRows.entitiesByName[partyName]);
 	  }
 	  else {
 		Logger.log("WARNING: the Roles section defines a party %s which is not defined in an Entities section, so omitting from the data.parties list.", partyName);
@@ -2268,6 +2272,8 @@ function digitCommas_(numstr) {
   var parts = numstr.constructor.name == "String" ? numstr.split(".") : numstr.toString().split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   if (parts[1] == 0 && parts.length == 2) { parts = parts.slice(0,1); }
+  if (parts[1] && parts[1].length == 1) { parts[1] = parts[1] + "0" }
+  if (parts[1] && parts[1].length >  2) { parts[1] = parts[1].substr(0,2); }
   return parts.join(".");
 }
 
