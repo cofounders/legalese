@@ -108,7 +108,7 @@
 
 <a_left_sidehead>Subscription</a_left_sidehead>
 <numbered_2_para>Subject to the terms and conditions of this Agreement, the New Investor shall subscribe and pay for, and the Company shall effect the issuance and allotment of, the Subscription Shares, free from all Encumbrances and together with all rights and advantages now and hereafter attaching thereto.
-The number of Subscription Shares shall be <?= data.new_investor.num_new_shares ?>.
+The number of Subscription Shares shall be <?= digitCommas_(data.new_investor.num_new_shares.toFixed(0)) ?>.
 The Subscription Price of the Subscription Shares shall be <?= data.price_per_share ?> per TGAS (the same issue price per share as for the underlying TradeGecko CPS) or the equivalent in Singapore Dollars according to an exchange rate to be prescribed by the Company, making an aggregate Subscription Consideration of <?= data.new_investor.new_commitment ?>.</numbered_2_para>
 
 
