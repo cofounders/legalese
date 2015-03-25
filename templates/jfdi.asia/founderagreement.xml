@@ -148,7 +148,7 @@ This offer may be rescinded should the Founders be unable to comply with the req
 <?!= include("inc_signature", data, data.parties.founder[i]) ?>
 <? } ?>
 <? for (var i = 0; i < data.parties.investor.length; i++) { ?>
-<?!= include("inc_signature", data, data.parties.investor[i]) ?>
+<?!= include("inc_signature", data, data.parties.investor[i], { no_addnewline:i==(data.parties.investor.length-1) } ) ?>
 <? } ?>
 </Story_Main>
 </Root>
