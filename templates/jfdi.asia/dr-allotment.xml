@@ -22,7 +22,7 @@
    data._subscription_agreement_dates = commaAnd(data._subscription_agreement_dates);
  ?>
 <para_2>and pursuant to the Subscription <?= plural(data._subscription_agreement_dates_array, "Agreement") ?> dated <?= data._subscription_agreement_dates ?> signed among the Company, <?=
-commaAnd([data.parties.promoter[0].name].concat(
+commaAnd((data.parties.promoter ? [data.parties.promoter[0].name] : []).concat(
 data.parties.new_investor.map(function(p){return p.name}))) ?>,</para_2>
 <? } ?>
 <para_2>the Company do hereby approve the allotment of <?= digitCommas_(data._total_new_shares) ?> <?= data.security_type_long ?> (<?= data.security_type_short ?>) in the share capital of the Company at <?= data.sgd_price_per_share || data.price_per_share ?> each for cash consideration as follows:</para_2>
