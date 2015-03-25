@@ -8,7 +8,7 @@
 </Firstpage_Sidebar>
 <? data._total_new_shares = data.parties.new_investor.map(function(p){return p.num_new_shares}).reduce(function(a,b){return a+b}, 0); ?>
 <? Logger.log("about to sum across %s", data.parties.new_investor.map(function(p){return p.new_commitment})); ?>
-<? var mysum = data.parties.new_investor.map(function(p){return Number(p.new_commitment.replace(/[^\d\.]+/g,""))}).reduce(function(a,b){return a+b})); ?>
+<? var mysum = data.parties.new_investor.map(function(p){return Number(p.new_commitment.replace(/[^\d\.]+/g,""))}).reduce(function(a,b){return a+b}); ?>
 <? Logger.log("sum = %s", mysum); ?>
 <? Logger.log("formatting with %s", data.parties.new_investor[0]._format_new_commitment); ?>
 <? data._total_commitment = asCurrency_(data.parties.new_investor[0]._format_new_commitment, mysum); ?>
