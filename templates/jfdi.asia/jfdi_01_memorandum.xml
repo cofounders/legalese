@@ -1,0 +1,111 @@
+<? data.xml_declaration ?>
+<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
+<CoverTop>
+<cover_title>JFDI Founder Agreement</cover_title>
+<cover_company_name>
+
+
+
+
+
+<?= data.parties.company[0].name ?>
+
+</cover_company_name>
+<cover_company_id><?= data.parties.company[0].idtype ?> <?= data.parties.company[0].id ?></cover_company_id>
+<cover_company_name><?= data.parties.investor[0].name ?></cover_company_name>
+<cover_company_id><?= data.parties.investor[0].idtype ?> <?= data.parties.investor[0].id ?></cover_company_id>
+</CoverTop>
+<CoverMid>
+<? for (var f in data.parties.founder) { ?>
+<cover_parties_centered><?= data.parties.founder[f].name ?></cover_parties_centered>
+<? } ?>
+
+</CoverMid>
+<?!= include("inc_cover_jfdi", data, { in_series:"01" }) ?>
+<Firstpage_Sidebar>
+<sidebar></sidebar>
+</Firstpage_Sidebar>
+<Story_Main>
+  <chapter_header>Memorandum of Association</chapter_header>
+  <centered><?= data.company.name ?></centered>
+  <centered><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></centered>
+  <centered>(Incorporated in the Republic of Singapore)</centered>
+  <centered>(the "Company")</centered>
+  <centered></centered>
+  <numbered_1_para>The name of the company is <?= data.company.name ?></numbered_1_para>
+  <numbered_1_para>The Registered Office of the Company will be situated in the Republic of Singapore. </numbered_1_para>
+  <numbered_1_para>The liability of the members is limited. </numbered_1_para>
+  <numbered_1_para>Subject to the provisions of the Companies Act, Cap. 50 and this Memorandum and Articles of Association, the Company has full capacity, rights and powers to carry on or undertake any business or activity and to do any act or enter into any transactions and/or arrangements. </numbered_1_para>
+  <numbered_1_para>The total paid-up capital of the company is S$10.00. Each ordinary share is being issued at S$0.01 per share at the date of incorporation. </numbered_1_para>
+  <numbered_1_para>The shares in the original or any increased capital may be divided into several classes, and there may be attached thereto respectively any preferential, deferred or other speical rights, privileges, conditions or restrictions as to dividend, capital, voting or otherwise. </numbered_1_para>
+  <numbered_1_para>We, the several persons whose names, addresses and occupations are hereunto subscribed are desirous of being formed into a company in pursuance of this Memorandum of Association and we respectively agree to take the number of shares in the capital of the Company set opposite our respective names. </numbered_1_para>
+  <para_1>
+    <Table aid5:tablestyle="[Basic Table]" aid:table="table" aid:tcols="3" aid:trows="6" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+      <Cell aid5:cellstyle="Cell Style 1" aid:ccols="1" aid:ccolwidth="200" aid:crows="1" aid:cstyle="[None]" aid:table="cell" aid:theader="">
+        <cell>Name and Address</cell>
+      </Cell>
+      <Cell aid5:cellstyle="Cell Style 1" aid:ccols="1" aid:ccolwidth="117" aid:crows="1" aid:cstyle="[None]" aid:table="cell" aid:theader="">
+        <cell>Number of Shares taken</cell>
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="125.99999999999994" aid:crows="1" aid:table="cell" aid:theader="">
+        <cell>Signature</cell>
+      </Cell>
+      <Cell aid5:cellstyle="Cell Style 1" aid:ccols="1" aid:ccolwidth="200" aid:crows="1" aid:cstyle="[None]" aid:table="cell">
+        <cell>&lt;&lt;Founder1Name&gt;&gt; </cell>
+        <cell>&lt;&lt;Founder1IDType&gt;&gt; &lt;&lt;Founder1IDvalue&gt;&gt; </cell>
+        <cell>&lt;&lt;Founder1Address&gt;&gt; </cell>
+      </Cell>
+      <Cell aid5:cellstyle="Cell Style 1" aid:ccols="1" aid:ccolwidth="117" aid:crows="1" aid:cstyle="[None]" aid:table="cell">
+        <cell>&lt;&lt;Founder1Shares&gt;&gt; </cell>
+        <cell>Ordinary Shares</cell>
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="125.99999999999994" aid:crows="1" aid:table="cell">
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="200" aid:crows="1" aid:table="cell">
+        <cell>&lt;&lt;Founder2Name&gt;&gt; </cell>
+        <cell>&lt;&lt;Founder2IDType&gt;&gt; &lt;&lt;Founder2IDvalue&gt;&gt; </cell>
+        <cell>&lt;&lt;Founder2Address&gt;&gt;</cell>
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="117" aid:crows="1" aid:table="cell">
+        <cell>&lt;&lt;Founder2Shares&gt;&gt; </cell>
+        <cell>Ordinary Shares</cell>
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="125.99999999999994" aid:crows="1" aid:table="cell">
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="200" aid:crows="1" aid:table="cell">
+        <cell>&lt;&lt;Founder3Name&gt;&gt; </cell>
+        <cell>&lt;&lt;Founder3IDType&gt;&gt; &lt;&lt;Founder3IDvalue&gt;&gt; </cell>
+        <cell>&lt;&lt;Founder3Address&gt;&gt;</cell>
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="117" aid:crows="1" aid:table="cell">
+        <cell>&lt;&lt;Founder3Shares&gt;&gt; </cell>
+        <cell>Ordinary Shares</cell>
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="125.99999999999994" aid:crows="1" aid:table="cell">
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="200" aid:crows="1" aid:table="cell">
+        <cell>&lt;&lt;Founder4Name&gt;&gt; </cell>
+        <cell>&lt;&lt;Founder4IDType&gt;&gt; &lt;&lt;Founder4IDvalue&gt;&gt; </cell>
+        <cell>&lt;&lt;Founder4Address&gt;&gt;</cell>
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="117" aid:crows="1" aid:table="cell">
+        <cell>&lt;&lt;Founder4Shares&gt;&gt; </cell>
+        <cell>Ordinary Shares</cell>
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="125.99999999999994" aid:crows="1" aid:table="cell">
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="200" aid:crows="1" aid:table="cell">
+        <cell>&lt;&lt;Founder5Name&gt;&gt; </cell>
+        <cell>&lt;&lt;Founder5IDType&gt;&gt; &lt;&lt;Founder5IDvalue&gt;&gt; </cell>
+        <cell>&lt;&lt;Founder5Address&gt;&gt;</cell>
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="117" aid:crows="1" aid:table="cell">
+        <cell>&lt;&lt;Founder5Shares&gt;&gt; </cell>
+        <cell>Ordinary Shares</cell>
+      </Cell>
+      <Cell aid:ccols="1" aid:ccolwidth="125.99999999999994" aid:crows="1" aid:table="cell">
+      </Cell>
+    </Table>
+  </para_1>
+</Story_Main>
+</Root>
