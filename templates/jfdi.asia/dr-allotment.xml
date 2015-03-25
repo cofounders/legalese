@@ -5,7 +5,7 @@
   chapter_header:"Allotment of " + data.security_type_long,
   r_num: 3 }) ?>
 <a_left_sidehead>Shares to be Issued</a_left_sidehead>
-<? if (data.share_issue_specialcase_text) { ?><?!= data.share_issue_specialcase_text ?><? } else { ?>
+<? if (data.share_issue_specialcase_text) { ?><para_1><?!= data.share_issue_specialcase_text ?></para_1><? } else { ?>
 <para_1>That pursuant to the authority given to the Directors <?
   if (data.egm_or_written_means == "EGM") { ?>at the Extraordinary General Meeting of <?= data.company.name ?> (the "Company") held on <?= data.gm_date ?>
   if (data.egm_or_written_means == "AGM") { ?>at the Annual General Meeting of <?= data.company.name ?> (the "Company") held on <?= data.gm_date ?>
