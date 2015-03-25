@@ -10,7 +10,7 @@ have resolved to appoint
 as our Corporate <?= plural(data.parties.corporate_representative, "Representative") ?>
 
 <? if (data.parties.corporate_representative.length > 1) { ?>each <?}?>
-authorised <?= authorisation || "to attend, act, and vote on the Company's behalf" ?>
+authorised <?= data.authorisation || "to attend, act, and vote on the Company's behalf" ?>
 at all General Meetings of <?= data.parties.startup[0].name ?> (the "Other Company")
 and at any adjournment thereof
 with power, where applicable, to accept short notice or dispense with formal notice of any such meetings or adjourned meetings
