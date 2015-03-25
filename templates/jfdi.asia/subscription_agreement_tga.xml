@@ -230,7 +230,7 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 <b_left_sidehead>Communications</b_left_sidehead>
 <para_1>All notices, demands or other communications required or permitted to be given or made hereunder shall be in writing and delivered by hand, by courier or prepaid registered post with recorded delivery, or by electronic mail (e-mail) marked for the attention of such person (if any), designated by it to the other Party for the purposes of this Agreement or to such other address or e-mail address, and marked for the attention of such person, as a Party may from time to time duly notify the other in writing.  The initial address, E-mail address and person (if any) so designated by the Parties are set out below:</para_1>
 <p>
-<Table aid:table="table" aid:tcols="2" aid:trows="6" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+<Table aid:table="table" aid:tcols="2" aid:trows="7" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
 <Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Company Address</cell></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="274" aid:crows="1" aid:table="cell" aid5:cellstyle="border_l"><cell_fl><?= data.company.address ?></cell_fl></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="122" aid:crows="1" aid:table="cell" aid5:cellstyle="border_r"><cell>Email</cell></Cell>
