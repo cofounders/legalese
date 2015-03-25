@@ -42,13 +42,15 @@
   <numbered_1_para>The shares in the original or any increased capital may be divided into several classes, and there may be attached thereto respectively any preferential, deferred or other speical rights, privileges, conditions or restrictions as to dividend, capital, voting or otherwise. </numbered_1_para>
   <numbered_1_para>We, the several persons whose names, addresses and occupations are hereunto subscribed are desirous of being formed into a company in pursuance of this Memorandum of Association and we respectively agree to take the number of shares in the capital of the Company set opposite our respective names. </numbered_1_para>
   <table_enclosing_para>
-	<Table aid:table="table" aid:tcols="4" aid:trows="<?= data.parties.founder.length+1 ?>" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+	<Table aid:table="table" aid:tcols="5" aid:trows="<?= data.parties.founder.length+1 ?>" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
 <Cell aid:ccols="1" aid:ccolwidth="110" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Name</cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="76" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Citizenship</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="76" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>ID</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="140" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Address</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="90" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Number of Shares Held</cell_c></Cell>
 <? for (var i = 0; i<data.parties.founder.length; i++) { with(data.parties) { ?>
 <Cell aid:ccols="1" aid:ccolwidth="110" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= founder[i].name ?></cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="76" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= founder[i].state ?></span_ucnum></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="76" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= founder[i].idtype ?> <span_ucnum><?= founder[i].id ?></span_ucnum></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="140" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= founder[i].address ?></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="90" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= founder[i].num_shares ?> ordinary shares for <?= founder[i].commitment ?></cell_c></Cell>
