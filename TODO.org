@@ -57,16 +57,16 @@ figure out building this as a proper google add-on.
 
 
 * for jfdi.2014
-** TODO add to explanatory statement
+** DONE add to explanatory statement
 *** this is a formality and we do not expect anyone to object
 *** what happens if you don't sign the agreement
 *** what if you want to put more money in
 
 * TODO figure out how to do PDF form elements so that EchoSigners can check various boxes and enter text amounts.
 * for Kark
-** sent out the issue & allotment workflow
+** DONE sent out the issue & allotment workflow
 * [2015-03-22 Sun 14:53] for tradegecko
-** TODO draft amendment to articles of association describing the new share class
+** DONE draft amendment to articles of association describing the new share class
 *** as regards the relationship with the underlying security
 **** jfdi.2012 holds shares of TradeGecko in trust for the TGA shareholders
 **** proceeds from the issuance of TGA shares shall be used solely to purchase additional shares in TradeGecko 
@@ -87,18 +87,19 @@ figure out building this as a proper google add-on.
 **** the creation of the new class
 **** the issue of up to $$$ of new shares
 *** give the corp sec authority to bizfile
-** TODO draft subscription and shareholders agreement to new class of TGA shares
+** DONE draft subscription and shareholders agreement to new class of TGA shares
 *** subscription agreement
 **** pursuant to the JFDI.2012 subscription agreement which states that preemptive rights may be transferred to RCPS shareholders on commercial terms,
 **** payment instructions to JFDI.2012
 *** shareholder agreement
 **** transfer limited to TGA, then JFDI.2012, then JFDI group shareholders, then TradeGecko shareholders
-** TODO draft subsequent directors resolutions under 184A -- issue and allotment
+** WAIT draft subsequent directors resolutions under 184A -- issue and allotment
 this is basically done -- we have this docset ready.
 *** to issue new shares to everybody who has subscribed
 *** if the members give approval, to give corporate secretary authority to bizfile
+** TODO fix up 3A using the same ab styling and get it submitted as a change
 * for 2015a
-** TODO issue founder agreement to neuroware at 5%
+** DONE issue founder agreement to neuroware at 5%
 ** TODO import memorandum of association
 see JFDI.BOOTCAMP.pdf from JFDI.2012 -- this text should go inside the Memo
 ** TODO import articles of association
