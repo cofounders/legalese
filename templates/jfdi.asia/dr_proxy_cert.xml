@@ -9,11 +9,10 @@ have resolved to appoint
 
 as our Proxy
 authorised to attend, act, and vote on the Company's behalf
-at the Second General Meeting of <?= data.parties.startup[0].name ?> (the "Other Company")
-held on or about March 25 2015
-and at any adjournment thereof within a period of one week
+at the next General Meeting of <?= data.parties.startup[0].name ?>
+and at any adjournments thereof within a period of one week
 with power, where applicable, to accept short notice or dispense with formal notice of any such meetings or adjourned meetings
-and that such appointment shall remain in force until April 2 2015.
+and that such appointment shall remain in force until <?= data.expiry_date ?>.
 
 
 </para_2_hanging>

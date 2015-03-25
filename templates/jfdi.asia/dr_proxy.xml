@@ -1,5 +1,5 @@
 <?!= include("inc_dr_start", data, { chapter_header: data.directors_resolutions_title, director_or_member:"Director", article_pursuant:data.article_for_directors_resolution_in_writing, }) ?>
-<para_1>That the Company, being a member of <?= data.parties.startup[0].name ?> (the "Other Company") does hereby appoint <?= include("inc_party",data,data.parties.proxy[0]) ?>
+<para_1>That the Company, being a member of <?= data.parties.startup[0].name ?> (the "Other Company") does hereby appoint <?!= include("inc_party",data,data.parties.proxy[0]) ?>
 <? if (data.parties.proxy.length > 1) { ?> each<?}?>
  <?= data.authorisation_proxy ?>
  until revoked in writing to that effect.</para_1>
