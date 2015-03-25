@@ -3,7 +3,7 @@
 <resolution_title>Directors' resolution<?= (data._include.r_num && data._include.r_num==1) ? "" : "s" ?> in writing&#8232;passed pursuant to Article <?= data._include.article_pursuant || data.article_for_directors_resolution_in_writing ?> of the Company's Articles of Association</resolution_title>
 <? } else if (data._include.director_or_member.toLowerCase() == "member") { ?>
 <resolution_title>Members resolution<?= (data._include.r_num && data._include.r_num==1) ? "" : "s" ?>
-<?      if (data.egm_or_written_means == "written") { ?>
+<?      if (data.egm_or_written_means.match(/written/)) { ?>
  in writing&#8232;passed pursuant to Article 184A of the Companies Act (Cap. 50)<? }
  else if (data.egm_or_written_means == "EGM") { ?> at Extraordinary General Meeting<? }
  else if (data.egm_or_written_means == "AGM") { ?> at Annual General Meeting<? } ?>
