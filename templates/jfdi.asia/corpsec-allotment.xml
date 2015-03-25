@@ -10,7 +10,7 @@
 <? Logger.log("about to sum across %s", data.parties.new_investor.map(function(p){return p.new_commitment})); ?>
 <? Logger.log("sum = %s", data.parties.new_investor.map(function(p){return Number(p.new_commitment.replace(/[^\d\.]+/g,""))}).reduce(function(a,b){return a+b})); ?>
 <? Logger.log("formatting with %s", data.parties.new_investor[0]._format_new_commitment); ?>
-<? data._total_commitment = formatify_(data.parties.new_investor[0]._format_new_commitment,
+<? data._total_commitment = asCurrency_(data.parties.new_investor[0]._format_new_commitment,
   data.parties.new_investor.map(function(p){return Number(p.new_commitment.replace(/[^\d\.]+/,""))}).reduce(function(a,b){return a+b})); ?>
 <? Logger.log("data._total_commitment = %s", data._total_commitment); ?>
 <Story_Main>
