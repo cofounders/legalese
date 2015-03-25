@@ -2155,7 +2155,7 @@ function uploadAgreement(sheet) {
 }
 
 function templateTitles_(templates) {
-  if (templates.length == 1) { return templates[0].name }
+  if (templates.length == 1) { return templates[0].title }
   return templates.map(function(t){return t.sequence}).join(", ");
 }
 
