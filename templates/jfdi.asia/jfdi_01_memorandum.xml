@@ -1,7 +1,7 @@
 <? data.xml_declaration ?>
 <Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
 <CoverTop>
-<cover_title>JFDI Founder Agreement</cover_title>
+<cover_title>Memorandum of Association</cover_title>
 <cover_company_name>
 
 
@@ -33,7 +33,8 @@
   <centered>(the "Company")</centered>
   <centered></centered>
   <numbered_1_para>The name of the company is <?= data.company.name ?></numbered_1_para>
-  <numbered_1_para>The Registered Office of the Company will be situated in the Republic of Singapore. </numbered_1_para>
+  <numbered_1_para>The Registered Office of the Company will be situated in the Republic of Singapore, at</numbered_1_para>
+  <para_2><?= data.company.address ?></para_2>
   <numbered_1_para>The liability of the members is limited. </numbered_1_para>
   <numbered_1_para>Subject to the provisions of the Companies Act, Cap. 50 and this Memorandum and Articles of Association, the Company has full capacity, rights and powers to carry on or undertake any business or activity and to do any act or enter into any transactions and/or arrangements. </numbered_1_para>
   <numbered_1_para>The total paid-up capital of the company is S$10.00. Each ordinary share is being issued at S$0.01 per share at the date of incorporation. </numbered_1_para>
