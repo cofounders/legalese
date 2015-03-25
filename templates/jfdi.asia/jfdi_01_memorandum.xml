@@ -39,8 +39,10 @@
   <numbered_1_para>The liability of the members is limited. </numbered_1_para>
   <numbered_1_para>Subject to the provisions of the Companies Act (Cap. 50) and this Memorandum and Articles of Association, the Company has full capacity, rights and powers to carry on or undertake any business or activity and to do any act or enter into any transactions and/or arrangements. </numbered_1_para>
   <numbered_1_para>The total paid-up capital of the company is <?= data.company.total_capitalization ?>. Each ordinary share is being issued at <?= data.price_per_share ?> per share at the date of incorporation. </numbered_1_para>
-  <numbered_1_para>The shares in the original or any increased capital may be divided into several classes, and there may be attached thereto respectively any preferential, deferred or other speical rights, privileges, conditions or restrictions as to dividend, capital, voting or otherwise. </numbered_1_para>
-  <numbered_1_para>We, the several persons whose names, addresses and occupations are hereunto subscribed are desirous of being formed into a company in pursuance of this Memorandum of Association and we respectively agree to take the number of shares in the capital of the Company set opposite our respective names. </numbered_1_para>
+  <numbered_1_para>The shares in the original or any increased capital may be divided into several classes, and there may be attached thereto respectively any preferential, deferred or other special rights, privileges, conditions or restrictions as to dividend, capital, voting or otherwise. </numbered_1_para>
+  <numbered_1_para><? if (data.parties.founder.length > 1) { ?>We, the several persons whose names, citizenship, and addresses are hereunto subscribed are<?} else {?>
+I, the sole shareholder whose name, citizenship, and address are hereunto subscribed am<? } ?>
+ desirous of incorporating a company in pursuance of this Memorandum of Association and <?= plural(data.parties.founder.length, "I hereby", "we respectively") ?> agree to take the number of shares in the capital of the Company set opposite <?= plural(data.parties.founder.length, "my name", "our respective names") ?>. </numbered_1_para>
   <table_enclosing_para>
 	<Table aid:table="table" aid:tcols="5" aid:trows="<?= data.parties.founder.length+1 ?>" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
 <Cell aid:ccols="1" aid:ccolwidth="110" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Name</cell_c></Cell>
@@ -58,7 +60,7 @@
 </Table>
 </table_enclosing_para>
 
-<para_1>Affirming the above we hereby set our hands:---</para_1>
+<para_1>Affirming the above <?= plural(data.parties.founder.length, "I", "we") ?> hereby set our hands:---</para_1>
 
 	<? for (var i = 0; i < data.parties.founder.length; i++) { ?>
 	<?!= include("inc_signature", data, data.parties.founder[i]) ?>
