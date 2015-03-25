@@ -5,8 +5,8 @@
 <resolution_title>Members resolution<?= (data._include.r_num && data._include.r_num==1) ? "" : "s" ?>
 <?      if (data.egm_or_written_means == "written") { ?>
  in writing&#8232;passed pursuant to Article 184A of the Companies Act (Cap. 50)<? }
- else if (data.egm_or_written_means == "EGM") { ?> at Extraordinary General Meeting<? } ?>
- <? } else if (data.egm_or_written_means == "AGM") { ?> at Annual General Meeting<? } ?>
+ else if (data.egm_or_written_means == "EGM") { ?> at Extraordinary General Meeting<? }
+ else if (data.egm_or_written_means == "AGM") { ?> at Annual General Meeting<? } ?>
 </resolution_title>
 <? } ?>
 <? if (data._include.chapter_header) { ?><chapter_header override="startParagraph=StartParagraph.ANYWHERE"><?= data._include.chapter_header ?></chapter_header><? } ?>
