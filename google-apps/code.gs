@@ -2277,6 +2277,8 @@ function asCurrency_(currency, amount, chop) {
   // but that doesn't work either. so we do it by hand.
 
   // currency can be either just "S$" or the full numberFormat specification string.
+
+  Logger.log("asCurrency_(%s, %s, %s)", currency, amount, chop);
   
   var mycurrency = currency;
   var matches;
