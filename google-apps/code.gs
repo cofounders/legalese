@@ -1619,17 +1619,20 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
 
 // ---------------------------------------------------------------------------------------------------------------- include
 // used inside <? ?>
-function include(name, data, _include) {
-  Logger.log("running include for %s, with _include=%s", name, _include);
+function include(name, data, _include, _include2) {
+  Logger.log("running include for %s, with _include=%s, _include2=%s", name, _include, _include2);
   var origInclude = data._include;
+  var origInclude2 = data._include2;
   var filtered = availableTemplates_().filter(function(t){return t.name == name});
   if (filtered.length == 1) {
 	var template = filtered[0];
 	var childTemplate = obtainTemplate_(template.url);
 	childTemplate.data = data;
 	childTemplate.data._include = _include || {};
+	childTemplate.data._include2 = _include2 || {};
 	var filledHTML = childTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
 	data._include = origInclude;
+	data._include2 = origInclude2;
 	return filledHTML;
   }
   Logger.log("include(): unable to find template named %s", name);
