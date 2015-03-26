@@ -55,5 +55,29 @@ And concurrently with the issue of Class F Shares to the founders and shareholde
   <numbered_2_firstbold>
     <b>The Company shall procure that the Existing Shareholders shall waive any and all rights of pre-emption which they have (or may have) with respect to the allotment and issue of the Conversion Shares to JFDI, whether pursuant to the Memorandum or Articles of Association of the Company, by contract or otherwise. </b>
   </numbered_2_firstbold>
+<?if(data.security_type=="Convertible Note"){?>  <a_left_sidehead>Repayment </a_left_sidehead>
+  <numbered_2_para>So long as the <?=data.security_type_short_singular?> has not been <?=data.security_type_operation=="conversion"?"converted":"exercised"?> pursuant to the terms set out in this <?=data.security_type_short_singular?>, if at any time and for any reason (and whether within or beyond the control of any party to this Agreement) any Event of Default has occurred, then at any time thereafter JFDI may by serving a Repayment Notice on the Company declare the <?=data.security_type_short_singular?> to be immediately due and payable at the Repayment Amount. </numbered_2_para>
+  <numbered_2_para>For the purposes of this <?=data.security_type_short_singular?>, the following events are Events of Default:--</numbered_2_para>
+  <numbered_3_para>a material breach of any of the warranties, undertakings and conditions contained herein or in any document in connection therewith; including the Founder Agreement signed as a condition of acceptance into the JFDI bootcamp; such breach being capable of remedy, but not so remedied within 30 days after notice of such breach having been given by JFDI to the Company or the Founders; </numbered_3_para>
+  <numbered_3_para>the company ceases or threatens to cease to carry on its business; </numbered_3_para>
+  <numbered_3_para>the resignation or termination of one-half or more of the Founders from the Company; </numbered_3_para>
+  <numbered_3_para>the departure of all of the Founders from Singapore and the failure of the Founders to respond to JFDI communications in a timely fashion; </numbered_3_para>
+  <numbered_3_para>an encumbrancer takes possession of, or a receiver, manager or other similar officer is appointed over, the whole or any part of the property or assets of the Company; </numbered_3_para>
+  <numbered_3_para>any liquidation or winding-up proceedings are commenced against the Company; </numbered_3_para>
+  <numbered_3_para>the Company substantially sells or otherwise disposes of the whole or substantially all of its undertakings or assets; or </numbered_3_para>
+  <numbered_3_para>it is or will become unlawful for the Company to perform or comply with any one or more of its obligations under the <?=data.security_type_short_singular?>. </numbered_3_para>
+  <numbered_2_para>Upon receipt of a repayment notice by the Company sent by JFDI, the Company shall repay JFDI the repayment amount within 14 days from the date of the repayment notice. </numbered_2_para>
+  <numbered_2_para>Subject to a repayment notice being delivered to the Company on or after the occurrence of an Event of Default, the amount to be repaid by the Company to JFDI under this <?=data.security_type_short_singular?> (the &#8220;Repayment Amount&#8221;) shall be the amount equal to the principal amount and unpaid interest (if any) accruing from the closing date until the date of the Automatic Conversion (as described in Clause 4.2), Maturity Date, or Default date. </numbered_2_para>
+  <numbered_2_para>Upon receipt of the Repayment Amount subsequent to an Event of Default, this Loan shall terminate and there will be no further liability owing or owed by the Company to JFDI. </numbered_2_para>
+  <numbered_2_para>Redemption at the option of the Company </numbered_2_para>
+  <numbered_2_para>The Company shall have the option to redeem the <?=data.security_type_short_singular?> in the event of Default by JFDI. The repayment amount shall be $25,000. Redemption must be in whole, not in part. </numbered_2_para>
+  <numbered_2_para>Any of the following events occurring prior to the Maturity Date constitutes Default by JFDI: </numbered_2_para>
+  <numbered_3_para>A material breach by JFDI of any of the warranties, undertakings and conditions contained herein or in any document in connection therewith; including the Founder Agreement signed as a condition of acceptance into the JFDI bootcamp; such breach being capable of remedy, but not so remedied within 30 days after notice of such breach having been given in writing by the Company and/or the Founders to JFDI; </numbered_3_para>
+  <numbered_3_para>JFDI ceases or threatens to cease to carry on its business; </numbered_3_para>
+  <numbered_3_para>the departure of JFDI from Singapore and the failure of JFDI to respond to communications from Founders in a timely fashion; </numbered_3_para>
+  <numbered_3_para>an encumbrancer takes possession of, or a receiver, manager or other similar officer is appointed over, the whole or any part of the property or assets of JFDI; </numbered_3_para>
+  <numbered_3_para>any liquidation or winding-up proceedings are commenced against JFDI; or </numbered_3_para>
+  <numbered_3_para>it is or will become unlawful for JFDI to perform or comply with any one or more of its obligations under the <?=data.security_type_short_singular?>. Liquidation Prior to next Financing Round In the event of a Trade Sale or Change of Control prior to the Next Financing Round, then the Company shall redeem this <?=data.security_type_short_singular?> for 2× the amount paid by JFDI. </numbered_3_para>
+<?}?>
 </Story_Main>
 </Root>
