@@ -32,7 +32,7 @@ And concurrently with the issue of Class F Shares to the founders and shareholde
   <definition>Shares	means shares in the capital of the Company whether ordinary or preferred; </definition>
   <definition>Unresponsiveness	in the context of a Donor / Donee relationship, means any of the following events:</definition>
   <definition_list>the Donee is unable to contact the Donor for a cumulative period of more than two (2) calendar months by email and registered mail; or
-  the Donor becomes mentally or physically incapacitated or in any other way unable to perform his duties as a Member of the Company for a cumulative period of more than two (2) calendar months.</definition_list>
+the Donor becomes mentally or physically incapacitated or in any other way unable to perform his duties as a Member of the Company for a cumulative period of more than two (2) calendar months.</definition_list>
   <definition>S$ or $	means the lawful currency for the time being of the Republic of Singapore; and </definition>
   <para_1>Except where the context otherwise requires, words importing the singular include the plural and vice versa, words importing a gender include every gender and references to persons include bodies corporate or unincorporated, any state or any agency thereof and any other entity. </para_1>
   <para_1>Headings, marginal sidenotes, and graphic art are for ease of reference only and have no legal effect. Reference to Clauses are to Clauses of this Agreement and references to this Agreement include any amendments or supplementals thereto. </para_1>
@@ -118,19 +118,21 @@ And concurrently with the issue of Class F Shares to the founders and shareholde
 
 <a_left_sidehead>Grant of Limited Power of Attorney</a_left_sidehead>
   
-  <para_1>Each Founder (in this context the "Donor") hereby irrevocably designates and appoints the Investor and its duly authorized officers and agents as his agent and attorney in fact (in this context the "Donee"), to act for and on his behalf and stead,</para_1>
-  <para_2>if and only if the Donee is unable because of the Donee's Unresponsiveness to secure the Donor's signature or other authorisation to effect any compliance paperwork or other filings necessary to maintain the Company&#8217;s good standing status with government authorities, </para_2>
-  <para_2>to execute and file any such applications or documents and to do all other lawfully permitted acts to further the application for, prosecution and issuance including striking off or winding down of the Company, thereon with the same legal force and effect as if originally executed by the Donor. The Donor hereby waives and irrevocably quits claim to the Investor any and all claims, of any nature whatsoever, which the Donor now or hereafter has for infringement of any and all rights assigned to the Donee.</para_2>
+<numberd_2_para>Each Founder (in this context the "Donor") hereby irrevocably designates and appoints the Investor and its duly authorized officers and agents as his agent and attorney in fact (in this context the "Donee"), to act for and on his behalf and stead,</numberd_2_para>
+<para_2>if and only if the Donee is unable because of the Donee's Unresponsiveness to secure the Donor's signature or other authorisation to effect any compliance paperwork or other filings necessary to maintain the Company&#8217;s good standing status with government authorities, </para_2>
+<para_2>to execute and file any such applications or documents and to do all other lawfully permitted acts to further the application for, prosecution and issuance including striking off or winding down of the Company, thereon with the same legal force and effect as if originally executed by the Donor.</para_2>
+
+<numbered_2_para>The Donor hereby waives and irrevocably quits claim to the Investor any and all claims, of any nature whatsoever, which the Donor now or hereafter has for infringement of any and all rights assigned to the Donee.</numbered_2_para>
 
 <a_left_sidehead>Exercise of Limited Power of Attorney</a_left_sidehead>
   
-  <para_1>If, one month prior to the latest date the Company may legally convene an AGM, the Company has not issued notice of an AGM (unless the Members have dispensed with AGMs under Section 175A),
-  or if, two months prior to the annual return filing deadline prescribed by law, the Company's Directors have not signed the Directors' Report and Statement by Directors in respect of the financial statements,
-  then the Company shall be deemed to be in danger of failing to maintain its good standing,
-  and the Investor shall have the right to exercise its power of attorney to commence winding-up, dissolution, or striking-off proceedings.
-  </para_1>
+<numbered_2_para>If, one month prior to the latest date the Company may legally convene an AGM, the Company has not issued notice of an AGM (unless the Members have dispensed with AGMs under Section 175A),</numbered_2_para>
+<para_2>or if, two months prior to the annual return filing deadline prescribed by law, the Company's Directors have not signed the Directors' Report and Statement by Directors in respect of the financial statements,
+then the Company shall be deemed to be in danger of failing to maintain its good standing,
+and the Investor shall have the right to exercise its power of attorney to commence winding-up, dissolution, or striking-off proceedings.
+</para_2>
 
-  <? } ?>
+<? } ?>
 
   <chapter_header override="startParagraph=StartParagraph.ANYWHERE">Signatures </chapter_header>
   <para_1>IN WITNESS WHEREOF we have hereunto set our hand on <?= data.investment_agreement_date ?></para_1>
