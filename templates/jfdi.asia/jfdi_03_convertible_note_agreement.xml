@@ -118,7 +118,7 @@ the Donor becomes mentally or physically incapacitated or in any other way unabl
 
 <a_left_sidehead>Grant of Limited Power of Attorney</a_left_sidehead>
   
-<numberd_2_para>Each Founder (in this context the "Donor") hereby irrevocably designates and appoints the Investor and its duly authorized officers and agents as his agent and attorney in fact (in this context the "Donee"), to act for and on his behalf and stead,</numberd_2_para>
+<numbered_2_para>Each Founder (in this context the "Donor") hereby irrevocably designates and appoints the Investor and its duly authorized officers and agents as his agent and attorney in fact (in this context the "Donee"), to act for and on his behalf and stead,</numbered_2_para>
 <para_2>if and only if the Donee is unable because of the Donee's Unresponsiveness to secure the Donor's signature or other authorisation to effect any compliance paperwork or other filings necessary to maintain the Company&#8217;s good standing status with government authorities, </para_2>
 <para_2>to execute and file any such applications or documents and to do all other lawfully permitted acts to further the application for, prosecution and issuance including striking off or winding down of the Company, thereon with the same legal force and effect as if originally executed by the Donor.</para_2>
 
@@ -134,7 +134,7 @@ and the Investor shall have the right to exercise its power of attorney to comme
 
 <? } ?>
 
-  <chapter_header override="startParagraph=StartParagraph.ANYWHERE">Signatures </chapter_header>
+  <chapter_header>
   <para_1>IN WITNESS WHEREOF we have hereunto set our hand on <?= data.investment_agreement_date ?></para_1>
   <para_1>For the Founders: </para_1>
 <? for (var i = 0; i < data.parties.founder.length; i++) { ?>
