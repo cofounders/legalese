@@ -113,5 +113,33 @@ And concurrently with the issue of Class F Shares to the founders and shareholde
   <numbered_2_para>This Clause 14 shall survive the termination of this Agreement for any reason whatsoever.  </numbered_2_para>
   <chapter_header>Signatures </chapter_header>
   <para_1>IN WITNESS WHEREOF we have hereunto set our hand on <?= data.investment_agreement_date ?></para_1>
+  <para_1>For the Founders: </para_1>
+<? for (var i = 0; i < data.parties.founder.length; i++) { ?>
+<?!= include("inc_signature", data, data.parties.founder[i]) ?>
+<? } ?>
+  <para_1>For and on behalf of the Company: </para_1>
+<?!= include("inc_signature", data, data.company) ?>
+  <para_1>For and on behalf of the Investor:			 </para_1>
+<? for (var i = 0; i < data.parties.investor.length; i++) { ?>
+<?!= include("inc_signature", data, data.parties.investor[i], { no_addnewline:i==(data.parties.investor.length-1) } ) ?>
+<? } ?>
+<?if(data.security_type=="Convertible Note"){?>
+  <chapter_header>Exhibit A </chapter_header>
+  <swash_header> </swash_header>
+  <swash_header>Repayment Notice </swash_header>
+  <para_1> </para_1>
+  <para_1>Dear Sirs, </para_1>
+  <para_1>We refer to the <?=data.security_type?> Agreement Dated <?=data.investment_agreement_date?>, in particular, Clause 5.1 therein. </para_1>
+  <para_1>All terms defined in the <?=data.security_type_short_singular?> shall bear the same meaning when used in this letter. </para_1>
+  <para_1>We hereby give you notice that we require you to repay the <?=data.security_type?> in accordance with the terms and conditions as set out in the <?=data.security_type_short_singular?>. </para_1>
+  <para_1>Please make payment of $x therefor. </para_1>
+  <para_2> </para_2>
+  <para_2> </para_2>
+  <para_2> </para_2>
+  <para_1>Name: </para_1>
+  <para_1>Signature: </para_1>
+  <para_1>Date: </para_1>
+  <para_2> </para_2>
+<?}?>
 </Story_Main>
 </Root>
