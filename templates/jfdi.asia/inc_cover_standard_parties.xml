@@ -1,3 +1,5 @@
+<CoverTop>
+<cover_title><?= data._include.cover_title ?></cover_title>
 <cover_company_name>
 
 
