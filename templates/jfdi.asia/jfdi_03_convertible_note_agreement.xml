@@ -43,7 +43,7 @@ And concurrently with the issue of Class F Shares to the founders and shareholde
   <a_left_sidehead>Conditions Precedent </a_left_sidehead>
   <numbered_2_para>The obligations of the parties under this agreement are conditional upon:&#8212; </numbered_2_para>
   <numbered_3_para>approvals and consents (including any governmental, regulatory and/or corporate approvals and consents) in the form and substance satisfactory to JFDI (where applicable), for the transactions contemplated under this agreement, being obtained and not withdrawn or amended, on or before the Completion Date;
-representations and warrants by the Company that all intellectual property and other rights necessary to pursue the business are the full legal, beneficial, and unencumbered property of the Company;<? if (data.jfdi_standard_valuation == false || data.valuation_basis == fixed) { ?><? }else{ ?> and
+representations and warrants by the Company that all intellectual property and other rights necessary to pursue the business are the full legal, beneficial, and unencumbered property of the Company;<? if (data.jfdi_standard_valuation == false || data.valuation_basis == "fixed") { ?><? }else{ ?> and
 <?}?>
 disclosure of the details of existing incorporated entities, if any, that represent the business of the Company
 <? if (data.jfdi_standard_valuation == false || data.valuation_basis == "fixed") { ?>; and
