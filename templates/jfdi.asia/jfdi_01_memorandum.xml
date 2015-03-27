@@ -56,7 +56,8 @@ I, the sole shareholder whose name, citizenship, and address are hereunto subscr
 </Table>
 </table_enclosing_para>
 
-<para_1>Affirming the above <?= plural(data.parties.founder.length, "I", "we") ?> hereby set our hands:---</para_1>
+<para_1>Affirming the above <?= plural(data.parties.founder, "I", "we") ?>
+ hereby set <?= plural(data.parties.founder, "my hand", "our hands") ?>:---</para_1>
 
 	<? for (var i = 0; i < data.parties.founder.length; i++) { ?>
 	<?!= include("inc_signature", data, data.parties.founder[i], { no_addnewline:i==(data.parties.founder.length-1) } ) ?>
