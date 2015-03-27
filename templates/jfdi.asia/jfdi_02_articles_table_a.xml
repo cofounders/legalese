@@ -1,0 +1,11 @@
+<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
+<?!= include("inc_cover_standard_parties", data, {cover_title:"Articles of Association"}) ?>
+<?!= include("inc_cover_jfdi", data, { in_series:"03" }) ?>
+<Firstpage_Sidebar>
+<sidebar>See statutes.agc.gov.sg Cap 50.</sidebar>
+</Firstpage_Sidebar>
+<Story_Main>
+  <chapter_header>Articles of Association</chapter_header>
+<para_1><?= data.company.name ?> by omission hereby adopts as its Articles of Association the regulations shown in Table A of the Fourth Schedule of the Companies Act (Cap. 50) of Singapore.</para_1>
+</Story_Main>
+</Root>
