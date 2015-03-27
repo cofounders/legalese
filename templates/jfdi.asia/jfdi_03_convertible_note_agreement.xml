@@ -148,7 +148,7 @@ and the Investor shall have the right to exercise its power of attorney to comme
   <para_1><i>For and on behalf of the Company:</i></para_1>
 <?!= include("inc_signature", data, data.company) ?>
   <para_1><i>For and on behalf of the Investor:</i></para_1>
-<?!= include("inc_signature", data, data.parties.investor) ?>
+<?!= include("inc_signature", data, data.parties.investor[0]) ?>
 
 <?if(data.security_type=="Convertible Note"){?>
   <chapter_header>Exhibit A </chapter_header>
