@@ -31,8 +31,8 @@ And concurrently with the issue of Class F Shares to the founders and shareholde
   <definition>Ordinary Shares	means the ordinary shares in the capital of the Company; </definition>
   <definition>Shares	means shares in the capital of the Company whether ordinary or preferred; </definition>
 <? if (data.local_director) {?>  <definition>Unresponsiveness	in the context of a Donor / Donee relationship, means any of the following events:</definition>
-  <definition_list>the Donee is unable to contact the Donor for a cumulative period of more than two (2) calendar months by email and registered mail; or
-  the Donor becomes mentally or physically incapacitated or in any other way unable to perform his duties as a Member of the Company for a cumulative period of more than two (2) calendar months.</definition_list>
+  <definition_list>the Donee is unable to contact the Donor for a cumulative period of more than two (2) calendar months by email and registered mail; or</definition_list>
+  <definition_list>the Donor becomes mentally or physically incapacitated or in any other way unable to perform his duties as a Member of the Company for a cumulative period of more than two (2) calendar months.</definition_list>
 <? } ?>
   <definition><span_smallcaps>S$</span_smallcaps> or $	means the lawful currency for the time being of the Republic of Singapore; and </definition>
   <para_1>Except where the context otherwise requires, words importing the singular include the plural and vice versa, words importing a gender include every gender and references to persons include bodies corporate or unincorporated, any state or any agency thereof and any other entity. </para_1>
