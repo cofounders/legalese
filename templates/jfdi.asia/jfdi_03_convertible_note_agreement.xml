@@ -47,8 +47,7 @@ representations and warrants by the Company that all intellectual property and o
 <?}?>
 disclosure of the details of existing incorporated entities, if any, that represent the business of the Company<?
 if (data.jfdi_standard_valuation == false || data.valuation_basis == "fixed") { ?>; and
-full and accurate disclosure by the Company of information used to calculate the valuation of the Company and JFDI&#8217;s shareholding percentage, consistent with JFDI&#8217;s valuation methodology, and consistent with previous representations and warrants by the Company made at the time of the signing of the Founder Agreement
-<? } ?>.
+full and accurate disclosure by the Company of information used to calculate the valuation of the Company and JFDI&#8217;s shareholding percentage, consistent with JFDI&#8217;s valuation methodology, and consistent with previous representations and warrants by the Company made at the time of the signing of the Founder Agreement<? } ?>.
 </numbered_3_para>
 <a_left_sidehead><?= data.security_type_operation?></a_left_sidehead>
   <numbered_2_para>The <?=data.security_type_short_singular?> shall be <?=data.security_type_operation=="conversion"?"converted":"exercised"?> in accordance with this Clause 4. </numbered_2_para>
