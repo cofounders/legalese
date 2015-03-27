@@ -24,7 +24,7 @@ And concurrently with the issue of Class F Shares to the founders and shareholde
 <?if(data.term){?>  <definition>Maturity Date	<?=data.term?> from date of issue of the <?=data.security_type_short_singular?>, or such other date as may be mutually agreed between the Parties; </definition>
 <?}?>
 <?if(data.interest != undefined){?>
-<definition>Interest Rate	The <?=data.security_type_short_singular?> <? if (data.interest > 0) { ?>accrues <?= data.interest ?>% simple interest, to be payable in full on the earlier of the Maturity Date or the date on which the <?=data.security_type_short_singular?> is converted or redeemed in full,<?}else{?>no interest.<?}?></definition>
+<definition>Interest Rate	The <?=data.security_type_short_singular?> <? if (data.interest > 0) { ?>accrues <?= data.interest ?>% simple interest, to be payable in full on the earlier of the Maturity Date or the date on which the <?=data.security_type_short_singular?> is converted or redeemed in full,<?}else{?>carry no interest.<?}?></definition>
 <?}?>
   <definition>Trade Sale	means a sale of 75% or more of the voting share capital of the Company to a third party buyer; </definition>
   <definition>Memorandum	means the Memorandum of Association of the Company; </definition>
