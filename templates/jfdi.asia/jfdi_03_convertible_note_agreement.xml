@@ -57,9 +57,9 @@ And concurrently with the issue of Class F Shares to the founders and shareholde
   <numbered_2_para>The pre-emptive rights accruing to JFDI shall be transferable at JFDI&#8217;s sole discretion to non-members notwithstanding Article 23.2 of the Articles of Association; and the Founders shall procure such authorisation from the Members. </numbered_2_para>
 <?if(data.security_type=="Convertible Note"){?>  <numbered_2_para>Should the <?=data.security_type_short_singular?> fail to <?=data.security_type_operation=="conversion"?"convert":"exercise"?> by the maturity date (the &#8220;Maturity Date&#8221;), JFDI may at any time thereafter redeem in full the outstanding principal <?if(data.interest){?>and accrued interest <?}?>of the <?=data.security_type_short_singular?>. </numbered_2_para>
 <?}?>
-  <numbered_2_firstbold>
-    <b>The Company shall procure that the Existing Shareholders shall waive any and all rights of pre-emption which they have (or may have) with respect to the allotment and issue of the Conversion Shares to JFDI, whether pursuant to the Memorandum or Articles of Association of the Company, by contract or otherwise. </b>
-  </numbered_2_firstbold>
+  <numbered_2_para>
+    The Company shall procure that the Existing Shareholders shall waive any and all rights of pre-emption which they have (or may have) with respect to the allotment and issue of the Conversion Shares to JFDI, whether pursuant to the Memorandum or Articles of Association of the Company, by contract or otherwise.
+  </numbered_2_para>
 <?if(data.security_type=="Convertible Note"){?>  <a_left_sidehead>Repayment </a_left_sidehead>
   <numbered_2_para>So long as the <?=data.security_type_short_singular?> has not been <?=data.security_type_operation=="conversion"?"converted":"exercised"?> pursuant to the terms set out in this <?=data.security_type_short_singular?>, if at any time and for any reason (and whether within or beyond the control of any party to this Agreement) any Event of Default has occurred, then at any time thereafter JFDI may by serving a Repayment Notice on the Company declare the <?=data.security_type_short_singular?> to be immediately due and payable at the Repayment Amount. </numbered_2_para>
   <numbered_2_para>For the purposes of this <?=data.security_type_short_singular?>, the following events are Events of Default:--</numbered_2_para>
@@ -85,9 +85,9 @@ And concurrently with the issue of Class F Shares to the founders and shareholde
   <numbered_3_para>it is or will become unlawful for JFDI to perform or comply with any one or more of its obligations under the <?=data.security_type_short_singular?>. Liquidation Prior to next Financing Round In the event of a Trade Sale or Change of Control prior to the Next Financing Round, then the Company shall redeem this <?=data.security_type_short_singular?> for 2× the amount paid by JFDI. </numbered_3_para>
 <?}?>
   <a_left_sidehead>Negative Pledge </a_left_sidehead>
-  <numbered_2_firstbold>
-    <b>The Company shall not, without the consent in writing of JFDI, create or allow the creation of any security interest upon the whole or any part of its property or assets, present or future, in order to secure, for the benefit of any creditor of the Company (other than the holders of the <?=data.security_type_short_singular?>), without according to JFDI at the same time, either the same security as is created or is outstanding in respect of such issue or such other security or guarantee as is not materially less benefical to JFDI. </b>
-  </numbered_2_firstbold>
+  <numbered_2_para>
+    The Company shall not, without the consent in writing of JFDI, create or allow the creation of any security interest upon the whole or any part of its property or assets, present or future, in order to secure, for the benefit of any creditor of the Company (other than the holders of the <?=data.security_type_short_singular?>), without according to JFDI at the same time, either the same security as is created or is outstanding in respect of such issue or such other security or guarantee as is not materially less benefical to JFDI.
+  </numbered_2_para>
   <a_left_sidehead>Use of proceeds </a_left_sidehead>
   <numbered_2_para>The Company is not to use the proceeds raised from the <?=data.security_type_short_singular?> issuance for any purpose other than the meeting of the Company&#8217;s operating expenses and capital expenditure. For the avoidance of doubt, operating expenses include the living expenses of the Founders in Singapore and their families. </numbered_2_para>
   <a_left_sidehead>Costs </a_left_sidehead>
@@ -95,9 +95,9 @@ And concurrently with the issue of Class F Shares to the founders and shareholde
   <a_left_sidehead>Service of Notices </a_left_sidehead>
   <numbered_2_para>Any notice, communication or demand required to be given, made or served for any purpose of this <?=data.security_type_short_singular?> shall be given, made or served by delivering the same in person by letter, or by facsimile, or made by telephone (but in the case of notification by telephone with subsequent confirmation by facsimile despatched, or letter delivered in person, within twenty-four (24) hours). Such notice or demand shall take effect at the time of delivering such letter, despatching such facsimile or making such telephone call if so delivered, despatched or made to the principal or registered address of each party. </numbered_2_para>
   <a_left_sidehead>In good standing </a_left_sidehead>
-  <numbered_2_firstbold>
-    <b>The Founders shall have the responsibility to maintain the Company as a legal entity in good standing at all times with the Singapore authorities. </b>
-  </numbered_2_firstbold>
+  <numbered_2_para>
+    The Founders shall have the responsibility to maintain the Company as a legal entity in good standing at all times with the Singapore authorities.
+  </numbered_2_para>
 
   <a_left_sidehead>Further Assurance </a_left_sidehead>
   <numbered_2_para>The parties hereto shall execute and do and procure all other persons if necessary, to execute and do all such further deeds, assurances, acts and things as may be reasonably required whether before or after completion so that full effect may be given to the terms and conditions of this <?=data.security_type_short_singular?>. </numbered_2_para>
@@ -121,7 +121,7 @@ And concurrently with the issue of Class F Shares to the founders and shareholde
 <a_left_sidehead>Grant of Limited Power of Attorney</a_left_sidehead>
   
 <numbered_2_para>Each Founder (in this context the "Donor") hereby irrevocably designates and appoints the Investor and its duly authorized officers and agents as his agent and attorney in fact (in this context the "Donee"), to act for and on his behalf and stead,</numbered_2_para>
-<para_2>if and only if the Donee is unable because of the Donee's Unresponsiveness to secure the Donor's signature or other authorisation to effect any compliance paperwork or other filings necessary to maintain the Company&#8217;s good standing status with government authorities, </para_2>
+<para_2>if and only if the Donee is unable because of the Donor's Unresponsiveness to secure the Donor's signature or other authorisation to effect any compliance paperwork or other filings necessary to maintain the Company&#8217;s good standing status with government authorities, </para_2>
 <para_2>to execute and file any such applications or documents and to do all other lawfully permitted acts to further the application for, prosecution and issuance including striking off or winding down of the Company, thereon with the same legal force and effect as if originally executed by the Donor.</para_2>
 
 <numbered_2_para>The Donor hereby waives and irrevocably quits claim to the Investor any and all claims, of any nature whatsoever, which the Donor now or hereafter has for infringement of any and all rights assigned to the Donee.</numbered_2_para>
