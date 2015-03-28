@@ -155,7 +155,7 @@ and the Investor shall have the right to exercise its power of attorney to comme
   <swash_header> </swash_header>
   <swash_header>Repayment Notice </swash_header>
   <para_1> </para_1>
-  <para_1>Dear Sirs, </para_1>
+  <para_1>Dear Sirs,</para_1>
   <para_1>We refer to the <?=data.security_type?> Agreement Dated <?=data.investment_agreement_date?>. </para_1>
   <para_1>All terms defined in the <?=data.security_type_short_singular?> shall bear the same meaning when used in this letter. </para_1>
   <para_1>We hereby give you notice that we require you to repay the <?=data.security_type?> in accordance with the terms and conditions as set out in the <?=data.security_type_short_singular?>. </para_1>
