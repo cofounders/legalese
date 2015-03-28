@@ -227,12 +227,37 @@ function setSignaturePageToAMaster(doc) {
   }
 }
 
+function isLastPara(para) {
+  var nextPara = para.paragraphs[-1].insertionPoints[-1].paragraphs[0];
+  if (nextPara == para) {
+	logToFile("found last para: " + para.contents);
+	return true;
+  }
+  return false;
+}
+
+function isLastElement(el) {
+  var parent = el.parent;
+  logToFile("isLastElement: parent of element " + el + " is " + parent + ".");
+  logToFile("isLastElement: parent.constructor.name of element " + el + " is " + parent.constructor.name + ".");
+  if (parent.constructor.name != "XMLElement") { return }
+  var index = el.index;
+  if (parent.xmlItems[index].isValid && parent.xmlItems[index] == el) {
+	logToFile("isLastElement: the index and parent thing is working as expected");
+  }
+  if (index == el.parent.xmlItems.length-1) { logToFile("isLastElement: we are the last element.");
+											   return true; }
+  return false;
+}
+
 // -------------------------------------------------- AddReturns
 function AddReturns(doc, importMaps){
   this.name = "AddReturns";
   this.xpath = "//*";
   this.apply = function(myElement, myRuleProcessor){
 
+	logToFile("AddReturns: considering " + myElement.markupTag.name + " XML element ("+myElement.index+") with last paragraph" + myElement.paragraphs.lastItem().contents.substr(0,30));
+	isLastElement(myElement);
 	if ((myElement.xmlAttributes.item("addnewline").isValid &&
 		 myElement.xmlAttributes.item("addnewline").value == "true")
 		|| (importMaps[myElement.markupTag.name] != undefined
@@ -244,10 +269,10 @@ function AddReturns(doc, importMaps){
 			&& (! myElement.xmlAttributes.item("addnewline").isValid ||
 				myElement.xmlAttributes.item("addnewline").value != "false")
 			&& ! myElement.contents.match(/\r$/)
+			&& ! isLastElement(myElement)
 		   )
 	   ) {
-	  logToFile("appending newline to element " + myElement.markupTag.name);
-	  logToFile(" contents = '" + myElement.contents + "'");
+	  logToFile("AddReturns: will append newline to element " + myElement.markupTag.name);
       myElement.insertTextAsContent("\r", XMLElementPosition.ELEMENT_END);
 	}
     return false;
