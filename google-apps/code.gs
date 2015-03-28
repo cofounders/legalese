@@ -970,6 +970,7 @@ function fillOtherTemplates_() {
 	// myRow.getCell(1,4).setValue('=IMPORTRANGE(A' +myRow.getRowIndex() +',"Founder Agreement!e6")');
 
 	myRow.getCell(1,5).setValue("unsent");
+	if (sheets.length > 1) { SpreadsheetApp.flush(); }
   }
 }
 
@@ -1021,73 +1022,71 @@ function availableTemplates_() {
 //	parties:{to:["director"], cc:["corporate_secretary"]},
 //	nocache:true,
 //  },
+	{ name:"jfdi_investment_agreement", title:"JFDI Investment Agreement",
+	   url:"http://www.legalese.io/templates/jfdi.asia/jfdi_03_convertible_note_agreement.xml",
+	  parties:{to:["founder", "company", "investor"], cc:["corporate_secretary"]},
+	},
+	{ name:"jfdi_articles_table_a", title:"Articles of Association",
+	   url:"http://www.legalese.io/templates/jfdi.asia/jfdi_02_articles_table_a.xml",
+	  parties:{to:["founder", "investor"], cc:["corporate_secretary"]},
+	},
 	{ name:"jfdi_memorandum", title:"Memorandum of Association",
 	   url:"http://www.legalese.io/templates/jfdi.asia/jfdi_01_memorandum.xml",
 	  parties:{to:["founder"], cc:["corporate_secretary"]},
-	  nocache:true,
 	},
-	{ name:"inc_cover_jfdi", title:"JFDI Cover Page",
+	{ name:"inc_cover_standard_parties", title:"JFDI Cover Page Parties",
+	   url:"http://www.legalese.io/templates/jfdi.asia/inc_cover_standard_parties.xml",
+	},
+	{ name:"inc_cover_jfdi", title:"JFDI Cover Page Bottom",
 	   url:"http://www.legalese.io/templates/jfdi.asia/inc_cover_jfdi.xml",
 	},
 	{ name:"tgas_subscription", title:"TradeGecko-A Share Subscription Agreement",
 	   url:"http://www.legalese.io/templates/jfdi.asia/subscription_agreement_tga.xml",
 	  parties:{to:["company"], cc:["corporate_secretary"]},
 	  explode:"new_investor",
-	  nocache:true,
 	},
  { name:"dr_proxy", title:"Appointment of Proxy",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr_proxy.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
-	nocache:true,
  },
  { name:"dr_proxy_cert", title:"Certficate of Appointment of Proxy",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr_proxy_cert.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
-	nocache:true,
  },
  { name:"dr_corp_rep_cert", title:"Certificate of Appointment of Corporate Representative",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr_corp_rep_cert.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
-	nocache:true,
  },
  { name:"dr_corp_rep", title:"Appointment of Corporate Representative",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr_corp_rep.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
-	nocache:true,
  },
  { name:"dr_generic", title:"Directors' Resolutions",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr_generic.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
-	nocache:true,
  },
  { name:"new_share_class_mr", title:"Members' Resolutions to Create a New Class of Shares",
 	url:"http://www.legalese.io/templates/jfdi.asia/new_share_class_mr.xml",
 	parties:{to:["shareholder"], cc:["corporate_secretary"]},
-	nocache:true,
  },
  { name:"new_share_class_dr", title:"Directors' Resolutions to Create a New Class of Shares",
 	url:"http://www.legalese.io/templates/jfdi.asia/new_share_class_dr.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
-	nocache:true,
  },
   { name:"new_share_class_spec", title:"Details of New Share Class",
 	url:"http://www.legalese.io/templates/jfdi.asia/new_share_class_spec.xml",
-	nocache:true,
   },
   { name:"mr_issue_shares", title:"Members Approve Ordinary Resolution to Issue Shares",
 	url:"http://www.legalese.io/templates/jfdi.asia/mr-issue_shares.xml",
 	parties:{to:["shareholder"], cc:["corporate_secretary"]},
-	nocache:true,
   },
   { name:"dr_egm_notice_issue_shares", title:"Directors Issue Notice of New Share Issue",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr-egm_notice-issue_shares.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
-	nocache:true,
   },
   { name:"strikeoff_financial_report", title:"Financial Report",
 	url:"http://www.legalese.io/templates/jfdi.asia/strikeoff_financial_report.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
-	nocache:true,
   },
   { name:"change_of_address", title:"Resolutions to Change Registered Address",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr_change_of_address.xml",
@@ -1125,12 +1124,10 @@ function availableTemplates_() {
   { name:"corpsec_allotment", title:"Instruction to Corpsec for Allotment",
 	url:"http://www.legalese.io/templates/jfdi.asia/corpsec-allotment.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
-	nocache:true,
   },
   { name:"dr_allotment", title:"Directors' Resolution for Allotment",
 	url:"http://www.legalese.io/templates/jfdi.asia/dr-allotment.xml",
 	parties:{to:["director"],cc:["corporate_secretary"]},
-	nocache: true,
   },
   { name:"jfdi_2014_rcps", title:"JFDI.2014 Subscription Agreement",
 	url:"jfdi_2014_rcps_xml.html",
@@ -1279,7 +1276,9 @@ function obtainTemplate_(url, nocache) {
 	  }
 	}
 
-	var result = UrlFetchApp.fetch(url);
+	var result = UrlFetchApp.fetch(url, { headers: { "Accept-Encoding": "identity" } } );
+	// by default the good people at Github Pages will gzip compress if we don't explicitly set this
+	
 	var contents = result.getContentText();
 	// the cache service can only store keys of up to 250 characters and content of up to 100k, so over that, we don't cache.
 	if (nocache != true && contents.length < 100000 && url.length < 250) {
@@ -1620,7 +1619,7 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
 // ---------------------------------------------------------------------------------------------------------------- include
 // used inside <? ?>
 function include(name, data, _include, _include2) {
-  Logger.log("running include for %s, with _include=%s, _include2=%s", name, _include, _include2);
+  Logger.log("include(%s) _include=%s, _include2=%s", name, _include, _include2);
   var origInclude = data._include;
   var origInclude2 = data._include2;
   var filtered = availableTemplates_().filter(function(t){return t.name == name});
@@ -1631,6 +1630,7 @@ function include(name, data, _include, _include2) {
 	childTemplate.data._include = _include || {};
 	childTemplate.data._include2 = _include2 || {};
 	var filledHTML = childTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+	Logger.log("include(%s) complete", name);
 	data._include = origInclude;
 	data._include2 = origInclude2;
 	return filledHTML;
@@ -1877,7 +1877,7 @@ function authCallback(request) {
   var echosignService = getEchoSignService_();
   var isAuthorized = echosignService.handleCallback(request);
   if (isAuthorized) {
-    return HtmlService.createHtmlOutput('<p>Success! You can close this tab.</p><p>BTW the token property is ' +  PropertiesService.getDocumentProperties().getProperty("oauth2.echosign")+'</p>');
+    return HtmlService.createHtmlOutput('<p>Success! You can close this tab.</p><p>&#128077;</p><p>BTW the token property is ' +  PropertiesService.getDocumentProperties().getProperty("oauth2.echosign")+'</p>');
   } else {
     return HtmlService.createHtmlOutput('Denied. You can close this tab.');
   }
