@@ -5,7 +5,7 @@
 <sidebar>This document governs the relationship between members of the company.</sidebar>
 </Firstpage_Sidebar>
 <Story_Main>
-  <chapter_header><?=data.security_type?> Agreement</chapter_header>
+  <chapter_header>Shareholders' Agreement</chapter_header>
   <para_1>This agreement is dated the <?= data.shareholders_agreement_date ?></para_1>
   <para_1>between:</para_1>
   <parties><?!= include("inc_party", data, data.parties.investor[0]) ?> ("Investor")</parties>
@@ -19,10 +19,10 @@
 
   <para_1>Whereas:</para_1>
 
-  <recitals>As at the date of this Agreement, the Company has an issued and paid-up share capital of <?= data.company.commitment ?> divided into <?= data.company.num_shares ?> Ordinary Shares. </recitals>
+  <recitals>As at the date of this Agreement, the Company has an issued and paid-up share capital of <?= data.company.commitment ?> divided into <?= digitCommas_(data.company.num_shares) ?> Ordinary Shares. </recitals>
   <recitals>Pursuant to a Founder Agreement dated <?= data.founder_agreement_date ?>, and in conjunction with </recitals>
   <para_2>a "Class F Agreement" between the Founders and the Company, by which the Founders subscribe to <?= data.total_f_shares ?>Class F Preference Shares whose rights of redemption are governed by a vesting schedule described therein; and </para_2>
-  <para_2>a "<?= data.security_type ?> Agreement" dated <?= data.investment_agreement_date ?>, by which <?= data.parties.investor[0].short_name ?> shall become a <?= data.agreed_percentage ?> shareholder upon <?= data.security_type_operation ?>; </para_2>
+  <para_2>a "<?= data.security_type ?> Agreement" dated <?= data.investment_agreement_date ?>, by which <?= data.parties.investor[0].short_name ?> shall become a <?= data.agreed_percentage ?>% shareholder upon <?= data.security_type_operation ?>; </para_2>
   <recitals>To regulate the relationship of the Parties inter se being present and prospective members of the Company, and the conduct of the business and affairs of the Company, in the spirit of mutual confidence and co-operation, the Parties have agreed to enter into this Agreement on the terms and conditions hereinafter set out. </recitals>
   <para_1>Now it is hereby agreed as follows:- </para_1>
   <a_left_sidehead>Definitions </a_left_sidehead>
@@ -33,12 +33,11 @@
   <definition>Board	means the board of Directors for the time being of the Company; </definition>
   <definition>Business	means the business of the Company which is high-tech software product and service development; </definition>
   <definition>Change of Control	is as defined in the Articles; </definition>
-  <definition>Control	means the possession, direct or indirect, of the power to direct or cause the direction of the management and policies of a corporation, whether through the ownership of voting securities, by contract, or otherwise and derivative terms thereof (including &#8220;Controlling&#8221;, &#8220;Controlled by&#8221; and &#8220;under common Control with&#8221;) shall also bear such meaning as aforesaid. For the purpose of this definition, the holding of an interest (within the meaning of the Act) of more than 50% of the equity share capital of the relevant corporation shall be deemed to be &#8220;Control&#8221; of this corporation; </definition>
+  <definition>Control	means the possession, direct or indirect, of the power to direct or cause the direction of the management and policies of a corporation, whether through the ownership of voting securities, by contract, or otherwise and derivative terms thereof (including <b>&#8220;Controlling&#8221;</b>, <b>&#8220;Controlled by&#8221</b>; and &#8220;under common Control with&#8221;) shall also bear such meaning as aforesaid. For the purpose of this definition, the holding of an interest (within the meaning of the Act) of more than 50% of the equity share capital of the relevant corporation shall be deemed to be &#8220;Control&#8221; of this corporation; </definition>
   <definition>Deed of Ratification	means a deed of ratification and accession whereby the signatory thereof enters into, becomes a party to and undertakes to be legally bound by the terms of this Agreement;  </definition>
   <definition>Director	means a director of the Company for the time being, including where applicable an alternate director; </definition>
   <definition>External Investor	means a debt-, warrant-, option-, or equity-holder other than the Founders and <span_ucnum>JFDI.2014</span_ucnum>; </definition>
-  <definition>External Financing	means a fund-raising event which involves an External Investor, in which the company is valued at no less than $&lt;&lt;minimum valuation&gt;&gt;; </definition>
-  <definition>Investor	means <span_ucnum>JFDI.2014</span_ucnum> Pte. Ltd.; </definition>
+  <definition>External Financing	means a fund-raising event which involves an External Investor, in which the company raises no less than <?= data.qualified_financing_round_size?></definition>
   <definition>Investment	means the amount invested in the Company by the Investor in the form of the Convertible Note; </definition>
   <definition>Trade Sale	means a sale of 75% or more of the issued Ordinary share capital of the Company to a third party buyer; </definition>
   <definition>Memorandum	means the Memorandum of Association of the Company; </definition>
@@ -56,18 +55,18 @@
   <para_1>This Agreement shall be governed by and interpreted in accordance with the laws of the Republic of Singapore. </para_1>
   <b_left_sidehead_nonum>Founder Stock Vesting Scheme </b_left_sidehead_nonum>
   <numbered_1_para>The Company shall issue and the Shareholders may subscribe to Class F Shares as described in the Class F Agreement. These shares provide a mechanism for: </numbered_1_para>
-  <numbered_2_para_indented>recognizing different degrees of commitment and different levels of contribution from each Founder; </numbered_2_para_indented>
-  <numbered_2_para_indented>respecting the need of each Founder to balance compensation between cash and equity; and </numbered_2_para_indented>
-  <numbered_2_para_indented>amicably resolving scenarios in which one or more Founders leave the company. </numbered_2_para_indented>
-  <numbered_1_para>Article 44 of the Articles of Association confers pre-emptive rights on the Shareholders. The Shareholders shall waive these pre-emptive rights with regard to the issue of new Class F Shares provided that such issue occurs pursuant to a Compensation Adjustment and at the Discretionary Subscription Price as described in the Class F Agreement. </numbered_1_para>
+  <numbered_2_para_indent>recognizing different degrees of commitment and different levels of contribution from each Founder; </numbered_2_para_indent>
+  <numbered_2_para_indent>respecting the need of each Founder to balance compensation between cash and equity; and </numbered_2_para_indent>
+  <numbered_2_para_indent>amicably resolving scenarios in which one or more Founders leave the company. </numbered_2_para_indent>
+  <numbered_1_para>Article 41 of the Articles of Association confers pre-emptive rights on the Shareholders. The Shareholders hereby waive waive these pre-emptive rights with regard to the issue of new Class F Shares provided that such issue occurs pursuant to a Compensation Adjustment and at the Discretionary Subscription Price as described in the Class F Agreement. </numbered_1_para>
   <b_left_sidehead_nonum>Share Valuation Policy </b_left_sidehead_nonum>
   <numbered_1_para>For purposes of calculating the valuation of the company, Class F shares shall contribute to the fully-diluted capitalization value, and shall be valued on an as-if-converted basis. </numbered_1_para>
   <numbered_1_para>For purposes of transferring shares among the Shareholders, an ordinary share of the company shall be valued </numbered_1_para>
-  <numbered_2_para_indented>if an External Financing occurred less than 1 year ago, at 25% less than the valuation agreed therein; </numbered_2_para_indented>
-  <numbered_2_para_indented>if an External Financing has not occurred, or has occurred more than 1 year prior to the date of the transfer of shares, then as the shareholders agree amongst themselves. </numbered_2_para_indented>
+  <numbered_2_para_indent>if an External Financing occurred less than 1 year ago, at 25% less than the valuation agreed therein; </numbered_2_para_indent>
+  <numbered_2_para_indent>if an External Financing has not occurred, or has occurred more than 1 year prior to the date of the transfer of shares, then as the shareholders agree amongst themselves. </numbered_2_para_indent>
   <numbered_2_para>Variation from this rule shall require the approval of the Directors. If the Directors do not give their approval to a variant valuation they may refuse to register the transfer. </numbered_2_para>
   <b_left_sidehead_nonum>Dispute Resolution  </b_left_sidehead_nonum>
-  <numbered_2_para_noupspace>Founders will attempt to settle disputes amongst themselves. </numbered_2_para_noupspace>
+  <numbered_2_para>Founders will attempt to settle disputes amongst themselves. </numbered_2_para>
   <numbered_2_para>If a dispute, controversy or claim arises out of or relates to this contract, or breach, termination or invalidity thereof, and if such dispute, controversy or claim cannot be settled and resolved through negotiation, the parties agree first to try in good faith to settle such dispute, controversy or claim through mediation. </numbered_2_para>
   <numbered_2_para>Any issue or claim not resolved by mediation shall be referred to and finally resolved by arbitration in Singapore. </numbered_2_para>
   <numbered_2_para>The mediator and if necessary, the arbitrator, shall be mutually agreed to by the parties and shall be a professional arbitrator or mediator (as the case may be) of The Arbitration Chambers. Failing such agreement, the mediator or arbitrator shall be appointed by The Arbitration Chambers. </numbered_2_para>
@@ -76,7 +75,7 @@
   <b_left_sidehead_nonum>Tag-Along Rights </b_left_sidehead_nonum>
   <numbered_1_para>Should one or more Shareholders offer to sell their shares to a third Party or Parties such that the new Parties would hold more than 25% of the voting stock of the company, those Shareholders must offer all other Shareholders an opportunity, calculated pro rata, to sell their shares also. </numbered_1_para>
   <b_left_sidehead_nonum>New Parties  </b_left_sidehead_nonum>
-  <numbered_2_para_noupspace>New Shareholders shall be required to execute a Deed of Ratification and be bound by this Agreement. </numbered_2_para_noupspace>
+  <numbered_2_para>New Shareholders shall be required to execute a Deed of Ratification and be bound by this Agreement. </numbered_2_para>
   <numbered_2_para>While the Investor at the date of the signing of this Agreement is holder of Convertible Debt and not a Shareholder, by conversion whether in whole or in part, the Investor shall be deemed to have ratified and acceded to this Agreement and agrees to be bound by the terms of this Agreement. </numbered_2_para>
   <b_left_sidehead_nonum>Transferability of Rights </b_left_sidehead_nonum>
   <numbered_1_para>The Articles of Association give shareholders pre-emptive rights (on the issue of new securities) and rights of first refusal (to purchase existing securities). These rights shall be transferable on a commercial basis, so that if a deal is oversubscribed, each founder can delegate their position to one or more favourite investors. </numbered_1_para>
@@ -88,8 +87,8 @@
   <numbered_1_para>The Founders acknowledge that the business may outgrow them, and that their primary commitment is to the success of the business. Should, one day, other leadership and management be better suited, the Founders agree to be reminded of this commitment. </numbered_1_para>
   <b_left_sidehead_nonum>Regarding Death and Disability </b_left_sidehead_nonum>
   <numbered_1_para>As soon as practical, after or in preparation for an External Financing, the Company shall purchase insurance, such that in the event of Death or Disability of a Founder, the Company can afford to </numbered_1_para>
-  <numbered_2_para_indented>continue operations in the absence of that Founder, and </numbered_2_para_indented>
-  <numbered_2_para_indented>offer to that Founder or his Estate a redemption of the Founder&#8217;s securities at fair market value. </numbered_2_para_indented>
-  <para_1>Should the Company not raise External Financing, but recognize revenue of at least $100,000, then this provision shall apply with equal force. </para_1>
+  <numbered_2_para_indent>continue operations in the absence of that Founder, and </numbered_2_para_indent>
+  <numbered_2_para_indent>offer to that Founder or his Estate a redemption of the Founder&#8217;s securities at fair market value. </numbered_2_para_indent>
+  <para_1>Should the Company not raise External Financing, but recognize revenue of at least S$100,000, then this provision shall apply with equal force. </para_1>
 </Story_Main>
 </Root>
