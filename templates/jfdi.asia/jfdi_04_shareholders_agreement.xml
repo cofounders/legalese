@@ -17,7 +17,7 @@
 
   <parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
 
-<para_1>(collectively, the "Parties")-.
+<para_1>(collectively, the "Parties").</para_1>
 
   <para_1>Whereas:</para_1>
 
