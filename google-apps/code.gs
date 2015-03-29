@@ -1054,6 +1054,12 @@ function availableTemplates_() {
 //	parties:{to:["director"], cc:["corporate_secretary"]},
 //	nocache:true,
 //  },
+	{ name:"jfdi_volunteer_agreement", title:"Volunteer Agreement",
+	   url:baseUrl + "templates/jfdi.asia/jfdi_06_volunteer_agreement.xml",
+	  parties:{to:["company"], cc:["corporate_secretary", "investor"]},
+	  explode:"founder",
+	  nocache:true,
+	},
 	{ name:"jfdi_class_f_agreement", title:"Class F Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_05_class_f_agreement.xml",
 	  parties:{to:["founder", "company"], cc:["corporate_secretary", "investor"]},
@@ -1253,6 +1259,9 @@ function availableTemplates_() {
   },
   { name:"inc_resolved_mr", title:"members resolution preface",
 	url:baseUrl + "templates/jfdi.asia/inc_resolved_mr.xml"
+  },
+  { name:"inc_mediation_arbitration", title:"ruben's mediation and arbitration clause",
+	url:baseUrl + "templates/jfdi.asia/inc_mediation_arbitration.xml" // define numberering_level = 3 or whatever. default is 2.
   },
 
   ];
@@ -1626,9 +1635,29 @@ function fillTemplates(sheet) {
   docsetEmails.normal(buildTemplate);
 
   var ROBOT = 'robot@legalese.io';
-  Logger.log("sharing %s with %s", folder.getName(), ROBOT);
+  Logger.log("fillTemplates(): sharing %s with %s", folder.getName(), ROBOT);
   folder.addEditor(ROBOT);
 
+  if (config.add_to_folder) {
+	var folderValues = [];
+	for (var i in config.add_to_folder.tree) {
+	  var matches;
+	  if (matches = i.match(/#folders.*\/([^\/]+)/)) { // we want the rightmost folderid
+		folderValues.push(matches[1]);
+	  }
+	}
+	for (var i = 0; i<folderValues.length; i++) {
+	  var addToFolder = DriveApp.getFolderById(folderValues[i]);
+	  if (addToFolder) {
+		Logger.log("fillTemplates(): config says we should add the output folder to %s", addToFolder.getName());
+		try { addToFolder.addFolder(folder); }
+		catch (e) {
+		  Logger.log("fillTemplates(): failed to do so. %s", e);
+		}
+	  }
+	}
+  }
+  
   Logger.log("that's all folks!");
 }
 
