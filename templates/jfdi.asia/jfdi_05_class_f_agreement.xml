@@ -81,8 +81,7 @@
   <a_left_sidehead>Compensation Adjustment</a_left_sidehead>
   <para_1>The Directors intend to permit a Holder who is also an employee or consultant to balance his compensation from time to time in favour of cash or equity according to preference and circumstance. Accordingly, the Holder may in any given month, with the approval of the Directors, elect to subscribe for additional Unrestricted F Shares at the Discretionary Subscription Price (defined below) up to the maximum amount of his monthly pay. </para_1>
   <a_left_sidehead>Discretionary Subscription Price</a_left_sidehead>
-  <numbered_2_para>Subsequent to the initial issue of <?= data.class_f_agreement_date ?>, Class F Shares may be issued pursant to section 6 at a "
-    <b>Discretionary Subscription Price</b>", which shall be the greater of </numbered_2_para>
+  <numbered_2_para>Subsequent to the initial issue of <?= data.class_f_agreement_date ?>, Class F Shares may be issued pursant to section 6 at a "<b>Discretionary Subscription Price</b>", which shall be the greater of </numbered_2_para>
   <numbered_3_para>the price of any previous issue of Class F Shares, </numbered_3_para>
   <numbered_3_para>in the event that a valuation was placed on the Company in the course of an External Financing event, a price consistent with that set for transfers among founders as described under Share Valuation Policy in the Shareholders' Agreement, or </numbered_3_para>
   <numbered_3_para>a price determined by the Board. </numbered_3_para>
