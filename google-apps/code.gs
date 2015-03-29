@@ -824,7 +824,7 @@ function formatify_(format, string, sheet, fieldname) {
     var matches;
     if (matches = format.match(/\[\$(.*)\]/)) { // currency
 	  // TODO: move this to a configuration, not a hardcoding
-	  if (fieldname && fieldname.match(/price_per_share/)) {
+	  if (fieldname && fieldname.match(/price_per.*_share/)) { // price per f share
 		toreturn = asCurrency_(format, string, false);
 	  } else {
 		toreturn = asCurrency_(format, string);
