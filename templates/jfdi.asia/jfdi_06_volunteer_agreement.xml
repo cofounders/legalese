@@ -5,19 +5,14 @@
 <sidebar>This document establishes confidentiality, non-compete, and IP assignment between the Company and the founders, who are unpaid volunteers.</sidebar>
 </Firstpage_Sidebar>
 <Story_Main>
-  <chapter_header>Volunteer Agreement </chapter_header>
-  <para_1>This agreement is dated the <?= data.class_f_agreement_date ?></para_1>
+  <chapter_header>Volunteer Agreement</chapter_header>
+  <para_1>This agreement is dated <?= data.volunteer_agreement_date ?></para_1>
   <para_1>between:</para_1>
-<? for (var i in data.parties.founder) { ?>
-<parties><?!= include("inc_party", data, data.parties.founder[i]) ?><? if (data.parties.founder.length == 1) { ?> (the "Founder")<?}?>;</parties>
-<? } ?>
-<?   if (data.parties.founder.length > 1)           { ?><para_1>(collectively the "Founders" and individually a "Founder"); and</para_1><?}?>
-
+  <parties><?!= include("inc_party", data, data.founder) ?> (the "Volunteer");</parties>
   <parties><?!= include("inc_party", data, data.company) ?> ("Company").</parties>
-
   <para_1>Whereas:</para_1>
-  <recitals>Each Volunteer desires to contribute to the Company for a defined period of time without compensation or expectation of compensation beyond reimbursement; </recitals>
-  <recitals>The Company and the Volunteers now enter into this Agreement to confirm ownership of certain Achievements (as defined below) that may be created during the Volunteer's term of service with the Company and to regulate other matters concerning intellectual property rights, non-competition, and confidentiality. </recitals>
+  <recitals>The Volunteer desires to contribute to the Company for a defined period of time without compensation or expectation of compensation beyond reimbursement; </recitals>
+  <recitals>The Company and the Volunteer now enters into this Agreement to confirm ownership of certain Achievements (as defined below) that may be created during the Volunteer's term of service with the Company and to regulate other matters concerning intellectual property rights, non-competition, and confidentiality. </recitals>
   <para_1>Now it is hereby agreed as follows:- </para_1>
   <a_left_sidehead>Definitions  </a_left_sidehead>
   <para_1>In this Agreement and in the Recitals abovementioned, unless the context otherwise requires:</para_1>
@@ -42,11 +37,11 @@
   <para_1>Any reference in this Agreement to a Shareholder procuring and derivative terms thereof (including &#8220;shall procure&#8221;), shall only oblige the Shareholder to exercise its voting rights in the Company to vote in favour of the Company performing its obligation as required. </para_1>
   <para_1>This Agreement shall be governed by and interpreted in accordance with the laws of the Republic of Singapore. </para_1>
   <a_left_sidehead>No Employment Relationship Assumed</a_left_sidehead>
-  <numbered_2_para>The Volunteers are volunteering their time and energy on behalf of the Company for their own reasons and expect no salary compensation during the Term of this Agreement. </numbered_2_para>
-  <a_left_sidehead>Volunteer's term of service</a_left_sidehead>
+  <numbered_2_para>The Volunteer is volunteering their time and energy on behalf of the Company for their own reasons and expects no salary compensation during the Term of this Agreement. </numbered_2_para>
+  <a_left_sidehead>Volunteer's Term of Service</a_left_sidehead>
   <numbered_2_para>This Agreement shall be effective upon execution and shall remain in full force and effect until the execution of any subsequent volunteer or employment agreement. This Agreement may be extended by the Parties through a contract extension agreement. </numbered_2_para>
   <a_left_sidehead>Non-Competition</a_left_sidehead>
-  <numbered_2_para>The Volunteers shall not and shall procure that their Affiliated Corporations shall not do or permit to be done any of the following: </numbered_2_para>
+  <numbered_2_para>The Volunteer shall not and shall procure that their Affiliated Corporations shall not do or permit to be done any of the following: </numbered_2_para>
   <numbered_3_para>either solely or jointly with or on behalf of any person directly or indirectly carry on or be engaged or interested in or otherwise manage or assist any business which is substantially similar or materially identical to the Company Business (unless such business is a subsidiary, parent, or otherwise part of the same group of holdings as the Company) up to the expiration of a twelve (12) month period after the termination of this Agreement or the termination of their directorship or volunteership, whichever is the earlier; </numbered_3_para>
   <numbered_3_para>solicit or entice away or endeavour to solicit or entice away any director, volunteer, or employee of the Company at any time during the duration of this Agreement or for a period of twelve (12) months after such director or employee has terminated their directorship or employment in the Company; or </numbered_3_para>
   <numbered_3_para>cause or permit any person directly or indirectly under its Control to do any of the foregoing acts or things. </numbered_3_para>
@@ -88,8 +83,6 @@
   <?!= include("inc_mediation_arbitration", data) ?>
 
 <a_left_sidehead>Miscellaneous</a_left_sidehead>
-
-
   <numbered_2_para>The Volunteer acknowledges that, in executing this Agreement, he has had the opportunity to seek the advice of independent legal counsel, and he has read and understood all of the terms and provisions of this Agreement. This Agreement shall not be construed against any party by reason of the drafting or preparation hereof. </numbered_2_para>
   <numbered_2_para>Where any part of this Agreement is invalid, the other parts of this Agreement shall continue in full force and effect. </numbered_2_para>
   <numbered_2_para>This Agreement shall be binding on the parties and their respective successors and assigns. </numbered_2_para>
@@ -99,156 +92,19 @@
   <numbered_2_para>This Agreement is signed in the English language. </numbered_2_para>
   <numbered_2_para>The provisions of this Agreement shall survive the termination of volunteership with the Company and the assignment of this Agreement by the Company to any successor in interest or other assignee. </numbered_2_para>
   <numbered_2_para>This Agreement may be executed in counterparts, each of which shall constitute an original, but all of which shall constitute one and the same document. </numbered_2_para>
-  <para_1> </para_1>
-  <para_2> </para_2>
-  <para_1> </para_1>
-  <chapter_header>Exhibit A: Disclosure of Prior Inventions </chapter_header>
+
+  <chapter_header>Signatures</chapter_header>
+  <para_1>In witness whereof we have hereunto set our hand on <?= data.shareholders_agreement_date ?></para_1>
+  <para_1><i>Volunteer:</i></para_1>
+<?!= include("inc_signature", data, data.founder) ?>
+  <para_1><i>On behalf of the Company:</i></para_1>
+<?!= include("inc_signature", data, data.company) ?>
+
+<chapter_header>Exhibit A: Disclosure of Prior Inventions </chapter_header>
   <centered>A list of Works which the Volunteer previously created and owns, and are related to some aspect of the Company Business, but which are not assigned to the Company </centered>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
+<? if (data.founder.prior_inventions) {?><bullets><?=data.founder.prior_inventions?></bullets<?}?>
   <chapter_header>Exhibit B: Disclosure of Opensource Projects </chapter_header>
   <centered>A list of Opensource Projects to which the Volunteer contributes Work which the Company does not own </centered>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p> </p>
-  <p>
-    <Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
-      <para_1>IN WITNESS WHEREOF we have hereunto set our hand on &lt;&lt;06 Volunteer Agreement (date)&gt;&gt; </para_1>
-      <para_1> </para_1>
-      <para_1>For and on behalf of the Company: </para_1>
-      <para_1>Signed, sealed and delivered by the Undersigned			)	 </para_1>
-      <para_1>for and on behalf of &lt;&lt;CompanyName&gt;&gt; PTE. LTD.		) </para_1>
-      <para_1>in the presence of  Mr Ruben Potter				)    </para_1>
-      <para_1> </para_1>
-      <para_1>Signature 	_________________________		 </para_1>
-      <para_1>Address:         	12 Marina Boulevard #17-01 MBFC Tower 3 </para_1>
-      <para_2>		Singapore 018982 </para_2>
-      <para_1>Occupation:	Company Secretary </para_1>
-    </Root>
-    <Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
-      <para_1> </para_1>
-      <para_1>For the Founders: </para_1>
-      <para_1>Signed, sealed and delivered by the Undersigned			)	 </para_1>
-      <para_1>in the presence of  Mr Ruben Potter				)    </para_1>
-      <para_1> </para_1>
-      <para_1>Signature 	_________________________		 </para_1>
-      <para_1>Address:         	12 Marina Boulevard #17-01 MBFC Tower 3 </para_1>
-      <para_2>		Singapore 018982 </para_2>
-      <para_1>Occupation:	Company Secretary </para_1>
-      <para_2> </para_2>
-      <para_2> </para_2>
-    </Root>
-  </p>
-  <Story>Joyful Frog DIGITAL Incubator</Story>
-  <Story>Blk 71 Ayer Rajah Crescent #05-16   Singapore 139951</Story>
-  <Story>volunteer agreement 
-    <noindent> </noindent>
-    <noindent> </noindent>
-    <noindent> </noindent>
-    <noindent> </noindent>
-    <span_ucnum>&lt;&lt;CompanyName&gt;&gt;</span_ucnum> PTE. LTD. Co. Reg. No. &lt;&lt;UEN&gt;&gt;</Story>
-  <Story>
-    <noindent>document 6 in a series </noindent>
-    <noindent>10 April 2014 
-      <span_ucnum>5:32 PM sgt</span_ucnum> </noindent>
-    <noindent>version 2.1.2</noindent>
-  </Story>
-  <Story>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2>_________________________ </para_2>
-    <para_2>&lt;&lt;Founder1Name&gt;&gt; </para_2>
-    <para_2>&lt;&lt;Founder1IDType&gt;&gt; &lt;&lt;Founder1IDvalue&gt;&gt; </para_2>
-    <para_2>Director </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2>_________________________ </para_2>
-    <para_2>&lt;&lt;Founder2Name&gt;&gt; </para_2>
-    <para_2>&lt;&lt;Founder2IDType&gt;&gt; &lt;&lt;Founder2IDvalue&gt;&gt; </para_2>
-    <para_2>Director </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-  </Story>
-  <Story>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2>_________________________ </para_2>
-    <para_2>&lt;&lt;Founder1Name&gt;&gt; </para_2>
-    <para_2>&lt;&lt;Founder1IDType&gt;&gt; &lt;&lt;Founder1IDvalue&gt;&gt; </para_2>
-    <para_2>Holder of &lt;&lt;Founder1Shares&gt;&gt; </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2>_________________________ </para_2>
-    <para_2>&lt;&lt;Founder2Name&gt;&gt; </para_2>
-    <para_2>&lt;&lt;Founder2IDType&gt;&gt; &lt;&lt;Founder2IDvalue&gt;&gt; </para_2>
-    <para_2>Holder of &lt;&lt;Founder2Shares&gt;&gt; </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2>_________________________ </para_2>
-    <para_2>&lt;&lt;Founder3IDType&gt;&gt; </para_2>
-    <para_2>&lt;&lt;Founder3IDType&gt;&gt; &lt;&lt;Founder3IDvalue&gt;&gt; </para_2>
-    <para_2>Holder of &lt;&lt;Founder3Shares&gt;&gt; </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2>_________________________ </para_2>
-    <para_2>&lt;&lt;Founder4Name&gt;&gt; </para_2>
-    <para_2>&lt;&lt;Founder4IDType&gt;&gt; &lt;&lt;Founder4IDvalue&gt;&gt; </para_2>
-    <para_2>Holder of &lt;&lt;Founder4Shares&gt;&gt; </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2> </para_2>
-    <para_2>_________________________ </para_2>
-    <para_2>&lt;&lt;Founder5Name&gt;&gt; </para_2>
-    <para_2>&lt;&lt;Founder5IDType&gt;&gt; &lt;&lt;Founder5IDvalue&gt;&gt; </para_2>
-    <para_2>Holder of &lt;&lt;Founder5Shares&gt;&gt; </para_2>
-  </Story>
+<? if (data.founder.opensource_projects) {?><bullets><?=data.founder.opensource_projects?></bullets<?}?>
+</Story_Main>
 </Root>

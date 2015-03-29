@@ -6,7 +6,7 @@
 </Firstpage_Sidebar>
 <Story_Main>
   <chapter_header>Class F Agreement</chapter_header>
-  <para_1>This agreement is dated the <?= data.class_f_agreement_date ?></para_1>
+  <para_1>This agreement is dated <?= data.class_f_agreement_date ?></para_1>
   <para_1>between:</para_1>
 <? for (var i in data.parties.founder) { ?>
 <parties><?!= include("inc_party", data, data.parties.founder[i]) ?><? if (data.parties.founder.length == 1) { ?> (the "Founder")<?}?>;</parties>
@@ -147,7 +147,7 @@
   <a_left_sidehead>Governing Law</a_left_sidehead>
   <?!= include("inc_mediation_arbitration", data) ?>
   <chapter_header>Signatures</chapter_header>
-  <para_1>IN WITNESS WHEREOF we have hereunto set our hand on <?= data.shareholders_agreement_date ?></para_1>
+  <para_1>In witness whereof we have hereunto set our hand on <?= data.shareholders_agreement_date ?></para_1>
   <para_1><i>For the Founders:</i></para_1>
 <? for (var i = 0; i < data.parties.founder.length; i++) { ?>
 <?!= include("inc_signature", data, data.parties.founder[i]) ?>
