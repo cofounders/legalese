@@ -46,8 +46,27 @@
   <numbered_3_para>in the event that the Holder is discharged by the Company from employment or volunteership, with Cause (as defined below) and prior to a Change of Control event, the Company shall have the right and option (the "Redemption Right") to purchase from the Holder, at a price per share equal to the Issue Price (the "Redemption Price"), up to the total number of Shares that have not vested according to the table in Section 2 (the "Restricted Shares"). </numbered_3_para>
   <numbered_3_para>the number of shares in the Restricted column of the above table shall initially be subject to the Redemption Right. </numbered_3_para>
   <numbered_3_para>the number of shares in the Unrestricted column of the above table shall not be subject to the Redemption Right; they shall be deemed vested and are to mandatory convert to Ordinary Shares. </numbered_3_para>
-  <numbered_3_para>the number of shares in the Cliff column of the above table shall vest on the last business day of June 2014. </numbered_3_para>
-  <numbered_3_para>thereafter, the number of shares in the Monthly column of the above table shall vest on the last business day of each month, starting with July 2014, until such time as all Shares are fully vested. </numbered_3_para>
+  <numbered_3_para>the number of shares in the Cliff column of the above table shall vest on <?= data.f_cliff_end_date ?>. </numbered_3_para>
+  <numbered_3_para>thereafter, the number of shares in the Monthly column of the above table shall vest on the last business day of each month until such time as all Shares are fully vested. </numbered_3_para>
+  <table_enclosing_para>
+	<Table aid:table="table" aid:tcols="6" aid:trows="<?= data.parties.founder.length+1 ?>" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+<Cell aid:ccols="1" aid:ccolwidth="110" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_fl>Name</cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell>Ordinary</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell>Unrestricted</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell>Restricted</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell>Cliff</cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell>Monthly</cell></Cell>
+<? for (var i = 0; i<data.parties.founder.length; i++) { with(data.parties) { ?>
+<Cell aid:ccols="1" aid:ccolwidth="110" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_fl><?= founder[i].name ?></cell_fl></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell><?= founder[i].num_shares ?></cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell><?= founder[i].f_unrestricted ?></cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell><?= founder[i].f_restricted ?></cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell><?= founder[i].f_cliff ?></cell></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="60" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell><?= founder[i].f_monthly ?></cell></Cell>
+<? } } ?>
+</Table>
+  </table_enclosing_para>
+
   <numbered_2_para>For purposes of this Agreement, <b>"Cause"</b> shall mean </numbered_2_para>
   <numbered_3_para>any act or omission which constitutes a material breach by the Holder of the terms of </numbered_3_para>
   <numbered_4_para>this Agreement, </numbered_4_para>
