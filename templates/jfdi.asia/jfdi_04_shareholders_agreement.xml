@@ -8,14 +8,16 @@
   <chapter_header>Shareholders' Agreement</chapter_header>
   <para_1>This agreement is dated the <?= data.shareholders_agreement_date ?></para_1>
   <para_1>between:</para_1>
-  <parties><?!= include("inc_party", data, data.parties.investor[0]) ?> ("Investor")</parties>
-
 <? for (var i in data.parties.shareholder) { ?>
 <parties><?!= include("inc_party", data, data.parties.shareholder[i]) ?><? if (data.parties.shareholder.length == 1) { ?> (the "Shareholder")<?}?>;</parties>
 <? } ?>
-<?   if (data.parties.shareholder.length > 1)           { ?><para_1>(collectively the "Shareholders" and individually a "Shareholder"); and</para_1><?}?>
+<?   if (data.parties.shareholder.length > 1)           { ?><para_1>(collectively the "Shareholders" and individually a "Shareholder");</para_1><?}?>
 
-  <parties><?!= include("inc_party", data, data.company) ?> ("Company").</parties>
+  <parties><?!= include("inc_party", data, data.parties.investor[0]) ?> (the "Investor"); and</parties>
+
+  <parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
+
+<para_1>(collectively, the "Parties").
 
   <para_1>Whereas:</para_1>
 
