@@ -48,8 +48,7 @@
   <numbered_3_para>the number of shares in the Unrestricted column of the above table shall not be subject to the Redemption Right; they shall be deemed vested and are to mandatory convert to Ordinary Shares. </numbered_3_para>
   <numbered_3_para>the number of shares in the Cliff column of the above table shall vest on the last business day of June 2014. </numbered_3_para>
   <numbered_3_para>thereafter, the number of shares in the Monthly column of the above table shall vest on the last business day of each month, starting with July 2014, until such time as all Shares are fully vested. </numbered_3_para>
-  <numbered_2_para>For purposes of this Agreement, "
-    <b>Cause</b>" shall mean </numbered_2_para>
+  <numbered_2_para>For purposes of this Agreement, <b>"Cause"</b> shall mean </numbered_2_para>
   <numbered_3_para>any act or omission which constitutes a material breach by the Holder of the terms of </numbered_3_para>
   <numbered_4_para>this Agreement, </numbered_4_para>
   <numbered_4_para>the Holder's Volunteer Agreement or Employment Agreement as the case may be, or </numbered_4_para>
@@ -58,8 +57,7 @@
   <numbered_3_para>the commission by the Holder of an arrestable offence, a criminal act in connection with an arrestable offence, or any dishonest or wrongful act involving fraud; </numbered_3_para>
   <numbered_3_para>the commission by the Holder of an act of moral turpitude which may adversely effect the reputation or business of the Company as reasonably determined by the Board; or </numbered_3_para>
   <numbered_3_para>the Holder's willful or continuing failure to perform the Holder's duties reasonably assigned during the course of employment or volunteership. </numbered_3_para>
-  <numbered_2_para>For purposes of this Agreement, the term "
-    <b>Good Reason</b>" shall mean termination due to a material breach by the Company of the Holder's Volunteer Agreement or Employment Agreement, as the case may be, which breach remains uncured by the Company, if curable, for a period of thirty (30) days following receipt of a written notice of breach from the Holder, specifying the act or omission upon which the Holder's claim of breach is based. </numbered_2_para>
+  <numbered_2_para>For purposes of this Agreement, the term "<b>Good Reason</b>" shall mean termination due to a material breach by the Company of the Holder's Volunteer Agreement or Employment Agreement, as the case may be, which breach remains uncured by the Company, if curable, for a period of thirty (30) days following receipt of a written notice of breach from the Holder, specifying the act or omission upon which the Holder's claim of breach is based. </numbered_2_para>
   <numbered_2_para>Termination for Good Reason shall be deemed to be termination by the Company without Cause under this Agreement. </numbered_2_para>
   <a_left_sidehead>Exercise of Redemption Right</a_left_sidehead>
   <numbered_2_para>The Company may exercise the Redemption Right with respect to Restricted Shares by delivering or mailing to the Holder (or his estate), within 60 days after the termination of the employment or volunteership of the Holder with the Company, a written notice of exercise of the Redemption Right. Such notice shall specify the number of Shares to be purchased. If and to the extent the Redemption Right is not so exercised by the giving of such a notice within such 60-day period, the Redemption Right shall automatically expire and terminate effective upon the expiration of such 60-day period. </numbered_2_para>
@@ -135,6 +133,16 @@
   <numbered_2_para>Pending the resolution or final determination of the dispute or difference pursuant to this Clause, the Parties shall procure that the Company shall, as far as practicable, continue to carry on its day-to-day business, having regard to the dispute or difference. </numbered_2_para>
   <numbered_2_para>Notwithstanding the foregoing, each of the Parties reserves its right to immediately commence any interim Court action such as an injunction against any of the other Parties to enforce the terms of this Agreement in a forum of its choice. </numbered_2_para>
   <numbered_2_para>This Clause shall survive the termination of this Agreement for any reason whatsoever.  </numbered_2_para>
+
+  <chapter_header>Signatures</chapter_header>
+  <para_1>IN WITNESS WHEREOF we have hereunto set our hand on <?= data.shareholders_agreement_date ?></para_1>
+  <para_1><i>For the Founders:</i></para_1>
+<? for (var i = 0; i < data.parties.founder.length; i++) { ?>
+<?!= include("inc_signature", data, data.parties.founder[i]) ?>
+<? } ?>
+  <para_1><i>For and on behalf of the Company:</i></para_1>
+<?!= include("inc_signature", data, data.company) ?>
+
   <chapter_header>Sample Redemption Notice </chapter_header>
   <para_1> </para_1>
   <para_1>Dear Founder, </para_1>

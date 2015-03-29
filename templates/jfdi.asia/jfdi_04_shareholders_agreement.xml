@@ -92,5 +92,18 @@
   <numbered_2_para_indent>continue operations in the absence of that Founder, and </numbered_2_para_indent>
   <numbered_2_para_indent>offer to that Founder or his Estate a redemption of the Founder&#8217;s securities at fair market value. </numbered_2_para_indent>
   <para_1>Should the Company not raise External Financing, but recognize revenue of at least S$100,000, then this provision shall apply with equal force. </para_1>
+
+  <chapter_header>Signatures</chapter_header>
+  <para_1>IN WITNESS WHEREOF we have hereunto set our hand on <?= data.shareholders_agreement_date ?></para_1>
+  <para_1><i>For the Shareholders:</i></para_1>
+<? for (var i = 0; i < data.parties.shareholder.length; i++) { ?>
+<?!= include("inc_signature", data, data.parties.shareholder[i]) ?>
+<? } ?>
+  <para_1><i>For and on behalf of the Company:</i></para_1>
+<?!= include("inc_signature", data, data.company) ?>
+  <para_1><i>For and on behalf of the Investor:</i></para_1>
+<?!= include("inc_signature", data, data.parties.investor[0]) ?>
+
+
 </Story_Main>
 </Root>
