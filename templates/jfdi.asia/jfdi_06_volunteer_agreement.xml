@@ -91,7 +91,6 @@
   <numbered_2_para>This Agreement sets forth the entire agreement and understanding between the parties relating to the subject matter herein and supersedes all prior discussions between them. </numbered_2_para>
   <numbered_2_para>This Agreement is signed in the English language. </numbered_2_para>
   <numbered_2_para>The provisions of this Agreement shall survive the termination of volunteership with the Company and the assignment of this Agreement by the Company to any successor in interest or other assignee. </numbered_2_para>
-  <numbered_2_para>This Agreement may be executed in counterparts, each of which shall constitute an original, but all of which shall constitute one and the same document. </numbered_2_para>
 
   <chapter_header>Signatures</chapter_header>
   <para_1>In witness whereof we have hereunto set our hand on <?= data.shareholders_agreement_date ?></para_1>
