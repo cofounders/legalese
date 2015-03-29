@@ -613,17 +613,45 @@ function readRows_(sheet, entitiesByName) {
 	else if (section == "ROLES") { // principal relation entity. these are all strings. we attach other details
 	  var relation  = asvar_(row[0]);
 	  var entityname    = row[1];
-	  var entity = entitiesByName[entityname];
 
 	  roles[relation] = roles[relation] || [];
-	  roles[relation].push(entityname);
-      Logger.log("readRows(%s):         ROLES: learning party role %s = %s", sheet.getSheetName(), relation, entityname);
 
-	  for (var role_x = 2; role_x < row.length; role_x+=2) {
-		if (row[role_x] && row[role_x+1]) {
-		  Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[role_x]), formatify_(formats[i][role_x+1], row[role_x+1], sheet));
-		  entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x+1], sheet, asvar_(row[role_x]));
-		  entity["_format_" + asvar_(row[role_x])] = formats[i][role_x+1];
+	  var matches;
+	  if (matches = entityname.match(/^\[(.*)\]$/)) {
+		// Shareholder: [Founder]
+		// means all founders are also shareholders and we should populate the Shareholder parties accordinlgy
+
+		var to_import = asvar_(matches[1]);
+
+		// TODO: sanity check so we don't do a reflexive assignment
+		
+		Logger.log("readRows(%s):         ROLES: merging role %s = %s", sheet.getSheetName(), relation, to_import);
+		if (! (roles[to_import] && roles[to_import].length)) {
+		  Logger.log("readRows(%s):         ERROR: roles[%s] is useless to us", to_import);
+		  continue;
+		}
+		else {
+		  Logger.log("readRows(%s):         ROLES: before, roles[%s] = %s", sheet.getSheetName(), relation, roles[relation]);
+		  roles[relation] = roles[relation].concat(roles[to_import]);
+		  Logger.log("readRows(%s):         ROLES: after, roles[%s] = %s", sheet.getSheetName(), relation, roles[relation]);
+		}
+
+		if (row[2]) {
+		  Logger.log("WARNING: readRows(%s): [merge] syntax doesn't currently support extended attributes.");
+		  // but there's no reason it couldn't ... just gotta tweak the code below.
+		}
+	  }
+	  else {
+		var entity = entitiesByName[entityname];
+		roles[relation].push(entityname);
+		Logger.log("readRows(%s):         ROLES: learning party role %s = %s", sheet.getSheetName(), relation, entityname);
+		
+		for (var role_x = 2; role_x < row.length; role_x+=2) {
+		  if (row[role_x] && row[role_x+1]) {
+			Logger.log("ROLES: learning attribute %s.%s = %s", entityname, asvar_(row[role_x]), formatify_(formats[i][role_x+1], row[role_x+1], sheet));
+			entity[asvar_(row[role_x])] = formatify_(formats[i][role_x+1], row[role_x+1], sheet, asvar_(row[role_x]));
+			entity["_format_" + asvar_(row[role_x])] = formats[i][role_x+1];
+		  }
 		}
 	  }
 	}
