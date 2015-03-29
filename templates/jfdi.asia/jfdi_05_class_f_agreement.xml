@@ -160,16 +160,16 @@
   <para_1>Dear Founder, </para_1>
   <para_1>We refer to the Class F Agreement signed on <?= data.class_f_agreement_date ?>, in particular, Clauses 3 and 5.1.2 therein. </para_1>
   <para_1>All terms defined in the Class F Agreement shall bear the same meaning when used in this letter. </para_1>
-  <para_1>We understand that an event entailing redemption of Restricted Shares has occurred. For the purposes of redemption we date that event at the 30th of February. </para_1>
+  <para_1>We understand that an event entailing redemption of Restricted Shares has occurred. For the purposes of redemption we date that event at T date. </para_1>
   <para_1>For the avoidance of doubt, we calculate the following shareholding as of that date: </para_1>
-  <para_2>45	Ordinary Shares existed at time of the agreement; </para_2>
-  <para_2>90	Unrestricted Shares were granted upon initial signing of agreement; </para_2>
-  <para_2>135	"Cliff" Unrestricted Shares vested at the end of June 2014; </para_2>
-  <para_2>84	"Monthly" Unrestricted Shares vested from July 1 to August 24 2014; </para_2>
-  <para_2>861	Restricted Shares remain. </para_2>
-  <para_1>Pursuant to Clause 4 of the Class F Agreement we hereby give notice that we intend to redeem the 861 remaining Restricted Shares. </para_1>
+  <para_2>N	Ordinary Shares existed at time of the agreement; </para_2>
+  <para_2>M	Unrestricted Shares were granted upon initial signing of agreement; </para_2>
+  <para_2>O	"Cliff" Unrestricted Shares vested at the end of <?= data.f_cliff_end_date ?>; </para_2>
+  <para_2>P	"Monthly" Unrestricted Shares vested from <?= data.f_cliff_end_date ?> to X date; </para_2>
+  <para_2>Q	Restricted Shares remain. </para_2>
+  <para_1>Pursuant to the Class F Agreement we hereby give notice that we intend to redeem the Q remaining Restricted Shares. </para_1>
   <para_1>The completion shall be fourteen days from the date hereof (unless otherwise agreed in writing between ourselves.) </para_1>
-  <para_1>By that date we shall make payment of s$0.00385 per share (the "Redemption Price") for a total of S$3.32. </para_1>
+  <para_1>By that date we shall make payment of <?= data.price_per_f_share?> per share (the "Redemption Price") for a total of S$1.23. </para_1>
   <para_1> </para_1>
   <para_1>Name: </para_1>
   <para_1>Signature: </para_1>
