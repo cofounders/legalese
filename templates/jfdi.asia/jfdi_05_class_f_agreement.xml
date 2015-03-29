@@ -164,8 +164,8 @@
   <para_1>For the avoidance of doubt, we calculate the following shareholding as of that date: </para_1>
   <para_2>N	Ordinary Shares existed at time of the agreement; </para_2>
   <para_2>M	Unrestricted Shares were granted upon initial signing of agreement; </para_2>
-  <para_2>O	"Cliff" Unrestricted Shares vested at the end of <?= data.f_cliff_end_date ?>; </para_2>
-  <para_2>P	"Monthly" Unrestricted Shares vested from <?= data.f_cliff_end_date ?> to X date; </para_2>
+  <para_2>O	"Cliff" Unrestricted Shares vested on <?= data.f_cliff_end_date ?>; </para_2>
+  <para_2>P	"Monthly" Unrestricted Shares subsequently vested up to X date; </para_2>
   <para_2>Q	Restricted Shares remain. </para_2>
   <para_1>Pursuant to the Class F Agreement we hereby give notice that we intend to redeem the Q remaining Restricted Shares. </para_1>
   <para_1>The completion shall be fourteen days from the date hereof (unless otherwise agreed in writing between ourselves.) </para_1>
