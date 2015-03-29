@@ -1314,7 +1314,9 @@ function obtainTemplate_(url, nocache) {
 	var contents = result.getContentText();
 	// the cache service can only store keys of up to 250 characters and content of up to 100k, so over that, we don't cache.
 	if (nocache != true && contents.length < 100000 && url.length < 250) {
-	  cache.put(url, contents, 60);
+	  cache.put(url, contents, 300);
+	  // a run of the google script may take up to 5 minutes, so cache for that time.
+	  // if you're hot and heavy with the updates, set nocache:true in the sourceTemplate properties.
 	}
 	// Logger.log("obtained template %s, length %s bytes", url, contents.length);
 	return HtmlService.createTemplate(contents);
