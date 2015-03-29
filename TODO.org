@@ -63,6 +63,7 @@ figure out building this as a proper google add-on.
 *** what if you want to put more money in
 
 * TODO figure out how to do PDF form elements so that EchoSigners can check various boxes and enter text amounts.
+* TODO refactor the signature page so that all parties are automatically represented by default.
 * for Kark
 ** DONE sent out the issue & allotment workflow
 * [2015-03-22 Sun 14:53] for tradegecko
@@ -102,13 +103,13 @@ this is basically done -- we have this docset ready.
 ** DONE issue founder agreement to neuroware at 5%
 ** DONE import memorandum of association
 see JFDI.BOOTCAMP.pdf from JFDI.2012 -- this text should go inside the Memo
-** TODO import articles of association
+** TODO review articles of association from 2013B and see if there are significant omissions in our 2015a version.
 ** TODO reformat all of Table A into the articles of association so we have something that's submissible to banks and so on
 ** DONE import convertible note agreement
 ** DONE import shareholder agreement
-** TODO import class f agreement
-** TODO import volunteer agreement
-** TODO import employment agreement
+** DONE import class f agreement
+** DONE import volunteer agreement
+** TODO merge employment agreement and internship agreement into volunteer agreement
 ** TODO create directors and members resolution docset to waive AGM for first two years until such time as the company ceases to be an exempt private limited.
 ** TODO the issue of securities to JFDI needs to be preceded by section 161 workflow, with resolutions of directors and members.
 ** TODO the issue of F shares also needs a section 161 workflow
@@ -118,6 +119,7 @@ see JFDI.BOOTCAMP.pdf from JFDI.2012 -- this text should go inside the Memo
 ** restructure code.gs so it's easier for people to use as an add-on without having to have (staling) source in each spreadsheet
 ** republish all the currently private content under cofounders to legalese, with the echosign oauth creds scrubbed
 ** confirm that https://some-legalese-thing.github.io works so we close at least one MITM attack vector for code insertion in the xml templates
+** TODO chuck kiss and safe into it
 * for [2015-03-26 Thu] at thehub
 ** TODO import KISSsing
 ** TODO import SAFE US
