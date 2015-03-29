@@ -260,8 +260,7 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 
 
 <b_left_sidehead>Governing Law and Jurisdiction</b_left_sidehead>
-<numbered_3_para_fl>The construction, validity and performance of this Agreement shall be governed by the laws of Singapore.</numbered_3_para_fl>
-<numbered_3_para_fl>Any dispute arising out of or in connection with this Agreement, including any question regarding its existence, validity or termination, shall be referred to and finally resolved by arbitration in Singapore in accordance with the Arbitration Rules of the Singapore International Arbitration Centre ("SIAC") for the time being in force, which rules are deemed to be incorporated by reference in this Clause 8.15. The language of the arbitration shall be English. The arbitral tribunal shall consist of three (3) arbitrators, one to be appointed by the New Investor, one to be appointed by the Company and the third to be appointed by the Chairman of the SIAC.</numbered_3_para_fl>
+  <?!= include("inc_mediation_arbitration", data, { numbering_level: 3 }) ?>
 
 <chapter_header>Signatures</chapter_header>
 <para_1><span_smallcaps>In witness whereof</span_smallcaps> this Agreement has been entered into on the date stated at the beginning.</para_1>

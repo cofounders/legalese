@@ -45,7 +45,7 @@
   <numbered_2_para>Subject to Sections 3.2, 3.3, and 3.4 below, </numbered_2_para>
   <numbered_3_para>in the event that the Holder is discharged by the Company from employment or volunteership, with Cause (as defined below) and prior to a Change of Control event, the Company shall have the right and option (the "Redemption Right") to purchase from the Holder, at a price per share equal to the Issue Price (the "Redemption Price"), up to the total number of Shares that have not vested according to the table in Section 2 (the "Restricted Shares"). </numbered_3_para>
   <numbered_3_para>the number of shares in the Restricted column of the above table shall initially be subject to the Redemption Right. </numbered_3_para>
-  <numbered_3_para>the number of shares in the Unrestricted column of the above table shall not be subject to the Redemption Right; they shall be deemed vested and are to mandatory convert to Ordinary Shares. </numbered_3_para>
+  <numbered_3_para>the number of shares in the Unrestricted column of the above table shall not be subject to the Redemption Right; they shall be deemed vested upon issue and are convertible to Ordinary Shares. </numbered_3_para>
   <numbered_3_para>the number of shares in the Cliff column of the above table shall vest on <?= data.f_cliff_end_date ?>. </numbered_3_para>
   <numbered_3_para>thereafter, the number of shares in the Monthly column of the above table shall vest on the last business day of each month until such time as all Shares are fully vested. </numbered_3_para>
   <table_enclosing_para>
@@ -145,13 +145,7 @@
   <a_left_sidehead>Amendment</a_left_sidehead>
   <para_1>This Agreement may be amended or modified only by a written instrument executed by both the Company and the Holder. </para_1>
   <a_left_sidehead>Governing Law</a_left_sidehead>
-  <numbered_2_para>This Agreement (and any dispute, controversy, proceedings or claim of whatever nature arising out of this Agreement or its formation) shall be governed by and construed in accordance with the laws of Singapore and the Parties irrevocably submit to the jurisdiction of the Courts of the Republic of Singapore. </numbered_2_para>
-  <numbered_2_para>Notwithstanding any provisions to the contrary in this Agreement, in the event of any dispute or difference arising out of or in connection with this Agreement (including any question regarding its existence, validity or termination) whether during the continuance of this Agreement or at any time after the termination hereof, the parties shall first attempt to resolve the same by negotiation in good faith or through mediation at the Singapore Mediation Centre ("SMC") between the appointed representative of the respective Parties. </numbered_2_para>
-  <numbered_2_para>In the event that the dispute or difference shall remain unresolved within thirty (30) days upon conclusion of such negotiation or mediation, any Party shall be entitled to refer the dispute to arbitration in Singapore in accordance with the Law Society of Singapore Arbitration Scheme ("LSAS") following the LawSoc Arbitration Rules for the time being in force, which rules are deemed to be incorporated by reference to this Clause. The arbitral tribunal shall consist of a sole arbitrator, who shall be appointed by the President of the Law Society of Singapore, under the LawSoc Arbitration Rules. The language of the arbitration shall be English. Any award made hereunder shall be final and binding upon the Parties and judgement on such award may be entered in any court or tribunal having jurisdiction thereof. </numbered_2_para>
-  <numbered_2_para>Pending the resolution or final determination of the dispute or difference pursuant to this Clause, the Parties shall procure that the Company shall, as far as practicable, continue to carry on its day-to-day business, having regard to the dispute or difference. </numbered_2_para>
-  <numbered_2_para>Notwithstanding the foregoing, each of the Parties reserves its right to immediately commence any interim Court action such as an injunction against any of the other Parties to enforce the terms of this Agreement in a forum of its choice. </numbered_2_para>
-  <numbered_2_para>This Clause shall survive the termination of this Agreement for any reason whatsoever.  </numbered_2_para>
-
+  <?!= include("inc_mediation_arbitration", data) ?>
   <chapter_header>Signatures</chapter_header>
   <para_1>IN WITNESS WHEREOF we have hereunto set our hand on <?= data.shareholders_agreement_date ?></para_1>
   <para_1><i>For the Founders:</i></para_1>
