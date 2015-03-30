@@ -252,9 +252,9 @@ function AddReturns(doc, importMaps){
   this.xpath = "//*";
   this.apply = function(myElement, myRuleProcessor){
 
-	logToFile("AddReturns applying. ------------------------");
-	logToFile("AddReturns: considering " + importMaps[myElement.markupTag.name]);
-	logToFile("AddReturns: it is " + myElement.markupTag.name + " XML element ("+myElement.index+")");
+//	logToFile("AddReturns: applying. ------------------------");
+//	logToFile("AddReturns: considering " + importMaps[myElement.markupTag.name]);
+//	logToFile("AddReturns: it is " + myElement.markupTag.name + " XML element ("+myElement.index+")");
 
 	if ((myElement.xmlAttributes.item("addnewline").isValid &&
 		 myElement.xmlAttributes.item("addnewline").value == "true")
