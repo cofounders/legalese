@@ -263,7 +263,7 @@ function AddReturns(doc, importMaps){
 		|| (importMaps[myElement.markupTag.name] != undefined
 			&& importMaps[myElement.markupTag.name].constructor.name == "ParagraphStyle"
 			&& importMaps[myElement.markupTag.name].name != "[Basic Paragraph]"
-			&& ! importMaps[myElement.markupTag.name].name.match(/^cell/)
+			&& (! importMaps[myElement.markupTag.name].name.match(/^cell/))
 			&& myElement.markupTag.name != "Table"
 			&& myElement.markupTag.name != "Cell"
 			&& ! myElement.markupTag.name.match(/^cell/i)
