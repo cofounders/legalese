@@ -171,6 +171,7 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
 	  doc.xmlElements.item(0).xmlAttributes.item("addnewline").value == "false") {
 	logToFile("not adding newlines");
   } else {
+	logToFile("calling AddReturns ruleset");
 	__processRuleSet(doc.xmlElements.item(0), [new AddReturns(doc,importMaps) ]);
   }
 
@@ -238,14 +239,9 @@ function isLastPara(para) {
 
 function isLastElement(el) {
   var parent = el.parent;
-  logToFile("isLastElement: parent of element " + el + " is " + parent + ".");
-  logToFile("isLastElement: parent.constructor.name of element " + el + " is " + parent.constructor.name + ".");
   if (parent.constructor.name != "XMLElement") { return }
   var index = el.index;
-  if (parent.xmlItems[index].isValid && parent.xmlItems[index] == el) {
-	logToFile("isLastElement: the index and parent thing is working as expected");
-  }
-  if (index == el.parent.xmlItems.length-1) { logToFile("isLastElement: we are the last element.");
+  if (index == el.parent.xmlItems.length-1) { logToFile("isLastElement: we (" + el.markupTag.name + ") are the last element in parent (" + el.parent.markupTag.name+")");
 											   return true; }
   return false;
 }
@@ -256,8 +252,10 @@ function AddReturns(doc, importMaps){
   this.xpath = "//*";
   this.apply = function(myElement, myRuleProcessor){
 
-	logToFile("AddReturns: considering " + myElement.markupTag.name + " XML element ("+myElement.index+") with last paragraph" + myElement.paragraphs.lastItem().contents.substr(0,30));
-	isLastElement(myElement);
+	logToFile("AddReturns applying. ------------------------");
+	logToFile("AddReturns: considering " + importMaps[myElement.markupTag.name]);
+	logToFile("AddReturns: it is " + myElement.markupTag.name + " XML element ("+myElement.index+")");
+
 	if ((myElement.xmlAttributes.item("addnewline").isValid &&
 		 myElement.xmlAttributes.item("addnewline").value == "true")
 		|| (importMaps[myElement.markupTag.name] != undefined
@@ -266,13 +264,14 @@ function AddReturns(doc, importMaps){
 			&& (! importMaps[myElement.markupTag.name].name.match(/^cell/))
 			&& myElement.markupTag.name != "Table"
 			&& myElement.markupTag.name != "Cell"
-			&& ! myElement.markupTag.name.match(/^cell/i)
+			&& (! myElement.markupTag.name.match(/^cell/i))
 			&& (! myElement.xmlAttributes.item("addnewline").isValid ||
 				myElement.xmlAttributes.item("addnewline").value != "false")
-			&& ! myElement.contents.match(/\r$/)
-			&& ! isLastElement(myElement)
+			&& (! myElement.contents.match(/\r$/))
+			&& (! isLastElement(myElement))
 		   )
 	   ) {
+	  // logToFile("AddReturns: last paragraph: " + myElement.paragraphs.lastItem().contents.substr(0,30));
 	  logToFile("AddReturns: will append newline to element " + myElement.markupTag.name);
       myElement.insertTextAsContent("\r", XMLElementPosition.ELEMENT_END);
 	}
