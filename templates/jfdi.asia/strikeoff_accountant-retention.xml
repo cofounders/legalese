@@ -28,6 +28,6 @@ Yours faithfully,
 <para_1>We hereby confirm our understanding of the arrangements as stated above.</para_1>
 <? data.signature_comment = "Director"; ?>
 <?!= include("inc_signature", data, data.director) ?>
-<? if (data.skip_company_stamp == true) { ?><para_1 override="justification=Justification.RIGHT_ALIGN"><i>Company Stamp</i></para_1><? } ?>
+<? if (! data.skip_company_stamp == true) { ?><para_1 override="justification=Justification.RIGHT_ALIGN"><i>Company Stamp</i></para_1><? } ?>
 </Bottom_Box>
 </Root>
