@@ -670,6 +670,7 @@ function readRows_(sheet, entitiesByName) {
         var v = formatify_(entity_formats[0][ki], row[ki], sheet, k);
         entity[k] = v;
 		entity["_format_" + k] = entity_formats[0][ki];
+		if (v && v.length) { entity["_"+k+"_firstline"] = v.replace(/\n.*/g, ""); }
       }
       var coreRelation = asvar_(row[0]);
 	  if (coreRelation == undefined || ! coreRelation.length) { continue }
@@ -1234,7 +1235,7 @@ function availableTemplates_() {
 	url:baseUrl + "templates/jfdi.asia/inc_plain_letterhead.xml"
   },
   { name:"inc_signature", title:"signature component",
-	url:baseUrl + "templates/jfdi.asia/inc_signature.xml"
+	url:baseUrl + "templates/jfdi.asia/inc_signature.xml",
   },
   { name:"inc_party", title:"party component",
 	url:baseUrl + "templates/jfdi.asia/inc_party.xml"
@@ -1754,10 +1755,11 @@ function legaleseRootFolder_() {
 // ---------------------------------------------------------------------------------------------------------------- createFolder_
 function createFolder_(sheet) {
   var legalese_root = legaleseRootFolder_();
-  Logger.log("attempting createfolder");
-  var folder = legalese_root.createFolder(sheet.getParent().getName() + " "
-										  + sheet.getSheetName() + " "
-										  + Utilities.formatDate(new Date(), sheet.getParent().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss"));
+  var folderName = sheet.getParent().getName() + " "
+	  + sheet.getSheetName() + " "
+	  + Utilities.formatDate(new Date(), sheet.getParent().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss");
+  Logger.log("attempting createfolder(%s)", folderName);
+  var folder = legalese_root.createFolder(folderName);
   Logger.log("createfolder returned " + folder);
 
   legalese_root.addFile(DriveApp.getFileById(sheet.getParent().getId()));
