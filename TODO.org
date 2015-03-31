@@ -101,8 +101,8 @@ this is basically done -- we have this docset ready.
 *** if the members give approval, to give corporate secretary authority to bizfile
 ** TODO fix up 3A using the same ab styling and get it submitted as a change
 * for 2015a
-** TODO add a director's consent to legalese
-** TODO update the creation of class f agreements for those teams that have already incorporated. create new sheet for those. create ROLES rows.
+** DONE add a director's consent to legalese
+** DONE update the creation of class f agreements for those teams that have already incorporated. create new sheet for those. create ROLES rows.
 - Taembe.com
 - Bakipa
 - BoxGreen
@@ -118,7 +118,7 @@ see JFDI.BOOTCAMP.pdf from JFDI.2012 -- this text should go inside the Memo
 ** DONE import volunteer agreement
 ** TODO merge employment agreement and internship agreement into volunteer agreement
 ** TODO create directors and members resolution docset to waive AGM for first two years until such time as the company ceases to be an exempt private limited.
-** TODO the issue of securities to JFDI needs to be preceded by section 161 workflow, with resolutions of directors and members.
+** TODO the issue of securities to JFDI needs to be preceded by section 161 workflow, with resolutions of directors and members. maybe this only happens at time of conversion or exercise. but better to get it out of the way now.
 ** TODO the issue of F shares also needs a section 161 workflow
 * TODO for launch of legalese
 ** go register a legalese project identity on github

@@ -1248,7 +1248,7 @@ function availableTemplates_() {
   },
   { name:"dora", title:"DORA",
 	url:baseUrl + "templates/jfdi.asia/dora-signatures.xml",
-	parties:{to:["new_investor","shareholder"],cc:["corporate_secretary","company"]},
+	parties:{to:["new_investor","company","shareholder"],cc:["corporate_secretary"]},
   },
   { name:"inc_plain_letterhead", title:"plain letterhead",
 	url:baseUrl + "templates/jfdi.asia/inc_plain_letterhead.xml"
