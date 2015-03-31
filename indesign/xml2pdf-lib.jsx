@@ -116,13 +116,8 @@ function identifyIndtFile(mode, path, xmlFile) {
 
 	var templateSpec = myXML.attribute("templateSpec");
 	if (templateSpec != undefined) {
-	  if (templateSpec == "singlepage.indt") {
-		path = "~/non-db-src/legalese/build/" + templateSpec;
-		mode = "hardcoded";
-	  }
-	  else {
-		mode = "queryUser";
-	  }
+	  path = "~/non-db-src/legalese/build/" + templateSpec;
+	  mode = "hardcoded";
 	}
 	else {
 	  if (path.length)	mode = "hardcoded";
@@ -132,7 +127,7 @@ function identifyIndtFile(mode, path, xmlFile) {
   // not an else if because we cascade from above
   if (mode == "hardcoded") {
 	indtFile = new File(path);
-	if (indtFile.exists) return indtFile else mode = "queryUser";
+	if (indtFile.exists) return indtFile else throw("unable to open specified indtFile: " + path);
   } 
   // not an else if because we cascade from above
   if (mode == "queryUser"
