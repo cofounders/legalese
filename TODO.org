@@ -62,9 +62,9 @@ figure out building this as a proper google add-on.
 *** what happens if you don't sign the agreement
 *** what if you want to put more money in
 
-* TODO figure out how to do PDF form elements so that EchoSigners can check various boxes and enter text amounts.
+* TODO [#C] figure out how to do PDF form elements so that EchoSigners can check various boxes and enter text amounts.
 * TODO refactor the signature page so that all parties are automatically represented by default.
-* TODO concatenate PDFs doesn't quite do the right thing -- ensure individual docs don't each get the full set of recipients
+* DONE concatenate PDFs doesn't quite do the right thing -- ensure individual docs don't each get the full set of recipients
 * for Kark
 ** DONE sent out the issue & allotment workflow
 * [2015-03-22 Sun 14:53] for tradegecko
@@ -101,24 +101,29 @@ this is basically done -- we have this docset ready.
 *** if the members give approval, to give corporate secretary authority to bizfile
 ** TODO fix up 3A using the same ab styling and get it submitted as a change
 * for 2015a
+** TODO [#A] reformat all of Table A into the articles of association so we have something that's submissible to banks and so on
+** TODO [#A] review articles of association from 2013B and see if there are significant omissions in our 2015a version.
+** TODO [#A] previously incorporated companies to adopt new articles.
+** TODO [#A] draft paperwork to effect share exchange with Indian shareholders
+** TODO [#A] setup a workflow for each new company to authorise and issue class F shares to the founders.
+** TODO [#A] setup a workflow for each new company for the directors to authorise the issue of the convertible note to JFDI.
+*** TODO [#A] this will include a resolution for the directors to sign the agreements
+*** the issue of securities to JFDI needs to be preceded by section 161 workflow, with resolutions of directors and members. maybe this only happens at time of conversion or exercise. but better to get it out of the way now.
+** one of these workflows can be inside the regular Incorporation and the other will have to be separate because they both use the same variables.
 ** DONE add a director's consent to legalese
 ** DONE update the creation of class f agreements for those teams that have already incorporated. create new sheet for those. create ROLES rows.
 - Taembe.com
 - Bakipa
 - BoxGreen
-** TODO draft paperwork to effect share exchange with Indian shareholders
 ** DONE issue founder agreement to neuroware at 5%
 ** DONE import memorandum of association
 see JFDI.BOOTCAMP.pdf from JFDI.2012 -- this text should go inside the Memo
-** TODO review articles of association from 2013B and see if there are significant omissions in our 2015a version.
-** TODO reformat all of Table A into the articles of association so we have something that's submissible to banks and so on
 ** DONE import convertible note agreement
 ** DONE import shareholder agreement
 ** DONE import class f agreement
 ** DONE import volunteer agreement
-** TODO merge employment agreement and internship agreement into volunteer agreement
-** TODO create directors and members resolution docset to waive AGM for first two years until such time as the company ceases to be an exempt private limited.
-** TODO the issue of securities to JFDI needs to be preceded by section 161 workflow, with resolutions of directors and members. maybe this only happens at time of conversion or exercise. but better to get it out of the way now.
+** TODO [#C] merge employment agreement and internship agreement into volunteer agreement
+** TODO [#C] create directors and members resolution docset to waive AGM for first two years until such time as the company ceases to be an exempt private limited.
 ** TODO the issue of F shares also needs a section 161 workflow
 * TODO for launch of legalese
 ** go register a legalese project identity on github

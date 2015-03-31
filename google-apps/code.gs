@@ -1148,7 +1148,7 @@ function availableTemplates_() {
 	url:baseUrl + "templates/jfdi.asia/mr-issue_shares.xml",
 	parties:{to:["shareholder"], cc:["corporate_secretary"]},
   },
-  { name:"dr_egm_notice_issue_shares", title:"Directors Issue Notice of New Share Issue",
+  { name:"dr_egm_notice_issue_shares", title:"Directors Give Notice of New Share Issue",
 	url:baseUrl + "templates/jfdi.asia/dr-egm_notice-issue_shares.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
   },
@@ -2215,6 +2215,11 @@ function uploadAgreement(sheet) {
 			   multiTitles(templates, entity),
 			   rcpts);
 
+	if (entity.skip_echosign) {
+	  Logger.log("entity %s wants to skip echosign. so, not creating agreement.", entity.name);
+	  return "skipping echosign as requested by entity";
+	}
+	
 	var tDocIds = templates.map(function(t){return transientDocumentIds[filenameFor_(t,entity)+".pdf"]});
 
 	if (tDocIds == undefined || tDocIds.length == 0) {
