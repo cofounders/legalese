@@ -42,7 +42,7 @@ and we confirm that all is in order. </numbered_2_para>
 <Cell aid:ccols="1" aid:ccolwidth="110" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= new_investor[i].name ?></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="76" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= new_investor[i].idtype ?> <span_ucnum><?= new_investor[i].id ?></span_ucnum></cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="140" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= new_investor[i].address ?></cell_c></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="90" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= new_investor[i].num_new_shares ?> <?= new_investor[i].share_type ?> for <?= new_investor[i].new_commitment ?><?= new_investor[i].commitment_comment ? new_investor[i].commitment_comment : "" ?></cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="90" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c><?= digitCommas_(new_investor[i].num_new_shares) ?> <?= new_investor[i].share_type ?> for <?= new_investor[i].new_commitment ?><?= new_investor[i].commitment_comment ? new_investor[i].commitment_comment : "" ?></cell_c></Cell>
 <? } } ?>
 </Table>
 </para_1>
