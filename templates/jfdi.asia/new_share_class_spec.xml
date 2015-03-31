@@ -10,9 +10,9 @@
 <definition_nonum><?= data.underlying_security_short_plural ?>	means the <?= data.underlying_security_name ?> in the capital of <?!= include("inc_party", data, data.parties.startup[0]) ?> (the "Incubatee"), described in the Articles of Association of the Incubatee;</definition_nonum>
 <? } ?>
 
-<ab_a_left_sidehead override="numberingContinue=false numberingStartAt=2">TradeGecko-A Preference Shares</ab_a_left_sidehead>
+<ab_a_left_sidehead override="numberingContinue=false numberingStartAt=2"><?= data.new_security_type ?></ab_a_left_sidehead>
 
-<para_1>The Company may issue preference shares in the capital of the Company ("<?= data.new_security_type ?>") which shall carry the following rights, benefits, and privileges, and be subject to the following restrictions:--</para_1>
+<para_1>The Company may issue preference shares in the capital of the Company ("<?= data.new_security_short ?>") which shall carry the following rights, benefits, and privileges, and be subject to the following restrictions:--</para_1>
 <? if (data.shadows_an_underlying_security) { ?>
 <ab_b_left_sidehead>As Regards the Relationship with the Underlying Security</ab_b_left_sidehead>
 <ab_numbered_3_para_fl><?= data.new_security_short_plural ?> represent <?= data.underlying_security_name ?> of <?= data.parties.underlying_company[0].name ?> (the <b>"Underlying Security"</b> or "<?= data.underlying_security_short_plural ?>"). The term "Underlying Security" shall include both the TG CP Shares and any security to which the TG CP Shares are converted or convertible.

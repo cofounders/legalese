@@ -24,7 +24,8 @@
 
 <chapter_header>Amendments to Articles of Association of the Company</chapter_header>
 
-<?!= include("new_share_class_spec", data) ?>
+<?!= include("inc_additional_resolutions", data, {
+  prefix:"members_annex" } ) ?>
 
 </Story_Main>
 <Bottom_Box delete_if_empty="true" />
