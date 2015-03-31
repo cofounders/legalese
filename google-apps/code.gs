@@ -515,9 +515,9 @@ function readRows_(sheet, entitiesByName) {
 
   for (var i = 0; i <= numRows - 1; i++) {
     var row = values[i];
-	Logger.log("readRows: row " + i + ": processing row "+row[0]);
 	// process header rows
-	if (row.filter(function(c){return c.length > 0}).length == 0) { Logger.log("row %s is blank, skipping", i);  continue; }
+	if (row.filter(function(c){return c.length > 0}).length == 0) { Logger.log("readRows: row %s is blank, skipping", i);  continue; }
+	else 	Logger.log("readRows: row " + i + ": processing row "+row[0]);
     if      (row[0] == "KEY TERMS" ||
 			 row[0] == "TERMS") { section="TERMS"; continue; }
     else if (row[0] == "IGNORE") { section = row[0]; continue; }
@@ -549,11 +549,11 @@ function readRows_(sheet, entitiesByName) {
 	}
     else if (row[0] == "PARTYFORM_ORDER") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||!row[ki]){continue}
 																				  entityfieldorder[ki] = row[ki];
-																				  Logger.log("readRows: PARTYFORM_ORDER: entityfieldorder[%s] = %s", ki, row[ki]);
+																				  // Logger.log("readRows: PARTYFORM_ORDER: entityfieldorder[%s] = %s", ki, row[ki]);
 																				  origentityfields[entityfieldorder[ki]] = origentityfields[entityfieldorder[ki]]||{};
 																				  origentityfields[entityfieldorder[ki]].column = parseInt(ki)+1;
 																				  origentityfields[entityfieldorder[ki]].row    = i+1;
-																				  Logger.log("readRows: learned that field with order "+row[ki]+ " is in row %s column %s ", origentityfields[entityfieldorder[ki]].row, origentityfields[entityfieldorder[ki]].column);
+																				  // Logger.log("readRows: learned that field with order "+row[ki]+ " is in row %s column %s ", origentityfields[entityfieldorder[ki]].row, origentityfields[entityfieldorder[ki]].column);
 																				}
 											continue;
 										  }
@@ -568,13 +568,13 @@ function readRows_(sheet, entitiesByName) {
 											continue;
 										  }
     else if (row[0] == "PARTYFORM_DEFAULT") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||entityfieldorder[ki]==undefined||row[ki].length==0){continue}
-																					Logger.log("readRows: learned default value for %s = %s", entityfieldorder[ki], row[ki]);
+																					// Logger.log("readRows: learned default value for %s = %s", entityfieldorder[ki], row[ki]);
 																					 origentityfields[entityfieldorder[ki]]["default"] = row[ki];
 																				   }
 											continue;
 										  }
     else if (row[0] == "PARTYFORM_REQUIRED") { section=row[0]; for (var ki in row) { if (ki<1||row[ki]==undefined||entityfieldorder[ki]==undefined){continue}
-																					 Logger.log("readRows: line "+i+" col "+ki+": learned that field with order "+entityfieldorder[ki]+ " has required="+row[ki]);
+																					 // Logger.log("readRows: line "+i+" col "+ki+": learned that field with order "+entityfieldorder[ki]+ " has required="+row[ki]);
 																					 origentityfields[entityfieldorder[ki]].required = row[ki];
 																				   }
 											continue;
@@ -592,7 +592,7 @@ function readRows_(sheet, entitiesByName) {
           origentityfields[entityfieldorder[ki]].fieldname = row[ki];
 		  // Logger.log("readRows: learned origentityfields["+entityfieldorder[ki]+"].fieldname="+row[ki]);
           entityfields[ki] = asvar_(entityfields[ki]);
-		  Logger.log("readRows(%s): recorded entityfield[%s]=%s", sheet.getSheetName(), ki, entityfields[ki]);
+		  // Logger.log("readRows(%s): recorded entityfield[%s]=%s", sheet.getSheetName(), ki, entityfields[ki]);
 		}
 	  }
 	  continue;
@@ -682,7 +682,7 @@ function readRows_(sheet, entitiesByName) {
   // connect up the parties based on the relations learned from the ROLES section.
   // this establishes PRINCIPAL.roles.RELATION_NAME = [ party1, party2, ..., partyN ]
   // for instance, companyParty.roles.shareholder = [ alice, bob ]
-      Logger.log("readRows: learning entity (core relation = %s), %s", coreRelation, entity);
+      Logger.log("readRows: learning entity (core relation = %s), %s", coreRelation, entity.name);
 	  roles[coreRelation] = roles[coreRelation] || [];
 	  roles[coreRelation].push(entity.name);
 
@@ -806,7 +806,11 @@ function getPartyCells_(sheet, readrows, party) {
 // ---------------------------------------------------------------------------------------------------------------- asvar_
 function asvar_(str) {
   if (str == undefined) { return undefined }
-  return str.toString().replace(/:/g, "").toLowerCase().replace(/\W/g, "_").toLowerCase();
+  return str.toString()
+	.replace(/\W/g, "_")
+	.replace(/^_+/, "")
+	.replace(/_+$/, "")
+	.toLowerCase();
 }
 
 // ---------------------------------------------------------------------------------------------------------------- formatify_
@@ -1055,6 +1059,14 @@ function availableTemplates_() {
 //	parties:{to:["director"], cc:["corporate_secretary"]},
 //	nocache:true,
 //  },
+	{ name:"jfdi_articles_additional_definitions", title:"AA Additional Definitions",
+	   url:baseUrl + "templates/jfdi.asia/jfdi_articles_additional_definitions.xml",
+	  nocache:true,
+	},
+	{ name:"jfdi_articles_class_f", title:"AA Class F Shares",
+	   url:baseUrl + "templates/jfdi.asia/jfdi_articles_class_f.xml",
+	  nocache:true,
+	},
 	{ name:"jfdi_volunteer_agreement", title:"Volunteer Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_06_volunteer_agreement.xml",
 	  parties:{to:["company"], cc:["corporate_secretary", "investor"]},
@@ -1149,7 +1161,8 @@ function availableTemplates_() {
   },
   { name:"strikeoff_accountant_retention", title:"Retainer of Accountant for Financial Statements",
 	url:baseUrl + "templates/jfdi.asia/strikeoff_accountant-retention.xml",
-	parties:{to:["accountant", "director"]},
+	parties:{to:[], cc:["accountant"]},
+	explode:"director",
   },
   { name:"strikeoff_financials_letter", title:"Letter to Accountant regarding Financial Statements",
 	url:baseUrl + "templates/jfdi.asia/strikeoff_financials-letter.xml",
