@@ -6,7 +6,7 @@
   <cover_company_name><?= data.company.name ?></cover_company_name>
   <CoverTop><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></CoverTop>
   <noindent><?= data.director.name ?></noindent>
-  <CoverBottom_Address><?= newlinesToCommas_(data.director.address) ?></CoverBottom_Address>
+  <CoverBottom_Address><?= newlinesToCommas(data.director.address) ?></CoverBottom_Address>
   <CoverMid><?= data.director.idtype ?>:</CoverMid>
   <CoverMid><span_ucnum><?= data.director.id ?></span_ucnum></CoverMid>
   <CoverMid><?= data.director.state ?></CoverMid>
