@@ -64,6 +64,7 @@ figure out building this as a proper google add-on.
 
 * TODO figure out how to do PDF form elements so that EchoSigners can check various boxes and enter text amounts.
 * TODO refactor the signature page so that all parties are automatically represented by default.
+* TODO concatenate PDFs doesn't quite do the right thing -- ensure individual docs don't each get the full set of recipients
 * for Kark
 ** DONE sent out the issue & allotment workflow
 * [2015-03-22 Sun 14:53] for tradegecko
@@ -100,6 +101,12 @@ this is basically done -- we have this docset ready.
 *** if the members give approval, to give corporate secretary authority to bizfile
 ** TODO fix up 3A using the same ab styling and get it submitted as a change
 * for 2015a
+** TODO add a director's consent to legalese
+** TODO update the creation of class f agreements for those teams that have already incorporated. create new sheet for those. create ROLES rows.
+- Taembe.com
+- Bakipa
+- BoxGreen
+** TODO draft paperwork to effect share exchange with Indian shareholders
 ** DONE issue founder agreement to neuroware at 5%
 ** DONE import memorandum of association
 see JFDI.BOOTCAMP.pdf from JFDI.2012 -- this text should go inside the Memo
