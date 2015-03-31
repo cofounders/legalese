@@ -419,8 +419,8 @@ function constructFormFields(doc) {
   // then the signaturepage is in the overset region, and adding an anchored object
   // is eventually going to barf when we try to do anything with geometricbounds.
 
-  var XMLRoot = doc.xmlElements.item(1);
-  if (XMLRoot.attribute("appendPages") && XMLRoot.attribute("appendPages").value == "false") { appendPages = false };
+  var XMLRoot = doc.xmlElements[0];
+  if (XMLRoot.xmlAttributes.item("appendPages") && XMLRoot.xmlAttributes.item("appendPages").value == "false") { appendPages = false };
   
   // so we kludge by adding a last page to the document
   // we add a text frame to that page
