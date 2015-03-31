@@ -1,0 +1,16 @@
+<?!= data.xml_declaration ?>
+<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" templateSpec="form45_2015.indt">
+  <cover_company_name><?= data.company.name ?></cover_company_name>
+  <CoverTop><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></CoverTop>
+  <CoverBottom_series><?= data.agreement_date ?></CoverBottom_series>
+  <cover_company_name><?= data.company.name ?></cover_company_name>
+  <CoverTop><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></CoverTop>
+  <noindent><?= data.director.name ?></noindent>
+  <CoverBottom_Address><?= newlinesToCommas_(data.director.address) ?></CoverBottom_Address>
+  <CoverMid><?= data.director.idtype ?>:</CoverMid>
+  <CoverMid><span_ucnum><?= data.director.id ?></span_ucnum></CoverMid>
+  <CoverMid><?= data.director.state ?></CoverMid>
+  <? var mydate = data.agreemet_date.split(' '); ?>
+  <CoverMid><?= getOrdinalFor_(mydate[1]) ?></CoverMid>
+  <CoverMid><?= mydate.splice(2,2).join(", ") ?></CoverMid>
+</Root>
