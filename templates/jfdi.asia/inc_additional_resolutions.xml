@@ -8,7 +8,7 @@
 <?!= "<" + (data[prefix + "_"+ar_i+"_bodystyle"] || data._include.bodystyle ) ?>><?
        } ?>
 <?     var ar_match = data[prefix+"_"+ar_i].match(/^include\((\S+)\)/);
-       if (ar_match) { Logger.log("will run include(%s)", ar_match[1]); ?><?!= include(ar_match[1], data) ?><?
+       if (ar_match) { Logger.log("will run include(%s)", ar_match[1]); ?><?!= include(ar_match[1], data, data._include, data._include2) ?><?
        } else { ?>
 <?!= data[prefix+"_"+ar_i] ?>
 <?     } ?>
