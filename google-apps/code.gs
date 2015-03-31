@@ -608,7 +608,7 @@ function readRows_(sheet, entitiesByName) {
 	  var asvar = asvar_(row[0]);
       terms[           asvar] = formatify_(term_formats[i][0], row[1], sheet, asvar);
 	  terms["_orig_" + asvar] = row[1];
-	  Logger.log("readRows(%s): TERMS: %s --> %s", sheet.getSheetName(), row[1], terms[asvar]);
+	  Logger.log("readRows(%s): TERMS: %s = %s --> %s", sheet.getSheetName(), asvar, row[1], terms[asvar]);
     }
 	else if (section == "ROLES") { // principal relation entity. these are all strings. we attach other details
 	  var relation  = asvar_(row[0]);
@@ -1071,6 +1071,12 @@ function availableTemplates_() {
 	   url:baseUrl + "templates/jfdi.asia/jfdi_06_volunteer_agreement.xml",
 	  parties:{to:["company"], cc:["corporate_secretary", "investor"]},
 	  explode:"founder",
+	  nocache:true,
+	},
+	{ name:"form45", title:"Form 45 Consent to Act as a Director",
+	   url:baseUrl + "templates/jfdi.asia/form45.xml",
+	  parties:{to:[], cc:["corporate_secretary"]},
+	  explode:"director",
 	  nocache:true,
 	},
 	{ name:"jfdi_class_f_agreement", title:"Class F Agreement",
@@ -1707,7 +1713,8 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
 // ---------------------------------------------------------------------------------------------------------------- include
 // used inside <? ?>
 function include(name, data, _include, _include2) {
-  Logger.log("include(%s) _include=%s, _include2=%s", name, _include, _include2);
+  Logger.log("include(%s) running", name);
+//  Logger.log("include(%s) _include=%s, _include2=%s", name, _include, _include2);
   var origInclude = data._include;
   var origInclude2 = data._include2;
   var filtered = availableTemplates_().filter(function(t){return t.name == name});
@@ -2338,7 +2345,12 @@ function postAgreement_(fileInfos, recipients, message, name, cc_list, terms, co
   }
 }
 
+function getOrdinalFor_ (intNum, includeNumber) {
+  return (includeNumber ? intNum : "")
+    + ([,"st","nd","rd"][((intNum = Math.abs(intNum % 100)) - 20) % 10] || [,"st","nd","rd"][intNum] || "th");
+}
   
+
 // ---------------------------------------------------------------------------------------------------------------- localization
 
 function plural(num, singular, plural, locale) {

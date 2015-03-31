@@ -413,15 +413,20 @@ function constructFormFields(doc) {
   doc.viewPreferences.horizontalMeasurementUnits = MeasurementUnits.points;
   doc.viewPreferences.verticalMeasurementUnits = MeasurementUnits.points;
 
+  var appendPages = true;
+  
   // if smart text reflow has not completed,
   // then the signaturepage is in the overset region, and adding an anchored object
   // is eventually going to barf when we try to do anything with geometricbounds.
 
+  var XMLRoot = doc.xmlElements.item(1);
+  if (XMLRoot.attribute("appendPages") && XMLRoot.attribute("appendPages").value == "false") { appendPages = false };
+  
   // so we kludge by adding a last page to the document
   // we add a text frame to that page
   // and we manually thread the text frame
   // https://forums.adobe.com/thread/1675713	
-  if (true) {
+  if (appendPages) {
 	
 	doc.textPreferences.smartTextReflow = false;
 	//doc.textPreferences.limitToMasterTextFrames = false;
@@ -458,20 +463,21 @@ function constructFormFields(doc) {
   __processRuleSet(doc.xmlElements.item(0), [new AddFormFields(doc)
 											]);
 
-  logToFile("processRuleSet AddFormFields completed successfully. removing last page.");
-  // now we get rid of the excess pages.
+  if (appendPages) {
+	logToFile("processRuleSet AddFormFields completed successfully. removing last page.");
+	// now we get rid of the excess pages.
 	doc.textPreferences.smartTextReflow = true;
 	doc.textPreferences.limitToMasterTextFrames = false;
 	doc.textPreferences.deleteEmptyPages = true;
 
   // trigger smart text reflow by adding a new textframe.
 
-  logToFile("trigger reflow by linking last text frames");
-  var lasttextframe = doc.pages.item(-2).textFrames.item(0);
-  var  newtextframe = doc.pages.item(-1).textFrames.item(0);
-  logToFile("attaching text frames");
-  lasttextframe.nextTextFrame = newtextframe;
-  logToFile("new text frame added.");
+	logToFile("trigger reflow by linking last text frames");
+	var lasttextframe = doc.pages.item(-2).textFrames.item(0);
+	var  newtextframe = doc.pages.item(-1).textFrames.item(0);
+	logToFile("attaching text frames");
+	lasttextframe.nextTextFrame = newtextframe;
+	logToFile("new text frame added.");
 
 	var myProfile = app.preflightProfiles.item(0);
 	var myProcess = app.preflightProcesses.add(doc, myProfile);
@@ -481,8 +487,8 @@ function constructFormFields(doc) {
 //	alert("giving time for smart text reflow. page length is " + doc.pages.length);
 
 //  np.remove();
+  }
   doc.recompose();
-
 }
 
 
