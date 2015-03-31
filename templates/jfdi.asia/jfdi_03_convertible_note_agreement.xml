@@ -92,7 +92,7 @@ taking all possible conversions, exercises of securities, and dilutions into acc
   <numbered_3_para>it is or will become unlawful for JFDI to perform or comply with any one or more of its obligations under the <?=data.security_type_short_singular?>.</numbered_3_para>
 
 <a_left_sidehead>Liquidation Prior to next Financing Round</a_left_sidehead>
-<para_1>In the event of a Trade Sale or Change of Control prior to the Next Financing Round, then the Company shall redeem this <?=data.security_type_short_singular?> for 2× the amount paid by JFDI.</para_1>
+<para_1>In the event of a Trade Sale or Change of Control prior to the Next Financing Round, then the Company shall redeem this <?=data.security_type_short_singular?> for <?= data.acquisition_preference || 2 ?>× the amount paid by JFDI.</para_1>
 <?}?>
   <a_left_sidehead>Negative Pledge </a_left_sidehead>
   <para_1>The Company shall not, without the consent in writing of JFDI, create or allow the creation of any security interest upon the whole or any part of its property or assets, present or future, in order to secure, for the benefit of any creditor of the Company (other than the holders of the <?=data.security_type_short_singular?>), without according to JFDI at the same time, either the same security as is created or is outstanding in respect of such issue or such other security or guarantee as is not materially less benefical to JFDI.</para_1>
