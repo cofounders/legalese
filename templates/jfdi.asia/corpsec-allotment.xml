@@ -6,7 +6,7 @@
 <sidebar><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></sidebar>
 <sidebar><?= data.company.address ?></sidebar>
 </Firstpage_Sidebar>
-<? data._total_new_shares = data.parties.new_investor.map(function(p){return p.num_new_shares}).reduce(function(a,b){return a+b}, 0); ?>
+<? data._total_new_shares = digitCommas_(data.parties.new_investor.map(function(p){return p.num_new_shares}).reduce(function(a,b){return a+b}, 0)); ?>
 <? Logger.log("about to sum across %s", data.parties.new_investor.map(function(p){return p.new_commitment})); ?>
 <? var mysum = data.parties.new_investor.map(function(p){return Number(p.new_commitment.replace(/[^\d\.]+/g,""))}).reduce(function(a,b){return a+b}); ?>
 <? Logger.log("sum = %s", mysum); ?>

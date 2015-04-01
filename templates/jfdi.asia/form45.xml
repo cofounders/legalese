@@ -5,7 +5,7 @@
   <CoverTop><noindent_centered><b><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></b></noindent_centered></CoverTop>
   <CoverBottom_series><?= mydate ?></CoverBottom_series>
   <cover_company_name><?= data.company.name ?></cover_company_name>
-  <CoverTop><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></CoverTop>
+  <CoverTop><noindent_centered><b><?= data.company.idtype ?> <span_ucnum><?= data.company.id ?></span_ucnum></b></noindent_centered></CoverTop>
   <noindent><?= data.director.name ?></noindent>
   <CoverBottom_Address><?= newlinesToCommas(data.director.address) ?></CoverBottom_Address>
   <CoverMid><?= data.director.idtype ?>:</CoverMid>

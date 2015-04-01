@@ -1,4 +1,4 @@
-<? data._total_new_shares = data.parties.new_investor.map(function(p){return p.num_new_shares}).reduce(function(a,b){return a+b}, 0); ?>
+<? data._total_new_shares = digitCommas_(data.parties.new_investor.map(function(p){return p.num_new_shares}).reduce(function(a,b){return a+b}, 0)); ?>
 <?!= include("inc_dr_start", data, {
   director_or_member:"Director",
   article_pursuant:data.article_for_directors_resolution_in_writing,
