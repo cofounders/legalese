@@ -9,6 +9,8 @@ function main(){
 
   var interactive = true;
 
+  var saveIndd = false;
+  
   var xmlFiles = identifyXmlFiles("recurse",  // recurse | queryUser
 								  Folder("~/Google Drive/Legalese Root"));
   
@@ -16,7 +18,7 @@ function main(){
 
   if (xmlFiles.length > 0) {
 	app.scriptPreferences.enableRedraw=true; 
-	xmls2pdf(xmlFiles, interactive);
+	xmls2pdf(xmlFiles, interactive, saveIndd);
 	app.scriptPreferences.enableRedraw=true;
   }
 }

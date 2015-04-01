@@ -7,7 +7,7 @@
 #include "/Applications/Adobe InDesign CC/Scripts/XML Rules/glue code.jsx"
 
 // -------------------------------------------------- xmls2pdf
-function xmls2pdf(xmlFiles, showingWindow) {
+function xmls2pdf(xmlFiles, showingWindow, keepIndd) {
   if (showingWindow == undefined) showingWindow = false;
   var errors = [];
   app.textPreferences.smartTextReflow = false;
@@ -38,10 +38,8 @@ function xmls2pdf(xmlFiles, showingWindow) {
 	  doc.recompose();
 	  logToFile("xmls2pdf: about to exportToPDF");
 	  exportToPDF(doc, xmlFile);
-	  logToFile("xmls2pdf: about to saveAsIndd, for the second time");
-	  saveAsIndd(doc, xmlFile);
-	  if (! showingWindow) { if (doc && doc.isValid) { doc.close(SaveOptions.NO); } }
-	  else doc.pages.item(-1).textFrames.item(0).select();
+	  if (keepIndd) { saveAsIndd(doc, xmlFile); }
+	  if (doc && doc.isValid) { doc.close(SaveOptions.NO); }
 	  logToFile("xmls2pdf: finished " + xmlFile.fullName);
 	}
 	catch (error) {
@@ -441,7 +439,7 @@ function constructFormFields(doc) {
 	doc.recompose();
 	logToFile("the lastpage is " + lastpage.name);
 
-	var pages_to_add = 30;
+	var pages_to_add = 20;
 	var new_pages = [];
 
 	logToFile("creating " + pages_to_add + " pages because smart text reflow page addition doesn't run right under scripting and creates invalid object errors when i try to create an anchored signature box.");
@@ -479,11 +477,11 @@ function constructFormFields(doc) {
 	lasttextframe.nextTextFrame = newtextframe;
 	logToFile("new text frame added.");
 
-	var myProfile = app.preflightProfiles.item(0);
-	var myProcess = app.preflightProcesses.add(doc, myProfile);
-	logToFile("giving time for smart text reflow");
-	myProcess.waitForProcess(20);
-	myProcess.remove();
+//	var myProfile = app.preflightProfiles.item(0);
+//	var myProcess = app.preflightProcesses.add(doc, myProfile);
+//	logToFile("giving time for smart text reflow");
+//	myProcess.waitForProcess(20);
+//	myProcess.remove();
 //	alert("giving time for smart text reflow. page length is " + doc.pages.length);
 
 //  np.remove();
