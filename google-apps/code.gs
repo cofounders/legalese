@@ -2215,7 +2215,7 @@ function uploadAgreement(sheet) {
 			   multiTitles(templates, entity),
 			   rcpts);
 
-	if (entity.skip_echosign) {
+	if (entity && entity.skip_echosign) {
 	  Logger.log("entity %s wants to skip echosign. so, not creating agreement.", entity.name);
 	  return "skipping echosign as requested by entity";
 	}

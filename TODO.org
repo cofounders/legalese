@@ -100,12 +100,15 @@ this is basically done -- we have this docset ready.
 *** to issue new shares to everybody who has subscribed
 *** if the members give approval, to give corporate secretary authority to bizfile
 ** TODO fix up 3A using the same ab styling and get it submitted as a change
+* bugfixes
+** TODO [#A] if the controller defines a form here and a form there do those forms' onsubmits find the right sheet to update?
 * for 2015a
 ** TODO [#A] reformat all of Table A into the articles of association so we have something that's submissible to banks and so on
 ** TODO [#A] review articles of association from 2013B and see if there are significant omissions in our 2015a version.
 ** TODO [#A] previously incorporated companies to adopt new articles.
 ** TODO [#A] draft paperwork to effect share exchange with Indian shareholders
 ** TODO [#A] setup a workflow for each new company to authorise and issue class F shares to the founders.
+** TODO need a combo bold and ucnum character class for the form45.xml
 ** TODO [#A] setup a workflow for each new company for the directors to authorise the issue of the convertible note to JFDI.
 *** TODO [#A] this will include a resolution for the directors to sign the agreements
 *** the issue of securities to JFDI needs to be preceded by section 161 workflow, with resolutions of directors and members. maybe this only happens at time of conversion or exercise. but better to get it out of the way now.
