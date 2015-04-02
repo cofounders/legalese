@@ -1,6 +1,6 @@
 <b_left_sidehead_nonum>Additional Definitions</b_left_sidehead_nonum>
 
-<numbered_1_para override="numberingContinue=false numberingStartAt=<?= data.aa_additional_definitions_clause_number || "1" ?>">In these Articles, “Change of Control” shall mean the occurrence of any of the following:</numbered_1_para>
+<numbered_1_para override="numberingContinue=false numberingStartAt=<?= data._include.numberingStartAt || data.aa_additional_definitions_clause_number || "1" ?>">In these Articles, “Change of Control” shall mean the occurrence of any of the following:</numbered_1_para>
 <numbered_2_para>a sale of assets representing fifty percent (50%) or more of the net book value and of the fair market value of the Company’s consolidated assets (in a single transaction or in a series of related transactions);
 a merger or consolidation involving the Company or any subsidiary of the Company after the completion of which:</numbered_2_para>
 <numbered_3_para>in the case of a merger (other than a triangular merger) or a consolidation involving the Company, the shareholders of the Company immediately prior to the completion of such merger or consolidation beneficially own, directly or indirectly, outstanding voting securities representing less than fifty percent (50%) of the combined voting power of the surviving entity in such merger or consolidation, and
