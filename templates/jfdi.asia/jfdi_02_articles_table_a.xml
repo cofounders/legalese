@@ -22,7 +22,7 @@ to which the consent in writing of all the Members within that class of shares f
 
 <numbered_1_para override="numberingContinue=false numberingStartAt=108">Notice may be given by the company to any member in person, by post, or by e-mail.</numbered_1_para>
 
-<?!= include("jfdi_articles_additional_definitions", data, { numberingStartAt: data.aa_f_clause_number-1 } ) ?>
+<?!= include("jfdi_articles_additional_definitions", data, { numberingStartAt: parseInt(data.aa_f_clause_number)-1 } ) ?>
 <?!= include("jfdi_articles_class_f",                data, { numberingStartAt: data.aa_f_clause_number } ) ?>
 
 </Story_Main>
