@@ -8,12 +8,19 @@
   <chapter_header>Shareholders' Agreement</chapter_header>
   <para_1>This agreement is dated <?= data.shareholders_agreement_date ?></para_1>
   <para_1>between:</para_1>
-<? for (var i in data.parties.shareholder) { ?>
-<parties><?!= include("inc_party", data, data.parties.shareholder[i]) ?><? if (data.parties.shareholder.length == 1) { ?> (the "Shareholder")<?}?>;</parties>
+<? for (var i in data.parties.founder) { ?>
+<parties><?!= include("inc_party", data, data.parties.founder[i]) ?><? if (data.parties.founder.length == 1) { ?> (the "Founder")<?}?>;</parties>
 <? } ?>
-<?   if (data.parties.shareholder.length > 1)           { ?><para_1>(collectively the "Shareholders" and individually a "Shareholder");</para_1><?}?>
+<?   if (data.parties.founder.length > 1)           { ?><para_1>(collectively the "Founders" and individually a "Founder");</para_1><?}?>
 
   <parties><?!= include("inc_party", data, data.parties.investor[0]) ?> (the "Investor"); and</parties>
+
+<? if (data.parties.existing_investor) { ?>
+<? for (var i in data.parties.existing_investor) { ?>
+<parties><?!= include("inc_party", data, data.parties.existing_investor[i]) ?><? if (data.parties.existing_investor.length == 1) { ?> (the "Existing_Investor")<?}?>;</parties>
+<? } ?>
+<?   if (data.parties.existing_investor.length > 1)           { ?><para_1>(collectively the "Existing Investors" and individually an "Existing Investor");</para_1><?}?>
+<? } ?>
 
   <parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
 
@@ -82,7 +89,11 @@
   <b_left_sidehead_nonum>Transferability of Rights </b_left_sidehead_nonum>
   <numbered_1_para>The Articles of Association give shareholders pre-emptive rights (on the issue of new securities) and rights of first refusal (to purchase existing securities). These rights shall be transferable on a commercial basis, so that if a deal is oversubscribed, each founder can delegate their position to one or more favourite investors. </numbered_1_para>
   <b_left_sidehead_nonum>Related Companies and Existing Proprietary Assets </b_left_sidehead_nonum>
-  <numbered_1_para>Pursuant to the Founder Agreement, should one or more Founders control a existing business whose proprietary assets will be used in the Company&#8217;s current Business, then those Founders shall procure the transfer of those assets, a controlling equity stake in that existing business, or a perpetual, irrevocable, royalty-free, exclusive, worldwide license to the Company for a nominal fee. </numbered_1_para>
+  <numbered_1_para>Pursuant to the Founder Agreement, should the Founders jointly or severally control an existing business whose proprietary assets will be used in the Company's current Business, then those Founders shall, at the election of the Investor but in any event prior to the Next External Financing defined in the <?=data.security_type?> Agreement of <?= data.investment_agreement_date ?>, procure</numbered_1_para>
+  <bullets>the transfer of those assets, or
+the transfer of all equity in that existing business, or
+a perpetual, irrevocable, royalty-free, exclusive, worldwide license</bullets>
+<para_2>to the Company for a nominal fee.</para_2>
   <b_left_sidehead_nonum>Alterations Due to External Financing </b_left_sidehead_nonum>
   <numbered_1_para>A prospective investor may seek to alter both this Agreement and the Articles of Association as a condition of External Financing. </numbered_1_para>
   <b_left_sidehead_nonum>Humility </b_left_sidehead_nonum>
@@ -94,15 +105,21 @@
   <para_1>Should the Company not raise External Financing, but recognize revenue of at least S$100,000, then this provision shall apply with equal force. </para_1>
 
   <chapter_header>Signatures</chapter_header>
-  <para_1>IN WITNESS WHEREOF we have hereunto set our hand on <?= data.shareholders_agreement_date ?></para_1>
-  <para_1><i>For the Shareholders:</i></para_1>
-<? for (var i = 0; i < data.parties.shareholder.length; i++) { ?>
-<?!= include("inc_signature", data, data.parties.shareholder[i]) ?>
+  <para_1>In witness whereof we have hereunto set our hand on <?= data.shareholders_agreement_date ?></para_1>
+  <para_1><i>The Founders:</i></para_1>
+<? for (var i = 0; i < data.parties.founder.length; i++) { ?>
+<?!= include("inc_signature", data, data.parties.founder[i]) ?>
 <? } ?>
-  <para_1><i>For and on behalf of the Company:</i></para_1>
-<?!= include("inc_signature", data, data.company) ?>
   <para_1><i>For and on behalf of the Investor:</i></para_1>
 <?!= include("inc_signature", data, data.parties.investor[0]) ?>
+  <para_1><i>For and on behalf of the Company:</i></para_1>
+<?!= include("inc_signature", data, data.company) ?>
+<? if (data.parties.existing_investor) { ?>
+  <para_1><i>The Existing <?= plural(data.parties.existing_investor, "Investor") ?>:</i></para_1>
+<?   for (var i = 0; i < data.parties.existing_investor.length; i++) { ?>
+<?!=   include("inc_signature", data, data.parties.existing_investor[i]) ?>
+<?   } ?>
+<? } ?>
 
 
 </Story_Main>
