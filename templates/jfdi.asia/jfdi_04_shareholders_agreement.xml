@@ -32,7 +32,13 @@
   <recitals>Pursuant to a Founder Agreement dated <?= data.founder_agreement_date ?>, and in conjunction with </recitals>
   <para_2>a "Class F Agreement" between the Founders and the Company, by which the Founders subscribe to <?= digitCommas_(data.company.f_restricted+data.company.f_unrestricted) ?> Class F Preference Shares whose rights of redemption are governed by a vesting schedule described therein; and </para_2>
   <para_2>a "<?= data.security_type ?> Agreement" dated <?= data.investment_agreement_date ?>, by which the Investor shall become a shareholder upon <?= data.security_type_operation ?>; </para_2>
-  <recitals>To regulate the relationship of the Parties inter se being present and prospective members of the Company, and the conduct of the business and affairs of the Company, in the spirit of mutual confidence and co-operation, the Parties have agreed to enter into this Agreement on the terms and conditions hereinafter set out. </recitals>
+<? if (data.previously_incorporated && data.previous_investors && data.previous_incorporation_locale != "Singapore") { ?>
+<recitals>The Existing Investors have invested in a Previous Company <?!= include("inc_party", data.parties.previous_company[0]) ?> whose economic interests will henceforth be represented by the Company instead;</recitals>
+<? } ?>
+
+<recitals>To regulate the relationship of the Parties inter se being present and prospective members of the Company, and the conduct of the business and affairs of the Company, <? if (data.previously_incorporated && data.previous_investors && data.previous_incorporation_locale != "Singapore") { ?>
+and to protect the interests of the Existing Investors by ensuring fair representation in the Company, <? } ?>
+in the spirit of mutual confidence and co-operation, the Parties have agreed to enter into this Agreement on the terms and conditions hereinafter set out. </recitals>
   <para_1>Now it is hereby agreed as follows:- </para_1>
   <a_left_sidehead>Definitions </a_left_sidehead>
   <para_1>In this Agreement and in the Recitals abovementioned, unless the context otherwise requires:</para_1>
@@ -94,7 +100,14 @@
 the transfer of all equity in that existing business, or
 a perpetual, irrevocable, royalty-free, exclusive, worldwide license</bullets>
 <para_2>to the Company for a nominal fee.</para_2>
-  <b_left_sidehead_nonum>Alterations Due to External Financing </b_left_sidehead_nonum>
+
+
+<? if (data.previously_incorporated && data.previous_investors && data.previous_incorporation_locale != "Singapore") { ?>
+<b_left_sidehead_nonum>Existing Investors' Interests to be Protected</b_left_sidehead_nonum>
+<numbered_1_para>Prior to the Next External Financing, the Company shall issue and allot shares or other securities so as to represent the interests of the Existing Investors, who hold shares in the Previous Company <?= data.parties.previous_company[0].name ?>.</numbered_1_para>
+<? } ?>
+
+<b_left_sidehead_nonum>Alterations Due to External Financing </b_left_sidehead_nonum>
   <numbered_1_para>A prospective investor may seek to alter both this Agreement and the Articles of Association as a condition of External Financing. </numbered_1_para>
   <b_left_sidehead_nonum>Humility </b_left_sidehead_nonum>
   <numbered_1_para>The Founders acknowledge that the business may outgrow them, and that their primary commitment is to the success of the business. Should, one day, other leadership and management be better suited, the Founders agree to be reminded of this commitment. </numbered_1_para>
