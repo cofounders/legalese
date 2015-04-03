@@ -17,7 +17,7 @@
 
 <? if (data.parties.existing_investor) { ?>
 <? for (var i in data.parties.existing_investor) { ?>
-<parties><?!= include("inc_party", data, data.parties.existing_investor[i]) ?><? if (data.parties.existing_investor.length == 1) { ?> (the "Existing_Investor")<?}?>;</parties>
+<parties><?!= include("inc_party", data, data.parties.existing_investor[i]) ?><? if (data.parties.existing_investor.length == 1) { ?> (the "Existing Investor")<?}?>;</parties>
 <? } ?>
 <?   if (data.parties.existing_investor.length > 1)           { ?><para_1>(collectively the "Existing Investors" and individually an "Existing Investor");</para_1><?}?>
 <? } ?>
