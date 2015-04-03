@@ -18,7 +18,7 @@ var SLEEP_INTERVAL = 10000; // milliseconds
 
 var still_want_to_run = true;
 
-var ROOTFOLDER = "~/Google Drive/incoming";
+var ROOTFOLDER = "~/Google Drive/Legalese Root";
 // on the production server, robot@legalese.io syncs Google Drive directly with no Legalese Root folder.
 
 var IPC_FILE = "stop-please.txt";
@@ -33,7 +33,7 @@ function main() {
 
   if (i_was_previously_running(rootFolder)) {
 	tell_the_previous_run_to_stop(rootFolder);
-//	alert("telling previous run to stop.");
+	alert("telling previous run to stop.");
 	// i don't think this actually works because the scripts are not multithreaded.
 	// you should just create the stop-please.txt file by hand.
   }
@@ -99,7 +99,7 @@ function i_am_running(folder) {
 
 function xml2pdf_main(){
 
-  var interactive = false;
+  var interactive = true;
 
   var xmlFiles = identifyXmlFiles("recurse", rootFolder); // recurse | queryUser
 

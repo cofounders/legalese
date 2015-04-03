@@ -99,6 +99,7 @@ function onOpen() {
 	  addOnMenu.addItem("Send to EchoSign", "uploadAgreement");
   }
 
+  addOnMenu.addItem("Clone Spreadsheet", "cloneSpreadsheet_")
   addOnMenu.addToUi();
 
   // when we release this as an add-on the menu-adding will change.
@@ -467,6 +468,14 @@ function onFormSubmit(e) {
   }
 }
 
+function hyperlink2sheet_(hyperlink) { // input: either a =HYPERLINK formula or just a regular URL of the form https://docs.google.com/a/jfdi.asia/spreadsheets/d/1y8BdKfGzn3IrXK9qrlzKH2IHo4fR-GulXQnMp0hrVIU/edit#gid=1382748166
+  var res = hyperlink.match(/\/([^\/]+)\/edit#gid=(\d+)/); // JS doesn't need us to backslash the / in [] but it helps emacs js-mode
+  if (res) {
+	return getSheetById_(SpreadsheetApp.openById(res[1]), res[2]);
+  }
+  return null;
+}
+
 // ---------------------------------------------------------------------------------------------------------------- readRows
 /**
  * populate a number of data structures, all kept in "toreturn".
@@ -527,16 +536,16 @@ function readRows_(sheet, entitiesByName) {
 	  var formula = formulas[i][1];
 	  if (formula) {
 		// =HYPERLINK("https://docs.google.com/a/jfdi.asia/spreadsheets/d/1Ix5OYS7EpmEIqA93S4_JWxV1OO82tRM0MLNj9C8IwHU/edit#gid=1249418813","Entities JFDI.2014")
-		var res = formula.match(/=HYPERLINK\(".*\/([^\/]+)\/edit#gid=(\d+)/); // JS doesn't need us to backslash the / in [] but it helps emacs js-mode
-		if (res) {
-		  include_sheet = getSheetById_(SpreadsheetApp.openById(res[1]), res[2]);
-		}
+		include_sheet = hyperlink2sheet_(formula);
 	  }
 	  else {
 		include_sheet = sheet.getParent().getSheetByName(row[1]);
 	  }
 	  
 	  Logger.log("readRows(%s): encountered INCLUDE %s", sheet.getSheetName(), row[1]);
+
+	  if (include_sheet == undefined) { throw("unable to fetch included sheet " + row[1]) }
+	  
 	  var includedReadRows = readRows_(include_sheet, entitiesByName);
 	  Logger.log("readRows(%s): back from INCLUDE %s; toreturn.principal = %s",
 				 sheet.getSheetName(), row[1], toreturn.principal ? toreturn.principal.name : undefined);
@@ -1086,7 +1095,7 @@ function availableTemplates_() {
 	},
 	{ name:"jfdi_shareholders_agreement", title:"JFDI Shareholders' Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_04_shareholders_agreement.xml",
-	  parties:{to:["shareholder", "company", "investor"], cc:["corporate_secretary"]},
+	  parties:{to:["founder", "existing_investor", "company", "investor"], cc:["corporate_secretary"]},
 	  nocache:true,
 	},
 	{ name:"jfdi_investment_agreement", title:"JFDI Investment Agreement",
@@ -1329,7 +1338,7 @@ function intersect_(array1, array2) {
 // create a canonical filename for a given sourceTemplate,entity pair
 function filenameFor_ (sourceTemplate, entity) {
   var sequence = sourceTemplate.sequence;
-  if (sequence == undefined) { sequence = "" } else { sequence = (sequence < 100 ? "0" : "") + sequence + " - " }
+  if (sequence == undefined) { sequence = "" } else { sequence = (sequence < 100 && sequence >= 10  ? "0" : "") + sequence + " - " }
   if (entity) return sequence + sourceTemplate.title + " for " + firstline_(entity.name)
   else        return sequence + sourceTemplate.title;
 };
@@ -1466,7 +1475,7 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 
 	var sourceTemplateNames = sourceTemplates.map(function(st){return st.name});
 
-	Logger.log("docsetEmails.Rcpts(%s), %s", sourceTemplateNames, explodeEntity);
+//	Logger.log("docsetEmails.Rcpts(%s), %s", sourceTemplateNames, explodeEntity);
 	// pull up all the entities relevant to this particular set of sourceTemplates
 	// this should be easy, we've already done the hard work above.
 	var all_to = [], all_cc = [];
@@ -2577,4 +2586,42 @@ function partiesWearingManyHats(data, principal, hats) {
   Logger.log("returning %s", toreturn);
   return toreturn;
 }
+
+function cloneSpreadsheet_() {
+  // only callable from the legalese controller
+  // the code below was inspired by otherSheets_()
+
+  var activeRange = SpreadsheetApp.getActiveRange(); // user-selected range
+  var rangeValues = activeRange.getValues();
+  var toreturn = [];
+  for (var i = 0; i < rangeValues.length; i++) {
+	var myRow = activeRange.getSheet().getRange(activeRange.getRow()+i, 1, 1, 10);
+
+	// we expect column A to be literal txt "clone"
+	// column B will be the source spreadsheet to clone
+	// column C will be the new title of the spreadsheet
+	// then we reset column A and B to the the ssid and the sheetid
+	
+	Logger.log("you are interested in row " + myRow.getValues()[0]);
+	var ss;
+	try { ss = SpreadsheetApp.openById(myRow.getValues()[0][0]) } catch (e) {
+	  Logger.log("couldn't open indicated spreadsheet ... probably on wrong row. %s", e);
+	  throw("is your selection on the correct row?");
+	  return;
+	}
+	var sheet = getSheetById_(ss, myRow.getValues()[0][1])
+	Logger.log("smoochy says otherSheets: sheet %s is on row %s", i.toString(), myRow.getRowIndex().toString());
+	myRow.getCell(1,3).setValue("=HYPERLINK(\""
+								+sheet.getParent().getUrl()
+								+"#gid="
+								+sheet.getSheetId()
+								+"\",\""
+								+sheet.getParent().getName() + " / " + sheet.getName()
+								+"\")");
+	toreturn.push(sheet);
+  }
+  return toreturn;
+
+}
+
 
