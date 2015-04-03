@@ -17,7 +17,7 @@
 
 <chapter_header override="startParagraph=StartParagraph.ANYWHERE">Closure of Company's Bank Account</chapter_header>
 <para_1><span_smallcaps>Resolved that:---</span_smallcaps></para_1>
-<numbered_1_para>the Company do and hereby closes any and all accounts maintained with <?= data.bank.name ?> (the "Bank") with immediate effect; and
+<numbered_1_para>the Company do and hereby closes any and all accounts maintained with <?= data.parties.bank[0].name ?> (the "Bank") with immediate effect; and
 a certified copy of this resolution be furnished to the Bank.</numbered_1_para>
 <para_1><span_smallcaps>Dated this:</span_smallcaps> <?= data.shutdown_process_begin_date ?></para_1>
 <? data.signature_comment = "Director" ?>

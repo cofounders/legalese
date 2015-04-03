@@ -93,18 +93,23 @@ in the spirit of mutual confidence and co-operation, the Parties have agreed to 
   <numbered_2_para>New Shareholders shall be required to execute a Deed of Ratification and be bound by this Agreement. </numbered_2_para>
   <numbered_2_para>While the Investor at the date of the signing of this Agreement is holder of Convertible Debt and not a Shareholder, by conversion whether in whole or in part, the Investor shall be deemed to have ratified and acceded to this Agreement and agrees to be bound by the terms of this Agreement. </numbered_2_para>
   <b_left_sidehead_nonum>Transferability of Rights </b_left_sidehead_nonum>
-  <numbered_1_para>The Articles of Association give shareholders pre-emptive rights (on the issue of new securities) and rights of first refusal (to purchase existing securities). These rights shall be transferable on a commercial basis, so that if a deal is oversubscribed, each founder can delegate their position to one or more favourite investors. </numbered_1_para>
+  <numbered_1_para>The Articles of Association give shareholders pre-emptive rights (on the issue of new securities) and rights of first refusal (to purchase existing securities). These rights shall be transferable on a commercial basis, so that if a deal is oversubscribed, each holder of shares or convertible instruments can delegate their position to one or more favourite investors. </numbered_1_para>
   <b_left_sidehead_nonum>Related Companies and Existing Proprietary Assets </b_left_sidehead_nonum>
   <numbered_1_para>Pursuant to the Founder Agreement, should the Founders jointly or severally control an existing business (the "Previous Company") whose proprietary assets will be used in the Company's current business, then those Founders shall, at the election of the Investor but in any event prior to the Next External Financing defined in the <?=data.security_type?> Agreement of <?= data.investment_agreement_date ?>, procure</numbered_1_para>
   <bullets>the transfer of those assets, or
-the transfer of all equity in that existing business, or
+the transfer of controlling equity in that existing business, or
 a perpetual, irrevocable, royalty-free, exclusive, worldwide license of the Previous Company's assets</bullets>
 <para_2>to the Company for a nominal fee.</para_2>
+
+<? if (data.previously_incorporated && data.previous_incorporation_locale != "Singapore") { ?>
+<b_left_sidehead_nonum>New Investors' Interests to be Protected</b_left_sidehead_nonum>
+<numbered_1_para>Given that the capital appreciation of the business shall henceforth inhere in the Company <?= data.company.name ?>, the Parties agree that the Previous Company shall not seek further investment from external investors, and that any external investment shall be directed toward the Company instead. The Founders<? if (data.previous_investors) { ?> and Existing Investors<?}?> hereby agree that, to the extent that they have any interest in or influence over the actions of the Previous Company <?= data.parties.previous_company[0].name ?>, they shall act in accordance with this Clause.</numbered_1_para>
+<? } ?>
 
 
 <? if (data.previously_incorporated && data.previous_investors && data.previous_incorporation_locale != "Singapore") { ?>
 <b_left_sidehead_nonum>Existing Investors' Interests to be Protected</b_left_sidehead_nonum>
-<numbered_1_para>Prior to the Next External Financing, the Company shall issue and allot shares or other securities so as to represent the interests of the Existing Investors, who hold shares in the Previous Company <?= data.parties.previous_company[0].name ?>.</numbered_1_para>
+<numbered_1_para>Prior to the Next External Financing, the Company shall issue and allot shares or other securities so as to represent the interests of the Existing Investors, who hold shares in the Previous Company <?= data.parties.previous_company[0].name ?>, and the Founders shall act accordingly.</numbered_1_para>
 <? } ?>
 
 <b_left_sidehead_nonum>Alterations Due to External Financing </b_left_sidehead_nonum>
@@ -112,10 +117,10 @@ a perpetual, irrevocable, royalty-free, exclusive, worldwide license of the Prev
   <b_left_sidehead_nonum>Humility </b_left_sidehead_nonum>
   <numbered_1_para>The Founders acknowledge that the business may outgrow them, and that their primary commitment is to the success of the business. Should, one day, other leadership and management be better suited, the Founders agree to be reminded of this commitment. </numbered_1_para>
   <b_left_sidehead_nonum>Regarding Death and Disability </b_left_sidehead_nonum>
-  <numbered_1_para>As soon as practical, after or in preparation for an External Financing, the Company shall purchase insurance, such that in the event of Death or Disability of a Founder, the Company can afford to </numbered_1_para>
+  <numbered_1_para>As soon as practical, after or in preparation for an External Financing, the Company shall purchase what is commonly called "Key Man" insurance, such that in the event of Death or Disability of a Founder, whether that Founder is indeed a Man or a Woman, the Company can afford to </numbered_1_para>
   <numbered_2_para_indent>continue operations in the absence of that Founder, and </numbered_2_para_indent>
   <numbered_2_para_indent>offer to that Founder or his Estate a redemption of the Founder&#8217;s securities at fair market value. </numbered_2_para_indent>
-  <para_1>Should the Company not raise External Financing, but recognize revenue of at least S$100,000, then this provision shall apply with equal force. </para_1>
+  <para_1>Should the Company not raise External Financing, but recognize total revenue of at least S$250,000, then this provision shall apply with equal force. </para_1>
 
   <chapter_header>Signatures</chapter_header>
   <para_1>In witness whereof we have hereunto set our hand on <?= data.shareholders_agreement_date ?></para_1>
