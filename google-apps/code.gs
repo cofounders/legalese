@@ -99,7 +99,7 @@ function onOpen() {
 	  addOnMenu.addItem("Send to EchoSign", "uploadAgreement");
   }
 
-  addOnMenu.addItem("Clone Spreadsheet", "cloneSpreadsheet_")
+  addOnMenu.addItem("Clone Spreadsheet", "cloneSpreadsheet_");
   addOnMenu.addToUi();
 
   // when we release this as an add-on the menu-adding will change.
@@ -1093,7 +1093,7 @@ function availableTemplates_() {
 	  parties:{to:["founder", "company"], cc:["corporate_secretary", "investor"]},
 	  nocache:true,
 	},
-	{ name:"jfdi_shareholders_agreement", title:"JFDI Shareholders' Agreement",
+	{ name:"jfdi_shareholders_agreement", title:"Shareholders' Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_04_shareholders_agreement.xml",
 	  parties:{to:["founder", "existing_investor", "company", "investor"], cc:["corporate_secretary"]},
 	  nocache:true,
@@ -2592,10 +2592,14 @@ function cloneSpreadsheet_() {
   // the code below was inspired by otherSheets_()
 
   var activeRange = SpreadsheetApp.getActiveRange(); // user-selected range
-  var rangeValues = activeRange.getValues();
   var toreturn = [];
-  for (var i = 0; i < rangeValues.length; i++) {
-	var myRow = activeRange.getSheet().getRange(activeRange.getRow()+i, 1, 1, 10);
+  var legalese_root = legaleseRootFolder_();
+  var mySheet = activeRange.getSheet();
+  var insertions = 0;
+  for (var i = 0; i < (insertions+activeRange.getValues().length); i++) {
+	Logger.log("cloneSpreadsheet_: i = %s; activeRange.getValues().length = %s", i, activeRange.getValues().length);
+	
+	var myRow = mySheet.getRange(activeRange.getRow()+i, 1, 1, 10);
 
 	// we expect column A to be literal txt "clone"
 	// column B will be the source spreadsheet to clone
@@ -2603,25 +2607,50 @@ function cloneSpreadsheet_() {
 	// then we reset column A and B to the the ssid and the sheetid
 	
 	Logger.log("you are interested in row " + myRow.getValues()[0]);
-	var ss;
-	try { ss = SpreadsheetApp.openById(myRow.getValues()[0][0]) } catch (e) {
-	  Logger.log("couldn't open indicated spreadsheet ... probably on wrong row. %s", e);
+	if (myRow.getValues()[0][0] != "clone") { Logger.log("not a cloneable row. skipping"); continue }
+	
+	var sourceSheet;
+	try { sourceSheet = hyperlink2sheet_(myRow.getFormulas()[0][1] || myRow.getValues()[0][1]) } catch (e) {
+	  Logger.log("couldn't open source spreadsheet ... probably on wrong row. %s", e);
 	  throw("is your selection on the correct row?");
 	  return;
 	}
-	var sheet = getSheetById_(ss, myRow.getValues()[0][1])
-	Logger.log("smoochy says otherSheets: sheet %s is on row %s", i.toString(), myRow.getRowIndex().toString());
-	myRow.getCell(1,3).setValue("=HYPERLINK(\""
-								+sheet.getParent().getUrl()
-								+"#gid="
-								+sheet.getSheetId()
-								+"\",\""
-								+sheet.getParent().getName() + " / " + sheet.getName()
-								+"\")");
-	toreturn.push(sheet);
+
+	// duplicate the spreadsheet
+	var copySS = sourceSheet.getParent().copy(myRow.getValues()[0][2]);
+	Logger.log("copied %s to %s", sourceSheet.getParent().getName(), myRow.getValues()[0][2]);
+
+	var SSfile = DriveApp.getFileById(copySS.getId());
+	legalese_root.addFile(SSfile);
+	DriveApp.getRootFolder().removeFile(SSfile);
+	Logger.log("moved to legalese root folder");
+
+	var sheets = copySS.getSheets().filter(function(s){return ! s.getSheetName().toLowerCase().match(/entities/)});
+
+	Logger.log("copied spreadsheet has %s agreement sheets: %s", sheets.length, sheets);
+	
+	for (var j = 0; j < sheets.length; j++) {
+	  var sheet = sheets[j];
+	  var newRow;
+
+	  // first response replaces the active row. subsequent responses require row insertions.
+	  if (j == 0) newRow = myRow
+	  else {
+		Logger.log("inserting a new row after index %s", myRow.getRowIndex());
+		newRow = mySheet.insertRowAfter(myRow.getRowIndex()).getRange(myRow.getRowIndex()+1,1,1,5);
+		insertions++;
+	  }
+		
+	  newRow.getCell(1,1).setValue(copySS.getId());
+	  newRow.getCell(1,2).setValue(sheet.getSheetId());
+	  newRow.getCell(1,3).setValue("=HYPERLINK(\""
+								   +copySS.getUrl()
+								   +"#gid="
+								   +sheet.getSheetId()
+								   +"\",\""
+								   +sheet.getParent().getName() + " / " + sheet.getName()
+								   +"\")");
+	}
   }
-  return toreturn;
-
 }
-
 
