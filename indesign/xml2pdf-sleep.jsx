@@ -18,7 +18,7 @@ var SLEEP_INTERVAL = 10000; // milliseconds
 
 var still_want_to_run = true;
 
-var ROOTFOLDER = "~/Google Drive/Legalese Root";
+var ROOTFOLDER = "~/Google Drive/incoming";
 // on the production server, robot@legalese.io syncs Google Drive directly with no Legalese Root folder.
 
 var IPC_FILE = "stop-please.txt";
