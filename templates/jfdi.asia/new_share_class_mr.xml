@@ -2,7 +2,7 @@
   director_or_member:"Member",
   article_pursuant:data.article_allowing_shareholders_resolution_in_writing,
   r_num: 1,
-  chapter_header:"Authority to Create and Issue TGA Shares",
+  chapter_header:"Authority to Create and Issue Shares",
   skip_resolved:true,
 }) ?>
 
