@@ -22,8 +22,6 @@
 <para_1>We, the undersigned, being the Shareholders of the Company, do hereby pass the foregoing Resolution<?= data.members_resolution_2 ? "s" : "" ?> by written means under Section 184A of the Companies Act (Cap. 50):---</para_1>
 <?!= include("inc_dr_end", data, { director_or_member:"Member", butWaitTheresMore:true}) ?>
 
-<chapter_header>Amendments to Articles of Association of the Company</chapter_header>
-
 <?!= include("inc_additional_resolutions", data, {
   prefix:"members_annex" } ) ?>
 
