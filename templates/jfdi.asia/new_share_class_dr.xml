@@ -14,7 +14,8 @@
 
 <?!= include("inc_dr_end", data, { member_or_director: "Director", butWaitTheresMore:true } ) ?>
 
-<?!= include("new_share_class_spec", data) ?>
+<?!= include("inc_additional_resolutions", data, {
+  prefix:"members_annex" } ) ?>
 
 </Story_Main>
 <Bottom_Box delete_if_empty="true" />
