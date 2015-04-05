@@ -41,7 +41,7 @@
   <para_1>The Company shall issue and sell to the Holder, and the Holder shall purchase from the Company, subject to the terms and conditions set forth in this Agreement, Class F Preference shares (the "Shares") of the Company, at a purchase price of <?= data.price_per_f_share ?> per share (the "Issue Price"). The aggregate purchase price for the Shares shall be paid by the Holder in cash or cheque. The number of Shares purchased by each Holder shall be the total of the numbers shown in the Restricted and Unrestricted columns in the table below. Upon receipt of payment by the Company, the Company shall issue to the Holder one or more certificates in the name of the Holder for that number of Shares purchased by the Holder. The Holder agrees that the Shares shall be subject to the purchase options and restrictions on transfer set forth in this Agreement and in the Articles of Association. </para_1>
   <para_2> For convenience of reference the table below indicates in the column titled Ordinary the number of ordinary shares presently held by each Holder.  </para_2>
   <para_2> </para_2>
-  <a_left_sidehead>Redemption</a_left_sidehead>
+  <a_left_sidehead xname="redemption">Redemption</a_left_sidehead>
   <numbered_2_para>Subject to Sections 3.2, 3.3, and 3.4 below, </numbered_2_para>
   <numbered_3_para>in the event that the Holder is discharged by the Company from employment or volunteership, with Cause (as defined below) and prior to a Change of Control event, the Company shall have the right and option (the "Redemption Right") to purchase from the Holder, at a price per share equal to the Issue Price (the "Redemption Price"), up to the total number of Shares that have not vested according to the table in Section 2 (the "Restricted Shares"). </numbered_3_para>
   <numbered_3_para>the number of shares in the Restricted column of the above table shall initially be subject to the Redemption Right. </numbered_3_para>
@@ -87,7 +87,7 @@
   <b_left_sidehead>Acceleration prior to acquisition. </b_left_sidehead>
   <para_1>In the absence of a Change of Control event, </para_1>
   <numbered_3_para>termination without cause or resignation in response to a hostile work environment shall entail redemption of Restricted Shares. </numbered_3_para>
-  <numbered_3_para>termination with cause or voluntary resignation shall, unless the Directors resolve otherwise, entail redemption of Restricted Shares. </numbered_3_para>
+  <numbered_3_para xname="quit">termination with cause or voluntary resignation shall, unless the Directors resolve otherwise, entail redemption of Restricted Shares. </numbered_3_para>
   <numbered_3_para>at the closing of the first External Financing, all Unrestricted Shares shall convert to Ordinary Shares and all Restricted Shares may be cancelled at the option of the Company. </numbered_3_para>
   <b_left_sidehead>Acceleration post acquisition for stock. </b_left_sidehead>
   <para_1>Subsequent to a Change of Control event in which the Company is acquired primarily for stock, and in which the vesting schedule is substantially preserved in the acquiring entity's stock repurchase or stock option plan, </para_1>
@@ -104,7 +104,7 @@
   <numbered_3_para>the price of any previous issue of Class F Shares, </numbered_3_para>
   <numbered_3_para>in the event that a valuation was placed on the Company in the course of an External Financing event, a price consistent with that set for transfers among founders as described under Share Valuation Policy in the Shareholders' Agreement, or </numbered_3_para>
   <numbered_3_para>a price determined by the Board. </numbered_3_para>
-  <numbered_2_para>In the event Class F Shares are issued at a price other than provided above, the pre-emption rights waived by the Founders in Clause 3 of the Shareholders' Agreement shall return with full force and Founders shall enjoy their pre-emptive rights with respect to the new issue. </numbered_2_para>
+  <numbered_2_para>In the event Class F Shares are issued at a price other than provided above, the pre-emption rights waived by the Founders in the Shareholders' Agreement shall return with full force and Founders shall enjoy their pre-emptive rights with respect to the new issue. </numbered_2_para>
   <a_left_sidehead>Repurchase of Vested Shares</a_left_sidehead>
   <para_1>In the event of the Holder's termination of employment for Cause, the Company shall have the option, but not the obligation, to repurchase all or any part of the Holder's Vested Shares. In the event the Company does not, upon any such termination of employment of the Holder, exercise its option pursuant to this section, the restrictions set forth in the balance of this Agreement shall not thereby lapse, and the Holder for himself or herself, his or her heirs, legatees, executors, administrators and other successors in interest, agrees that the Shares shall remain subject to such restrictions. The following provisions shall apply to a repurchase under this Section: </para_1>
   <numbered_2_para>The per-share repurchase price of the Vested Shares to be sold to the Company upon exercise of its option under this Section shall be equal to the Redemption Price. </numbered_2_para>
@@ -158,7 +158,7 @@
   <chapter_header>Sample Redemption Notice </chapter_header>
   <para_1> </para_1>
   <para_1>Dear Founder, </para_1>
-  <para_1>We refer to the Class F Agreement signed on <?= data.class_f_agreement_date ?>, in particular, Clauses 3 and 5.1.2 therein. </para_1>
+  <para_1>We refer to the Class F Agreement signed on <?= data.class_f_agreement_date ?>, in particular, Clauses <xref to="redemption" /> and <xref to="quit" /> therein. </para_1>
   <para_1>All terms defined in the Class F Agreement shall bear the same meaning when used in this letter. </para_1>
   <para_1>We understand that an event entailing redemption of Restricted Shares has occurred. For the purposes of redemption we date that event at T date. </para_1>
   <para_1>For the avoidance of doubt, we calculate the following shareholding as of that date: </para_1>
