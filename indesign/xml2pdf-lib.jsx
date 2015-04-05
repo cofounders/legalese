@@ -36,6 +36,7 @@ function xmls2pdf(xmlFiles, showingWindow, keepIndd, keepOpen) {
 	  // findAndReplace(doc); change " to ''
 	  // trim trailing newlines from the document. not quite sure how to do this.
 	  doc.recompose();
+	  doc.updateCrossReferences();
 	  logToFile("xmls2pdf: about to exportToPDF");
 	  exportToPDF(doc, xmlFile);
 	  if (keepIndd) { saveAsIndd(doc, xmlFile); }
@@ -61,6 +62,7 @@ function addCrossReferences(doc) {
 // the first part of the crossreferences logic.
 // we look for paragraphs with an "xname" attribute.
 // we define doc.paragraphDestinations named accordingly.
+// ... <para_2_numbered xname="foo"> ...
 function LearnParagraphDestinations(doc){
   this.name = "LearnParagraphDestinations";
   this.xpath = "//*[@xname]";
@@ -71,6 +73,9 @@ function LearnParagraphDestinations(doc){
   }
 }
 
+// ... <xref to="foo" /> ...
+// ... <xref to="foo" format="Paragraph Number" /> ...
+// ... <xref to="foo" format="Paragraph Number (firstbold)" /> ...
 function InsertCrossReferences(doc) {
   this.name = "InsertCrossReferences";
   this.xpath = "//xref";
