@@ -102,8 +102,8 @@ a perpetual, irrevocable, royalty-free, exclusive, worldwide license of the Prev
 <para_2>to the Company for a nominal fee.</para_2>
 
 <? if (data.previously_incorporated && data.previous_incorporation_locale != "Singapore") { ?>
-<b_left_sidehead_nonum>New Investors' Interests to be Protected</b_left_sidehead_nonum>
-<numbered_1_para>Given that the capital appreciation of the business shall henceforth inhere in the Company <?= data.company.name ?>, the Parties agree that the Previous Company shall not seek further investment from external investors, and that any external investment shall be directed toward the Company instead. The Founders<? if (data.previous_investors) { ?> and Existing Investors<?}?> hereby agree that, to the extent that they have any interest in or influence over the actions of the Previous Company <?= data.parties.previous_company[0].name ?>, they shall act in accordance with this Clause.</numbered_1_para>
+<b_left_sidehead_nonum xname="protect_new_investors">New Investors' Interests to be Protected</b_left_sidehead_nonum>
+<numbered_1_para>Given that the capital appreciation of the business shall henceforth inhere in the Company <?= data.company.name ?>, the Parties agree that the Previous Company shall not seek further investment from external investors, and that any external investment shall be directed toward the Company instead. The Founders<? if (data.previous_investors) { ?> and Existing Investors<?}?> hereby agree that, to the extent that they have any interest in or influence over the actions of the Previous Company <?= data.parties.previous_company[0].name ?>, they shall act in accordance with this Clause <xref to="protect_new_investors".</numbered_1_para>
 <? } ?>
 
 

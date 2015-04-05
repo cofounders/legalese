@@ -12,7 +12,7 @@
 <numbered_2_para xname="lol2">This is a numbered 2 paragraph with a second crossreference target painted on it.</numbered_2_para>
 <b_left_sidehead>This is a B Left Sidehead.</b_left_sidehead>
 <numbered_2_para>This is a numbered 2 paragraph.</numbered_2_para>
-<para_1>This is a plain paragraph with a crossreference source in it, which goes to the first target <xref to="lol1" format="Paragraph Number"> showing the paragraph number.</numbered_2_para>
+<para_1>This is a plain paragraph with a crossreference source in it, which goes to the first target <xref to="lol1" format="Paragraph Number" /> showing the paragraph number.</para_1>
 <numbered_2_para>This is the last numbered 2 paragraph.</numbered_2_para>
 <?!= include("inc_signature", data, data.company[0]) ?>
 </Story_Main>
