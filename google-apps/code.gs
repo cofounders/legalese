@@ -1256,6 +1256,7 @@ function availableTemplates_() {
   { name:"founder_agreement", title:"JFDI Accelerate Founder Agreement",
 	url:baseUrl + "templates/jfdi.asia/founderagreement.xml",
 	parties:{to:["founder","investor"], cc:["corporate_secretary"]},
+	nocache:true,
   },
   { name:"dora", title:"DORA",
 	url:baseUrl + "templates/jfdi.asia/dora-signatures.xml",
@@ -1527,6 +1528,21 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	return [to_emails, cc_emails];
   };
 
+  // callback framework for doing things to do with normal sourceTemplates, for both concatenate_pdfs modes
+  this.normal = function(individual_callback, group_callback) {
+	var normals   = suitables.filter(function(t){return ! t.explode});
+	Logger.log("docsetEmails.normal(): concatenateMode %s, templates=%s",
+			   this.readRows.config.concatenate_pdfs && this.readRows.config.concatenate_pdfs.values[0] == true,
+			   normals.map(function(t){return t.name}));
+	if (this.readRows.config.concatenate_pdfs && this.readRows.config.concatenate_pdfs.values[0] == true) {
+	                           var rcpts = this.Rcpts(normals);
+	  for (var i in normals) {                                       individual_callback([normals[i]], null, rcpts); }
+      if (group_callback) {            group_callback(normals, null, rcpts); }
+	} else {
+	  for (var i in normals) { var rcpts = this.Rcpts([normals[i]]); individual_callback([normals[i]], null, rcpts); }
+	}
+  };	
+
   // callback framework for doing things to do with exploded sourceTemplates
   this.explode = function(callback) {
 	var exploders = this.suitables.filter(function(t){return   t.explode});
@@ -1545,21 +1561,6 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 	  }
 	}
   };
-
-  // callback framework for doing things to do with normal sourceTemplates, for both concatenate_pdfs modes
-  this.normal = function(individual_callback, group_callback) {
-	var normals   = suitables.filter(function(t){return ! t.explode});
-	Logger.log("docsetEmails.normal(): concatenateMode %s, templates=%s",
-			   this.readRows.config.concatenate_pdfs && this.readRows.config.concatenate_pdfs.values[0] == true,
-			   normals.map(function(t){return t.name}));
-	if (this.readRows.config.concatenate_pdfs && this.readRows.config.concatenate_pdfs.values[0] == true) {
-	                           var rcpts = this.Rcpts(normals);
-	  for (var i in normals) {                                       individual_callback([normals[i]], null, rcpts); }
-      if (group_callback) {            group_callback(normals, null, rcpts); }
-	} else {
-	  for (var i in normals) { var rcpts = this.Rcpts([normals[i]]); individual_callback([normals[i]], null, rcpts); }
-	}
-  };	
 
 };
 

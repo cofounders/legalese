@@ -105,7 +105,7 @@ function xml2pdf_main(){
 
   if (xmlFiles.length > 0) {
 	app.scriptPreferences.enableRedraw=interactive; 
-	xmls2pdf(xmlFiles, interactive, false);
+	xmls2pdf(xmlFiles, interactive, false, false);
 	app.scriptPreferences.enableRedraw=true;
   }
 }
