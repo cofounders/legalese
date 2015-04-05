@@ -52,11 +52,39 @@ function xmls2pdf(xmlFiles, showingWindow, keepIndd) {
 }
 
 // -------------------------------------------------- addCrossReferences
-// i don't know how to do this. maybe we will need to
-// convert the XML into IDML.
 function addCrossReferences(doc) {
+  __processRuleSet(doc.xmlElements.item(0), [new LearnParagraphDestinations(doc)]);
+  __processRuleSet(doc.xmlElements.item(0), [new InsertCrossReferences(doc)     ]);
 }
 
+// -------------------------------------------------- LearnParagraphDestinations
+// the first part of the crossreferences logic.
+// we look for paragraphs with an "xname" attribute.
+// we define doc.paragraphDestinations named accordingly.
+function LearnParagraphDestinations(doc){
+  this.name = "LearnParagraphDestinations";
+  this.xpath = "//*[@xname]";
+  this.apply = function(myElement, myRuleProcessor){
+	doc.paragraphDestinations.add(myElement.paragraphs.item(0), { name: myElement.xmlAttributes.item("xname").value });
+	logToFile("crossreferences: learning destination named " + myElement.xmlAttributes.item("xname").value);
+    return true;
+  }
+}
+
+function InsertCrossReferences(doc) {
+  this.name = "InsertCrossReferences";
+  this.xpath = "//xref";
+  this.apply = function(myElement, myRuleProcessor){
+	var dest = doc.paragraphDestinations.item(myElement.xmlAttributes.item("to").value);
+	if (! dest.isValid) { logToFile("crossreferences: encountered xref to="+myElement.xmlAttributes.item("to").value+ ", which appears to be undefined."); return false; }
+	var crf = myElement.xmlAttributes.item("format").isValid ? myElement.xmlAttributes.item("format").value : "Paragraph Number";
+	var src = doc.crossReferenceSources.add(myElement.insertionPoints.item(0), doc.crossReferenceFormats.itemByName(crf));
+	logToFile("crossreferences: creating link " + myElement.xmlAttributes.item("to").value);
+	doc.hyperlinks.add(src,dest);
+    return true;
+  }
+}
+  
 
 // -------------------------------------------------- isXmlOrFolder
 function isXmlOrFolder(file) {
