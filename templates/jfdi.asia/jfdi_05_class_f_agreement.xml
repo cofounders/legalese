@@ -2,7 +2,7 @@
 <?!= include("inc_cover_standard_parties", data, {cover_title:"Class F Agreement"}) ?>
 <?!= include("inc_cover_jfdi", data, { in_series:"05" }) ?>
 <Firstpage_Sidebar>
-<sidebar>This document prescribes the vesting schedule for the founders.</sidebar>
+<sidebar>This document prescribes the vesting schedule for the founders. If you're new to vesting, you should read http://pando.com/2012/04/26/founders-should-give-their-stock-back-why-vesting-is-in-your-startups-best-interest/</sidebar>
 </Firstpage_Sidebar>
 <Story_Main>
   <chapter_header>Class F Agreement</chapter_header>
