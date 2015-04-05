@@ -259,7 +259,7 @@ The Subscription Price of the Subscription Shares shall be <?= data.price_per_sh
 <para_1>This Agreement may be signed in any number of counterparts, all of which taken together shall constitute one and the same instrument. Any Party may enter into this Agreement by signing any such counterpart (which may include counterparts delivered by facsimile and/or electronic transmission) and each counterpart shall be as valid and effectual as if executed as an original.</para_1>
 
 
-<b_left_sidehead>Governing Law and Jurisdiction</b_left_sidehead>
+<b_left_sidehead xname="medarb">Governing Law and Jurisdiction</b_left_sidehead>
   <?!= include("inc_mediation_arbitration", data, { numbering_level: 3 }) ?>
 
 <chapter_header>Signatures</chapter_header>

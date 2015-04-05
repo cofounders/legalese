@@ -144,7 +144,7 @@
   <para_1>This Agreement constitutes the entire agreement between the parties, and supersedes all prior agreements and understandings, relating to the subject matter of this Agreement. </para_1>
   <a_left_sidehead>Amendment</a_left_sidehead>
   <para_1>This Agreement may be amended or modified only by a written instrument executed by both the Company and the Holder. </para_1>
-  <a_left_sidehead>Governing Law</a_left_sidehead>
+  <a_left_sidehead xname="medarb">Governing Law</a_left_sidehead>
   <?!= include("inc_mediation_arbitration", data) ?>
   <chapter_header>Signatures</chapter_header>
   <para_1>In witness whereof we have hereunto set our hand on <?= data.shareholders_agreement_date ?></para_1>

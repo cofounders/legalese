@@ -112,7 +112,7 @@ taking all possible conversions, exercises of securities, and dilutions into acc
   <para_1>This <?=data.security_type_short_singular?> is issued pursuant to the Company&#8217;s obligations under the Founder Agreement executed on <?=data.founder_agreement_date?>, which requires the Company to <i>"authorise and issue <? if (data.jfdi_standard_valuation != false) {
   ?>convertible debt, equity, or other such security in the corporation such that, immediately prior to the Next External Financing, <?=data.company.short_name || data.company.name ?> will own a certain percentage (the "Conversion Percentage") of the total capital in the Startup, on a fully-diluted, as-if-converted basis.<? }
   else { ?><?= data.nonstandard_valuation_text ?><? } ?>"</i> That obligation shall be considered discharged upon the conversion of this <?=data.security_type_short_singular?>. </para_1>
-  <a_left_sidehead>Law and Jurisdiction </a_left_sidehead>
+  <a_left_sidehead xname="medarb">Law and Jurisdiction </a_left_sidehead>
   <?!= include("inc_mediation_arbitration", data) ?>
 
   <? if (data.local_director) { ?>
