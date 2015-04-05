@@ -7,7 +7,7 @@
 #include "/Applications/Adobe InDesign CC/Scripts/XML Rules/glue code.jsx"
 
 // -------------------------------------------------- xmls2pdf
-function xmls2pdf(xmlFiles, showingWindow, keepIndd) {
+function xmls2pdf(xmlFiles, showingWindow, keepIndd, keepOpen) {
   if (showingWindow == undefined) showingWindow = false;
   var errors = [];
   app.textPreferences.smartTextReflow = false;
@@ -39,7 +39,7 @@ function xmls2pdf(xmlFiles, showingWindow, keepIndd) {
 	  logToFile("xmls2pdf: about to exportToPDF");
 	  exportToPDF(doc, xmlFile);
 	  if (keepIndd) { saveAsIndd(doc, xmlFile); }
-	  if (doc && doc.isValid) { doc.close(SaveOptions.NO); }
+	  if (! keepOpen && doc && doc.isValid) { doc.close(SaveOptions.NO); }
 	  logToFile("xmls2pdf: finished " + xmlFile.fullName);
 	}
 	catch (error) {
