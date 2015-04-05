@@ -1660,11 +1660,11 @@ function fillTemplates(sheet) {
 	if (entity) { readmeDoc.getBody().appendParagraph("doing template for " + entity.name); }
   };
 
-  Logger.log("FillTemplates(): first we do the exploded templates");
-  docsetEmails.explode(buildTemplate);
-
-  Logger.log("FillTemplates(): then we do the non-exploded normal templates");
+  Logger.log("FillTemplates(): we do the non-exploded normal templates");
   docsetEmails.normal(buildTemplate);
+
+  Logger.log("FillTemplates(): we do the exploded templates");
+  docsetEmails.explode(buildTemplate);
 
   var ROBOT = 'robot@legalese.io';
   Logger.log("fillTemplates(): sharing %s with %s", folder.getName(), ROBOT);
@@ -2273,21 +2273,21 @@ function uploadAgreement(sheet) {
  	Logger.log("createAgreement: well, that seems to have worked!");
   };
   
-  Logger.log("uploadAgreements(): first we upload the exploded templates as a transientDocument");
-  docsetEmails.explode(uploadTransientDocument);
-
-  Logger.log("uploadAgreements(): then we upload the non-exploded normal templates as transientDocuments");
+  Logger.log("uploadAgreements(): we upload the non-exploded normal templates as transientDocuments");
   docsetEmails.normal(uploadTransientDocument);
 
-  Logger.log("uploadAgreements(): next we post the exploded transientDocuments as Agreements");
-  docsetEmails.explode(createAgreement);
+  Logger.log("uploadAgreements(): we upload the exploded templates as a transientDocument");
+  docsetEmails.explode(uploadTransientDocument);
 
-  Logger.log("uploadAgreements(): then we post the non-exploded normal transientDocuments as Agreements");
+  Logger.log("uploadAgreements(): we post the non-exploded normal transientDocuments as Agreements");
   if (config.concatenate_pdfs && config.concatenate_pdfs.values[0] == true) {
 	docsetEmails.normal(function(){Logger.log("individual callback doing nothing")}, createAgreement );
   } else {
 	docsetEmails.normal(createAgreement, function(){Logger.log("group callback doing nothing")});
   }
+
+  Logger.log("uploadAgreements(): we post the exploded transientDocuments as Agreements");
+  docsetEmails.explode(createAgreement);
 
   return "sent";
 }
