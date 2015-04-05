@@ -775,7 +775,7 @@ function readRows_(sheet, entitiesByName) {
 	Logger.log("readRows(%s): principal %s now has %s %s roles", sheet.getSheetName(), toreturn.principal.name, roles[k].length, k);
 	for (var pi in roles[k]) {
 	  var entity = entitiesByName[roles[k][pi]];
-	  if (entity == undefined) { throw(roles[k] + " role " + roles[k][pi] + " refers to an entity that is not defined!") }
+	  if (entity == undefined) { throw(k + " role " + roles[k][pi] + " refers to an entity that is not defined!") }
 	  entity._role = entity._role || {};
 	  entity._role[toreturn.principal.name] = entity._role[toreturn.principal.name] || [];
 	  entity._role[toreturn.principal.name].push(k);
@@ -1068,12 +1068,8 @@ function availableTemplates_() {
 //	parties:{to:["director"], cc:["corporate_secretary"]},
 //	nocache:true,
 //  },
-	{ name:"jfdi_articles_additional_definitions", title:"AA Additional Definitions",
-	   url:baseUrl + "templates/jfdi.asia/jfdi_articles_additional_definitions.xml",
-	  nocache:true,
-	},
-	{ name:"jfdi_articles_class_f", title:"AA Class F Shares",
-	   url:baseUrl + "templates/jfdi.asia/jfdi_articles_class_f.xml",
+	{ name:"jfdi_articles_2015", title:"JFDI Articles",
+	   url:baseUrl + "templates/jfdi.asia/jfdi_articles_2015.xml",
 	  nocache:true,
 	},
 	{ name:"jfdi_volunteer_agreement", title:"Volunteer Agreement",
@@ -1230,6 +1226,7 @@ function availableTemplates_() {
   { name:"test_templatespec", title:"Test templateSpec",
 	url:baseUrl + "templates/jfdi.asia/test-templatespec.xml",
 	parties:{to:["company[0]"],cc:["founder"]},
+	nocache:true,
   },
   { name:"employment_agreement", title:"Employment Agreement",
 	url:baseUrl + "templates/jfdi.asia/employment-agreement.xml",
@@ -1779,6 +1776,7 @@ function legaleseRootFolder_() {
 	  legalese_root = legaleses.next();
 	  Logger.log("legalese_root = " + legalese_root);
 	} else {
+	  Logger.log("WARNING: Google Drive claims that the Legalese Root folder does not exist. really?");
 	  legalese_root = DriveApp.createFolder("Legalese Root");
 	}
 	PropertiesService.getDocumentProperties().setProperty("legalese.rootfolder", JSON.stringify(legalese_root.getId));

@@ -64,6 +64,10 @@ figure out building this as a proper google add-on.
 
 * TODO [#C] figure out how to do PDF form elements so that EchoSigners can check various boxes and enter text amounts.
 * TODO refactor the signature page so that all parties are automatically represented by default.
+* DONE support cross references
+* TODO support table of contents and TOC bookmarks
+* TODO preemptive rights response form inspired by the example set by crayondata. need to do form response logic.
+* TODO V39A
 * DONE concatenate PDFs doesn't quite do the right thing -- ensure individual docs don't each get the full set of recipients
 * for Kark
 ** DONE sent out the issue & allotment workflow
@@ -103,14 +107,17 @@ this is basically done -- we have this docset ready.
 * bugfixes
 ** TODO [#A] if the controller defines a form here and a form there do those forms' onsubmits find the right sheet to update?
 * for 2015a
-** TODO [#A] reformat all of Table A into the articles of association so we have something that's submissible to banks and so on
+** DONE [#A] reformat all of Table A into the articles of association so we have something that's submissible to banks and so on
 ** TODO [#A] review articles of association from 2013B and see if there are significant omissions in our 2015a version.
-** TODO [#A] previously incorporated companies to adopt new articles.
-** TODO [#A] draft paperwork to effect share exchange with Indian shareholders
-** TODO [#A] setup a workflow for each new company to authorise and issue class F shares to the founders.
-** TODO need a combo bold and ucnum character class for the form45.xml
-** TODO [#A] setup a workflow for each new company for the directors to authorise the issue of the convertible note to JFDI.
-*** TODO [#A] this will include a resolution for the directors to sign the agreements
+** CANCELLED the issue of F shares also needs a preemptive waiver workflow for any shareholders who are not founders.
+no they don't -- 115.9 covers this.
+** DONE [#A] previously incorporated companies to adopt new articles.
+** CANCELLED [#A] draft paperwork to effect share exchange with Indian shareholders
+there are potential complications regarding foreign ownership of Indian companies. for now i have added text to the shareholder agreement to protect new Investors' interests.
+** DONE need a combo bold and ucnum character class for the form45.xml
+** DONE [#A] setup a workflow for each new company to authorise and issue class F shares to the founders.
+** DONE [#A] setup a workflow for each new company for the directors to authorise the issue of the convertible note to JFDI.
+*** DONE [#A] this will include a resolution for the directors to sign the agreements
 *** the issue of securities to JFDI needs to be preceded by section 161 workflow, with resolutions of directors and members. maybe this only happens at time of conversion or exercise. but better to get it out of the way now.
 ** one of these workflows can be inside the regular Incorporation and the other will have to be separate because they both use the same variables.
 ** DONE add a director's consent to legalese
@@ -127,7 +134,6 @@ see JFDI.BOOTCAMP.pdf from JFDI.2012 -- this text should go inside the Memo
 ** DONE import volunteer agreement
 ** TODO [#C] merge employment agreement and internship agreement into volunteer agreement
 ** TODO [#C] create directors and members resolution docset to waive AGM for first two years until such time as the company ceases to be an exempt private limited.
-** TODO the issue of F shares also needs a section 161 workflow
 * TODO for launch of legalese
 ** go register a legalese project identity on github
 ** restructure code.gs so that people can use it without having to actually have access to my echosign oauth credentials 
