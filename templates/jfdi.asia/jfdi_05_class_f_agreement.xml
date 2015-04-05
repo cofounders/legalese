@@ -42,7 +42,7 @@
   <para_2> For convenience of reference the table below indicates in the column titled Ordinary the number of ordinary shares presently held by each Holder.  </para_2>
   <para_2> </para_2>
   <a_left_sidehead xname="redemption">Redemption</a_left_sidehead>
-  <numbered_2_para>Subject to Sections 3.2, 3.3, and 3.4 below, </numbered_2_para>
+  <numbered_2_para>Subject to Sections <xref to="cause" />, <xref to="good reason" />, and <xref to="termination" /> below, </numbered_2_para>
   <numbered_3_para>in the event that the Holder is discharged by the Company from employment or volunteership, with Cause (as defined below) and prior to a Change of Control event, the Company shall have the right and option (the "Redemption Right") to purchase from the Holder, at a price per share equal to the Issue Price (the "Redemption Price"), up to the total number of Shares that have not vested according to the table in Section 2 (the "Restricted Shares"). </numbered_3_para>
   <numbered_3_para>the number of shares in the Restricted column of the above table shall initially be subject to the Redemption Right. </numbered_3_para>
   <numbered_3_para>the number of shares in the Unrestricted column of the above table shall not be subject to the Redemption Right; they shall be deemed vested upon issue and are convertible to Ordinary Shares. </numbered_3_para>
@@ -67,7 +67,7 @@
 </Table>
   </table_enclosing_para>
 
-  <numbered_2_para>For purposes of this Agreement, <b>"Cause"</b> shall mean </numbered_2_para>
+  <numbered_2_para xname="cause">For purposes of this Agreement, <b>"Cause"</b> shall mean </numbered_2_para>
   <numbered_3_para>any act or omission which constitutes a material breach by the Holder of the terms of </numbered_3_para>
   <numbered_4_para>this Agreement, </numbered_4_para>
   <numbered_4_para>the Holder's Volunteer Agreement or Employment Agreement as the case may be, or </numbered_4_para>
@@ -76,8 +76,8 @@
   <numbered_3_para>the commission by the Holder of an arrestable offence, a criminal act in connection with an arrestable offence, or any dishonest or wrongful act involving fraud; </numbered_3_para>
   <numbered_3_para>the commission by the Holder of an act of moral turpitude which may adversely effect the reputation or business of the Company as reasonably determined by the Board; or </numbered_3_para>
   <numbered_3_para>the Holder's willful or continuing failure to perform the Holder's duties reasonably assigned during the course of employment or volunteership. </numbered_3_para>
-  <numbered_2_para>For purposes of this Agreement, the term "<b>Good Reason</b>" shall mean termination due to a material breach by the Company of the Holder's Volunteer Agreement or Employment Agreement, as the case may be, which breach remains uncured by the Company, if curable, for a period of thirty (30) days following receipt of a written notice of breach from the Holder, specifying the act or omission upon which the Holder's claim of breach is based. </numbered_2_para>
-  <numbered_2_para>Termination for Good Reason shall be deemed to be termination by the Company without Cause under this Agreement. </numbered_2_para>
+  <numbered_2_para xname="good reason">For purposes of this Agreement, the term "<b>Good Reason</b>" shall mean termination due to a material breach by the Company of the Holder's Volunteer Agreement or Employment Agreement, as the case may be, which breach remains uncured by the Company, if curable, for a period of thirty (30) days following receipt of a written notice of breach from the Holder, specifying the act or omission upon which the Holder's claim of breach is based. </numbered_2_para>
+  <numbered_2_para xname="termination">Termination for Good Reason shall be deemed to be termination by the Company without Cause under this Agreement. </numbered_2_para>
   <a_left_sidehead>Exercise of Redemption Right</a_left_sidehead>
   <numbered_2_para>The Company may exercise the Redemption Right with respect to Restricted Shares by delivering or mailing to the Holder (or his estate), within 60 days after the termination of the employment or volunteership of the Holder with the Company, a written notice of exercise of the Redemption Right. Such notice shall specify the number of Shares to be purchased. If and to the extent the Redemption Right is not so exercised by the giving of such a notice within such 60-day period, the Redemption Right shall automatically expire and terminate effective upon the expiration of such 60-day period. </numbered_2_para>
   <numbered_2_para>The Company shall pay to the Holder the aggregate Redemption Price for such repurchased Shares against delivery of the certificate or certificates representing the Shares to be purchased by the Company. The written notice to the Holder shall specify the address at, and the time and date on, which payment of the Redemption Price for such repurchased Shares is to be made (the "Closing"). The date specified shall not be less than ten (10) days nor more than sixty (60) days from the date of the mailing of the notice, and the Holder or his or her successor in interest with respect to the Shares to be so repurchased shall have no further rights as the owner thereof from and after the date specified in the notice. At the Closing, the Redemption Price for such repurchased Shares shall be delivered to the Holder or his or her successor in interest and the Shares being purchased, duly endorsed for transfer, shall, to the extent that they are not then in the possession of the Company, be delivered to the Company by the Holder or his or her successor in interest. </numbered_2_para>
@@ -89,18 +89,18 @@
   <numbered_3_para>termination without cause or resignation in response to a hostile work environment shall entail redemption of Restricted Shares. </numbered_3_para>
   <numbered_3_para xname="quit">termination with cause or voluntary resignation shall, unless the Directors resolve otherwise, entail redemption of Restricted Shares. </numbered_3_para>
   <numbered_3_para>at the closing of the first External Financing, all Unrestricted Shares shall convert to Ordinary Shares and all Restricted Shares may be cancelled at the option of the Company. </numbered_3_para>
-  <b_left_sidehead>Acceleration post acquisition for stock. </b_left_sidehead>
+  <b_left_sidehead xname="acc_stock">Acceleration post acquisition for stock. </b_left_sidehead>
   <para_1>Subsequent to a Change of Control event in which the Company is acquired primarily for stock, and in which the vesting schedule is substantially preserved in the acquiring entity's stock repurchase or stock option plan, </para_1>
   <numbered_3_para>termination without cause or resignation in response to a hostile work environment shall entail full acceleration of unvested shares causing all outstanding Restricted Shares to become Unrestricted Shares; and </numbered_3_para>
   <numbered_3_para>termination with cause or voluntary resignation shall, unless the Directors of the acquiror resolve otherwise, entail redemption or forfeiture of the unvested portion. </numbered_3_para>
-  <b_left_sidehead>Acceleration post acquisition for cash. </b_left_sidehead>
+  <b_left_sidehead xname="acc_cash">Acceleration post acquisition for cash. </b_left_sidehead>
   <para_1>Subsequent to a Change of Control event in which the Company is acquired primarily for cash, the Restricted Shares shall form part of the fully diluted capitalization, and cash corresponding to the unvested portion shall be escrowed on a pro rata basis. Cash shall be released from escrow mutatis mutandis with the vesting scheme. </para_1>
   <b_left_sidehead>Acceleration post acquisition for cash and stock. </b_left_sidehead>
-  <para_1>In the event the Company is acquired for both cash and stock, the above sections 5.2 and 5.3 shall apply in pro rata fashion. </para_1>
-  <a_left_sidehead>Compensation Adjustment</a_left_sidehead>
+  <para_1>In the event the Company is acquired for both cash and stock, the above sections <xref to="acc_stock" /> and <xref to="acc_cash" /> shall apply in pro rata fashion. </para_1>
+  <a_left_sidehead xname="comp_adj">Compensation Adjustment</a_left_sidehead>
   <para_1>The Directors intend to permit a Holder who is also an employee or consultant to balance his compensation from time to time in favour of cash or equity according to preference and circumstance. Accordingly, the Holder may in any given month, with the approval of the Directors, elect to subscribe for additional Unrestricted F Shares at the Discretionary Subscription Price (defined below) up to the maximum amount of his monthly pay. </para_1>
   <a_left_sidehead>Discretionary Subscription Price</a_left_sidehead>
-  <numbered_2_para>Subsequent to the initial issue of <?= data.class_f_agreement_date ?>, Class F Shares may be issued pursant to section 6 at a "<b>Discretionary Subscription Price</b>", which shall be the greater of </numbered_2_para>
+  <numbered_2_para>Subsequent to the initial issue of <?= data.class_f_agreement_date ?>, Class F Shares may be issued pursant to Clause <xref to="comp_adj" /> at a "<b>Discretionary Subscription Price</b>", which shall be the greater of </numbered_2_para>
   <numbered_3_para>the price of any previous issue of Class F Shares, </numbered_3_para>
   <numbered_3_para>in the event that a valuation was placed on the Company in the course of an External Financing event, a price consistent with that set for transfers among founders as described under Share Valuation Policy in the Shareholders' Agreement, or </numbered_3_para>
   <numbered_3_para>a price determined by the Board. </numbered_3_para>
