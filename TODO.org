@@ -47,14 +47,11 @@ import JFDI's
 
 - help to filter the range based on which are acceptable to investors.
 
-* TODO define web app user model
+* TODO make Legalese a library
+that people can just import, similar to the OAuth library.
 
-different users should be able to log in to collaboratively edit the same deal.
-
-figure out building this as a proper google add-on.
-
-
-
+* TODO make Legalese an add-on
+that doesn't import a library.
 
 * for jfdi.2014
 ** DONE add to explanatory statement
@@ -63,12 +60,15 @@ figure out building this as a proper google add-on.
 *** what if you want to put more money in
 
 * TODO [#C] figure out how to do PDF form elements so that EchoSigners can check various boxes and enter text amounts.
-* TODO refactor the signature page so that all parties are automatically represented by default.
+* TODO refactor the signature page and cover page so that all parties are automatically represented by default.
 * DONE support cross references
 * TODO support table of contents and TOC bookmarks
 * TODO preemptive rights response form inspired by the example set by crayondata. need to do form response logic.
 * TODO V39A
 * DONE concatenate PDFs doesn't quite do the right thing -- ensure individual docs don't each get the full set of recipients
+* TODO improve schema management -- we should be able to create a new startup, a new agreement, etc faster, with correctly populated templates.
+* TODO clean up the overlap between the new share class creation variables and the new share issue variables. 
+* TODO figure out a better way to track the agreement dates (TODAY vs the actual signed date in the spreadsheet.)
 * for Kark
 ** DONE sent out the issue & allotment workflow
 * [2015-03-22 Sun 14:53] for tradegecko

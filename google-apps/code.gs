@@ -1068,36 +1068,41 @@ function availableTemplates_() {
 //	parties:{to:["director"], cc:["corporate_secretary"]},
 //	nocache:true,
 //  },
+	{ name:"incorporation_corpsec_retention", title:"Retention of Corporate Secretary",
+	   url:baseUrl + "templates/jfdi.asia/incorporation_corpsec_retention.xml",
+	  parties:{to:["corporate_secretary", "founder"], cc:["investor"]},
+	  nocache:true,
+	},
 	{ name:"jfdi_articles_2015", title:"JFDI Articles",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_articles_2015.xml",
-	  nocache:true,
+//	  nocache:true,
 	},
 	{ name:"jfdi_volunteer_agreement", title:"Volunteer Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_06_volunteer_agreement.xml",
 	  parties:{to:["company"], cc:["corporate_secretary", "investor"]},
 	  explode:"founder",
-	  nocache:true,
+//	  nocache:true,
 	},
 	{ name:"form45", title:"Form 45 Consent to Act as a Director",
 	   url:baseUrl + "templates/jfdi.asia/form45.xml",
 	  parties:{to:[], cc:["corporate_secretary"]},
 	  explode:"director",
-	  nocache:true,
+	  // nocache:true,
 	},
 	{ name:"jfdi_class_f_agreement", title:"Class F Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_05_class_f_agreement.xml",
 	  parties:{to:["founder", "company"], cc:["corporate_secretary", "investor"]},
-	  nocache:true,
+	  // nocache:true,
 	},
 	{ name:"jfdi_shareholders_agreement", title:"Shareholders' Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_04_shareholders_agreement.xml",
 	  parties:{to:["founder", "existing_investor", "company", "investor"], cc:["corporate_secretary"]},
-	  nocache:true,
+	  // nocache:true,
 	},
 	{ name:"jfdi_investment_agreement", title:"JFDI Investment Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_03_convertible_note_agreement.xml",
 	  parties:{to:["founder", "company", "investor"], cc:["corporate_secretary"]},
-	  nocache:true,
+	  // nocache:true,
 	},
 	{ name:"jfdi_articles_table_a", title:"Articles of Association",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_02_articles_table_a.xml",
@@ -1201,12 +1206,12 @@ function availableTemplates_() {
   { name:"corpsec_allotment", title:"Instruction to Corpsec for Allotment",
 	url:baseUrl + "templates/jfdi.asia/corpsec-allotment.xml",
 	parties:{to:["director"], cc:["corporate_secretary"]},
-	nocache:true,
+	// nocache:true,
   },
   { name:"dr_allotment", title:"Directors' Resolution for Allotment",
 	url:baseUrl + "templates/jfdi.asia/dr-allotment.xml",
 	parties:{to:["director"],cc:["corporate_secretary"]},
-	nocache:true,
+	// nocache:true,
   },
   { name:"jfdi_2014_rcps", title:"JFDI.2014 Subscription Agreement",
 	url:"jfdi_2014_rcps_xml.html",
@@ -1226,7 +1231,7 @@ function availableTemplates_() {
   { name:"test_templatespec", title:"Test templateSpec",
 	url:baseUrl + "templates/jfdi.asia/test-templatespec.xml",
 	parties:{to:["company[0]"],cc:["founder"]},
-	nocache:true,
+	// nocache:true,
   },
   { name:"employment_agreement", title:"Employment Agreement",
 	url:baseUrl + "templates/jfdi.asia/employment-agreement.xml",
@@ -1256,7 +1261,7 @@ function availableTemplates_() {
   { name:"founder_agreement", title:"JFDI Accelerate Founder Agreement",
 	url:baseUrl + "templates/jfdi.asia/founderagreement.xml",
 	parties:{to:["founder","investor"], cc:["corporate_secretary"]},
-	nocache:true,
+	// nocache:true,
   },
   { name:"dora", title:"DORA",
 	url:baseUrl + "templates/jfdi.asia/dora-signatures.xml",
@@ -1574,7 +1579,8 @@ function roles2parties_(readRows) {
 	  if (readRows.entitiesByName[partyName]) {
 		parties[role] = parties[role] || [];
 		parties[role].push(readRows.entitiesByName[partyName]);
-//		Logger.log("populated parties[%s] = %s", partyName, readRows.entitiesByName[partyName]);
+		// Logger.log("populated parties[%s] = %s (type=%s)",
+		// partyName, readRows.entitiesByName[partyName].email, readRows.entitiesByName[partyName].party_type);
 	  }
 	  else {
 		Logger.log("WARNING: the Roles section defines a party %s which is not defined in an Entities section, so omitting from the data.parties list.", partyName);
@@ -2279,6 +2285,8 @@ function uploadAgreement(sheet) {
   Logger.log("uploadAgreements(): we upload the exploded templates as a transientDocument");
   docsetEmails.explode(uploadTransientDocument);
 
+  // TODO: does this do the right thing when the constituent documents each have different to and cc parties?
+  
   Logger.log("uploadAgreements(): we post the non-exploded normal transientDocuments as Agreements");
   if (config.concatenate_pdfs && config.concatenate_pdfs.values[0] == true) {
 	docsetEmails.normal(function(){Logger.log("individual callback doing nothing")}, createAgreement );
@@ -2650,6 +2658,29 @@ function cloneSpreadsheet_() {
 								   +sheet.getParent().getName() + " / " + sheet.getName()
 								   +"\")");
 	}
+  }
+}
+
+function BootcampTeamsImportRange () {
+  var activeRange = SpreadsheetApp.getActiveRange(); // user-selected range
+  var mySheet = activeRange.getSheet();
+  for (var i = 0; i < (activeRange.getValues().length); i++) {
+	var myRow = mySheet.getRange(activeRange.getRow()+i, 1, 1, 10);
+	// we expect column B to contain the URL of the Entities sheet
+	// column A will become the importrange indicated by the current value
+	
+	Logger.log("you are interested in row " + myRow.getValues()[0]);
+	if (! myRow.getValues()[0][1].match(/http/)) { Logger.log("not an importable row. skipping"); continue }
+	
+	var sourceSheet;
+	try { sourceSheet = hyperlink2sheet_(myRow.getFormulas()[0][1] || myRow.getValues()[0][1]) } catch (e) {
+	  Logger.log("couldn't open source spreadsheet ... probably on wrong row. %s", e);
+	  throw("is your selection on the correct row?");
+	  return;
+	}
+	myRow.getCell(1,1).setValue("=IMPORTRANGE('"+sourceSheet.getParent().getId()+"','"+
+								sourceSheet.getSheetName()+
+								"!"+myRow.getValues()[0][0]+"')");
   }
 }
 

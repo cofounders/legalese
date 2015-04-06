@@ -9,7 +9,7 @@ function main(){
 
   var interactive = true;
   var saveIndd    = false;
-  var keepOpen    = true;
+  var keepOpen    = false;
   
   var xmlFiles = identifyXmlFiles("recurse",  // recurse | queryUser
 								  Folder("~/Google Drive/Legalese Root"));
@@ -17,8 +17,14 @@ function main(){
   if (interactive && xmlFiles.length == 0) { alert ("nothing to do. Is Google Drive synced?"); } 
 
   if (xmlFiles.length > 0) {
-	app.scriptPreferences.enableRedraw=true; 
+	app.scriptPreferences.enableRedraw=keepOpen;
 	xmls2pdf(xmlFiles, interactive, saveIndd, keepOpen);
+
+	// run again, because maybe some new work arrived while we were busy
+	xmls2pdf(identifyXmlFiles("recurse",  // recurse | queryUser
+							  Folder("~/Google Drive/Legalese Root")),
+			 interactive, saveIndd, keepOpen);
+
 	app.scriptPreferences.enableRedraw=true;
   }
 }

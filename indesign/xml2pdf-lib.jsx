@@ -27,6 +27,7 @@ function xmls2pdf(xmlFiles, showingWindow, keepIndd, keepOpen) {
 //	  doc.textPreferences.limitToMasterTextFrames = false;
 //	  doc.textPreferences.deleteEmptyPages = true;
 
+	  initialAdjustments(doc);
 	  doc.recompose(); // force smart text reflow otherwise the signature fields won't add properly.
 	  addCrossReferences(doc);
 	  logToFile("xmls2pdf: about to constructFormFields. page length is " + doc.pages.length);
@@ -215,6 +216,16 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
 											]);
 
   return doc;
+}
+
+function initialAdjustments(doc) {
+  var XMLRoot = doc.xmlElements[0];
+  if (XMLRoot.xmlAttributes.item("font-family").isValid) {
+	doc.paragraphStyles.item("[Basic Paragraph]").appliedFont = XMLRoot.xmlAttributes.item("font-family").value;
+  }
+  if (XMLRoot.xmlAttributes.item("font-style").isValid) {
+	doc.paragraphStyles.item("[Basic Paragraph]").fontStyle = XMLRoot.xmlAttributes.item("font-style").value;
+  }
 }
 
 // -------------------------------------------------- setSignaturePageToAMaster
