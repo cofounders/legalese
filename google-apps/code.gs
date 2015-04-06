@@ -1110,7 +1110,7 @@ function availableTemplates_() {
 	},
 	{ name:"jfdi_memorandum", title:"Memorandum of Association",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_01_memorandum.xml",
-	  parties:{to:["founder"], cc:["corporate_secretary"]},
+	  parties:{to:["shareholder"], cc:["corporate_secretary"]},
 	},
 	{ name:"inc_cover_2_parties", title:"JFDI Cover Page with 2 Parties",
 	   url:baseUrl + "templates/jfdi.asia/inc_cover_2_parties.xml",
@@ -2405,7 +2405,7 @@ function asCurrency_(currency, amount, chop) {
 
   // currency can be either just "S$" or the full numberFormat specification string.
 
-  Logger.log("asCurrency_(%s, %s, %s)", currency, amount, chop);
+  // Logger.log("asCurrency_(%s, %s, %s)", currency, amount, chop);
   
   var mycurrency = currency;
   var matches;
