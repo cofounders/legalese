@@ -26,8 +26,10 @@ Should we provide any accounting or financial services, the Directors will be ul
 Our fees are annexed under <i>Schedule of Fees.</i>
 
 Yours faithfully,
-<?= data.parties.corporate_secretary[0].name ?>
 </para_1>
+<? for (var i = 0; i < data.parties.corporate_secretary.length; i++) { ?>
+  <?!= include("inc_signature", data, data.parties.corporate_secretary[i]) ?>
+<? } ?>
 
 <chapter_header>Acceptance of Terms</chapter_header>
 <para_1>We, the promoters of the Company, hereby confirm our understanding of the arrangements as stated above.</para_1>
