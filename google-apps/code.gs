@@ -1713,6 +1713,8 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   clauseroot = [];
   clausetext2num = {};
   newTemplate.data.signature_comment = null;
+  try       { Logger.log("fillTemplate_: parties = %s", sourceTemplate.data.parties.map(function (p) { return p.name } ) ); }
+  catch (e) { Logger.log("fillTemplate_: ERROR while showing parties: %s", e); }
   var filledHTML = newTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
   var xmlfile;
 
