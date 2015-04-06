@@ -5,6 +5,7 @@
 
 <?= data.parties.corporate_secretary[0].idtype ?> <span_ucnum><?= data.parties.corporate_secretary[0].id ?></span_ucnum>
 <?= data.parties.corporate_secretary[0].address ?>
+
 <?= data.parties.corporate_secretary[0].email ?>
 </Firstpage_Sidebar>
 <Story_Main>
@@ -24,7 +25,6 @@ Our primary duty as your secretarial agent is to ensure that your company’s se
 
 <centered></centered>
 <centered>SCOPE OF WORK</centered>
-<centered></centered>
 
 <numbered_1_para>Filing of name approval application with ACRA;
 Filing of Company Registration with ACRA;
