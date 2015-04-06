@@ -15,10 +15,10 @@
 
 </basic_para>
 <para_1>Dear Sirs,</para_1>
-<para_1>This letter is to confirm our understanding of the terms of our engagement and the nature and limits of the services we will provide to <?= data.company.name ?> (the "Company") and its promoters <?= commaAnd(data.parties.founder) ?> (the "<?= plural(data.parties.founder, "Founder") ?>").</para_1>
+<para_1>This letter is to confirm our understanding of the terms of our engagement and the nature and limits of the services we will provide to <?= data.company.name ?> (the "Company") and its promoters <?= commaAnd(data.parties.founder, "name") ?> (the "<?= plural(data.parties.founder, "Founder") ?>").</para_1>
 <para_2>We will facilitate the incorporation of the Company.
 We will act as the Company Secretary.
-We will record and file as needed the resolutions of the members and the directors.
+We will record and file as needed resolutions of the members and directors.
 We will issue share certificates as instructed by the directors.
 The Directors will be responsible for both the accuracy and completeness of the information supplied to us.
 Should we provide any accounting or financial services, the Directors will be ultimately responsible for the financial information compiled by us. This includes the maintenance of adequate accounting records and internal controls and the selection and application of appropriate accounting policies. Our engagement cannot be relied upon to disclose the existence of fraud, errors, or illegal acts. Any financial statements will be prepared in accordance with Financial Reporting Standards. Any known departures from this framework will be disclosed within the financial statements.</para_2>
