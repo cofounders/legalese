@@ -47,7 +47,7 @@ and we confirm that all is in order. </numbered_2_para>
 </Table>
 </para_1>
 
-<numbered_1_para>Kindly proceed with the lodgment of the returns on allotment of shares with the <?= data.parties.state_regulator[0].name ?>.</numbered_1_para>
+<numbered_1_para>Kindly proceed with the lodgment of the Return of Allotment of Shares with the <?= data.parties.state_regulator[0].name ?>.</numbered_1_para>
 
 <numbered_1_para>Kindly also issue the share certificates to the <?= plural(data.parties.new_investor, "investor") ?>.</numbered_1_para>
 

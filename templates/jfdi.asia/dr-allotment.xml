@@ -41,7 +41,7 @@ data.parties.new_investor.map(function(p){return p.name}))) ?>,</para_2>
 <a_left_sidehead>Share Certificates to be Issued</a_left_sidehead>
 <para_1>That the Common Seal of the Company be affixed in accordance with the Company's Articles of Association to the share certificate to be issued to the aforesaid <?= plural(data.parties.new_investor, "investor") ?>.</para_1>
 
-<?!= include("inc_authority_to_bizfile", data, {what:"aforesaid allotment"}) ?>
+<?!= include("inc_authority_to_bizfile", data, {what:"Return of Allotment of Shares"}) ?>
 
 <?!= include("inc_dr_end", data, { date: data.agreement_date } ) ?>
 
