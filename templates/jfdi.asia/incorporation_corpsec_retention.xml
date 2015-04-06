@@ -37,7 +37,7 @@ Yours faithfully,
   <?!= include("inc_signature", data, data.parties.founder[i]) ?>
 <? } ?>
 
-<schedule_header>Schedule of Fees</chapter_header>
+<schedule_header>Schedule of Fees</schedule_header>
 
 <table_enclosing_para>
 <Table aid:table="table" aid:tcols="3" aid:trows="3" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
