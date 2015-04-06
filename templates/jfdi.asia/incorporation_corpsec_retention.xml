@@ -1,0 +1,60 @@
+<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" templateSpec="singlepage.indt">
+<letterhead><?= data.parties.corporate_secretary[0].name ?></letterhead>
+<Firstpage_Sidebar>
+<?= data.parties.corporate_secretary[0].name ?>
+
+<?= data.parties.corporate_secretary[0].idtype ?> <span_ucnum><?= data.parties.corporate_secretary[0].id ?></span_ucnum>
+<?= data.parties.corporate_secretary[0].address ?>
+</Firstpage_Sidebar>
+<Story_Main>
+<resolution_title>Retention of Corporate Secretary</resolution_title>
+<basic_para>
+<?= data.company.name ?>
+
+<?= data.company.address ?>
+
+</basic_para>
+<para_1>Dear Sirs,</para_1>
+<para_1>This letter is to confirm our understanding of the terms of our engagement and the nature and limits of the services we will provide to <?= data.company.name ?> (the "Company") and its promoters <?= commaAnd_(data.parties.founder) ?> (the "<?= plural(data.parties.founder, "Founder") ?>").</para_1>
+<para_2>We will facilitate the incorporation of the Company.
+We will act as the Company Secretary.
+We will record and file as needed the resolutions of the members and the directors.
+We will issue share certificates as instructed by the directors.
+The Directors will be responsible for both the accuracy and completeness of the information supplied to us.
+Should we provide any accounting or financial services, the Directors will be ultimately responsible for the financial information compiled by us. This includes the maintenance of adequate accounting records and internal controls and the selection and application of appropriate accounting policies. Our engagement cannot be relied upon to disclose the existence of fraud, errors, or illegal acts. Any financial statements will be prepared in accordance with Financial Reporting Standards. Any known departures from this framework will be disclosed within the financial statements.
+This engagement will continue unless terminated, amended, or superseded in writing.
+Our fees are annexed under <i>Schedule of Fees.</i></para_2>
+
+<para_1>Yours faithfully,
+<?= data.parties.corporate_secretary[0].name ?>
+</para_1>
+
+<chapter_header override="startParagraph=StartParagraph.ANYWHERE">Acceptance of Terms</chapter_header>
+<para_1>We, the promoters of the Company, hereby confirm our understanding of the arrangements as stated above.</para_1>
+<? for (var i = 0; i < data.parties.founder.length; i++) {
+  <?!= include("inc_signature", data, data.parties.founder[i]) ?>
+<? } ?>
+
+<schedule_header>Schedule of Fees</chapter_header>
+
+<table_enclosing_para>
+<Table aid:table="table" aid:tcols="3" aid:trows="3" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
+<Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Num</cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="220" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Item</cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="48" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Fee</cell_c></Cell>
+
+<Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>1/cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="220" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Incorporation of private limited company&#8232;(this includes standard M&amp;A, common seal, minute book and share certificates)</cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="48" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>$865</cell_c></Cell>
+
+<Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>2</cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="220" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Secretarial fee per annum</cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="48" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>$720</cell_c></Cell>
+
+</Table>
+</table_enclosing_para>
+
+</Story_Main>
+<Bottom_Box delete_if_empty="true">
+</Bottom_Box>
+</Root>
