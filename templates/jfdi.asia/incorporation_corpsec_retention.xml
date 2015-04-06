@@ -54,26 +54,26 @@ Holding of annual general meeting which has to be held once every calendar year 
 <Table aid:table="table" aid:tcols="3" aid:trows="6" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/">
 <Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Num</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="260" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Item</cell_c></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="48" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Fee</cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="120" aid:crows="1" aid:table="cell" aid5:cellstyle="border_none"><cell_c>Fee</cell_c></Cell>
 
 <Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>1</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="260" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>Incorporation of private limited company&#8232;(this includes standard M&amp;A, common seal, minute book and share certificates)</cell_c></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="48" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>$865</cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="120" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>$865</cell_c></Cell>
 
 <Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>2</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="260" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>Secretarial fee, first year&#8232;(startup discount 50% off usual price)</cell_c></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="48" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>$360&#8232;billed upon incorporation</cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="120" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>$360&#8232;billed upon incorporation</cell_c></Cell>
 
 <Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>3</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="260" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>Secretarial fee, subsequent years</cell_c></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="48" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>$60 per month&#8232;billed quarterly</cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="120" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>$60 per month&#8232;billed quarterly</cell_c></Cell>
 
 <Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>4</cell_c></Cell>
 <Cell aid:ccols="1" aid:ccolwidth="260" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>Nominee Director&#8232;(<span_smallcaps>Optional</span_smallcaps> -- only if all founders are not resident in Singapore and do not have a local friend willing to perform this service.)</cell_c></Cell>
-<Cell aid:ccols="1" aid:ccolwidth="48" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>$3,600 per year&#8232;billed in advance; subject to separate contract and letter of indemnity</cell_c></Cell>
+<Cell aid:ccols="1" aid:ccolwidth="120" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>$3,600 per year&#8232;billed in advance; subject to separate contract and letter of indemnity</cell_c></Cell>
 
 <Cell aid:ccols="1" aid:ccolwidth="24" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>5</cell_c></Cell>
-<Cell aid:ccols="2" aid:ccolwidth="308" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>Disbursements and out-of-pocket expenses such as filing fees with ACRA, stamp duties paid on transfer of shares, transport, photocopy charges and postages will be billed separately.</cell_c></Cell>
+<Cell aid:ccols="2" aid:ccolwidth="380" aid:crows="1" aid:table="cell" aid5:cellstyle="horizontal_hairline"><cell_c>Disbursements and out-of-pocket expenses such as filing fees with ACRA, stamp duties paid on transfer of shares, transport, photocopy charges and postages will be billed separately.</cell_c></Cell>
 
 </Table>
 </table_enclosing_para>
