@@ -15,7 +15,7 @@
 
 </basic_para>
 <para_1>Dear Sirs,</para_1>
-<para_1>This letter is to confirm our understanding of the terms of our engagement and the nature and limits of the services we will provide to <?= data.company.name ?> (the "Company") and its promoters <?= commaAnd_(data.parties.founder) ?> (the "<?= plural(data.parties.founder, "Founder") ?>").</para_1>
+<para_1>This letter is to confirm our understanding of the terms of our engagement and the nature and limits of the services we will provide to <?= data.company.name ?> (the "Company") and its promoters <?= commaAnd(data.parties.founder) ?> (the "<?= plural(data.parties.founder, "Founder") ?>").</para_1>
 <para_2>We will facilitate the incorporation of the Company.
 We will act as the Company Secretary.
 We will record and file as needed the resolutions of the members and the directors.
