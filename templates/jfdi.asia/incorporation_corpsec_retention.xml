@@ -29,7 +29,7 @@ Yours faithfully,
 <?= data.parties.corporate_secretary[0].name ?>
 </para_1>
 
-<chapter_header override="startParagraph=StartParagraph.ANYWHERE">Acceptance of Terms</chapter_header>
+<chapter_header>Acceptance of Terms</chapter_header>
 <para_1>We, the promoters of the Company, hereby confirm our understanding of the arrangements as stated above.</para_1>
 <? for (var i = 0; i < data.parties.founder.length; i++) { ?>
   <?!= include("inc_signature", data, data.parties.founder[i]) ?>
