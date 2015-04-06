@@ -21,11 +21,11 @@ We will act as the Company Secretary.
 We will record and file as needed the resolutions of the members and the directors.
 We will issue share certificates as instructed by the directors.
 The Directors will be responsible for both the accuracy and completeness of the information supplied to us.
-Should we provide any accounting or financial services, the Directors will be ultimately responsible for the financial information compiled by us. This includes the maintenance of adequate accounting records and internal controls and the selection and application of appropriate accounting policies. Our engagement cannot be relied upon to disclose the existence of fraud, errors, or illegal acts. Any financial statements will be prepared in accordance with Financial Reporting Standards. Any known departures from this framework will be disclosed within the financial statements.
-This engagement will continue unless terminated, amended, or superseded in writing.
-Our fees are annexed under <i>Schedule of Fees.</i></para_2>
+Should we provide any accounting or financial services, the Directors will be ultimately responsible for the financial information compiled by us. This includes the maintenance of adequate accounting records and internal controls and the selection and application of appropriate accounting policies. Our engagement cannot be relied upon to disclose the existence of fraud, errors, or illegal acts. Any financial statements will be prepared in accordance with Financial Reporting Standards. Any known departures from this framework will be disclosed within the financial statements.</para_2>
+<para_1>This engagement will continue unless terminated, amended, or superseded in writing.
+Our fees are annexed under <i>Schedule of Fees.</i>
 
-<para_1>Yours faithfully,
+Yours faithfully,
 <?= data.parties.corporate_secretary[0].name ?>
 </para_1>
 
