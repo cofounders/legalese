@@ -41,9 +41,7 @@ This engagement will continue unless terminated, amended, or superseded in writi
 </Table>
 </table_enclosing_para>
 
-
-Yours faithfully,
-</para_1>
+<para_1>Yours faithfully,</para_1>
 <? for (var i = 0; i < data.parties.corporate_secretary.length; i++) { ?>
   <?!= include("inc_signature", data, data.parties.corporate_secretary[i]) ?>
 <? } ?>
