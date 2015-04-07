@@ -11,6 +11,6 @@
   <CoverMid><?= data.director.idtype ?>:</CoverMid>
   <CoverMid><span_ucnum><?= data.director.id ?></span_ucnum></CoverMid>
   <CoverMid><?= data.director.state ?></CoverMid>
-  <CoverMid><?= getOrdinalFor_(mydate.split(" ")[1],1) ?></CoverMid>
-  <CoverMid><?= mydate.split(" ").splice(2,2).join(", ") ?></CoverMid>
+  <CoverMid><?= getOrdinalFor_(data._todays_date.split(" ")[1],1) ?></CoverMid>
+  <CoverMid><?= data._todays_date.split(" ").splice(2,2).join(", ") ?></CoverMid>
 </Root>
