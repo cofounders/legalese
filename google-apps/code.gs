@@ -1106,7 +1106,7 @@ function availableTemplates_() {
 	},
 	{ name:"jfdi_articles_table_a", title:"Articles of Association",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_02_articles_table_a.xml",
-	  parties:{to:["founder", "investor"], cc:["corporate_secretary"]},
+	  parties:{to:[], cc:["corporate_secretary"]},
 	},
 	{ name:"jfdi_memorandum", title:"Memorandum of Association",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_01_memorandum.xml",
@@ -1713,8 +1713,8 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   clauseroot = [];
   clausetext2num = {};
   newTemplate.data.signature_comment = null;
-  try       { Logger.log("fillTemplate_: parties = %s", sourceTemplate.data.parties.map(function (p) { return p.name } ) ); }
-  catch (e) { Logger.log("fillTemplate_: ERROR while showing parties: %s", e); }
+  try       { Logger.log("fillTemplate_: parties = %s", newTemplate.data.parties.map(function (p) { return p.map(function(pp) { pp.name }) } )); }
+  catch (e) { Logger.log("fillTemplate_: ERROR while showing parties: %s ... %s", e, newTemplate.data); }
   var filledHTML = newTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
   var xmlfile;
 
@@ -2253,7 +2253,7 @@ function uploadAgreement(sheet) {
 	var cc_list   = rcpts[1];
 
 	if (emailInfo.length == 0) {
- 	  SpreadsheetApp.getUi().alert("There doesn't seem to be anybody for us to mail this to! Check the Legalese Status column.");
+ 	  // SpreadsheetApp.getUi().alert("no recipients for " + multiTitles(templates, entity) + " ... skipping.");
  	  return "no recipients!";
 	}
 	
@@ -2608,11 +2608,13 @@ function cloneSpreadsheet_() {
   for (var i = 0; i < (insertions+activeRange.getValues().length); i++) {
 	Logger.log("cloneSpreadsheet_: i = %s; activeRange.getValues().length = %s", i, activeRange.getValues().length);
 	
-	var myRow = mySheet.getRange(activeRange.getRow()+i, 1, 1, 10);
+	var myRow = mySheet.getRange(activeRange.getRow()+i, 1, 1, mySheet.getLastColumn());
 
-	// we expect column A to be literal txt "clone"
-	// column B will be the source spreadsheet to clone
-	// column C will be the new title of the spreadsheet
+	// specification:
+	// column A: literal txt "clone"
+	// column B: source spreadsheet to clone either as a URL or a =hyperlink formula
+	// column C: the new title of the spreadsheet
+	// column D, E, ...: the names of the sheets that should be copied. By default, only Entities will be cloned.
 	// then we reset column A and B to the the ssid and the sheetid
 	
 	Logger.log("you are interested in row " + myRow.getValues()[0]);
@@ -2634,9 +2636,26 @@ function cloneSpreadsheet_() {
 	DriveApp.getRootFolder().removeFile(SSfile);
 	Logger.log("moved to legalese root folder");
 
-	var sheets = copySS.getSheets().filter(function(s){return ! s.getSheetName().toLowerCase().match(/entities/)});
+	// columns D onward specify the names of desired sheets
+	// if user did not specify any sheets then we assume that all sheets were desired
+	// if user did specify then we delete all copied sheets which were not specified
+	var specified = myRow.getValues()[0].splice(3).filter(function(cellvalue){return cellvalue != undefined && cellvalue.length});
+	Logger.log("user specified desired sheets %s", specified);
+	if (specified.length) {
+	  var sheets = copySS.getSheets();
+	  for (var si = 0; si < sheets.length; si++) {
+		if (specified.indexOf(sheets[si].getSheetName()) == -1) { // unwanted
+		  copySS.deleteSheet(sheets[si]);
+		}
+	  }
+	}
+	mySheet.getRange(myRow.getRowIndex(),4,1,myRow.getLastColumn()).clearContent();
+	
+	// which sheets are left?
+	sheets = copySS.getSheets();
+	Logger.log("copied spreadsheet now has %s agreement sheets: %s", sheets.length, sheets.map(function(s){return s.getSheetName()}));
 
-	Logger.log("copied spreadsheet has %s agreement sheets: %s", sheets.length, sheets);
+	var inner_insertions = 0;
 	
 	for (var j = 0; j < sheets.length; j++) {
 	  var sheet = sheets[j];
@@ -2646,8 +2665,10 @@ function cloneSpreadsheet_() {
 	  if (j == 0) newRow = myRow
 	  else {
 		Logger.log("inserting a new row after index %s", myRow.getRowIndex());
-		newRow = mySheet.insertRowAfter(myRow.getRowIndex()).getRange(myRow.getRowIndex()+1,1,1,5);
-		insertions++;
+		newRow = mySheet
+		  .insertRowAfter(myRow.getRowIndex() + inner_insertions)
+		  .getRange(myRow.getRowIndex()+inner_insertions+1,1,1,5);
+		inner_insertions++;
 	  }
 		
 	  newRow.getCell(1,1).setValue(copySS.getId());
@@ -2660,6 +2681,7 @@ function cloneSpreadsheet_() {
 								   +sheet.getParent().getName() + " / " + sheet.getName()
 								   +"\")");
 	}
+	insertions += inner_insertions;
   }
 }
 
