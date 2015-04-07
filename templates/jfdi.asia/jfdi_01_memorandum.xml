@@ -61,7 +61,7 @@ I, the sole shareholder whose name, citizenship, and address are hereunto subscr
  hereby set <?= plural(data.parties.shareholder, "my hand", "our hands") ?>:---</para_1>
 
 	<? for (var i = 0; i < data.parties.shareholder.length; i++) { ?>
-	<?!= include("inc_signature", data, data.parties.shareholder[i], { no_addnewline:i==(data.parties.shareholder.length-1) } ) ?>
+	<?!= include("inc_signature", data, data.parties.shareholder[i] ) ?>
 	<? } ?>
 
 <?!= include("jfdi_articles_2015", data) ?>
