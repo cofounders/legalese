@@ -115,7 +115,7 @@ a perpetual, irrevocable, royalty-free, exclusive, worldwide license of the Prev
 <? if (data.significant_corporate_matters) { ?>
 <b_left_sidehead_nonum>Significant Corporate Matters</b_left_sidehead_nonum>
 
-<numbered_1_para>These matters may not be acted upon by a Director or officer of the Company or by any of the parties without the authority of an ordinary resolution passed by the members of the Company:</numbered_1_para>
+<numbered_1_para>These matters may not be acted upon by a Director or officer of the Company or by any of the parties without the authority of <?= data.scm_authority ?>:</numbered_1_para>
 <numbered_2_para>the Company ceasing to carry on the Business or a substantial part of the Business, or a decision to wind up or dissolve the Company;
 the merger of all or a significant part of the Business or the Company with any other entity;
 any reorganisation, reclassification, reconstruction, consolidation or subdivision of the share capital of the Company or the creation of different classes of securities in the capital of the Company or the introduction of new share capital into the Company;
