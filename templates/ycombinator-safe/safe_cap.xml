@@ -19,21 +19,19 @@ Cap Only, No Discount</cover_title>
 </Firstpage_Sidebar>
 <Story_Main>
 <?= include("inc_disclaimer", data, { flavor: data.company.state } ) ?>
-<para_1><span_smallcpas>This certifies that</span_smallcpas> in exchange for the payment by <?= data.investor.name ?>
+<para_1><span_smallcaps>This certifies that</span_smallcaps> in exchange for the payment by <?= data.investor.name ?>
  (the "Investor") of <?= data.investor.commitment ?>
  (the "Purchase Amount") on or about <?= data.agreement_date ?>
 , <?= data.company.name ?>, a <?= data.company.state ?>
  corporation (the "Company"), hereby issues to the Investor the right to certain shares of the Company's capital stock, subject to the terms set forth below.
-The "Valuation Cap" is <?= data.pre_money_valuation?>.  See Section <xref to="definitions"> for certain additional defined terms. </p>
+The "Valuation Cap" is <?= data.pre_money_valuation?>.  See Section <xref to="definitions"> for certain additional defined terms.</xref>
 <a_left_sidehead xname="events">Events </a_left_sidehead>
 <numbered_2_firstbold xname="equity_financing">>Equity Financing. If there is an Equity Financing before the expiration or termination of this instrument, the Company will automatically issue to the Investor either: </numbered_2_firstbold>
 <numbered_3_para>a number of shares of Standard Preferred Stock equal to the Purchase Amount divided by the price per share of the Standard Preferred Stock, if the pre-money valuation is less than or equal to the Valuation Cap; or </numbered_3_para>
 <numbered_3_para>a number of shares of Safe Preferred Stock equal to the Purchase Amount divided by the Safe Price, if the pre-money valuation is greater than the Valuation Cap. </numbered_3_para>
 <para_1>In connection with the issuance of Standard Preferred Stock or Safe Preferred Stock, as applicable, by the Company to the Investor pursuant to this Section <xref to="equity_financing">: </para_1>
 <numbered_3_para>The Investor will execute and deliver to the Company all transaction documents related to the Equity Financing; provided, that such documents are the same documents to be entered into with the purchasers of Standard Preferred Stock, with appropriate variations for the Safe Preferred Stock if applicable, and provided further, that such documents have customary exceptions to any drag-along applicable to the Investor, including, without limitation, limited representations and warranties and limited liability and indemnification obligations on the part of the Investor; and</numbered_3_para>
-<p> </p>
 <numbered_3_para>The Investor and the Company will execute a Pro Rata Rights Agreement, unless the Investor is already included in such rights in the transaction documents related to the Equity Financing. </numbered_3_para>
-<p> </p>
 <numbered_2_firstbold>
 Liquidity Event.  If there is a Liquidity Event before the expiration or termination of this instrument, the Investor will, at its option, either</numbered_2_firstbold>
 <numbered_3_para xname="cash_payment">
@@ -77,7 +75,7 @@ Termination.  This instrument will expire and terminate (without relieving the C
 <numbered_2_para>In the event any one or more of the provisions of this instrument is for any reason held to be invalid, illegal or unenforceable, in whole or in part or in any respect, or in the event that any one or more of the provisions of this instrument operate or would prospectively operate to invalidate this instrument, then and in any such event, such provision(s) only will be deemed null and void and will not affect any other provision of this instrument and the remaining provisions of this instrument will remain operative and in full force and effect and will not be affected, prejudiced, or disturbed thereby. </numbered_2_para>
 <numbered_2_para>All rights and obligations hereunder will be governed by the laws of the State of [Governing Law Jurisdiction], without regard to the conflicts of law provisions of such jurisdiction. </numbered_2_para>
 <chapter_header>Signatures </chapter_header>
-<p>IN WITNESS WHEREOF, the undersigned have caused this instrument to be duly executed and delivered. </p>
+<para_1>IN WITNESS WHEREOF, the undersigned have caused this instrument to be duly executed and delivered.</para_1>
 
 <?!= include("inc_signature", data, data.investor) ?>
 <?!= include("inc_signature", data, data.company) ?>
