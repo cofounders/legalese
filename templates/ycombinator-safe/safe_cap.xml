@@ -24,7 +24,7 @@ Cap Only, No Discount</cover_title>
  (the "Purchase Amount") on or about <?= data.agreement_date ?>
 , <?= data.company.name ?>, a <?= data.company.state ?>
  corporation (the "Company"), hereby issues to the Investor the right to certain shares of the Company's capital stock, subject to the terms set forth below.
-The "Valuation Cap" is <?= data.pre_money_valuation?>.  See Section <xref to="definitions" /> for certain additional defined terms.</xref>
+The "Valuation Cap" is <?= data.pre_money_valuation?>.  See Section <xref to="definitions" /> for certain additional defined terms.</para_1>
 <a_left_sidehead xname="events">Events </a_left_sidehead>
 <numbered_2_firstbold xname="equity_financing">>Equity Financing. If there is an Equity Financing before the expiration or termination of this instrument, the Company will automatically issue to the Investor either: </numbered_2_firstbold>
 <numbered_3_para>a number of shares of Standard Preferred Stock equal to the Purchase Amount divided by the price per share of the Standard Preferred Stock, if the pre-money valuation is less than or equal to the Valuation Cap; or </numbered_3_para>
