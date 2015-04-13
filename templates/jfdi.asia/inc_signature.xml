@@ -1,6 +1,8 @@
 <? var rows = [];
   if (data._include.party_type == "company") { rows = [["name"], ["idtype","id"], ["_email_firstline"], ["signatory_name"]]; }
   else                                       { rows = [["name"], ["idtype","id"], ["_email_firstline"],    ];             }
+  Logger.log("inc_signature(): running.");
+  Logger.log("inc_signature(): input entity: %s", data._include.party_type.name);
   var rowcount = rows.length;
   if (data.signature_comment != undefined) { rowcount++ }
 ?>
