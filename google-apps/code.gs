@@ -529,7 +529,8 @@ function readRows_(sheet, entitiesByName) {
 	else 	Logger.log("readRows: row " + i + ": processing row "+row[0]);
     if      (row[0] == "KEY TERMS" ||
 			 row[0] == "TERMS") { section="TERMS"; continue; }
-    else if (row[0] == "IGNORE") { section = row[0]; continue; }
+    else if (row[0] == "IGNORE")    { section = row[0]; continue; }
+    else if (row[0] == "CAP TABLE") { section = row[0]; continue; }
     else if (row[0] == "INCLUDE") {
 	  // the typical startup agreement sheet INCLUDEs its Entities sheet which INCLUDEs JFDI.2014's Entities which INCLUDEs JFDI.Asia's Entities
 	  var include_sheet;
@@ -623,6 +624,8 @@ function readRows_(sheet, entitiesByName) {
 	  var relation  = asvar_(row[0]);
 	  var entityname    = row[1];
 
+	  if (relation == "ignore") { Logger.log("ignoring %s line %s", relation, row[1]); continue }
+
 	  roles[relation] = roles[relation] || [];
 
 	  var matches;
@@ -636,7 +639,7 @@ function readRows_(sheet, entitiesByName) {
 		
 		Logger.log("readRows(%s):         ROLES: merging role %s = %s", sheet.getSheetName(), relation, to_import);
 		if (! (roles[to_import] && roles[to_import].length)) {
-		  Logger.log("readRows(%s):         ERROR: roles[%s] is useless to us", to_import);
+		  Logger.log("readRows(%s):         ERROR: roles[%s] is useless to us", sheet.getSheetName(), to_import);
 		  continue;
 		}
 		else {
@@ -671,8 +674,13 @@ function readRows_(sheet, entitiesByName) {
 					 roleEntities: function(roleName) { return this.roles[roleName].map(function(n){return entitiesByName[n]}) }
 				   };
       var entity_formats = sheet.getRange(i+1,1,1,row.length).getNumberFormats();
-	  toreturn._last_entity_row = i;
 
+      var coreRelation = asvar_(row[0]);
+	  if (coreRelation == undefined || ! coreRelation.length) { continue }
+	  if (coreRelation.toLowerCase() == "ignore") { Logger.log("ignoring %s line %s", coreRelation, row[1]); continue }
+
+	  toreturn._last_entity_row = i;
+	  
       for (var ki in entityfields) {
         if (ki < 1) { continue }
         var k = entityfields[ki];
@@ -681,12 +689,9 @@ function readRows_(sheet, entitiesByName) {
 		entity["_format_" + k] = entity_formats[0][ki];
 		if (v && v.length) { entity["_"+k+"_firstline"] = v.replace(/\n.*/g, ""); }
       }
-      var coreRelation = asvar_(row[0]);
-	  if (coreRelation == undefined || ! coreRelation.length) { continue }
 
 	  // all coreRelation relations in the ENTITIES section are defined relative to the principal, which is hardcoded as the first Company to appear
 	  if (coreRelation == "company" && principal == undefined) { principal = entity }
-	  if (coreRelation.toLowerCase() == "ignore") { Logger.log("ignoring %s line %s", coreRelation, entity.name); continue }
 
   // connect up the parties based on the relations learned from the ROLES section.
   // this establishes PRINCIPAL.roles.RELATION_NAME = [ party1, party2, ..., partyN ]
@@ -800,7 +805,6 @@ function getPartyCells_(sheet, readrows, party) {
   Logger.log("getPartyCells: looking to return a dict of entityfieldname to cell, for party %s", party.name);
   Logger.log("getPartyCells: party %s comes from spreadsheet row %s", party.name, party._spreadsheet_row);
   Logger.log("getPartyCells: the fieldname map looks like this: %s", readrows._entityfields);
-  Logger.log("getPartyCells: so the cell that matters for legalese_status should be row %s, col %s", party._spreadsheet_row, readrows._entityfields.indexOf("legalese_status")+1);
   Logger.log("getPartyCells: calling (getRange %s,%s,%s,%s)", party._spreadsheet_row, 1, 1, readrows._entityfields.length+1);
   var range = sheet.getRange(party._spreadsheet_row, 1, 1, readrows._entityfields.length+1);
   Logger.log("pulled range %s", JSON.stringify(range.getValues()));
@@ -1068,6 +1072,16 @@ function availableTemplates_() {
 //	parties:{to:["director"], cc:["corporate_secretary"]},
 //	nocache:true,
 //  },
+	{ name:"inc_disclaimer", title:"top securities disclaimer",
+	   url:baseUrl + "templates/ycombinator-safe/inc_disclaimer.xml",
+	  nocache:true,
+	},
+	{ name:"safe", title:"Y Combinator SAFE",
+	   url:baseUrl + "templates/ycombinator-safe/safe_cap.xml",
+	  parties:{to:["company"], cc:["corporate_secretary"]},
+	  explode:"investor",
+	  nocache:true,
+	},
 	{ name:"incorporation_corpsec_retention", title:"Retention of Corporate Secretary",
 	   url:baseUrl + "templates/jfdi.asia/incorporation_corpsec_retention.xml",
 	  parties:{to:["corporate_secretary", "founder"], cc:["investor"]},
@@ -1097,7 +1111,7 @@ function availableTemplates_() {
 	{ name:"jfdi_shareholders_agreement", title:"Shareholders' Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_04_shareholders_agreement.xml",
 	  parties:{to:["founder", "existing_investor", "company", "investor"], cc:["corporate_secretary"]},
-	  // nocache:true,
+	  nocache:true,
 	},
 	{ name:"jfdi_investment_agreement", title:"JFDI Investment Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_03_convertible_note_agreement.xml",
@@ -1108,9 +1122,10 @@ function availableTemplates_() {
 	   url:baseUrl + "templates/jfdi.asia/jfdi_02_articles_table_a.xml",
 	  parties:{to:[], cc:["corporate_secretary"]},
 	},
-	{ name:"jfdi_memorandum", title:"Memorandum of Association",
+	{ name:"jfdi_memorandum", title:"Memorandum and Articles of Association",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_01_memorandum.xml",
 	  parties:{to:["shareholder"], cc:["corporate_secretary"]},
+	  nocache:true,
 	},
 	{ name:"inc_cover_2_parties", title:"JFDI Cover Page with 2 Parties",
 	   url:baseUrl + "templates/jfdi.asia/inc_cover_2_parties.xml",
@@ -1560,7 +1575,14 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 //	  Logger.log("parties[partytype] = %s", parties[partytype]);
 	  for (var parties_k in parties[partytype]) {
 		var entity = this.readRows.entitiesByName[parties[partytype][parties_k].name];
-		Logger.log("docsetEmails.explode(): working with %s %s", partytype, entity.name);
+		Logger.log("docsetEmails.explode(): working with %s %s %s", partytype, entity.name, sourceTemplate.name);
+		if (entity.legalese_status
+			&& entity.legalese_status.match(/skip explode/)
+			&& entity.legalese_status.match(sourceTemplate.name)
+		   ) {
+		  Logger.log("docsetEmails.explode(%s): legalese status says %s", entity.name, entity.legalese_status);
+		  continue;
+		}
 		var rcpts = this.Rcpts([sourceTemplate], entity);
 		callback([sourceTemplate], entity, rcpts);
 	  }
@@ -1608,6 +1630,7 @@ function fillTemplates(sheet) {
   templatedata.clauses = {};
   templatedata._config = config;
   templatedata._todays_date = Utilities.formatDate(new Date(), sheet.getParent().getSpreadsheetTimeZone(), "d MMMM YYYY");
+  templatedata._todays_date_wdmy = Utilities.formatDate(new Date(), sheet.getParent().getSpreadsheetTimeZone(), "EEEE d MMMM YYYY");
 
   var entityNames = []; for (var eN in readRows.entityByName) { entityNames.push(eN) }
   Logger.log("fillTemplates(%s): got back readRows.entitiesByName=%s",
@@ -1647,6 +1670,7 @@ function fillTemplates(sheet) {
   // the parties{} for a given docset are always the same -- all the defined roles are available
   var parties = roles2parties_(readRows);
   templatedata.parties = parties;
+//  Logger.log("FillTemplates: send: assigning templatedata.parties = %s", templatedata.parties);
   templatedata.company = parties.company[0];
   templatedata._entitiesByName = readRows.entitiesByName;
 
@@ -1657,6 +1681,9 @@ function fillTemplates(sheet) {
 	var sourceTemplate = sourceTemplates[0];
 	var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache);
 	newTemplate.data = templatedata;
+//	Logger.log("buildTemplate: assigning newTemplate.data = %s", templatedata);
+//	Logger.log("buildTemplate: newTemplate.data.parties has length = %s", templatedata.data.parties.length);
+//	Logger.log("FillTemplates: recv: templatedata.parties = %s", templatedata.parties);
 	if (entity) { newTemplate.data.party = newTemplate.data.party || {};
 				  newTemplate.data.party[sourceTemplate.explode] = entity;
 				  newTemplate.data      [sourceTemplate.explode] = entity; }
@@ -1713,8 +1740,6 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
   clauseroot = [];
   clausetext2num = {};
   newTemplate.data.signature_comment = null;
-  try       { Logger.log("fillTemplate_: parties = %s", newTemplate.data.parties.map(function (p) { return p.map(function(pp) { pp.name }) } )); }
-  catch (e) { Logger.log("fillTemplate_: ERROR while showing parties: %s ... %s", e, newTemplate.data); }
   var filledHTML = newTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
   var xmlfile;
 

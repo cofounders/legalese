@@ -108,6 +108,9 @@ to the folder build/indesign2xml
 
 20150310-00:13:33 mengwong@venice:~/non-db-src/legalese/templates/jfdi.asia% perl -ple 's/<\/?i>//g' < ~/non-db-src/legalese/templates/jfdi.asia/rcps\ subscription\ agreement.xml | xml_pp -s record  > jfdi_2014_rcps.xml
 
+20150412-20:25:40 mengwong@venice:~/non-db-src/legalese-gh-pages/templates/ycombinator-safe% perl -ple 's/<\/?i>//g; s/&#8221;/"/g; s/&#8220;/"/g; s/&#8217;/'"'"'/g;  
+' < safe_cap_orig.xml | xml_pp -s record  > safe_cap.xml
+
 blow away all leading spaces
 (replace-regexp "^ *" "" nil (if (and transient-mark-mode mark-active) (region-beginning)) (if (and transient-mark-mode mark-active) (region-end)))
 
