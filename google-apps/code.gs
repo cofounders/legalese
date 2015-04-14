@@ -1054,8 +1054,8 @@ function uploadOtherAgreements_() {
 function availableTemplates_() {
   // return a bunch of URLs
 
-  var baseUrl = "http://www.legalese.io/";
   var baseUrl = "http://www.mengwong.com/legalese.io/";
+  var baseUrl = "http://www.legalese.io/";
   
   var availables = [
 
@@ -1085,7 +1085,6 @@ function availableTemplates_() {
 	{ name:"incorporation_corpsec_retention", title:"Retention of Corporate Secretary",
 	   url:baseUrl + "templates/jfdi.asia/incorporation_corpsec_retention.xml",
 	  parties:{to:["corporate_secretary", "founder"], cc:["investor"]},
-	  nocache:true,
 	},
 	{ name:"jfdi_articles_2015", title:"JFDI Articles",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_articles_2015.xml",
@@ -1111,7 +1110,6 @@ function availableTemplates_() {
 	{ name:"jfdi_shareholders_agreement", title:"Shareholders' Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_04_shareholders_agreement.xml",
 	  parties:{to:["founder", "existing_investor", "company", "investor"], cc:["corporate_secretary"]},
-	  nocache:true,
 	},
 	{ name:"jfdi_investment_agreement", title:"JFDI Investment Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_03_convertible_note_agreement.xml",
@@ -1125,7 +1123,6 @@ function availableTemplates_() {
 	{ name:"jfdi_memorandum", title:"Memorandum and Articles of Association",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_01_memorandum.xml",
 	  parties:{to:["shareholder"], cc:["corporate_secretary"]},
-	  nocache:true,
 	},
 	{ name:"inc_cover_2_parties", title:"JFDI Cover Page with 2 Parties",
 	   url:baseUrl + "templates/jfdi.asia/inc_cover_2_parties.xml",
@@ -1276,7 +1273,6 @@ function availableTemplates_() {
   { name:"founder_agreement", title:"JFDI Accelerate Founder Agreement",
 	url:baseUrl + "templates/jfdi.asia/founderagreement.xml",
 	parties:{to:["founder","investor"], cc:["corporate_secretary"]},
-	// nocache:true,
   },
   { name:"dora", title:"DORA",
 	url:baseUrl + "templates/jfdi.asia/dora-signatures.xml",
@@ -1580,7 +1576,7 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 			&& entity.legalese_status.match(/skip explode/)
 			&& entity.legalese_status.match(sourceTemplate.name)
 		   ) {
-		  Logger.log("docsetEmails.explode(%s): legalese status says %s", entity.name, entity.legalese_status);
+		  Logger.log("docsetEmails.explode(%s): SKIPPING because legalese status says %s", entity.name, entity.legalese_status);
 		  continue;
 		}
 		var rcpts = this.Rcpts([sourceTemplate], entity);
@@ -2290,7 +2286,9 @@ function uploadAgreement(sheet) {
 	readmeDoc.appendParagraph("To: " + emailInfo.map(function(party){return party.email}).join(", "));
 	readmeDoc.appendParagraph("CC: " + cc_list.join(", "));
 
+	// the exploded version needs a more specific title so the filenames don't clobber
 	var esTitle = config.echosign.tree.title + " - " + templateTitles_(templates);
+	if (entity) esTitle += " - " + entity.name;
 	
  	var acr = postAgreement_( tDocIds.map(function(t){return { "transientDocumentId": t } }),
  								emailInfo,
