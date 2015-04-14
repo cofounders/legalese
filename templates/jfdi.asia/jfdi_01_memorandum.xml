@@ -55,7 +55,7 @@ I, the sole shareholder whose name, citizenship, and address are hereunto subscr
 </Table>
 </table_enclosing_para>
 
-<para_1>Affirming the above <?= plural(data.parties.shareholder, "I", "we") ?>
+<para_1 override="keepWithNext=1">Affirming the above <?= plural(data.parties.shareholder, "I", "we") ?>
  hereby set <?= plural(data.parties.shareholder, "my hand", "our hands") ?>:---</para_1>
 
 	<? for (var i = 0; i < data.parties.shareholder.length; i++) { ?>
