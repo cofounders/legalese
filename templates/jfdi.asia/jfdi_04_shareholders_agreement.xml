@@ -41,7 +41,7 @@ and to protect the interests of the <?= plural(data.parties.existing_investor, "
 in the spirit of mutual confidence and co-operation, the Parties have agreed to enter into this Agreement on the terms and conditions hereinafter set out. </recitals>
   <para_1>Now it is hereby agreed as follows:- </para_1>
   <a_left_sidehead>Definitions </a_left_sidehead>
-  <para_1>In this Agreement and in the Recitals abovementioned, unless the context otherwise requires:</para_1>
+  <para_1 override="keepWithNext=1">In this Agreement and in the Recitals abovementioned, unless the context otherwise requires:</para_1>
   <definition>Act	means the Singapore Companies Act (Cap. 50) and includes any provision thereof as from time to time modified or re-enacted; </definition>
   <definition>Agreement	(also Shareholders' Agreement) means this Agreement and shall include all modifications and supplements thereto from time to time in force; </definition>
   <definition>Articles	means the Articles of Association of the Company; </definition>
