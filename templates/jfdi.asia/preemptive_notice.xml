@@ -46,11 +46,11 @@ How do pre-emptive rights work? <span_ucnum><?= data.company.short_name ?></span
     <para_1>We are pleased to announce that one of our portfolio startups <?= data.parties.startup[0].name ?> (&#8220;<?= data.parties.startup[0].short_name ?>&#8221;) has received an investment proposition which they intend to accept. They seek to raise up to <?= data.amount_raising ?> by issuing <?= data.security_type ?> at a pre-money valuation of <?= data.pre_money_valuation ?>.</para_1>
     <para_2>For background, please refer to our previous communication, the <i>Investor Newsletter for Holders of Preferred &#8216;A&#8217; Shares Regarding Pre-Emptive Rights</i>.</para_2>
     <para_2>There are two ways for you to participate in this round: directly, or indirectly through <span_ucnum><?= data.company.short_name ?></span_ucnum>.</para_2>
-    <b_left_sidehead>Direct Route to Investment</b_left_sidehead>
+    <b_left_sidehead_nonum>Direct Route to Investment</b_left_sidehead_nonum>
     <para_1>The direct route is simpler; you join the round as an investor like any other. If a deal is not oversubscribed, this is the likely route. Please contact the startup directly to explore this option.</para_1>
-    <b_left_sidehead>Indirect Route to Investment</b_left_sidehead>
+    <b_left_sidehead_nonum>Indirect Route to Investment</b_left_sidehead_nonum>
     <para_1>The indirect route involves JFDI&#8217;s pre-emptive rights. This route is relevant if the round is oversubscribed and it is difficult for you to get in through the direct route. In this case, the startup may not offer as much information for your due diligence as we would prefer. JFDI is a shareholder, not a director, in the company, so the startup is not obligated to send us information beyond financial statements.</para_1>
-    <b_left_sidehead>Next Steps</b_left_sidehead>
+    <b_left_sidehead_nonum>Next Steps</b_left_sidehead_nonum>
     <para_1>If you are not interested in participating, you don't need to do anything. We are required to give you notice, but you are not obligated to take action. You will continue to have rights in future rounds, just at a diluted percentage.</para_1>
     <para_1>If you <i>are</i> interested in <?= data.parties.startup[0].name ?>&#8217;s current round, <i>sign this document</i>. We will follow up to ask much money you want like to commit.</para_1>
     <para_2><b>If the round is not oversubscribed:</b> we will refer you to the startup for direct investment.
