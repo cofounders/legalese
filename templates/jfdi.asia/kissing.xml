@@ -24,29 +24,6 @@ else                                                                           {
 </cover_company_id>
 </CoverTop>
 <CoverMid><?!= include("inc_disclaimer", data, { parastyle:"noindent" })?>
-<para_1>_orig_major_investor_minimum=<?=data._orig_major_investor_minimum?>
-
-_orig_major_investor_minimum == undefined: <?=data._orig_major_investor_minimum==undefined?>
-
-_orig_major_investor_minimum != undefined: <?=data._orig_major_investor_minimum!=undefined?>
-
-_orig_major_investor_minimum != "": <?=data._orig_major_investor_minimum!=""?>
-
-_orig_major_investor_minimum == "": <?=data._orig_major_investor_minimum==""?>
-
-_orig_major_investor_minimum === "": <?=data._orig_major_investor_minimum===""?>
-
-_orig_major_investor_minimum == 0: <?=data._orig_major_investor_minimum==0?>
-
-_orig_major_investor_minimum === 0: <?=data._orig_major_investor_minimum===0?>
-
-_orig_major_investor_minimum.length=<?=data._orig_major_investor_minimum.length?>
-
-major_investor_minimum=<?=data.major_investor_minimum?>
-
-has_major_investor_rights=<?=data.has_major_investor_rights?>
-
-</para_1>
 </CoverMid>
 
 <CoverBottom_Logotype>
