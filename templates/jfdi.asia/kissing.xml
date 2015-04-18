@@ -3,7 +3,7 @@
 if      (data.security_type.match(/convertible (note|debt|loan)|kiss.*debt/i)) { data.kiss_type = "debt"   }
 else if (data.security_type.match(/convertible equity|kiss.*equity/))          { data.kiss_type = "equity" }
 else                                                                           { throw("kissing.xml: unrecognized Security Type term"); } ?>
-<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
+<?!= data.xmlRoot() ?>
 <CoverTop>
 <cover_title>KISS(Sing) Agreement (<?= data.kiss_type ?>)
 </cover_title>
