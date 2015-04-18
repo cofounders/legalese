@@ -823,6 +823,7 @@ function getPartyCells_(sheet, readrows, party) {
 function asvar_(str) {
   if (str == undefined) { return undefined }
   return str.toString()
+	.replace(/'/g, "")    // "investor's things" becomes "investors_things"
 	.replace(/\W/g, "_")
 	.replace(/^_+/, "")
 	.replace(/_+$/, "")
