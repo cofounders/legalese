@@ -42,14 +42,10 @@ else                                                                           {
 
 <Firstpage_Sidebar delete_if_empty="true"></Firstpage_Sidebar>
 <Story_Main><chapter_header>KISS(Sing) Agreement</chapter_header>
-<para_1>This KISS (Singapore) agreement (the "Agreement") is made on <?= data.kissing_agreement_date ?> (the "Date of Issuance") between:</para_1>
+<para_1>This KISS (Singapore) agreement (the "Agreement") is made on <?= data.agreement_date ?> (the "Date of Issuance") between:</para_1>
 <parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
-<? for (var i in data.parties.founder) { ?>
-<parties><?!= include("inc_party", data, data.parties.founder[i]) ?></parties>
-<? } ?>
-<para_1>(the "Founders")</para_1>
 <parties><?!= include("inc_party", data, data.new_investor) ?> (the "Investor")</parties>
-<para_1>The Company, the Founders, and the Investor shall collectively be known as the <b>"Parties"</b> and each, a <b>"Party"</b>.</para_1>
+<para_1>The Company and the Investor shall collectively be known as the <b>"Parties"</b> and each, a <b>"Party"</b>.</para_1>
 <para_1><span_smallcaps>Whereas</span_smallcaps>:</para_1>
 <recitals>The Company is a private company incorporated in Singapore limited by shares.</recitals>
 <recitals>The Investor and the Company desire and wish to enter into this Agreement to record and regulate an investment by the Investor into the Company.</recitals>
@@ -174,10 +170,5 @@ else                                                                           {
 <?!= include("inc_signature", data, data.new_investor) ?>
 <b_left_sidehead_nonum>for and on behalf of the Company <?= data.company.name ?></b_left_sidehead_nonum>
 <?!= include("inc_signature", data, data.company) ?>
-<b_left_sidehead_nonum>The Founders</b_left_sidehead_nonum>
-<? data.signature_comment = "Founder" ?>
-<? for (var i = 0; i < data.parties.founder.length; i++) { ?>
-<?!= include("inc_signature", data, data.parties.founder) ?>
-<? } ?>
 </Story_Main>
 </Root>
