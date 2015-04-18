@@ -3,7 +3,7 @@
 if      (data.security_type.match(/convertible (note|debt|loan)|kiss.*debt/i)) { data.kiss_type = "debt"   }
 else if (data.security_type.match(/convertible equity|kiss.*equity|warrant/i)) { data.kiss_type = "equity" }
 else                                                                           { throw("kissing.xml: unrecognized Security Type term"); } ?>
-<? data.has_major_investor_rights = data._orig_major_investor_minimum.length > 0; ?>
+<? data.has_major_investor_rights = (data._orig_major_investor_minimum != undefined && data._orig_major_investor_minimum != ""); ?>
 <?!= data.xmlRoot() ?>
 <CoverTop>
 <cover_title>KISS(Sing) Agreement (<?= data.kiss_type ?>)
