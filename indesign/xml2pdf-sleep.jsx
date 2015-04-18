@@ -18,6 +18,8 @@ var SLEEP_INTERVAL = 10000; // milliseconds
 
 var still_want_to_run = true;
 
+// make this a per-machine test or env or something.
+var ROOTFOLDER = "~/Google Drive/Legalese Root";
 var ROOTFOLDER = "~/Google Drive/incoming";
 // on the production server, robot@legalese.io syncs Google Drive directly with no Legalese Root folder.
 
@@ -99,7 +101,7 @@ function i_am_running(folder) {
 
 function xml2pdf_main(){
 
-  var interactive = true;
+  var interactive = false;
 
   var xmlFiles = identifyXmlFiles("recurse", rootFolder); // recurse | queryUser
 
