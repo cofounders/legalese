@@ -28,7 +28,11 @@ else                                                                           {
 
 _orig_major_investor_minimum.length=<?=data._orig_major_investor_minimum.length?>
 
-major_investor_minimum=<?=data.major_investor_minimum?></para_1>
+major_investor_minimum=<?=data.major_investor_minimum?>
+
+has_major_investor_rights=<?=data.has_major_investor_rights?>
+
+</para_1>
 </CoverMid>
 
 <CoverBottom_Logotype>
