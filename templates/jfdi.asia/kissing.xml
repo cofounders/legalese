@@ -42,7 +42,7 @@ else                                                                           {
 
 <Firstpage_Sidebar delete_if_empty="true"></Firstpage_Sidebar>
 <Story_Main><chapter_header>KISS(Sing) Agreement</chapter_header>
-<para_1>This KISS (Singapore) agreement (the "Agreement") is made on <?= data.agreement_date ?> (the "Date of Issuance") between:</para_1>
+<para_1>This KISS (Singapore) agreement (the "Agreement") is made on <?= data.kissing_agreement_date || data.investment_agreement_date || data.agreement_date ?> (the "Date of Issuance") between:</para_1>
 <parties><?!= include("inc_party", data, data.company) ?> (the "Company")</parties>
 <parties><?!= include("inc_party", data, data.new_investor) ?> (the "Investor")</parties>
 <para_1>The Company and the Investor shall collectively be known as the <b>"Parties"</b> and each, a <b>"Party"</b>.</para_1>
@@ -55,18 +55,18 @@ else                                                                           {
 <para_1><span_smallcaps>It is hereby agreed</span_smallcaps> as follows:</para_1>
 <a_left_sidehead>Definitions</a_left_sidehead>
 <para_1>In this Agreement, except to the extent that the context otherwise requires, the following terms shall have the meanings set forth below:</para_1>
-<definition>Valuation Cap<aid:tab/>shall mean <?= data.pre_money_valuation ?></definition>
-<definition>Discount<aid:tab/>shall mean <?= data.discount ?>%.</definition>
-<definition>Interest Rate<aid:tab/>shall mean <?= data.interest ?>%.</definition>
-<definition>Purchase Price<aid:tab/>shall mean <?= data.new_investor.commitment ?>.</definition>
-<definition>Maximum Round Size<aid:tab/> shall mean <?= data.amount_raising ?>.</definition>
-<definition>Next Equity Financing<aid:tab/>shall mean the next sale (or series of related sales) by the Company of its Preferred Stock following the Date of Issuance from which the Company receives gross proceeds of <b>not less than <?= data.qualified_financing_proceeds ?></b> (excluding the aggregate amount of securities converted into Common or Preferred Stock in connection with such sale (or series of related sales)).</definition>
-<definition>Conversion Shares<aid:tab/>shall mean:</definition>
+<definition>Valuation Cap	shall mean <?= data.pre_money_valuation ?></definition>
+<definition>Discount	shall mean <?= data.discount ?>%.</definition>
+<definition>Interest Rate	shall mean <?= data.interest ?>%.</definition>
+<definition>Purchase Price	shall mean <?= data.new_investor.commitment ?>.</definition>
+<definition>Maximum Round Size	 shall mean <?= data.amount_raising ?>.</definition>
+<definition>Next Equity Financing	shall mean the next sale (or series of related sales) by the Company of its Preferred Stock following the Date of Issuance from which the Company receives gross proceeds of <b>not less than <?= data.qualified_financing_proceeds ?></b> (excluding the aggregate amount of securities converted into Common or Preferred Stock in connection with such sale (or series of related sales)).</definition>
+<definition>Conversion Shares	shall mean:</definition>
 <definition_list>with respect to a conversion pursuant to Clause <xref to="nef" format="Paragraph Number (firstbold)" />, shares of the Company's Preferred Stock issued in the Next Equity Financing; provided, however, that, at the Company's election, "Conversion Shares" with respect to a conversion pursuant to Clause <xref to="nef" /> shall mean shares of a Shadow Series;</definition_list>
 <definition_list>with respect to a conversion pursuant to <xref to="corp_txn" format="Paragraph Number (firstbold)" />, shares of the Company's Common Stock;</definition_list>
 <definition_list>with respect to a conversion pursuant to Clause <xref to="maturity_conversion" format="Paragraph Number (firstbold)" />, shares of a newly created class of the Company's Series Seed Preferred Stock, upon the terms and provisions set forth in the most recent version of the Series Seed documents posted at www.seriesseed.com (or as reasonably agreed by the Company and a Majority in Interest); provided that, for the avoidance of doubt, the Conversion Price shall be determined pursuant to Clause 1.8.3; and</definition_list>
 <definition_list>with respect to a conversion pursuant to Clause <xref to="optional_conversion" format="Paragraph Number (firstbold)" />, Ordinary Shares of the Company's Common Stock.</definition_list>
-<definition>Conversion Price<aid:tab/>shall equal:</definition>
+<definition>Conversion Price	shall equal:</definition>
 <definition_list xname="nef_conversion_price">with respect to a conversion pursuant to Clause <xref to="nef" format="Paragraph Number (firstbold)" />, the lower of</definition_list>
 <definition_list_inner_2>the product of</definition_list_inner_2>
 <definition_list_inner_3>one (1) minus the Discount and</definition_list_inner_3>
@@ -76,27 +76,27 @@ else                                                                           {
 <definition_list_inner_3>the Fully-Diluted Capitalization immediately prior to the closing of the Next Equity Financing;</definition_list_inner_3>
 <definition_list xname="acquisition_conversion_price">with respect to a conversion pursuant to Clause <xref to="corp_txn" format="Paragraph Number (firstbold)" />, the quotient resulting from dividing (A) the Valuation Cap by (B) the Fully-Diluted Capitalization immediately prior to the closing of the Corporate Transaction; and</definition_list>
 <definition_list xname="maturity_conversion_price">with respect to a conversion pursuant to <xref to="maturity_conversion" format="Paragraph Number (firstbold)" /> or to <xref to="optional_conversion" format="Paragraph Number (firstbold)" />, the quotient resulting from dividing (A) the Valuation Cap by (B) the Fully-Diluted Capitalization immediately prior to the conversion.</definition_list>
-<definition>Corporate Transaction<aid:tab/>shall mean</definition>
+<definition>Corporate Transaction	shall mean</definition>
 <definition_list>the closing of the sale, transfer or other disposition of all or substantially all of the Company's assets,</definition_list>
 <definition_list>the consummation of the merger or consolidation of the Company with or into another entity (except a merger or consolidation in which the holders of capital stock of the Company immediately prior to such merger or consolidation continue to hold at least 50% of the voting power of the capital stock of the Company or the surviving or acquiring entity),</definition_list>
 <definition_list>the closing of the transfer (whether by merger, consolidation or otherwise), in one transaction or a series of related transactions, to a person or group of affiliated persons (other than an underwriter of the Company's securities), of the Company's securities if, after such closing, such person or group of affiliated persons would hold 50% or more of the outstanding voting stock of the Company (or the surviving or acquiring entity), or</definition_list>
 <definition_list>the liquidation, dissolution or winding up of the Company; provided, however, that a transaction shall not constitute a Corporate Transaction if its sole purpose is to change the state of the Company's incorporation or to create a holding company that will be owned in substantially the same proportions by the persons who held the Company's securities immediately prior to such transaction. Notwithstanding the prior sentence, the sale of shares of Preferred Stock in a bona fide financing transaction shall not be deemed a "Corporate Transaction."</definition_list>
-<definition>Corporate Transaction Payment<aid:tab/>shall mean an amount equal to <?= data.acquisition_preference ?>&#215; the Purchase Price.</definition>
-<definition>Equity Securities<aid:tab/>shall mean the Company's Common Stock or Preferred Stock or any securities conferring the right to purchase the Company's Common Stock or Preferred Stock or securities convertible into, or exchangeable for (with or without additional consideration), the Company's Common Stock or Preferred Stock, except</definition>
+<definition>Corporate Transaction Payment	shall mean an amount equal to <?= data.acquisition_preference ?>&#215; the Purchase Price.</definition>
+<definition>Equity Securities	shall mean the Company's Common Stock or Preferred Stock or any securities conferring the right to purchase the Company's Common Stock or Preferred Stock or securities convertible into, or exchangeable for (with or without additional consideration), the Company's Common Stock or Preferred Stock, except</definition>
 <definition_list>any security granted, issued and/or sold by the Company to any director, officer, employee or consultant of the Company in such capacity for the primary purpose of soliciting or retaining their services, or</definition_list>
 <definition_list>KISSes within the current Series.</definition_list>
-<definition>Financial Statements<aid:tab/>shall mean an income statement, balance sheet, statement of stockholders' equity, and/or a statement of cash flows, in each case as of the end of (i) each of the first three (3) fiscal quarters and (ii) each fiscal year of the Company.</definition>
-<definition>Fully-Diluted Capitalization<aid:tab/>shall mean the number of shares of outstanding Common Stock of the Company on a fully-diluted basis, including</definition>
+<definition>Financial Statements	shall mean an income statement, balance sheet, statement of stockholders' equity, and/or a statement of cash flows, in each case as of the end of (i) each of the first three (3) fiscal quarters and (ii) each fiscal year of the Company.</definition>
+<definition>Fully-Diluted Capitalization	shall mean the number of shares of outstanding Common Stock of the Company on a fully-diluted basis, including</definition>
 <definition_list>conversion or exercise of all securities convertible into or exercisable for Common Stock,</definition_list>
 <definition_list>exercise of all outstanding options and warrants to purchase Common Stock and,</definition_list>
 <definition_list>in the case of Clause <xref to="nef_conversion_price"/> and <xref to="maturity_conversion_price"/> only, the shares reserved or authorized for issuance under the Company's existing stock option plan or any stock option plan created or increased in connection with such transaction; but excluding, for this purpose, the conversion contemplated by the applicable provision of Clause <xref to="conversion" />.</definition_list>
-<definition>Holder<aid:tab/>shall mean a member of the KISS Group that holds a KISS (including, without limitation, the Investor, for so long as the Investor holds this KISS).</definition>
-<definition>KISS or KISSes<aid:tab/>shall mean the KISS instruments issued by the Company to Holders in the form hereof.</definition>
-<definition>KISS Group<aid:tab/>shall mean the holders of all KISSes in the Series, collectively.</definition>
-<definition>Majority in Interest<aid:tab/>shall mean members of the KISS Group holding a majority in interest of the aggregate Purchase Prices of all KISSes in the Series.</definition>
-<definition>Maturity Date<aid:tab/>shall mean the date that is <?= data.term ?> following the Date of Issuance.</definition>
-<definition>Participation Amount<aid:tab/>shall mean an amount equal to the Purchase Price.</definition>
-<definition>Shadow Series<aid:tab/>shall mean shares of a class of the Company's Preferred Stock that is identical in all respects to the shares of Preferred Stock issued in the Next Equity Financing (e.g., if the Company sells Series A Preferred Stock in the Next Equity Financing, the Shadow Series would be Series A-<span_allcaps>1</span_allcaps> Preferred Stock), except that the liquidation preference per share of the Shadow Series shall equal the Conversion Price (as determined pursuant to Clause <xref to="nef_conversion_price"/>), with corresponding adjustments to any price-based antidilution and dividend rights provisions.</definition>
+<definition>Holder	shall mean a member of the KISS Group that holds a KISS (including, without limitation, the Investor, for so long as the Investor holds this KISS).</definition>
+<definition>KISS or KISSes	shall mean the KISS instruments issued by the Company to Holders in the form hereof.</definition>
+<definition>KISS Group	shall mean the holders of all KISSes in the Series, collectively.</definition>
+<definition>Majority in Interest	shall mean members of the KISS Group holding a majority in interest of the aggregate Purchase Prices of all KISSes in the Series.</definition>
+<definition>Maturity Date	shall mean the date that is <?= data.term ?> following the Date of Issuance.</definition>
+<definition>Participation Amount	shall mean an amount equal to the Purchase Price.</definition>
+<definition>Shadow Series	shall mean shares of a class of the Company's Preferred Stock that is identical in all respects to the shares of Preferred Stock issued in the Next Equity Financing (e.g., if the Company sells Series A Preferred Stock in the Next Equity Financing, the Shadow Series would be Series A-<span_allcaps>1</span_allcaps> Preferred Stock), except that the liquidation preference per share of the Shadow Series shall equal the Conversion Price (as determined pursuant to Clause <xref to="nef_conversion_price"/>), with corresponding adjustments to any price-based antidilution and dividend rights provisions.</definition>
 <para_1>Except where the context otherwise requires, words importing the singular include the plural and vice versa, words importing a gender include every gender and references to persons include bodies corporate or unincorporated, any state or any agency thereof and any other entity.</para_1>
 <para_2>Headings, marginal sidenotes, and graphic art are for ease of reference only and have no legal effect. Reference to Clauses are to Clauses of this Agreement and references to this Agreement include any amendments or supplementals thereto.</para_2>
 <para_2>Except where the context otherwise requires, references to any person include its successors and permitted assignees. Except where the context otherwise requires, Clauses which refer to the "Company" shall apply mutatis mutandis to subsidiaries or successors of the Company which may from time to time be established.</para_2>
