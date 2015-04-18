@@ -25,7 +25,9 @@ else                                                                           {
 </CoverTop>
 <CoverMid><?!= include("inc_disclaimer", data, { parastyle:"noindent" })?>
 <para_1>_orig_major_investor_minimum=<?=data._orig_major_investor_minimum?>
+
 _orig_major_investor_minimum.length=<?=data._orig_major_investor_minimum.length?>
+
 major_investor_minimum=<?=data.major_investor_minimum?></para_1>
 </CoverMid>
 
