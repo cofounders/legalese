@@ -3,6 +3,7 @@
 if      (data.security_type.match(/convertible (note|debt|loan)|kiss.*debt/i)) { data.kiss_type = "debt"   }
 else if (data.security_type.match(/convertible equity|kiss.*equity|warrant/i)) { data.kiss_type = "equity" }
 else                                                                           { throw("kissing.xml: unrecognized Security Type term"); } ?>
+<? data.has_major_investor_rights = data._orig_major_investor_minimum.length > 0; ?>
 <?!= data.xmlRoot() ?>
 <CoverTop>
 <cover_title>KISS(Sing) Agreement (<?= data.kiss_type ?>)
@@ -51,7 +52,7 @@ else                                                                           {
 <recitals>The Investor and the Company desire and wish to enter into this Agreement to record and regulate an investment by the Investor into the Company.</recitals>
 <recitals>The investment takes the form of a "Keep It Simple Security", essentially a <? if (data.kiss_type == "debt") { ?>convertible debenture<? } else { ?>prepaid warrant<? } ?>, authored by <span_ucnum>500</span_ucnum> Startups and subsequently adapted for Singapore law.</recitals>
 <recitals>The parties anticipate that this investment will be succeeded by an equity financing, and that this KISS (if all goes well) will eventually convert to equity shares issued pursuant to subsequent financing.</recitals>
-<recitals>This KISS may be one of a series of KISSes issued by the Company to investors with essentially identical terms and on the same form as set forth herein (collectively, the "Series"), except that the Investor, Valuation Cap, Purchase Price, and Date of Issuance may differ in each specific KISS, as well as terms relating to Discounted Conversion Price and Major Investor Rights.</recitals>
+<recitals>This KISS may be one of a series of KISSes issued by the Company to investors with essentially identical terms and on the same form as set forth herein (collectively, the "Series"), except that the Investor, Valuation Cap, Purchase Price, and Date of Issuance may differ in each specific KISS, as well as terms relating to Discounted Conversion Price<? if(data.has_major_investor_rights){?> and Major Investor Rights<?}?>.</recitals>
 <para_1><span_smallcaps>It is hereby agreed</span_smallcaps> as follows:</para_1>
 <a_left_sidehead>Definitions</a_left_sidehead>
 <para_1>In this Agreement, except to the extent that the context otherwise requires, the following terms shall have the meanings set forth below:</para_1>
@@ -129,7 +130,6 @@ else                                                                           {
 <a_left_sidehead>Miscellaneous</a_left_sidehead>
 <? if (data.mfn) { ?><numbered_2_firstbold xname="mfn">Most Favored Nation. In the event the Company sells or issues any convertible instruments (other than the issuance of stock options to service providers of the Company) at any time prior to the earlier of (a) conversion of this KISS<? if (data.kiss_type=="debt") {?>,<?}else{?> or<?}?> (b) a Corporate Transaction<? if (data.kiss_type=="debt") { ?> or (c) payment in full of all outstanding principal<? if (data.interest) { ?> and accrued interest<?}?> in accordance with this KISS<? } ?>, the Company shall provide the Investor with written notice of such sale or issuance no later than <?= data.notice_period ?> days after the closing date thereof, including the price and terms of such convertible instruments (the “Subsequent Instruments”).  In the event the Investor determines, in its sole and absolute discretion, that any Subsequent Instrument contains terms more favorable to the holder(s) thereof than the terms set forth in this KISS, the Investor may elect to exchange this KISS for a Subsequent Instrument.</numbered_2_firstbold>
 <? } ?>
-<? data.has_major_investor_rights = data._orig_major_investor_minimum.length > 0; ?>
 <? if (data._orig_major_investor_minimum) { ?>
 <numbered_2_firstbold xname="major_investor_rights">Major Investor Rights. In the event the Investor, together with its affiliates, purchases one or more KISSes with an aggregate Purchase Price equal to or exceeding $50,000 (a “Major Investor”), the Company shall provide such Major Investor with the following rights:</numbered_2_firstbold>
 <? } else if (data.has_major_investor_rights) { // true string but the value is zero, means all investors enjoy the rights ?>
