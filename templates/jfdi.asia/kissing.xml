@@ -57,7 +57,7 @@ else                                                                           {
 <para_1>In this Agreement, except to the extent that the context otherwise requires, the following terms shall have the meanings set forth below:</para_1>
 <definition>Valuation Cap	shall mean <?= data.pre_money_valuation ?>.</definition>
 <definition>Discount	shall mean <?= data.discount ?>%.</definition>
-<? if (data.kiss_type eq "debt") { ?><definition>Interest Rate	shall mean <?= data.interest ?>%.</definition>
+<? if (data.kiss_type == "debt") { ?><definition>Interest Rate	shall mean <?= data.interest ?>%.</definition>
 <? } ?>
 <definition>Purchase Price	shall mean <?= data.new_investor.commitment ?>.</definition>
 <definition>Maximum Round Size	 shall mean <?= data.amount_raising ?>.</definition>
