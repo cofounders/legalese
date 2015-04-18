@@ -1,4 +1,5 @@
-<? if (data._include.parastyle) { ?><?!= '<'+data._include.parastyle+'>' ?><? } else { ?><para_1><?}?>
+<? if (data._include.parastyle && data._include.parastyle.length) { ?><?!= '<'+data._include.parastyle+'>' ?><? }
+else if (data._include.parastyle == undefined) { ?><para_1><?}?>
 <? if (data._include.lowercase) { ?>this <? } else { ?>This <?}?>
 <? if ((data.jurisdiction && data.jurisdiction.match(/america|united states/i))
   || data.company.state == "USA" || data.company.state == "United States") { ?>
@@ -9,4 +10,5 @@ KISS is offered in reliance on one or more of the exemptions under sections 272a
 <? } else { ?>
 instrument and its associated security have not been registered with any regulatory authority, and are not for sale to retail investors. Their transfer is restricted.
 <? } ?>
-<? if (data._include.parastyle) { ?><?!= '</'+data._include.parastyle+'>' ?><? } else { ?></para_1><?}?>
+<? if (data._include.parastyle && data._include.parastyle.length) { ?><?!= '</'+data._include.parastyle+'>' ?><? }
+else if (data._include.parastyle == undefined) { ?></para_1><?}?>
