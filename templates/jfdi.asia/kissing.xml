@@ -3,7 +3,7 @@
 if      (data.security_type.match(/convertible (note|debt|loan)|kiss.*debt/i)) { data.kiss_type = "debt"   }
 else if (data.security_type.match(/convertible equity|kiss.*equity|warrant/i)) { data.kiss_type = "equity" }
 else                                                                           { throw("kissing.xml: unrecognized Security Type term"); } ?>
-<? data.has_major_investor_rights = (data._orig_major_investor_minimum != undefined && data._orig_major_investor_minimum.length == undefined); ?>
+<? data.has_major_investor_rights = (data._orig_major_investor_minimum != undefined && ! data._orig_major_investor_minimum.length === ""); ?>
 <?!= data.xmlRoot() ?>
 <CoverTop>
 <cover_title>KISS(Sing) Agreement (<?= data.kiss_type ?>)
@@ -34,7 +34,11 @@ _orig_major_investor_minimum != "": <?=data._orig_major_investor_minimum!=""?>
 
 _orig_major_investor_minimum == "": <?=data._orig_major_investor_minimum==""?>
 
+_orig_major_investor_minimum === "": <?=data._orig_major_investor_minimum===""?>
+
 _orig_major_investor_minimum == 0: <?=data._orig_major_investor_minimum==0?>
+
+_orig_major_investor_minimum === 0: <?=data._orig_major_investor_minimum===0?>
 
 _orig_major_investor_minimum.length=<?=data._orig_major_investor_minimum.length?>
 
