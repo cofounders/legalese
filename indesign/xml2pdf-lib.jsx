@@ -7,7 +7,7 @@
 #include "/Applications/Adobe InDesign CC/Scripts/XML Rules/glue code.jsx"
 
 // -------------------------------------------------- xmls2pdf
-function xmls2pdf(xmlFiles, showingWindow, keepIndd, keepOpen) {
+function xmls2pdf(xmlFiles, showingWindow, saveIndd, keepOpen) {
   if (showingWindow == undefined) showingWindow = false;
   var errors = [];
   app.textPreferences.smartTextReflow = false;
@@ -40,7 +40,7 @@ function xmls2pdf(xmlFiles, showingWindow, keepIndd, keepOpen) {
 	  doc.updateCrossReferences();
 	  logToFile("xmls2pdf: about to exportToPDF");
 	  exportToPDF(doc, xmlFile);
-	  if (keepIndd) { saveAsIndd(doc, xmlFile); }
+	  if (saveIndd || doc.label.match(/saveIndd=true/)) { saveAsIndd(doc, xmlFile); }
 	  if (! keepOpen && doc && doc.isValid) { doc.close(SaveOptions.NO); }
 	  logToFile("xmls2pdf: finished " + xmlFile.fullName);
 	}
@@ -202,6 +202,14 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
 	__processRuleSet(doc.xmlElements.item(0), [new AddReturns(doc,importMaps) ]);
   }
 
+  // if the root element has saveIndd=true then set doc.label to saveIndd ... this is read by main()
+  if (doc.xmlElements.item(0).xmlAttributes.item("saveIndd").isValid &&
+	  doc.xmlElements.item(0).xmlAttributes.item("saveIndd").value == "true") {
+	if (doc.label && doc.label.length) { doc.label += "\n" }
+	logToFile("source XML wants us to saveIndd");
+	doc.label += "saveIndd=true\n";
+  }
+  
   __processRuleSet(doc.xmlElements.item(0), [new InsertTextVariables(doc,importMaps) ]);
 
   doc.mapXMLTagsToStyles();

@@ -8,7 +8,7 @@ main();
 function main(){
 
   var interactive = true;
-  var saveIndd    = true;
+  var saveIndd    = false;
   var keepOpen    = true;
   
   var xmlFiles = identifyXmlFiles("recurse",  // recurse | queryUser

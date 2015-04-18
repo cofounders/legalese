@@ -267,8 +267,11 @@ function setupForm_(sheet) {
   var origentityfields = readRows._origentityfields;
   Logger.log("origentityfields = " + origentityfields);
   for (var i in origentityfields) {
+	if (i == undefined) { continue }
 	var entityfield = origentityfields[i];
+	if (entityfield == undefined) { continue }
 	Logger.log("entityfield "+i+" = " + entityfield.fieldname);
+	if (i == "undefined") { Logger.log("that's, like, literally the string undefined, btw."); continue; } // yes, this actually happens.
 	if (entityfield.itemtype.match(/^list/)) {
 	  var enums = entityfield.itemtype.split(' ');
 	  enums.shift();
@@ -1021,14 +1024,16 @@ function fillOtherTemplates_() {
 }
 
 // ---------------------------------------------------------------------------------------------------------------- uploadOtherAgreements_
-function uploadOtherAgreements_() {
+function uploadOtherAgreements_(interactive) {
   var sheets = otherSheets_();
+  
   for (var i = 0; i < sheets.length; i++) {
 	var sheet = sheets[i];
 	var myRow = SpreadsheetApp.getActiveSheet().getRange(SpreadsheetApp.getActiveRange().getRow()+i, 1, 1, 10);
-	var result = uploadAgreement(sheet);
+	var result = uploadAgreement(sheet, interactive);
 	if (result == "sent") {
 	  myRow.getCell(1,5).setValue("sent at "+ Utilities.formatDate(new Date(), sheet.getParent().getSpreadsheetTimeZone(), "yyyyMMdd-HHmmss"));
+	  SpreadsheetApp.flush();
 	}
 	else {
 	  myRow.getCell(1,5).setValue(result);
@@ -1054,8 +1059,8 @@ function uploadOtherAgreements_() {
 function availableTemplates_() {
   // return a bunch of URLs
 
-  var baseUrl = "http://www.mengwong.com/legalese.io/";
   var baseUrl = "http://www.legalese.io/";
+  var baseUrl = "http://www.mengwong.com/legalese.io/";
   
   var availables = [
 
@@ -1093,7 +1098,7 @@ function availableTemplates_() {
 	{ name:"jfdi_volunteer_agreement", title:"Volunteer Agreement",
 	   url:baseUrl + "templates/jfdi.asia/jfdi_06_volunteer_agreement.xml",
 	  parties:{to:["company"], cc:["corporate_secretary", "investor"]},
-	  explode:"founder",
+	  explode:"volunteer",
 //	  nocache:true,
 	},
 	{ name:"form45", title:"Form 45 Consent to Act as a Director",
@@ -1233,7 +1238,8 @@ function availableTemplates_() {
   { name:"kissing", title:"KISS (Singapore)",
 	url:baseUrl + "templates/jfdi.asia/kissing.xml",
 	parties:{to:["founder", "company"],cc:["corporate_secretary"]},
-	explode:"investor",
+	explode:"new_investor",
+	nocache:true,
   },
   { name:"strikeoff_shareholders", title:"Striking Off for Shareholders",
 	url:baseUrl + "templates/jfdi.asia/strikeoff_shareholders.xml",
@@ -1255,7 +1261,8 @@ function availableTemplates_() {
   },
   { name:"preemptive_notice", title:"Pre-Emptive Notice to Shareholders",
 	url:baseUrl + "templates/jfdi.asia/preemptive_notice.xml",
-	parties:{to:["shareholder"],cc:["company"]},
+	parties:{to:[],cc:["company"]},
+	explode:"shareholder",
   },
   { name:"preemptive_waiver", title:"Issuance Offer Notice",
 	url:baseUrl + "templates/jfdi.asia/preemptive_waiver.xml",
@@ -1361,7 +1368,7 @@ function filenameFor_ (sourceTemplate, entity) {
 // obtainTemplate
 // we can pull a generic HTML template from somewhere else,
 // or it can be one of the project's HTML files.
-function obtainTemplate_(url, nocache) {
+function obtainTemplate_(url, nocache, readmeDoc) {
   // Logger.log("obtainTemplate_(%s) called", url);
 
   // we're actually running within a single script invocation so maybe we should find a more intelligent way to cache within a single session.
@@ -1376,10 +1383,39 @@ function obtainTemplate_(url, nocache) {
 	  }
 	}
 
-	var result = UrlFetchApp.fetch(url, { headers: { "Accept-Encoding": "identity" } } );
+	try {
+	  var result = UrlFetchApp.fetch(url, { headers: { "Accept-Encoding": "identity" } } );
+	} catch (e) {
+	  Logger.log("ERROR: caught error (%s) while fetching %s", e, url);
+	}
+	if (result == undefined) {
+	  try {	  
+		result = UrlFetchApp.fetch(url, { headers: { "Accept-Encoding": "identity" } } );
+	  } catch (e) {
+		Logger.log("ERROR: caught error (%s) while fetching %s for the second time!", e, url);
+		throw ("during obtainTemplate_(" + url + "): " + e);
+	  }
+	}
+	  
 	// by default the good people at Github Pages will gzip compress if we don't explicitly set this
-	
+
 	var contents = result.getContentText();
+
+	if (result.getResponseCode() != 200) {
+	  if (readmeDoc) { readmeDoc.getBody().appendParagraph("obtainTemplate(" + url + ") returned response code " + result.getResponseCode()); }
+	  result = UrlFetchApp.fetch(url, { headers: { "Accept-Encoding": "identity" } } );
+	  contents = result.getContentText();
+	  if (readmeDoc) { readmeDoc.getBody().appendParagraph("obtainTemplate(" + url + ") second try returned response code " + result.getResponseCode()); }
+	}
+	
+	if (! contents || ! contents.length) {
+	  if (readmeDoc) {
+		readmeDoc.getBody().appendParagraph("obtainTemplate(" + url + ") returned no contents");  	  Logger.log("obtainTemplate(" + url + ") returned no contents");
+		readmeDoc.getBody().appendParagraph(JSON.stringify(result.getAllHeaders()));                    Logger.log("obtainTemplate(" + url + ") headers: " + result.getAllHeaders());
+	  }
+	  throw("received zero-length content when fetching " + url);
+	}
+	
 	// the cache service can only store keys of up to 250 characters and content of up to 100k, so over that, we don't cache.
 	if (nocache != true && contents.length < 100000 && url.length < 250) {
 	  cache.put(url, contents, 300);
@@ -1573,7 +1609,7 @@ var docsetEmails_ = function (sheet, readRows, parties, suitables) {
 		var entity = this.readRows.entitiesByName[parties[partytype][parties_k].name];
 		Logger.log("docsetEmails.explode(): working with %s %s %s", partytype, entity.name, sourceTemplate.name);
 		if (entity.legalese_status
-			&& entity.legalese_status.match(/skip explode/)
+			&& entity.legalese_status.match(/skip explo/)
 			&& entity.legalese_status.match(sourceTemplate.name)
 		   ) {
 		  Logger.log("docsetEmails.explode(%s): SKIPPING because legalese status says %s", entity.name, entity.legalese_status);
@@ -1675,7 +1711,7 @@ function fillTemplates(sheet) {
   // you will see the same pattern in uploadAgreement.
   var buildTemplate = function(sourceTemplates, entity, rcpts) { // this is a callback run within the docsetEmails object.
 	var sourceTemplate = sourceTemplates[0];
-	var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache);
+	var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache, readmeDoc);
 	newTemplate.data = templatedata;
 //	Logger.log("buildTemplate: assigning newTemplate.data = %s", templatedata);
 //	Logger.log("buildTemplate: newTemplate.data.parties has length = %s", templatedata.data.parties.length);
@@ -1683,7 +1719,7 @@ function fillTemplates(sheet) {
 	if (entity) { newTemplate.data.party = newTemplate.data.party || {};
 				  newTemplate.data.party[sourceTemplate.explode] = entity;
 				  newTemplate.data      [sourceTemplate.explode] = entity; }
-	fillTemplate_(newTemplate, sourceTemplate, filenameFor_(sourceTemplate, entity), folder);
+	fillTemplate_(newTemplate, sourceTemplate, filenameFor_(sourceTemplate, entity), folder, config);
 	// todo: make the title configured in the spreadsheet itself, and get rid of the hardcoded title from the availabletemplates code below.
 	readmeDoc.getBody().appendParagraph("created " + sourceTemplate.title);
 	if (entity) { readmeDoc.getBody().appendParagraph("doing template for " + entity.name); }
@@ -1731,11 +1767,21 @@ function fillTemplates(sheet) {
 //
 // so, we define an include() function.
 
-function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder) {
+function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder, config) {
   // reset "globals"
   clauseroot = [];
   clausetext2num = {};
   newTemplate.data.signature_comment = null;
+  var xmlRootExtras = xmlRootExtras = config.save_indd ? ' saveIndd="true"' : '';
+  newTemplate.data.xmlRoot = function(someText) {
+	if (someText == undefined) { someText = '' }
+	else if (! someText.match(/^ /)) { someText = ' ' + someText }
+	return '<Root xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/"'
+	  + xmlRootExtras
+	  + someText
+	  + '>\n';
+  };
+  
   var filledHTML = newTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
   var xmlfile;
 
@@ -1761,7 +1807,7 @@ function include(name, data, _include, _include2) {
   var filtered = availableTemplates_().filter(function(t){return t.name == name});
   if (filtered.length == 1) {
 	var template = filtered[0];
-	var childTemplate = obtainTemplate_(template.url);
+	var childTemplate = obtainTemplate_(template.url, template.nocache);
 	childTemplate.data = data;
 	childTemplate.data._include = _include || {};
 	childTemplate.data._include2 = _include2 || {};
@@ -2147,7 +2193,7 @@ function fauxMegaSign(sheet) {
 // if the PDFs don't exist, send them to InDesign for creation and wait.
 // for extra credit, define a usercallback and associate it with a StateToken so InDesign can proactively trigger a pickup.
 // for now, just looking for the PDFs in the folder seems to be good enough.
-function uploadAgreement(sheet) {
+function uploadAgreement(sheet, interactive) {
   // TODO: we need to confirm that the docs generated match the current sheet.
   // exploded docs need to have a different set of email recipients for each document.
 
@@ -2163,21 +2209,22 @@ function uploadAgreement(sheet) {
 
   var sheetPassedIn = ! (sheet == undefined);
 
+  if (interactive == undefined || interactive) {
+	var ui = SpreadsheetApp.getUi();
+	var response = ui.alert("Send to EchoSign?",
+							"Are you sure you want to send to EchoSign?\nMaybe you clicked a menu option by mistake.",
+							ui.ButtonSet.YES_NO);
+	if (response == ui.Button.NO) return;
+  }
+  
   if (! sheetPassedIn && SpreadsheetApp.getActiveSpreadsheet().getName().toLowerCase() == "legalese controller") {
 	Logger.log("in controller mode, switching to uploadOtherAgreements()");
-	uploadOtherAgreements_();
+	uploadOtherAgreements_(false);
 	return;
   }
-
+  
   sheet = sheet || SpreadsheetApp.getActiveSheet();
 
-  var ui = SpreadsheetApp.getUi();
-  var response = ui.alert("Send to EchoSign?",
-						  "Are you sure you want to send to EchoSign?\nMaybe you clicked a menu option by mistake.",
-						  ui.ButtonSet.YES_NO);
-  
-  if (response == ui.Button.NO) return;
-  
   var ss = sheet.getParent();
   var entitiesByName = {};
   var readRows = readRows_(sheet, entitiesByName);
