@@ -173,7 +173,8 @@ the Corporate Transaction Payment<? } ?>
 <xref to="transfer" format="Paragraph Number (firstbold)" />, <?
 if (data.preemptive_rights_transferable_to_investors_members) {?><xref to="transfer_of_preemptive_rights" format="Paragraph Number (firstbold)" />, <? } ?>
 and
-<xref to="entire_agreement" format="Paragraph Number (firstbold)" /></bullets>
+<xref to="entire_agreement" format="Paragraph Number (firstbold)" />
+</bullets>
 <basic_para>may not be amended or waived without the written consent of the Investor. Any waiver or amendment effected in accordance with this Clause <xref to="entire_agreement" /> shall be binding upon the Company and each current and future member of the KISS Group.</basic_para>
 <? if (data.kiss_type == "equity") { ?><numbered_2_firstbold>Priority.	This KISS shall rank pari passu in all respects (including right of payment) to all other KISSes and all convertible indebtedness of the Company, now or hereafter existing.</numbered_2_firstbold>
 <? } ?>
