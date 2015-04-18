@@ -24,6 +24,9 @@ else                                                                           {
 </cover_company_id>
 </CoverTop>
 <CoverMid><?!= include("inc_disclaimer", data, { parastyle:"noindent" })?>
+<para_1>_orig_major_investor_minimum=<?=data._orig_major_investor_minimum?>
+_orig_major_investor_minimum.length=<?=data._orig_major_investor_minimum.length?>
+major_investor_minimum=<?=data.major_investor_minimum?></para_1>
 </CoverMid>
 
 <CoverBottom_Logotype>
@@ -133,7 +136,7 @@ else                                                                           {
 <? if (data._orig_major_investor_minimum) { ?>
 <numbered_2_firstbold xname="major_investor_rights">Major Investor Rights. In the event the Investor, together with its affiliates, purchases one or more KISSes with an aggregate Purchase Price equal to or exceeding $50,000 (a “Major Investor”), the Company shall provide such Major Investor with the following rights:</numbered_2_firstbold>
 <? } else if (data.has_major_investor_rights) { // true string but the value is zero, means all investors enjoy the rights ?>
-<numbered_2_firstbold xname="major_investor_rights">Other Investor Rights. (_orig_major_investor_minimum=<?=data._orig_major_investor_minimum?>) The Investor shall also enjoy the following rights:</numbered_2_firstbold>
+<numbered_2_firstbold xname="major_investor_rights">Other Investor Rights. The Investor shall also enjoy the following rights:</numbered_2_firstbold>
 <? } ?>
 <? if (data.has_major_investor_rights) { ?>
 <numbered_3_firstbold xname="information_rights">Information Rights. To the extent that the Company prepares Financial Statements, the Company shall deliver to the Investor such Financial Statements upon request, as soon as practicable, but in any event within thirty (30) days after the end of each of the first three (3) quarters of each fiscal year of the Company and within ninety (90) days after the end of each fiscal year of the Company. Such Financial Statements shall be in reasonable detail and prepared on a consistent basis. Additionally, regardless of whether the Company prepares Financial Statements, the Company shall deliver to the Investor such information relating to the financial condition, business or corporate affairs of the Company as such Investor may from time to time reasonably request. Notwithstanding anything to the contrary in this Clause <xref to="information_rights"/>, the Company shall not be obligated under this Clause <xref to="information_rights"/> to provide information that (a) it deems in good faith to be a trade secret or highly confidential information or (b) the disclosure of which would adversely affect the attorney-client privilege between the Company and its counsel; and the Investor agrees to maintain the confidentiality of all of the information provided to the Investor under this Clause <xref to="information_rights"/> and agrees not to use such information other than for a purpose reasonably related to the Investor's investment in the Company.</numbered_3_firstbold>
