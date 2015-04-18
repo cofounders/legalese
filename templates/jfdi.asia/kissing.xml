@@ -22,7 +22,7 @@ else                                                                           {
 <cover_company_id><?= data.new_investor.idtype ?> <?= data.new_investor.id ?>
 </cover_company_id>
 </CoverTop>
-<CoverMid>
+<CoverMid><?!= include("inc_disclaimer", data, { parastyle:"noindent" })?>
 </CoverMid>
 
 <CoverBottom_Logotype>
@@ -125,7 +125,8 @@ else                                                                           {
 <numbered_2_firstbold>Purchase Entirely for Own Account. Investor acknowledges that this KISS is issued to Investor in reliance upon Investor's representation to the Company that the KISS will be acquired for investment for Investor's own account, not as a nominee or agent, and not with a view to the resale or distribution of any part thereof, and that such Investor has no present intention of selling, granting any participation in, or otherwise distributing the same.</numbered_2_firstbold>
 <numbered_2_firstbold>Investment Experience. Investor is an investor in securities of companies in the development stage and acknowledges that it is able to fend for itself, can bear the economic risk of its investment, and has such knowledge and experience in financial or business matters that it is capable of evaluating the merits and risks of the investment in this KISS. Investor also represents it has not been organized solely for the purpose of acquiring this KISS.</numbered_2_firstbold>
 <numbered_2_firstbold>Accredited Investor. Investor is an "accredited" or "qualified" investor within the meaning of the Securities and Futures Act (Cap. 289) (the "Act").</numbered_2_firstbold>
-<numbered_2_firstbold>Exempt Security. Investor understands that this KISS is offered in reliance on one or more of the exemptions under sections 272a(1), 272b(1), 274, and 275(1) of the Securities and Futures Act. It is not made in or accompanied by a prospectus that is registered by the Monetary Authority of Singapore. Inasmuch as it is being acquired from the Company in a transaction not involving a public offering, under the Act and other applicable regulations this KISS may be resold only in certain limited circumstances.</numbered_2_firstbold>
+<numbered_2_firstbold>Exempt Security. Investor understands that <?!= include("inc_disclaimer", data, { parastyle:"", lowercase:true })?>
+</numbered_2_firstbold>
 <? if (data.founders_give_company_lpa || (data.company_gives_investors_lpa && data.new_investor.power_of_attorney)) { ?>
 <a_left_sidehead>Limited Powers of Attorney for Maintenance of Good Standing</a_left_sidehead>
 <?   if (data.founders_give_company_lpa) { ?>
