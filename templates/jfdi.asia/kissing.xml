@@ -49,7 +49,7 @@ else                                                                           {
 <para_1><span_smallcaps>Whereas</span_smallcaps>:</para_1>
 <recitals>The Company is a private company incorporated in Singapore limited by shares.</recitals>
 <recitals>The Investor and the Company desire and wish to enter into this Agreement to record and regulate an investment by the Investor into the Company.</recitals>
-<recitals>The investment takes the form of a "Keep It Simple Security", essentially a convertible debenture, authored by <span_ucnum>500</span_ucnum> Startups and subsequently adapted for Singapore law by JFDI.Asia.</recitals>
+<recitals>The investment takes the form of a "Keep It Simple Security", essentially a <? if (data.kiss_type == "debt") { ?>convertible debenture<? } else { ?>prepaid warrant<? } ?>, authored by <span_ucnum>500</span_ucnum> Startups and subsequently adapted for Singapore law.</recitals>
 <recitals>The parties anticipate that this investment will be succeeded by a seed, bridge, or equity financing, and that this KISS (if all goes well) will eventually convert to equity shares issued pursuant to subsequent financing.</recitals>
 <recitals>This KISS may be one of a series of KISSes issued by the Company to investors with essentially identical terms and on the same form as set forth herein (collectively, the "Series"), except that the Investor, Valuation Cap, Purchase Price, and Date of Issuance may differ in each specific KISS, as well as terms relating to Discounted Conversion price, a Limited Power of Attorney, and Information Rights).</recitals>
 <para_1><span_smallcaps>It is hereby agreed</span_smallcaps> as follows:</para_1>
