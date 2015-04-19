@@ -23,6 +23,7 @@ else                                                                           {
 <cover_company_id><?= data.new_investor.idtype ?> <?= data.new_investor.id ?>
 </cover_company_id>
 </CoverTop>
+<CoverMid></CoverMid>
 <CoverMid><?!= include("inc_disclaimer", data, { parastyle:"noindent" })?>
 </CoverMid>
 
