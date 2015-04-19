@@ -24,7 +24,7 @@ else                                                                           {
 </cover_company_id>
 </CoverTop>
 <CoverMid></CoverMid>
-<CoverMid><?!= include("inc_disclaimer", data, { parastyle:"noindent" })?>
+<CoverMid><?!= include("inc_disclaimer", data, { parastyle:"noindent_justified" })?>
 </CoverMid>
 
 <CoverBottom_Logotype>
@@ -62,7 +62,7 @@ else                                                                           {
 <? if (data.kiss_type == "debt") { ?><definition>Interest Rate	shall mean <?= data.interest ?>%.</definition>
 <? } ?>
 <definition>Purchase Price	shall mean <?= data.new_investor.commitment ?>.</definition>
-<definition>Maximum Round Size	 shall mean <?= data.amount_raising ?>.</definition>
+<definition>Maximum Round Size 	shall mean <?= data.amount_raising ?>.</definition>
 <definition>Next Equity Financing 	shall mean the next sale (or series of related sales) by the Company of its Preferred Stock following the Date of Issuance from which the Company receives gross proceeds of <b>not less than <?= data.qualified_financing_proceeds ?></b> (excluding the aggregate amount of securities converted into Common or Preferred Stock in connection with such sale (or series of related sales)).</definition>
 <definition>Conversion Shares	shall mean:</definition>
 <definition_list>with respect to a conversion pursuant to Clause <xref to="nef" format="Paragraph Number (firstbold)" />, shares of the Company's Preferred Stock issued in the Next Equity Financing; provided, however, that, at the Company's election, "Conversion Shares" with respect to a conversion pursuant to Clause <xref to="nef" /> shall mean shares of a Shadow Series;</definition_list>
@@ -161,7 +161,7 @@ the Corporate Transaction Payment<? } ?>
 <numbered_3_para>he must first offer to sell the whole or part KISS to the Company;</numbered_3_para>
 <numbered_3_para>any portion not redeemed must next be offered to the other Investors in his KISS Group who may subscribe pro rata with excess rights; and</numbered_3_para>
 <numbered_3_para>any portion surviving must then be offered to the members of the Company pro rata with excess rights;</numbered_3_para>
-<numbered_3_para>with a notice period of <?= data.new_issue_notice_period || data.notice_period ?> business days at each step, communication to be facilitated by the Company on behalf of the Investor.</numbered_3_para>
+<para_1>with a notice period of <?= data.new_issue_notice_period || data.notice_period ?> business days at each step, communication to be facilitated by the Company on behalf of the Investor.</para_1>
 <? } ?>
 <? if (data.preemptive_rights_transferable_to_investors_members) { ?>
 <numbered_2_firstbold xname="transfer_of_preemptive_rights">Transfer of Pre-Emptive Rights. The rights described in Clause <xref to="participation_rights" format="Paragraph Number (firstbold)"/> which accrue to the Investor shall be transferable at the Investor's sole discretion to members and affiliates of the Investor itself, notwithstanding the Company's Articles of Association<? if (data.transfers_have_rofr) {?>, and notwithstanding Clause <xref to="rofr" format="Paragraph Number (firstbold)"/><? } ?>.<? if (data.explicit_jfdi_prorata) {?> For the avoidance of doubt, this means that shareholders of JFDI.2014 may subscribe for Equity Securities in future financings, up to JFDI.2014's pro rata percentage.<? } ?></numbered_2_firstbold>
@@ -177,7 +177,7 @@ and
 <xref to="entire_agreement" format="Paragraph Number (firstbold)" />
 </bullets>
 <basic_para addnewline="true">may not be amended or waived without the written consent of the Investor. Any waiver or amendment effected in accordance with this Clause <xref to="entire_agreement" /> shall be binding upon the Company and each current and future member of the KISS Group.</basic_para>
-<? if (data.kiss_type == "equity") { ?><numbered_2_firstbold>Priority.	This KISS shall rank pari passu in all respects (including right of payment) to all other KISSes and all convertible indebtedness of the Company, now or hereafter existing.</numbered_2_firstbold>
+<? if (data.kiss_type == "equity") { ?><numbered_2_firstbold>Priority. This KISS shall rank pari passu in all respects (including right of payment) to all other KISSes and all convertible indebtedness of the Company, now or hereafter existing.</numbered_2_firstbold>
 <? } ?>
 <numbered_2_firstbold>Third Parties' Rights. Nothing in this Agreement is intended to grant to any third party any right to enforce any term of this Agreement or to confer on any third party any benefits under this Agreement for the purposes of the Contract (Rights of Third Parties) Chapter <span_smallcaps>53b</span_smallcaps> and any re-enactment thereof, the application of which legislation is hereby expressly excluded.</numbered_2_firstbold>
 <numbered_2_firstbold>Exculpation Among Holders. Each Holder acknowledges that it is not relying upon any person, firm, corporation or stockholder, other than the Company and its officers and directors in their capacities as such, in making its investment or decision to invest in the Company. Each Holder agrees that no other Holder nor the respective controlling persons, officers, directors, partners, agents, stockholders or employees of any other Holder shall be liable for any action heretofore or hereafter taken or omitted to be taken by any of them in connection with the purchase and sale of the KISSes.</numbered_2_firstbold>
