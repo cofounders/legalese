@@ -547,7 +547,6 @@ function readRows_(sheet, entitiesByName) {
 	  }
 	  
 	  Logger.log("readRows(%s): encountered INCLUDE %s", sheet.getSheetName(), row[1]);
-
 	  if (include_sheet == undefined) { throw("unable to fetch included sheet " + row[1]) }
 	  
 	  var includedReadRows = readRows_(include_sheet, entitiesByName);
@@ -557,6 +556,15 @@ function readRows_(sheet, entitiesByName) {
 	  // we throw away the returned object because we don't really care about the included sheet's terms or config.
 
 	  if (principal == undefined) { principal = includedReadRows.principal }
+
+	  Logger.log("readRows(%s): row[2] == %s ... wtf.", sheet.getSheetName(), row[2]);
+	  // if row[2] says "TERMS" then we include the TERMS as well.
+	  if (row[2] == "TERMS") {
+		Logger.log("readRows(%s): including TERMS as well.", sheet.getSheetName());
+		for (var ti in includedReadRows.terms) {
+		  terms[ti] = includedReadRows.terms[ti];
+		}
+	  }
 
 	  continue;
 	}
@@ -631,7 +639,7 @@ function readRows_(sheet, entitiesByName) {
 
 	  roles[relation] = roles[relation] || [];
 
-	  var matches;
+	  var matches; // there is similar code elsewhere in buildTemplate()
 	  if (matches = entityname.match(/^\[(.*)\]$/)) {
 		// Shareholder: [Founder]
 		// means all founders are also shareholders and we should populate the Shareholder parties accordinlgy
@@ -1080,6 +1088,11 @@ function availableTemplates_() {
 //	parties:{to:["director"], cc:["corporate_secretary"]},
 //	nocache:true,
 //  },
+	{ name:"dr_fundraising", title:"Directors' Resolution in favour of Fundraising",
+	   url:baseUrl + "templates/jfdi.asia/dr-fundraising.xml",
+	  parties:{to:["director"], cc:["corporate_secretary"]},
+	  nocache:true,
+	},
 	{ name:"inc_disclaimer", title:"top securities disclaimer",
 	   url:baseUrl + "templates/ycombinator-safe/inc_disclaimer.xml",
 	  nocache:true,
@@ -1717,7 +1730,65 @@ function fillTemplates(sheet) {
 	var sourceTemplate = sourceTemplates[0];
 	var newTemplate = obtainTemplate_(sourceTemplate.url, sourceTemplate.nocache, readmeDoc);
 	newTemplate.data = templatedata;
-//	Logger.log("buildTemplate: assigning newTemplate.data = %s", templatedata);
+
+	if (templatedata._origparties == undefined) {
+	  templatedata._origparties = {};
+	  for (var p in parties) { templatedata._origparties[p] = parties[p] }
+	  Logger.log("buildTemplate(%s): preserving original parties", sourceTemplate.name);
+	}
+	else {
+	  for (var p in templatedata._origparties) { templatedata.parties[p] = templatedata._origparties[p] }
+	  Logger.log("buildTemplate(%s): restoring original parties", sourceTemplate.name);
+	}
+
+	// EXCEPTION SCENARIO -- party overrides
+	// 
+	// it is possible that in the Templates: line of the config section, one or more party overrides are defined.
+	//
+	// for instance, Template: | foobar | company | [promoter]
+	// means that when filling the foobar template, we should set data.parties.company = data.parties.promoter
+	// and, due to the special case, also set data.company = promoter[0].
+	// 
+	// Template: | foobar | thing | SomeValue Pte. Ltd.
+	// means that for the foobar template, data.parties.thing = the entity named SomeValue Pte. Ltd.
+	//
+	Logger.log("config.templates.dict is %s", config.templates.dict);
+	if (config.templates.dict[sourceTemplate.name] && config.templates.dict[sourceTemplate.name].length) {
+	  var mydict = config.templates.dict[sourceTemplate.name];
+	  Logger.log("buildTemplate(%s): WE CAN HAZ OVERRIDE! coping with %s", sourceTemplate.name, config.templates.dict[sourceTemplate.name]);
+
+	  var keyvalues = {};
+	  while (config.templates.dict[sourceTemplate.name].length) { keyvalues[mydict.shift()] = mydict.shift() }
+	  Logger.log("buildTemplate(%s): keyvalues = %s", sourceTemplate.name, keyvalues);
+	  for (var kk in keyvalues) {
+		Logger.log("buildTemplate(%s): dealing with %s : %s", sourceTemplate.name, kk, keyvalues[kk]);
+
+		var matches; // there is similar code elsewhere in readRows_() under ROLES
+		if (matches = keyvalues[kk].match(/^\[(.*)\]$/)) {
+		  // company: [promoter]
+		  // means we temporarily substitute promoter for company
+		  var to_import = asvar_(matches[1]);
+		  // TODO: sanity check so we don't do a reflexive assignment
+		  
+		  Logger.log("buildTemplate(%s):         substituting %s = %s", sourceTemplate.name, kk, to_import);
+		  if (! (templatedata.company.roles[to_import] && templatedata.company.roles[to_import].length)) {
+			Logger.log("buildTemplate(%s):         ERROR: substitute [%s] is useless to us", sourceTemplate.name, to_import);
+			continue;
+		  }
+		  else {
+			Logger.log("buildTemplate(%s):         substituting: before, parties.%s = %s", sourceTemplate.name, kk, templatedata.company.roles[kk]);
+			templatedata.parties[kk] = templatedata.parties[to_import];
+			Logger.log("buildTemplate(%s):         substituting: after setting to %s, parties.%s = %s", sourceTemplate.name, to_import, kk, templatedata.parties[kk][0].name);
+		  }
+
+		  if (kk == "company") {
+			templatedata.company = templatedata.parties.company[0];
+			Logger.log("buildTemplate(%s):         final substitution: company =  %s", sourceTemplate.name, templatedata.company.name);
+		  }
+		}
+	  }
+	}
+	//	Logger.log("buildTemplate: assigning newTemplate.data = %s", templatedata);
 //	Logger.log("buildTemplate: newTemplate.data.parties has length = %s", templatedata.data.parties.length);
 //	Logger.log("FillTemplates: recv: templatedata.parties = %s", templatedata.parties);
 	if (entity) { newTemplate.data.party = newTemplate.data.party || {};
