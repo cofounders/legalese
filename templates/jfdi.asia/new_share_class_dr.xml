@@ -1,8 +1,8 @@
 <?!= include("inc_dr_start", data, { director_or_member:"Director", article_pursuant:data.article_for_directors_resolution_in_writing, r_num: 3 }) ?>
 
-<a_left_sidehead>Authority of Members Sought</a_left_sidehead>
+<a_left_sidehead>Authority of <?!= plural(data.parties.shareholder, "Member", "Members") ?> Sought</a_left_sidehead>
 
-<para_1>That the approval of the Members of the Company be sought for passing the following resolution<?= data.members_resolution_2 == undefined ? "" : "s" ?>:</para_1>
+<para_1>That the approval of the <?!= plural(data.parties.shareholder, "Member", "Members") ?> of the Company be sought for passing the following resolution<?= data.members_resolution_2 == undefined ? "" : "s" ?>:</para_1>
 
 <?!= include("inc_additional_resolutions", data, {
   header:data.members_resolution_headerstyle || "b_left_sidehead",
