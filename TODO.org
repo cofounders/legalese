@@ -70,8 +70,11 @@ that doesn't import a library.
 * TODO improve schema management -- we should be able to create a new startup, a new agreement, etc faster, with correctly populated templates.
 because we are aware of the schema we should autopopulate the sheet with those variables, and only those variables, that are expected in the xml.
 we have previously done a little work in this direction, titled something like introspector.
+** TODO this linter should verify, just before a run, that all the variables that an XML expects are available from the spreadsheet
 * TODO clean up the overlap between the new share class creation variables and the new share issue variables. 
 * TODO figure out a better way to track the agreement dates (TODAY vs the actual signed date in the spreadsheet.)
+* TODO collapse multiple hats to a single signer -- if the same email address is signing in multiple roles, give them the same esnum
+right now we send two emails and they are confusing.
 * for Kark
 ** DONE sent out the issue & allotment workflow
 * [2015-03-22 Sun 14:53] for tradegecko
