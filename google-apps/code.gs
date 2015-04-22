@@ -720,9 +720,11 @@ function readRows_(sheet, entitiesByName) {
 	  
 	  // populate the previous
 	  var columna = asvar_(row[0]) || previous[0];
+	  if (columna == "template") { columna = "templates"; Logger.log("CONF: correcting 'template' to 'templates'"); }
 	  previous[0] = columna;
 
 	  Logger.log("CONF: columna="+columna);
+
 	  config[columna] = config[columna] || { asRange:null, values:null, dict:{}, tree:{} };
 	  Logger.log("CONF: config[columna]="+config[columna]);
 
@@ -1671,7 +1673,7 @@ function fillTemplates(sheet) {
 			 entityNames);
 
   if (config.templates == undefined) {
-	throw("not on an Agreement sheet");
+	throw("sheet doesn't specify any templates ... are you on a Entities sheet perhaps?");
 	return;
   }
 
@@ -1702,11 +1704,12 @@ function fillTemplates(sheet) {
 
   // the parties{} for a given docset are always the same -- all the defined roles are available
   var parties = roles2parties_(readRows);
+
   templatedata.parties = parties;
 //  Logger.log("FillTemplates: send: assigning templatedata.parties = %s", templatedata.parties);
   templatedata.company = parties.company[0];
   templatedata._entitiesByName = readRows.entitiesByName;
-
+  
   var docsetEmails = new docsetEmails_(sheet, readRows, parties, suitables);
 
   // you will see the same pattern in uploadAgreement.
@@ -1773,6 +1776,7 @@ function fillTemplate_(newTemplate, sourceTemplate, mytitle, folder, config) {
   clauseroot = [];
   clausetext2num = {};
   newTemplate.data.signature_comment = null;
+
   var xmlRootExtras = xmlRootExtras = config.save_indd ? ' saveIndd="true"' : '';
   newTemplate.data.xmlRoot = function(someText) {
 	if (someText == undefined) { someText = '' }
@@ -2457,6 +2461,7 @@ function plural(num, singular, plural, locale) {
   if (num.constructor.name == "Array") { num = num.length }
   if (locale == "en-US") {
 	if (plural == undefined) {
+	  if (singular == "my")  { plural = "our" }
 	  if (singular == "its") { plural = "their" }
 	  else                   { plural = singular + "s" }
 	}
