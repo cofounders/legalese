@@ -146,25 +146,31 @@ function identifyIndtFile(mode, path, xmlFile) {
 	var myXML = new XML(xmlFile.read());
 	xmlFile.close();
 
-	var templateSpec = myXML.attribute("templateSpec");
-	if (templateSpec != undefined) {
+	var templateSpec = myXML.attribute("templateSpec").toString();
+
+	if (templateSpec != undefined && templateSpec.length) {
+	  logToFile("identifyIndtFile: read templateSpec = " + templateSpec + " out of XML file.");
 	  path = "~/non-db-src/legalese/build/" + templateSpec;
 	  mode = "hardcoded";
 	}
 	else {
+	  logToFile("identifyIndtFile: tried to read templateSpecout of XML file, but it's undefined.");
 	  if (path.length)	mode = "hardcoded";
 	  else				mode = "queryUser";
 	} 
   }
   // not an else if because we cascade from above
   if (mode == "hardcoded") {
+	logToFile("identifyIndtFile: trying to open " + path);
 	indtFile = new File(path);
-	if (indtFile.exists) return indtFile else throw("unable to open specified indtFile: " + path);
+	logToFile("identifyIndtFile: got back indtFile " + indtFile);
+	if (! indtFile.exists) throw("unable to open specified indtFile: " + path);
   } 
   // not an else if because we cascade from above
   if (mode == "queryUser"
 	  || mode == undefined
 	 ) {
+	logToFile("identifyIndtFile: default path -- mode = " + mode);
 	indtFile = File.openDialog(
 	  "Choose the Legalese template",
 	  function(file) {
@@ -173,6 +179,7 @@ function identifyIndtFile(mode, path, xmlFile) {
 	  },
 	  false); // multiselect
   }
+  logToFile("identifyIndtFile: returning indtFile" + indtFile.name);
   return indtFile;
 }
 
@@ -182,17 +189,24 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
 
   // iterate through each element. if its tag corresponds to a paragraph style (as opposed to a character style) then append a trailing newline unless the element already has one.
 
+  logToFile("importXmlIntoTemplate("+indtFile+"): starting");
   var doc = app.open(indtFile, showingWindow);
+  logToFile("importXmlIntoTemplate("+indtFile+"): app.open() succeeded: doc is " + doc);
+  logToFile("importXmlIntoTemplate("+indtFile+"): doc.isValid = " + doc.isValid);
+
   var importMaps = {};
   for (var i = 0; i < doc.xmlImportMaps.length; i++) {
 	importMaps[doc.xmlImportMaps.item(i).markupTag.name] = doc.xmlImportMaps.item(i).mappedStyle;
   }
+  logToFile("importXmlIntoTemplate("+indtFile+"): importMaps loaded");
 
   // define the default master for body text
   if (doc.xmlElements.item(0).xmlAttributes.item("defaultMaster").isValid)
 	doc.pages.item(-1).appliedMaster = doc.masterSpreads.item(doc.xmlElements.item(0).xmlAttributes.item("defaultMaster").value);
   
-  doc.xmlElements.item(0).importXML(xmlFile);
+  logToFile("importXmlIntoTemplate("+indtFile+"): running importXML("+xmlFile+")");
+  doc.xmlElements.item(0).importXML(xmlFile); // oddly, a file open dialog box appears here when we work with kindle.indt.
+  logToFile("importXmlIntoTemplate("+indtFile+"): returned from importXML("+xmlFile+")");
 
   if (doc.xmlElements.item(0).xmlAttributes.item("addnewline").isValid &&
 	  doc.xmlElements.item(0).xmlAttributes.item("addnewline").value == "false") {
@@ -209,8 +223,12 @@ function importXmlIntoTemplate(xmlFile, indtFile, showingWindow) {
 	logToFile("source XML wants us to saveIndd");
 	doc.label += "saveIndd=true\n";
   }
+
+  logToFile("calling InsertTextVariables ruleset");
   
   __processRuleSet(doc.xmlElements.item(0), [new InsertTextVariables(doc,importMaps) ]);
+
+  logToFile("mapping tags to styles");
 
   doc.mapXMLTagsToStyles();
 
