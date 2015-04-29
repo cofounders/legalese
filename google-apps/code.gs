@@ -1088,6 +1088,12 @@ function availableTemplates_() {
 //	parties:{to:["director"], cc:["corporate_secretary"]},
 //	nocache:true,
 //  },
+	{ name:"kindle", title:"Kindle Introduction",
+	   url:baseUrl + "templates/legalese/kindle.xml",
+	  parties:{to:[], cc:[]},
+	  explode:"new_participant",
+	  nocache:true,
+	},
 	{ name:"dr_fundraising", title:"Directors' Resolution in favour of Fundraising",
 	   url:baseUrl + "templates/jfdi.asia/dr-fundraising.xml",
 	  parties:{to:["director"], cc:["corporate_secretary"]},
@@ -1244,7 +1250,7 @@ function availableTemplates_() {
   { name:"dr_allotment", title:"Directors' Resolution for Allotment",
 	url:baseUrl + "templates/jfdi.asia/dr-allotment.xml",
 	parties:{to:["director"],cc:["corporate_secretary"]},
-	// nocache:true,
+	nocache:true,
   },
   { name:"jfdi_2014_rcps", title:"JFDI.2014 Subscription Agreement",
 	url:"jfdi_2014_rcps_xml.html",
@@ -1274,6 +1280,7 @@ function availableTemplates_() {
   { name:"termsheet", title:"Seed Term Sheet",
 	url:baseUrl + "templates/jfdi.asia/termsheet.xml",
 	parties:{to:[],cc:[]},
+	nocache: true,
   },
   { name:"preemptive_notice", title:"Pre-Emptive Notice to Shareholders",
 	url:baseUrl + "templates/jfdi.asia/preemptive_notice.xml",
@@ -1300,6 +1307,7 @@ function availableTemplates_() {
   { name:"dora", title:"DORA",
 	url:baseUrl + "templates/jfdi.asia/dora-signatures.xml",
 	parties:{to:["new_investor","company","shareholder"],cc:["corporate_secretary"]},
+	nocache:true,
   },
   { name:"inc_plain_letterhead", title:"plain letterhead",
 	url:baseUrl + "templates/jfdi.asia/inc_plain_letterhead.xml"
@@ -1752,7 +1760,7 @@ function fillTemplates(sheet) {
 	// Template: | foobar | thing | SomeValue Pte. Ltd.
 	// means that for the foobar template, data.parties.thing = the entity named SomeValue Pte. Ltd.
 	//
-	Logger.log("config.templates.dict is %s", config.templates.dict);
+	Logger.log("buildTemplate(%s): config.templates.dict is %s", sourceTemplate.name, config.templates.dict);
 	if (config.templates.dict[sourceTemplate.name] && config.templates.dict[sourceTemplate.name].length) {
 	  var mydict = config.templates.dict[sourceTemplate.name];
 	  Logger.log("buildTemplate(%s): WE CAN HAZ OVERRIDE! coping with %s", sourceTemplate.name, config.templates.dict[sourceTemplate.name]);
@@ -1814,7 +1822,7 @@ function fillTemplates(sheet) {
 	var folderValues = [];
 	for (var i in config.add_to_folder.tree) {
 	  var matches;
-	  if (matches = i.match(/#folders.*\/([^\/]+)/)) { // we want the rightmost folderid
+	  if (matches = i.match(/folders.*\/([^\/]+)/)) { // we want the rightmost folderid
 		folderValues.push(matches[1]);
 	  }
 	}
@@ -1826,6 +1834,9 @@ function fillTemplates(sheet) {
 		catch (e) {
 		  Logger.log("fillTemplates(): failed to do so. %s", e);
 		}
+	  }
+	  else {
+		Logger.log("fillTemplates(): ERROR: unable to getFolderById(%s)!", folderValues[i]);
 	  }
 	}
   }
@@ -2532,9 +2543,9 @@ function plural(num, singular, plural, locale) {
   if (num.constructor.name == "Array") { num = num.length }
   if (locale == "en-US") {
 	if (plural == undefined) {
-	  if (singular == "my")  { plural = "our" }
-	  if (singular == "its") { plural = "their" }
-	  else                   { plural = singular + "s" }
+	  if      (singular == "my")  { plural = "our" }
+	  else if (singular == "its") { plural = "their" }
+	  else                        { plural = singular + "s" }
 	}
 	if (num  > 1) { return plural }
 	if (num == 1) { return singular }
