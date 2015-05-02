@@ -2,7 +2,7 @@
 <? data.has_major_investor_rights = (data._orig_major_investor_minimum !== ""); ?>
 <?!= data.xmlRoot() ?>
 <CoverTop>
-<cover_title>KISS(Sing) Agreement (<?= data.security_essential ?>)
+<cover_title>KISS(Sing) Agreement (<?= data.security_essential == "warrant" ? "Equity" : "Debt" ?>)
 </cover_title>
 <cover_company_name>
 
