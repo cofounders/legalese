@@ -1,12 +1,12 @@
-"So anyway, tell me, what's the difference between programming and scripting?
+"So anyway, tell me, what's the difference between programming and scripting?"
 
 The question was asked in all innocence. Others leaned forward over glasses of Chardonnay, polite expectation on their faces.
 
 But I couldn't speak. All my attention was fixed on controlling the surge of adrenaline the question had provoked. Breathe in, breathe out. Try not to think.
 
-I'm a veteran of the Scripting Wars. My generation came of age when Perl, Python, and PHP were new. The rebellious youth of the 1990s embraced those languages, despite their utter absence from the university curriculum, or perhaps because they had that samizdat, underground quality, needing to be downloaded overnight from mysterious mirrors in Japan and Canada.
+I'm a veteran of the Scripting Wars. My generation came of age when Perl, Python, and PHP were new. The rebellious youth of the 1990s embraced those languages, despite their utter absence from the university curriculum, or perhaps because they had that samizdat, underground quality. To use those languages, you had to download them, overnight, from mysterious mirrors in Japan and Canada.
 
-"Nonsense pidgin," our seniors would universally scoff. "Real programmers use C." And we, the upstarts, have borne a chip on our shoulder ever since.
+"Nonsense pidgin," our seniors would universally scoff. "Real programmers use C." We upstarts have borne a chip on our shoulder ever since.
 
 The thing is, our seniors were right -- Perl, Python and PHP were themselves coded in C. But scripting languages were, like teenage slang, so much more expressive, so much more portable, flowing like quicksilver from platform to platform, from Solaris to Linux to FreeBSD, infinitely better suited to the impatient, ever-changing world of the Web, where time-to-market was everything and bugs be damned.
 
@@ -18,42 +18,45 @@ Reminiscence over. I can handle the question now. So, what is the difference bet
 
 Like mathematics, information science stands one Platonic remove from its applications. Physics and chemistry gave us the nuclear reactor and the solar panel; but physics and chemistry are about energy and matter, not about specific engines or particular materials. One is science, and the other is engineering. As the pat phrase goes, the scientist builds in order to learn, and the engineer learns in order to build.
 
-In the same way, "computer science" is really about the structuring of abstractions; it's about the communication of meaning in code and in codes; it's about the shifting of cognition from mind to machine. One of the earliest computer companies was called Thinking Machines, and that name alludes to the fundamental mystery of the field, and its frankly godlike aspirations to create golems that move by our spells.
+In the same way, "computer science" is really about the structuring of abstractions; it's about the communication of meaning in code and in codes; it's about the shifting of thinking from mind to machine. One of the earliest computer companies was called Thinking Machines, and that name alludes to the fundamental mystery of the field, to its frankly godlike aspirations to create golems that move by our spells.
 
 Computer science makes it possible to put a movie on a disc or a thumb drive or on a wire without caring which method you use; computer science makes it possible to prevent end-users from copying that movie; and computer science makes it possible for you to break the encryption and rip it anyway; but none of those things are what computer science is really about.
 
 Computer science is really about thinking -- thinking deeply about how something works, how something should work, and what things need to happen, in what sequence, for your wishes to come true; and about how to recover when the unexpected occurs, as it always does. Computer science is about knowing a thing so well you can explain it not even to a six-year-old who's trying his hardest to understand what you're saying, but to a soulless machine with even less empathy than a day-old puppy. If we anthropomorphize computers at all, we invariably believe they are trying their hardest to /misunderstand/ what we say. Nowadays computer scientists orchestrate thousands of those machines to work in concert. That takes a lot of deep thinking and clear communication.
 
-How do we communicate our intentions to machines? Through special languages. Programming languages.
+How do we communicate with machines? Through special languages. Programming languages.
 
-In the pantheon of programming languages, C stands apart, like Odin. Before Odin and the Norse gods to whom he is Allfather, there were the jötunn, the Giants: COBOL and Fortran. Then C came, and with it Unix, and the Giants were defeated to Niflheim, and the age of the Æsir began. (Well, first there was another war: the compiled languages -- C and Pascal and C++ -- warred with the Vanir -- the LISPs and the Schemes -- and defeated them. Their joint progeny -- the scripting languages -- bear both parentages proudly.)
+In the pantheon of programming languages, C stands apart, like Odin. Before Odin and the Norse gods to whom he is Allfather, there were the jötunn, the Giants: COBOL and Fortran. Then C came, and with it Unix, and the Giants were defeated to Niflheim, and the age of the Æsir began. (Well, first there was another war: the compiled languages -- C and Pascal and C++ -- warred with the Vanir -- the LISPs and the Schemes -- and bred with them. Their joint progeny -- the scripting languages -- bear both parentages proudly.)
 
 We call these tools languages for a reason. They are not natural languages; they are formal grammars. But they speak to computers with a precision and expressiveness that are unavailable in English, French, German, Hindi, Chinese, or any other natural language that emerged from collections of billions of neurons grunting and singing at thousands of other such collections.
 
-All the programming languages occupy a middle ground between the humanness of natural language and the cold binary logic of machine code. Programming languages are written by humans, and meant to be read (one hopes, for the sake of maintenance programmers everywhere) by humans; but they are also meant to be read by computers, and translated into the low-level binary instructions that microprocessors execute a billion times a second.
+All the programming languages occupy a middle ground between the warm emotional humanity of natural language and the cold binary logic of machine code. Programming languages are written by humans, and can be read (one hopes, for the sake of maintenance programmers everywhere) by humans; but they are also meant to be read by computers, and translated into the low-level binary instructions that microprocessors execute a billion times a second.
 
 Within that middle ground, languages like Pascal and C lie closer to machine code; the scripting languages lie closer to natural language. The "high level languages" are more compact, yet more expressive. Where a low-level language like C might only have a few words, like "if/else" and "do/while", high-level languages have words for bigger ideas, like "map" and "filter" and "reduce". Where a low-level language sees the world in shades of gray, a high-level language sees the world in colour: it knows about arrays, dictionaries, serialization. C doesn't even know about strings; it has to be taught.
 
-The scripting languages have another difference: where Pascal and C are always compiled to executable binaries, the scripting languages (being born later) take several generations of Moore's law for granted, and are accordingly profligate with CPU capacity; they interpret and compile anew, every time a program runs. A binary executable only works for a single processor architecture and a single operating system environment -- which is, fundamentally, why Windows software doesn't run on Macs, and vice versa. A high-level script, having the benefit of an indulgent interpreter that goes everywhere with it, can run on any platform where its interpreter is comfortable.
+The scripting languages have another difference: where Pascal and C are always compiled to executable binaries, the scripting languages (being born later) take several generations of Moore's law for granted, and are accordingly profligate with CPU capacity; they interpret and compile anew, every time a program runs. A binary executable only works for a single processor architecture and a single operating system environment -- which is, fundamentally, why Windows software doesn't run on Macs, and vice versa. A high-level script, having the benefit of an indulgent interpreter to pave its way, can run on any platform where its interpreter is comfortable.
 
-Some languages play with these ideas. Java compiles to a virtual machine which itself runs on an actual processor. Go, otherwise a member of the scripting family, compiles so fast you can't tell there's an interpreter at work.
+Some languages play with these ideas. Java compiles to a virtual machine which then runs on an actual processor. Go, otherwise a member of the scripting family, is statically typed and compiles so fast you can't tell there's an interpreter at work.
 
-These aren't all the differences -- but I won't get into dynamic typing and so forth, because what I really want to talk about is how, after four thousand years of C, law is about to discover Perl.
+These aren't all the differences -- but I won't get into them now, because what I really want to talk about is how, after four thousand years of C, law is about to discover Perl.
 
 Paul Graham wrote about Hackers and Painters. I'm going to write about Hackers and Lawyers.
 
 What do lawyers and coders have in common?
 
-Quite a lot. The two professions are twins separated at birth. Particularly where it comes to contracts and legislation, we do the same things. Contracts are programs. Laws are standards. We do them in very different ways, but both ways are deep expressions of fundamental human nature.
+Quite a lot. The two professions are twins separated at birth. Particularly where it comes to contracts and legislation, we do the same things. Laws are standards. Contracts are programs. We express them in very different ways, but both are expressions of a fundamentally human act.
 
-Humans are not the only species to use language; humans are not the only 
-species to use tools. But humans are the only species to use language /as a tool/.
+Humans are not the only species to use language; humans are not the only species to use tools. But humans are the only species to use language /as a tool/.
 
-This is a profound idea. The use of language as a /specialized/ tool is, arguably, one of the highest forms of human practice: the domain of poets, or programmers ... or lawyers.
+This is a profound idea. The use of language as a /specialized/ tool is, arguably, one of the highest forms of human practice: the domain of poets, programmers ... and lawyers.
 
-For four thousand years, lawyers have laboured in ignorance. They were programmers writing programs without the benefit of a programming language. So they used Latin; they used English; they used French; they used natural languages, but a convoluted version of natural language called /Legalese/.
+For four thousand years, lawyers have laboured in ignorance. They were programmers, writing programs, without a programming language. So they used Latin; they used English; they used French; they used a convoluted version of natural language called /Legalese/.
 
-Software is eating the world. Software will eat law.
+If Legalese is C, then something new -- so new it hasn't been invented yet -- will be the Perl, the Python, the Ruby of our day. I don't know much about it, but here's what I do know.
+
+The long-term vision is /formalization/: to make it possible to express contracts and legislation as precisely as one might wish, in a formal language, that compiles to natural language, but that can be modeled, executed, and visualized by machines executing the wishes of the human mind. It will be a domain-specific language; it will come with a compiler; you will be able to compile it to natural language legalese. Programs written in it will be executable by computers. It may connect to blockchains and Bitcoin.
+
+Marc Andreessen says: Software is eating the world. This is a perfect illustration of software eating law.
 
 Programmers -- computer scientists -- /information/ scientists -- are landing on the shores of law by droves, and they are horrified. They witness practices that are centuries old. These practices are actively resistant to productivity and automation because of the backward practice of hourly billing. Programmers react to these practices exactly the way that a modern doctor might react to surgical practices from the 15th century: "Wash your hands. Wash your hands. Wash your hands. Let me tell you about germ theory."
 
@@ -65,8 +68,8 @@ Github recently raised funding at a billion-dollar valuation. What is it? A vers
 
 To date, lawyers have coded in legalese, because they just didn't know any better. They lacked the tools. But the tools are coming. In the 1990s, the new tools were scripting languages: Perl, Python, PHP. Now, those tools are taken for granted, and have spawned new technologies in turn: Javascript, originally a language that runs in a browser, begat Phantom.js: a browser that runs in a language.
 
-That's why we call it "Legalese 2.0". The long-term vision is /formalization/: to make it possible to express contracts and legislation as precisely as one might wish, in a formal language, that compiles to natural language, but that can be modeled, executed, and visualized by machines executing the wishes of the human mind.
+That's why we use the name "Legalese 2.0".
 
-Old people can tell when a storm is coming; they feel it in their bones.
+They say old people can tell when a storm is coming; they feel it in their bones.
 
-I'm old now. I can feel this storm coming. It felt this way during the Scripting Wars, and I feel it now, coming to law.
+Well, I'm old now. I can feel this storm coming. It felt this way during the Scripting Wars, and it feels the same way now, coming to law.
