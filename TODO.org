@@ -147,7 +147,9 @@ see JFDI.BOOTCAMP.pdf from JFDI.2012 -- this text should go inside the Memo
 ** republish all the currently private content under cofounders to legalese, with the echosign oauth creds scrubbed
 ** confirm that https://some-legalese-thing.github.io works so we close at least one MITM attack vector for code insertion in the xml templates
 ** TODO chuck kiss and safe into it
+* TODO add gender pronoun
 * TODO for xml2pdf-lib.jsx, any paragraph that ends in ":" or ":--+" should have a "keep with next" turned on.
+* TODO poll the esignature backend and automatically download all signed documents back into the agreement's add_to folder
 * for [2015-03-26 Thu] at thehub
 ** TODO import KISSsing
 ** TODO import SAFE US
