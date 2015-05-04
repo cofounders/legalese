@@ -751,6 +751,11 @@ ol {
   padding-left: 3px;
 }
 
+div.li-inline p     { font-weight: bold; margin-bottom: 0; margin-top: 20px; }
+div.li-inline ul    { list-style-type: disc; margin-top: 0 }
+div.li-inline ul li { display: inline; }
+div.li-inline li:not(:first-child)::before { content: "\00b7 " }
+
 dl dd {
   font-style: italic;
   font-weight: 100;
